@@ -35,10 +35,12 @@ import com.objetdirect.gwt.umlapi.client.helpers.Session;
 public class HistoryManager implements ValueChangeHandler<String> {
 	private static String					lastHistoryAnchor			= "";
 	private static HashMap<String, String>	lastHistoryParametersList	= new HashMap<String, String>();
-	private static SimplePanel				applicationPanel			= new SimplePanel();
+	public static SimplePanel				applicationPanel			= new SimplePanel();
 	private static String					urlDiagram					= "";
 
-	static void upgradeDiagramURL(final String url) {
+	public static DrawerPanel drawerPanel = null;
+	
+	public static void upgradeDiagramURL(final String url) {
 		String historyToken = HistoryManager.lastHistoryAnchor + "?" + OptionsManager.toURL();
 		if (!historyToken.endsWith("&")) {
 			historyToken += "&";
@@ -108,7 +110,7 @@ public class HistoryManager implements ValueChangeHandler<String> {
 		OptionsManager.setAllFromURL(HistoryManager.lastHistoryParametersList);
 		UMLArtifact.getArtifactList().clear();
 		if (HistoryManager.lastHistoryAnchor.equals("Drawer")) {
-			final DrawerPanel drawerPanel = new DrawerPanel();
+			drawerPanel = new DrawerPanel();
 			if (HistoryManager.urlDiagram.equals("")) {
 				drawerPanel.addDefaultNode();
 			} else {

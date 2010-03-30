@@ -35,6 +35,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.LifeLineArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ObjectArtifact;
@@ -115,7 +116,7 @@ public class DrawerPanel extends AbsolutePanel {
 		}
 
 		final boolean isShadowed = OptionsManager.get("Shadowed") == 1;
-		Log.trace("Creating drawer");
+		Log.info("Creating drawer");
 
 		this.uMLCanvas = new UMLCanvas(new UMLDiagram(UMLDiagram.Type.getUMLDiagramFromIndex(OptionsManager.get("DiagramType"))), this.width, this.height);
 		this.add(this.uMLCanvas);
@@ -208,9 +209,9 @@ public class DrawerPanel extends AbsolutePanel {
 
 		}
 
-		Log.trace("Canvas added");
+		Log.info("Canvas added");
 		if (isShadowed) {
-			Log.trace("Making shadow");
+			Log.info("Making shadow");
 			this.makeShadow();
 		} else {
 			this.uMLCanvas.setStylePrimaryName("canvas");
@@ -219,7 +220,6 @@ public class DrawerPanel extends AbsolutePanel {
 		this.resizeHandler = new ResizeHandler() {
 			public void onResize(final ResizeEvent resizeEvent) {
 				if (OptionsManager.get("AutoResolution") == 1) {
-					// DOM.setStyleAttribute(Log.getDivLogger().getWidget().getElement(), "display", "none");
 					DrawerPanel.this.width = resizeEvent.getWidth() - 50;
 					DrawerPanel.this.height = resizeEvent.getHeight() - 50;
 					DrawerPanel.this.setPixelSize(DrawerPanel.this.width, DrawerPanel.this.height);
@@ -246,11 +246,11 @@ public class DrawerPanel extends AbsolutePanel {
 		// TODO : under chrome redraw doesn't work if the canvas is at a
 		// different point than (0,0) tatami ? dojo ? chrome ?
 		// example : this.setSpacing(50);
-		Log.trace("Setting active canvas");
+		Log.info("Setting active canvas");
 		Session.setActiveCanvas(this.uMLCanvas);
-		Log.trace("Disabling browser events");
+		Log.info("Disabling browser events");
 		GWTUMLDrawerHelper.disableBrowserEvents();
-		Log.trace("Init end");
+		Log.info("Init end");
 	}
 
 	/**
@@ -270,7 +270,7 @@ public class DrawerPanel extends AbsolutePanel {
 	public final UMLCanvas getUMLCanvas() {
 		return this.uMLCanvas;
 	}
-
+	
 	/**
 	 * Getter for the width
 	 * 
@@ -300,8 +300,12 @@ public class DrawerPanel extends AbsolutePanel {
 		this.width = width;
 	}
 
-	void addDefaultNode() {
+	public void addDefaultNode() {
 		final Type type = UMLDiagram.Type.getUMLDiagramFromIndex(OptionsManager.get("DiagramType"));
+		addDefaultNode(type);
+	}
+	
+	public void addDefaultNode(Type type) {
 		if (type.isClassType()) {
 			final ClassArtifact defaultclass = new ClassArtifact("Class1");
 			defaultclass.setLocation(new Point(this.width / 2, this.height / 2));
@@ -366,7 +370,6 @@ public class DrawerPanel extends AbsolutePanel {
 	 */
 	@Override
 	protected void onAttach() {
-		// TODO Auto-generated method stub
 		super.onAttach();
 
 	}

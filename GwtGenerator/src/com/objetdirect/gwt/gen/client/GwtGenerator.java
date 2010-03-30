@@ -14,22 +14,32 @@
  */
 package com.objetdirect.gwt.gen.client;
 
+import java.util.Map.Entry;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.Command;
 import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.DeferredCommand;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwt.user.client.ui.TextArea;
+import com.objetdirect.gwt.gen.client.services.GeneratorService;
+import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
+import com.objetdirect.gwt.gen.client.ui.Main;
+import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
+import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 
 /**
  * Main class for gwtuml application. This class does some initialization and calls the start panel.
@@ -40,6 +50,8 @@ import com.objetdirect.gwt.umlapi.client.helpers.Session;
 public class GwtGenerator implements EntryPoint {
 	private final static DockPanel	appRootPanel	= new DockPanel();
 	static HorizontalPanel			southBar;
+	
+	private final static GeneratorServiceAsync generatorService = GWT.create(GeneratorService.class);
 
 	/**
 	 * Entry point of the application This class make a StartPanel and manage the history for it
@@ -77,6 +89,17 @@ public class GwtGenerator implements EntryPoint {
 			}
 		});
 		GwtGenerator.southBar.add(exportToSvg);
+		
+		// Generate pojo
+		final Button generatePojo = new Button("Generate Pojo");
+		generatePojo.addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				generatePojo();
+			}
+		});
+		GwtGenerator.southBar.add(generatePojo);
+		
 		OptionsManager.initialize();
 		HotKeyManager.forceStaticInit();
 		final HistoryManager historyManager = new HistoryManager();
@@ -88,9 +111,10 @@ public class GwtGenerator implements EntryPoint {
 		GwtGenerator.appRootPanel.setSize("100%", "100%");
 
 		GwtGenerator.appRootPanel.add(GwtGenerator.southBar, DockPanel.SOUTH);
-		RootPanel.get().add(GwtGenerator.appRootPanel);
+		RootLayoutPanel.get().add(GwtGenerator.appRootPanel);
 	}
 
+	
 	/*
 	 * Real gwt app entry point, this code allow GWT Log to catch exception and display it (non-Javadoc)
 	 * 
@@ -98,10 +122,55 @@ public class GwtGenerator implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		Log.setUncaughtExceptionHandler();
-		DeferredCommand.addCommand(new Command() {
-			public void execute() {
-				GwtGenerator.this.gwt_main();
+		
+		Main mainWindow = new Main();
+		DOM.setInnerHTML(RootPanel.get("loading-screen").getElement(), "");
+		RootLayoutPanel.get().add(mainWindow);
+//		
+//		DeferredCommand.addCommand(new Command() {
+//			public void execute() {
+//				GwtGenerator.this.gwt_main();
+//			}
+//		});
+	}
+	
+	
+	
+	private void generatePojo() {
+		Log.debug("start generating the class code");
+		
+		final CodePanel codePanel = new CodePanel();
+		
+		for (final Entry<Integer, UMLArtifact> uMLArtifactEntry : UMLArtifact.getArtifactList().entrySet()) {
+			final UMLArtifact artifact  = uMLArtifactEntry.getValue();
+			
+			if (artifact instanceof ClassArtifact) {
+				ClassArtifact classArtifact  = (ClassArtifact)artifact;
+				final UMLClass clazz = classArtifact.toUMLComponent();
+				
+				Log.debug("Class name = " + clazz.getName());
+				
+				Log.debug("Call the service");
+				generatorService.generateClassCode(clazz, "com.od.test", new AsyncCallback<String[]>() {
+					@Override
+					public void onSuccess(String[] result) {
+//						Log.debug("code received : ");
+//						for (String s : result)
+//							Log.debug(s);
+						codePanel.addClassCode(result, clazz.getName());
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						Log.error("serice call failed " + caught.getMessage());
+					}
+				});
 			}
-		});
+		}
+		
+		HistoryManager.applicationPanel.clear();
+		HistoryManager.applicationPanel.add(codePanel);
+		
+		Log.debug("end generating the class code");
 	}
 }
