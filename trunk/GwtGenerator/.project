@@ -36,4 +36,16 @@
 		<nature>com.google.appengine.eclipse.core.gaeNature</nature>
 		<nature>com.google.gwt.eclipse.core.gwtNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>GwtUmlAPI-src</name>
+			<type>2</type>
+			<location>E://workspace/GWTUMLAPI/src</location>
+		</link>
+		<link>
+			<name>generatorAPI-src</name>
+			<type>2</type>
+			<location>E://workspace/GeneratorApi/src</location>
+		</link>
+	</linkedResources>
 </projectDescription>

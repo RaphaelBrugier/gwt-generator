@@ -5,24 +5,36 @@
 
 <web-app>
 
-  <servlet>
-  <servlet-name>remoteLoggingServiceImpl</servlet-name>
-  <servlet-class>com.google.gwt.libideas.logging.server.RemoteLoggingServiceImpl</servlet-class>
-</servlet>
-<servlet-mapping>
-  <servlet-name>remoteLoggingServiceImpl</servlet-name>
-  <url-pattern>/gwtgenerator/logging</url-pattern>
-</servlet-mapping>
-  
-  <servlet>
-  <servlet-name>remoteLoggerServiceImpl</servlet-name>
-  <servlet-class>com.allen_sauer.gwt.log.server.RemoteLoggerServiceImpl</servlet-class>
-</servlet>
+<!-- Services serlet -->
+	<servlet>
+ 		<servlet-name>generatorServlet</servlet-name>
+    	<servlet-class>com.objetdirect.gwt.gen.server.services.GeneratorServiceImpl</servlet-class> 
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>generatorServlet</servlet-name>
+    	<url-pattern>/gwtgenerator/generator</url-pattern>
+ 	</servlet-mapping>
 
-<servlet-mapping>
-  <servlet-name>remoteLoggerServiceImpl</servlet-name>
-  <url-pattern>/gwtgenerator/gwt-log</url-pattern>
-</servlet-mapping>
+
+<!-- Logging servlet -->
+	<servlet>
+  		<servlet-name>remoteLoggingServiceImpl</servlet-name>
+  		<servlet-class>com.google.gwt.libideas.logging.server.RemoteLoggingServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+  		<servlet-name>remoteLoggingServiceImpl</servlet-name>
+  		<url-pattern>/gwtgenerator/logging</url-pattern>
+	</servlet-mapping>
+  
+  	<servlet>
+  		<servlet-name>remoteLoggerServiceImpl</servlet-name>
+  		<servlet-class>com.allen_sauer.gwt.log.server.RemoteLoggerServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+  		<servlet-name>remoteLoggerServiceImpl</servlet-name>
+		<url-pattern>/gwtgenerator/gwt-log</url-pattern>
+	</servlet-mapping>
+  
   
   <!-- Default page to serve -->
   <welcome-file-list>
