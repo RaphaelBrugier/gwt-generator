@@ -90,16 +90,6 @@ public class GwtGenerator implements EntryPoint {
 		});
 		GwtGenerator.southBar.add(exportToSvg);
 		
-		// Generate pojo
-		final Button generatePojo = new Button("Generate Pojo");
-		generatePojo.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				generatePojo();
-			}
-		});
-		GwtGenerator.southBar.add(generatePojo);
-		
 		OptionsManager.initialize();
 		HotKeyManager.forceStaticInit();
 		final HistoryManager historyManager = new HistoryManager();
@@ -132,45 +122,5 @@ public class GwtGenerator implements EntryPoint {
 //				GwtGenerator.this.gwt_main();
 //			}
 //		});
-	}
-	
-	
-	
-	private void generatePojo() {
-		Log.debug("start generating the class code");
-		
-		final CodePanel codePanel = new CodePanel();
-		
-		for (final Entry<Integer, UMLArtifact> uMLArtifactEntry : UMLArtifact.getArtifactList().entrySet()) {
-			final UMLArtifact artifact  = uMLArtifactEntry.getValue();
-			
-			if (artifact instanceof ClassArtifact) {
-				ClassArtifact classArtifact  = (ClassArtifact)artifact;
-				final UMLClass clazz = classArtifact.toUMLComponent();
-				
-				Log.debug("Class name = " + clazz.getName());
-				
-				Log.debug("Call the service");
-				generatorService.generateClassCode(clazz, "com.od.test", new AsyncCallback<String[]>() {
-					@Override
-					public void onSuccess(String[] result) {
-//						Log.debug("code received : ");
-//						for (String s : result)
-//							Log.debug(s);
-						codePanel.addClassCode(result, clazz.getName());
-					}
-					
-					@Override
-					public void onFailure(Throwable caught) {
-						Log.error("serice call failed " + caught.getMessage());
-					}
-				});
-			}
-		}
-		
-		HistoryManager.applicationPanel.clear();
-		HistoryManager.applicationPanel.add(codePanel);
-		
-		Log.debug("end generating the class code");
 	}
 }

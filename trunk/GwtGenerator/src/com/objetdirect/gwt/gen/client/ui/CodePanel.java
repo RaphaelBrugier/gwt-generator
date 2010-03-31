@@ -18,6 +18,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
@@ -39,7 +40,7 @@ public class CodePanel extends Composite {
 	
 	public CodePanel() {
 		initWidget(uiBinder.createAndBindUi(this));
-		tabPanel.setSize("800px", "750px");
+		tabPanel.setSize("100%", "750px");
 	}
 	
 	public void addClassCode(String[] code, String className) {
@@ -50,12 +51,16 @@ public class CodePanel extends Composite {
 		TextArea ta = new TextArea();
 		ta.setText(sb.toString());
 		ta.setReadOnly(false);
-		ta.setCharacterWidth(360);
-		ta.setVisibleLines(45);
+//		ta.setCharacterWidth(360);
+//		ta.setVisibleLines(45);
 		ta.setHeight("100%");
 		ta.setWidth("100%");
 		
-		tabPanel.add(ta, className);
+		// Wrapp the textArea, it allows to display the scrollbar 
+		SimplePanel wrapper = new SimplePanel();
+		wrapper.add(ta);
+		
+		tabPanel.add(wrapper, className);
 	}
 	
 	public void cleanAllCode() {
