@@ -220,8 +220,8 @@ public class DrawerPanel extends AbsolutePanel {
 		this.resizeHandler = new ResizeHandler() {
 			public void onResize(final ResizeEvent resizeEvent) {
 				if (OptionsManager.get("AutoResolution") == 1) {
-					DrawerPanel.this.width = resizeEvent.getWidth() - 50;
-					DrawerPanel.this.height = resizeEvent.getHeight() - 50;
+					DrawerPanel.this.width = resizeEvent.getWidth() - 60;
+					DrawerPanel.this.height = resizeEvent.getHeight() - 60;
 					DrawerPanel.this.setPixelSize(DrawerPanel.this.width, DrawerPanel.this.height);
 					DrawerPanel.this.uMLCanvas.setPixelSize(DrawerPanel.this.width, DrawerPanel.this.height);
 					GfxManager.getPlatform().setSize(Session.getActiveCanvas().getDrawingCanvas(), DrawerPanel.this.width, DrawerPanel.this.height);

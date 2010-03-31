@@ -6,7 +6,9 @@
 			font-weight: bold;
 		}
 	</ui:style>
-	<g:SimplePanel>
-		<g:TabLayoutPanel barUnit='EM' barHeight='2' ui:field="tabPanel"/>
-	</g:SimplePanel>
+	<g:LayoutPanel>
+		<g:layer left='10px' right='10px' top='4px' height='750px' >
+	     	<g:TabLayoutPanel barUnit='EM' barHeight='2' ui:field="tabPanel"/>
+   		</g:layer>
+	</g:LayoutPanel>
 </ui:UiBinder> 
