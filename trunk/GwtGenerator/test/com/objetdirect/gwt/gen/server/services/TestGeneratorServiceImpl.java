@@ -4,16 +4,14 @@ import java.util.ArrayList;
 
 import junit.framework.TestCase;
 
-import com.objetdirect.entities.EntityDescriptor;
-import com.objetdirect.gwt.gen.client.services.GeneratorService;
+import com.objetdirect.gwt.TestUtil;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
-import com.objetdirect.gwt.TestUtil;
 
 public class TestGeneratorServiceImpl extends TestCase {
 
-	GeneratorService service = new GeneratorServiceImpl();
+	GeneratorServiceImpl service = new GeneratorServiceImpl();
 	
 	String packageName = "com.od.test";
 	
@@ -26,7 +24,7 @@ public class TestGeneratorServiceImpl extends TestCase {
 		UMLClassAttribute attribute = new UMLClassAttribute(UMLVisibility.PRIVATE, "String", "myStringField");
 		clazz.getAttributes().add(attribute);
 		
-		String[] classCode = service.generateClassCode(clazz, packageName);
+		String[] classCode = GeneratorHelper.convertUMLClassToEntityDescriptor(clazz, packageName).getText();
 		
 		TestUtil.println(classCode);
 		
@@ -73,7 +71,7 @@ public class TestGeneratorServiceImpl extends TestCase {
 		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "double", "myDoubleField"));
 		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Double", "myWDoubleField"));
 		
-		String[] classCode = service.generateClassCode(clazz, packageName);
+		String[] classCode = GeneratorHelper.convertUMLClassToEntityDescriptor(clazz, packageName).getText();
 		
 		TestUtil.assertExists(classCode,
 			"String myStringField;",
@@ -102,7 +100,7 @@ public class TestGeneratorServiceImpl extends TestCase {
 		clazz.getAttributes().add(attribute);
 		
 		try {
-			service.generateClassCode(clazz, packageName);
+			GeneratorHelper.convertUMLClassToEntityDescriptor(clazz, packageName);
 			fail("InvalidParameterException expected");
 		} catch (Exception e) {
 		}  

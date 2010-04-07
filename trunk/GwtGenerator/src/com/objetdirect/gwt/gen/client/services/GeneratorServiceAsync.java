@@ -14,8 +14,12 @@
  */
 package com.objetdirect.gwt.gen.client.services;
 
+import java.util.List;
+import java.util.Map;
+
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 
 /**
  * Asynchronous counterpart of the GeneratorService
@@ -29,6 +33,13 @@ public interface GeneratorServiceAsync {
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassCode(com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass, java.lang.String)
 	 */
-	void generateClassCode(UMLClass clazz, String packageName,
-			AsyncCallback<String[]> callback);
+	//public void generateClassCode(UMLClass clazz, String packageName,
+		//	AsyncCallback<String[]> callback);
+
+	
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassCode(java.util.List, java.util.List, java.lang.String)
+	 */
+	public void generateClassCode(List<UMLClass> classes, List<UMLRelation> relations,
+			String packageName, AsyncCallback<Map<String,List<String>>> callback);
 }
