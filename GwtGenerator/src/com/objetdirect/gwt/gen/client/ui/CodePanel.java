@@ -14,6 +14,8 @@
  */
 package com.objetdirect.gwt.gen.client.ui;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -43,7 +45,7 @@ public class CodePanel extends Composite {
 		tabPanel.setSize("100%", "750px");
 	}
 	
-	public void addClassCode(String[] code, String className) {
+	public void addClassCode(List<String> code, String className) {
 		StringBuilder sb = new StringBuilder();
 		for (String s : code) {
 			sb.append(s).append("\n");

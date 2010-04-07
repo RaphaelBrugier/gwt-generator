@@ -13,13 +13,34 @@ package com.objetdirect.gwt;
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-
-
+import java.util.List;
+import java.util.Map;
 
 import junit.framework.Assert;
 
+/**
+ * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
+ */
 public class TestUtil {
 
+	public static String packageName = "com.objetdirect";
+	
+	public static void assertText(String className, Map<String, List<String>> generatedCode, String ... model) {
+		List<String> code = generatedCode.get(className);
+		
+		int length = model.length < code.size() ? model.length : code.size();
+		for (int i=0; i<length; i++)
+			Assert.assertEquals("Line not found ("+i+") :", model[i], code.get(i));
+	}
+	
+	public static void assertExist(String className, Map<String, List<String>> generatedCode, String ... model) {
+		String[] lines = new String[generatedCode.get(className).size()];
+		System.arraycopy(generatedCode.get(className).toArray(), 0, lines, 0, generatedCode.get(className).size());
+//		String[] code = (String[]) lines.toArray();
+		//String[] code = (String[])generatedCode.get(className).toArray();
+		assertExists(lines, model);
+	}
+	
 	public static void assertText(String[] result, String ... model) {
 		int length = model.length < result.length ? model.length : result.length;
 		for (int i=0; i<length; i++)
@@ -27,6 +48,7 @@ public class TestUtil {
 	}
 
 	public static void assertExists(String[] result, String ... model) {
+		
 		int lineIndex = 0;
 		for (int i=0; i<result.length-model.length+1; i++) {
 			if (result[i].trim().equals(model[0].trim())) {
@@ -39,6 +61,7 @@ public class TestUtil {
 					lineIndex = j;
 			}
 		}
+		
 		Assert.fail("Line not found : "+model[lineIndex]);
 	}
 
@@ -55,8 +78,16 @@ public class TestUtil {
 			}
 		return -1;
 	}
+	
+	public static void println(List<String> text) {
+		System.out.println("---------------------------------------------------------------------------------------\n");
+		for (String line : text) {
+			System.out.println(line);
+		}
+	}
 
 	public static void println(String[] text) {
+		System.out.println("---------------------------------------------------------------------------------------\n");
 		for (String line : text) {
 			System.out.println(line);
 		}

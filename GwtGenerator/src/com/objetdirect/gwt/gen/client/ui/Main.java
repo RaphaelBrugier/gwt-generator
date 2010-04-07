@@ -14,7 +14,9 @@
  */
 package com.objetdirect.gwt.gen.client.ui;
 
-import java.util.Map.Entry;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -34,12 +36,15 @@ import com.objetdirect.gwt.gen.client.HistoryManager;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
+import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
 import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
 
 /**
@@ -76,12 +81,15 @@ public class Main extends Composite {
 	
 	final CodePanel codePanel = new CodePanel();
 	
+	final LoadingPopUp loadingPopUp = new LoadingPopUp();
+	
 	DrawerPanel drawer;
 
 	public Main() {
 		initWidget(uiBinder.createAndBindUi(this));
 		
 		OptionsManager.initialize();
+		OptionsManager.set("DiagramType", UMLDiagram.Type.CLASS.getIndex());
 		HotKeyManager.forceStaticInit();
 		drawer = new DrawerPanel();
 		drawer.addDefaultNode(Type.CLASS);
@@ -143,36 +151,50 @@ public class Main extends Composite {
 	private void generatePojo() {
 		codePanel.cleanAllCode();
 		
-		for (final Entry<Integer, UMLArtifact> uMLArtifactEntry : UMLArtifact.getArtifactList().entrySet()) {
-			final UMLArtifact artifact  = uMLArtifactEntry.getValue();
-			
-			if (artifact instanceof ClassArtifact) {
-				ClassArtifact classArtifact  = (ClassArtifact)artifact;
-				final UMLClass clazz = classArtifact.toUMLComponent();
-				
-				Log.debug("Class name = " + clazz.getName());
-				
-				generatorService.generateClassCode(clazz, "com.od.test", new AsyncCallback<String[]>() {
-					@Override
-					public void onSuccess(String[] result) {
-						codePanel.addClassCode(result, clazz.getName());
-						codePanel.goToFirstClass();
-					}
-					
-					@Override
-					public void onFailure(Throwable caught) {
-						Log.error("serice call failed " + caught.getMessage());
-					}
-				});
+		List<UMLClass> umlClasses = new ArrayList<UMLClass>();
+		List<UMLRelation> umlRelations = new ArrayList<UMLRelation>();
+		
+		for (final UMLArtifact umlArtifact : UMLArtifact.getArtifactList().values()) {
+			if (umlArtifact instanceof ClassArtifact) {
+				ClassArtifact classArtifact  = (ClassArtifact)umlArtifact;
+				umlClasses.add(classArtifact.toUMLComponent());
+			} else if (umlArtifact instanceof ClassRelationLinkArtifact) {
+				ClassRelationLinkArtifact relationLinkArtifact = (ClassRelationLinkArtifact)umlArtifact;
+				umlRelations.add(relationLinkArtifact.toUMLComponent());
 			}
 		}
 		
-		if (UMLArtifact.getArtifactList().size() > 0) {
+		if (umlClasses.size() ==0) {
+			//TODO display a message to inform the user that he should add at least one class before he can generate pojo
+		} else {
+			Log.debug(this.getClass().getName() + "::generatePojo() Starting generation");
+			
 			contentPanel.clear();
 			HotKeyManager.setInputEnabled(false);
 			GWTUMLDrawerHelper.enableBrowserEvents();
 			
-			contentPanel.add(codePanel);
-		} //TODO else display message which informs the user that he should add at least one classe before generate pojo
+			loadingPopUp.startProcessing("Generating code ...");
+			
+			generatorService.generateClassCode(umlClasses, umlRelations, "com.od.test", new AsyncCallback<Map<String,List<String>>>() {
+				
+				@Override
+				public void onSuccess(Map<String, List<String>> result) {
+					for (Map.Entry<String, List<String>> entry : result.entrySet()) {
+						String className = entry.getKey();
+						codePanel.addClassCode(entry.getValue(), className);
+					}
+					
+					contentPanel.add(codePanel);
+					codePanel.goToFirstClass();
+					loadingPopUp.stopProcessing();
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Log.debug(this.getClass().getName() + "::generatePojo Error", caught);
+					loadingPopUp.stopProcessing();
+				}
+			});
+		}
 	}
 }

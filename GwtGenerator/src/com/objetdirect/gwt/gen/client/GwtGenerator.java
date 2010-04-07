@@ -14,8 +14,6 @@
  */
 package com.objetdirect.gwt.gen.client;
 
-import java.util.Map.Entry;
-
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
@@ -24,28 +22,24 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.google.gwt.user.client.ui.TextArea;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.Main;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 
 /**
  * Main class for gwtuml application. This class does some initialization and calls the start panel.
  * 
  * @author Henri Darmet
  * @author Florian Mounier (mounier-dot-florian.at.gmail'dot'com)
+ * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class GwtGenerator implements EntryPoint {
 	private final static DockPanel	appRootPanel	= new DockPanel();
@@ -116,11 +110,6 @@ public class GwtGenerator implements EntryPoint {
 		Main mainWindow = new Main();
 		DOM.setInnerHTML(RootPanel.get("loading-screen").getElement(), "");
 		RootLayoutPanel.get().add(mainWindow);
-//		
-//		DeferredCommand.addCommand(new Command() {
-//			public void execute() {
-//				GwtGenerator.this.gwt_main();
-//			}
-//		});
+		
 	}
 }

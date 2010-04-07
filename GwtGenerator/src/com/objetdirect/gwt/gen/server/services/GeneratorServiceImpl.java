@@ -14,16 +14,17 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
+import com.objetdirect.gwt.gen.shared.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLType;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 
 /**
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
@@ -31,104 +32,44 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
 @SuppressWarnings("serial")
 public class GeneratorServiceImpl extends RemoteServiceServlet implements GeneratorService {
 
+	
+
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassCode(com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass, java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassCode(java.util.List, java.util.List, java.lang.String)
 	 */
 	@Override
-	public String[] generateClassCode(UMLClass clazz, String packageName) {
-		EntityDescriptor entity = new EntityDescriptor(packageName, clazz.getName());
-		
-		ArrayList<UMLClassAttribute> attributes = clazz.getAttributes();
-		
-		for(UMLClassAttribute attribute : attributes) {
-			addAttribute(entity, attribute);
+	public Map<String,List<String>> generateClassCode(List<UMLClass> classes,
+			List<UMLRelation> relations, String packageName) {
+
+		Map<UMLClass, EntityDescriptor> entities = new HashMap<UMLClass, EntityDescriptor>();
+		for (UMLClass umlClass : classes) {
+			EntityDescriptor entity = GeneratorHelper.convertUMLClassToEntityDescriptor(umlClass, packageName);
+			entities.put(umlClass, entity);
 		}
 		
-		return entity.getText();
+		for (UMLRelation relation : relations) {
+			if (relation.isOneToOne())
+				GeneratorHelper.createOneToOneRelation(entities, relation);
+			else
+				throw new GWTGeneratorException("Only one to one relations are supported currently.");
+		}
+
+		
+		Map<String,List<String>> result = new HashMap<String, List<String>>();
+		
+		for (Map.Entry<UMLClass, EntityDescriptor> entry : entities.entrySet()) {
+			List<String> lines = new ArrayList<String>();
+			
+			for(String line : entry.getValue().getText()) {
+				lines.add(line);	
+			}
+			
+			result.put(entry.getKey().getName(), lines);
+		}
+		
+		return result;
 	}
 	
-	private void addAttribute(EntityDescriptor entity, UMLClassAttribute attribute) {
-		String name = attribute.getName();
-		String type = attribute.getType();
-		UMLVisibility visibility = attribute.getVisibility();
-		
-		switch (visibility) {
-		case PRIVATE:
-			break;
-		default:
-			throw new InvalidParameterException("Pojo generator only supports private field");
-		}
-		
-		switch (UMLType.getUMLTypeFromString(type)) {
-		case STRING :
-			entity.addStringField(name, null);
-			break;
-		case INT :
-			entity.addIntField(name, null);
-			break;
-			
-		case INTEGER :
-			entity.addWrapperIntField(name, null);
-			break;
-			
-		case LONG : 
-			entity.addLongField(name, null);
-			break;
-			
-		case WRAPPED_LONG : 
-			entity.addWrapperLongField(name, null);
-			break;
-			
-		case BYTE : 
-			entity.addByteField(name, null);
-			break;
-			
-		case WRAPPED_BYTE : 
-			entity.addWrapperByteField(name, null);
-			break;
-			
-		case SHORT  : 
-			entity.addShortField(name, null);
-			break;
-			
-		case WRAPPED_SHORT :
-			entity.addWrapperShortField(name, null);
-			break;
-			
-		case BOOLEAN :
-			entity.addBooleanField(name, null);
-			break;
-			
-		case WRAPPED_BOOLEAN :
-			entity.addWrapperBooleanField(name, null);
-			break;
-			
-		case CHAR :
-			entity.addCharField(name, null);
-			break;
-			
-		case CHARACTER :
-			entity.addWrapperCharField(name, null);
-			break;
-			
-		case FLOAT  :
-			entity.addFloatField(name, null);
-			break;
-			
-		case WRAPPED_FLOAT :
-			entity.addWrapperFloatField(name, null);
-			break;
-			
-		case DOUBLE :
-			entity.addDoubleField(name, null);
-			break;
-			
-		case WRAPPED_DOUBLE  :
-			entity.addWrapperDoubleField(name, null);
-			break;
-
-		default:
-			break;
-		}
-	}
+	
+	
 }
