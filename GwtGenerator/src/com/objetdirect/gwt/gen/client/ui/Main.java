@@ -16,7 +16,6 @@ package com.objetdirect.gwt.gen.client.ui;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -35,6 +34,7 @@ import com.objetdirect.gwt.gen.client.DrawerPanel;
 import com.objetdirect.gwt.gen.client.HistoryManager;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
+import com.objetdirect.gwt.gen.shared.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
@@ -175,13 +175,13 @@ public class Main extends Composite {
 			
 			loadingPopUp.startProcessing("Generating code ...");
 			
-			generatorService.generateClassCode(umlClasses, umlRelations, "com.od.test", new AsyncCallback<Map<String,List<String>>>() {
+			generatorService.generateClassesCode(umlClasses, umlRelations, "com.od.test", new AsyncCallback<List<GeneratedCode>>() {
 				
 				@Override
-				public void onSuccess(Map<String, List<String>> result) {
-					for (Map.Entry<String, List<String>> entry : result.entrySet()) {
-						String className = entry.getKey();
-						codePanel.addClassCode(entry.getValue(), className);
+				public void onSuccess(List<GeneratedCode> result) {
+					for (GeneratedCode generatedCode : result) {
+						String className = generatedCode.getClassName();
+						codePanel.addClassCode(generatedCode.getLinesOfCode(), className);
 					}
 					
 					contentPanel.add(codePanel);

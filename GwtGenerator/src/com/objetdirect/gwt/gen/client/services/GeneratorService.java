@@ -15,10 +15,10 @@
 package com.objetdirect.gwt.gen.client.services;
 
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.objetdirect.gwt.gen.shared.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 
@@ -45,5 +45,5 @@ public interface GeneratorService extends RemoteService {
 	 * @param packageName
 	 * @return A list of 
 	 */
-	public Map<String,List<String>> generateClassCode(List<UMLClass> classes, List<UMLRelation> relations, String packageName);
+	public List<GeneratedCode> generateClassesCode(List<UMLClass> classes, List<UMLRelation> relations, String packageName);
 }

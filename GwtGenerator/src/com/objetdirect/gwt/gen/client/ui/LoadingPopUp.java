@@ -15,7 +15,6 @@
 package com.objetdirect.gwt.gen.client.ui;
 
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -38,8 +37,6 @@ public class LoadingPopUp {
 			popupPanel = new PopupPanel(false, true);
 			label = new Label();
 			popupPanel.setTitle("Loading");
-//			popupPanel.setWidth("300px");
-//			popupPanel.setHeight("200px");
 		
 			FlowPanel panel = new FlowPanel();
 		
@@ -57,13 +54,11 @@ public class LoadingPopUp {
 	}
 	
 	public void startProcessing(String message) {
-		Log.debug("LoadingPopup::Start processing");
 		label.setText(message);
 		popupPanel.center();
 	}
 	
 	public void stopProcessing() {
-		Log.debug("LoadingPopup::Stop processing");
 		popupPanel.hide();
 	}
 }
