@@ -14,8 +14,8 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -23,6 +23,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.shared.GWTGeneratorException;
+import com.objetdirect.gwt.gen.shared.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 
@@ -33,12 +34,11 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 public class GeneratorServiceImpl extends RemoteServiceServlet implements GeneratorService {
 
 	
-
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassCode(java.util.List, java.util.List, java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassesCode(java.util.List, java.util.List, java.lang.String)
 	 */
 	@Override
-	public Map<String,List<String>> generateClassCode(List<UMLClass> classes,
+	public List<GeneratedCode> generateClassesCode(List<UMLClass> classes,
 			List<UMLRelation> relations, String packageName) {
 
 		Map<UMLClass, EntityDescriptor> entities = new HashMap<UMLClass, EntityDescriptor>();
@@ -54,17 +54,18 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 				throw new GWTGeneratorException("Only one to one relations are supported currently.");
 		}
 
-		
-		Map<String,List<String>> result = new HashMap<String, List<String>>();
+		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
 		
 		for (Map.Entry<UMLClass, EntityDescriptor> entry : entities.entrySet()) {
-			List<String> lines = new ArrayList<String>();
+			List<String> linesOfCode = new LinkedList<String>();
 			
 			for(String line : entry.getValue().getText()) {
-				lines.add(line);	
+				linesOfCode.add(line);	
 			}
 			
-			result.put(entry.getKey().getName(), lines);
+			GeneratedCode generatedCode = new GeneratedCode(entry.getKey().getName(), linesOfCode);
+
+			result.add(generatedCode);
 		}
 		
 		return result;

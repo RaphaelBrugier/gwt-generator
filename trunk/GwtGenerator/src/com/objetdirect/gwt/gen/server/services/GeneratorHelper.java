@@ -77,7 +77,6 @@ public class GeneratorHelper {
 	}
 	
 	
-	
 	/**
 	 * Add an attribute to the entity depending of the type of the attribute
 	 * @param entity the target entity

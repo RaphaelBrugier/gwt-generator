@@ -13,10 +13,13 @@ package com.objetdirect.gwt;
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import junit.framework.Assert;
+
+import com.objetdirect.gwt.gen.shared.GeneratedCode;
 
 /**
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
@@ -25,19 +28,29 @@ public class TestUtil {
 
 	public static String packageName = "com.objetdirect";
 	
-	public static void assertText(String className, Map<String, List<String>> generatedCode, String ... model) {
-		List<String> code = generatedCode.get(className);
-		
+	public static void assertText(String className, List<GeneratedCode> generatedClassesCode, String ... model) {
+		List<String> code = new LinkedList<String>();
+		for(GeneratedCode genCode : generatedClassesCode) {
+			if (genCode.getClassName().equalsIgnoreCase(className)) {
+				code = genCode.getLinesOfCode();
+			}
+		}
+
 		int length = model.length < code.size() ? model.length : code.size();
 		for (int i=0; i<length; i++)
 			Assert.assertEquals("Line not found ("+i+") :", model[i], code.get(i));
 	}
 	
-	public static void assertExist(String className, Map<String, List<String>> generatedCode, String ... model) {
-		String[] lines = new String[generatedCode.get(className).size()];
-		System.arraycopy(generatedCode.get(className).toArray(), 0, lines, 0, generatedCode.get(className).size());
-//		String[] code = (String[]) lines.toArray();
-		//String[] code = (String[])generatedCode.get(className).toArray();
+	public static void assertExist(String className, List<GeneratedCode> generatedClassesCode, String ... model) {
+		List<String> linesOfCode = new LinkedList<String>();
+		for(GeneratedCode genCode : generatedClassesCode) {
+			if (genCode.getClassName().equalsIgnoreCase(className)) {
+				linesOfCode = genCode.getLinesOfCode();
+			}
+		}
+		
+		String[] lines = new String[linesOfCode.size()];
+		System.arraycopy(linesOfCode.toArray(), 0, lines, 0, linesOfCode.size());
 		assertExists(lines, model);
 	}
 	

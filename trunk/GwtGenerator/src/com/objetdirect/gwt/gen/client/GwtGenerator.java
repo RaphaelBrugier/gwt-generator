@@ -16,7 +16,6 @@ package com.objetdirect.gwt.gen.client;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
@@ -27,8 +26,6 @@ import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
-import com.objetdirect.gwt.gen.client.services.GeneratorService;
-import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.Main;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
@@ -45,8 +42,6 @@ public class GwtGenerator implements EntryPoint {
 	private final static DockPanel	appRootPanel	= new DockPanel();
 	static HorizontalPanel			southBar;
 	
-	private final static GeneratorServiceAsync generatorService = GWT.create(GeneratorService.class);
-
 	/**
 	 * Entry point of the application This class make a StartPanel and manage the history for it
 	 */
