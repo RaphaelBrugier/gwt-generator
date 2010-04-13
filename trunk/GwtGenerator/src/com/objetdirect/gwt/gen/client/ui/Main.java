@@ -104,7 +104,6 @@ public class Main extends Composite {
 	private void addCommands(){
 		
 		designMenuItem.setCommand(new Command() {
-			
 			@Override
 			public void execute() {
 				contentPanel.clear();
@@ -191,8 +190,19 @@ public class Main extends Composite {
 				
 				@Override
 				public void onFailure(Throwable caught) {
-					Log.debug(this.getClass().getName() + "::generatePojo Error", caught);
+					ErrorPopUp errorPopUp = new ErrorPopUp(caught);
+					errorPopUp.addClosedCommand(new Command() {
+						@Override
+						public void execute() {
+							contentPanel.clear();
+							contentPanel.add(drawer);
+							HotKeyManager.setInputEnabled(true);
+							GWTUMLDrawerHelper.disableBrowserEvents();
+						}
+					});
+					
 					loadingPopUp.stopProcessing();
+					errorPopUp.show();
 				}
 			});
 		}

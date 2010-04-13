@@ -19,8 +19,11 @@ package com.objetdirect.gwt.gen.shared;
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 @SuppressWarnings("serial")
-public class GWTGeneratorException extends RuntimeException {
+public class GWTGeneratorException extends Exception {
 
+	public GWTGeneratorException() {
+	}
+	
 	/**
 	 * Constructor of the exception
 	 * 

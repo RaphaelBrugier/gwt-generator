@@ -22,8 +22,8 @@ import java.util.Map;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
-import com.objetdirect.gwt.gen.shared.GWTGeneratorException;
 import com.objetdirect.gwt.gen.shared.GeneratedCode;
+import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 
@@ -39,7 +39,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	 */
 	@Override
 	public List<GeneratedCode> generateClassesCode(List<UMLClass> classes,
-			List<UMLRelation> relations, String packageName) {
+			List<UMLRelation> relations, String packageName) throws UMLComponentException {
 
 		Map<UMLClass, EntityDescriptor> entities = new HashMap<UMLClass, EntityDescriptor>();
 		for (UMLClass umlClass : classes) {
@@ -50,8 +50,15 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 		for (UMLRelation relation : relations) {
 			if (relation.isOneToOne())
 				GeneratorHelper.createOneToOneRelation(entities, relation);
-			else
-				throw new GWTGeneratorException("Only one to one relations are supported currently.");
+			else if (relation.isOneToMany()) {
+				GeneratorHelper.createOneToManyRelation(entities, relation);
+			} else if (relation.isManyToOne()) {
+				GeneratorHelper.createManyToOneRelation(entities, relation);
+			} else if (relation.isManyToMany()) {
+				GeneratorHelper.createManyToManyRelation(entities, relation);
+			} else {
+				throw new UMLComponentException("Unknown relation. Did you forget a property on the relation : " + relation);
+			}
 		}
 
 		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
@@ -64,7 +71,6 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 			}
 			
 			GeneratedCode generatedCode = new GeneratedCode(entry.getKey().getName(), linesOfCode);
-
 			result.add(generatedCode);
 		}
 		
