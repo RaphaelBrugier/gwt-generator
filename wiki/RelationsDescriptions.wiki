@@ -12,8 +12,11 @@ For a bidirectional relation, you must add a stereotype < < owner > > on the own
  
 == Quick access ==
  [RelationsDescriptions#One_To_One_relations_descriptions OneToOne relations]
+
  [RelationsDescriptions#One_To_Many_relations_descriptions OneToMany relations]
+
  [RelationsDescriptions#Many_To_One_relations_descriptions ManyToOne relations]
+
  [RelationsDescriptions#Many_To_Many_relations_descriptions ManyToMany relations]
 -----
 -----
