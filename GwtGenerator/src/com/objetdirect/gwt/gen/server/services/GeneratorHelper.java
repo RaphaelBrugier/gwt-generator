@@ -14,12 +14,16 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import java.security.InvalidParameterException;
 import java.util.ArrayList;
 import java.util.Map;
 
 import com.objetdirect.entities.EntityDescriptor;
+import com.objetdirect.entities.ManyToManyReferenceListDescriptor;
+import com.objetdirect.entities.ManyToOneReferenceDescriptor;
+import com.objetdirect.entities.OneToManyReferenceListDescriptor;
 import com.objetdirect.entities.OneToOneReferenceDescriptor;
+import com.objetdirect.gwt.gen.shared.GWTGeneratorException;
+import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
@@ -31,7 +35,7 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
  */
 public class GeneratorHelper {
 
-	public static EntityDescriptor convertUMLClassToEntityDescriptor(UMLClass umlClass, String packageName) {
+	public static EntityDescriptor convertUMLClassToEntityDescriptor(UMLClass umlClass, String packageName) throws UMLComponentException {
 		EntityDescriptor entity = new EntityDescriptor(packageName, umlClass.getName());
 		
 		ArrayList<UMLClassAttribute> attributes = umlClass.getAttributes();
@@ -43,8 +47,7 @@ public class GeneratorHelper {
 		return entity;
 	}
 	
-	
-	public static void createOneToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) {
+	public static void createOneToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
@@ -64,7 +67,6 @@ public class GeneratorHelper {
 			refLeftToRight.setReverse(refRightToLeft, relation.isLeftOwner());
 			refRightToLeft.setReverse(refLeftToRight, relation.isRightOwner());
 		} else {
-		
 			if (relation.isLeftOwner()) {
 				OneToOneReferenceDescriptor refLeftToRight = 
 					new OneToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, relation.isAComposition(), false);
@@ -77,12 +79,96 @@ public class GeneratorHelper {
 	}
 	
 	
+	public static void createOneToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
+		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
+		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
+		
+		if (relation.isBidirectional()) {
+			throw new UMLComponentException("Bidirectional one-to-many relation is not supported yet.");
+		} 
+		// Unidirectional
+		else {
+			if (relation.isLeftOwner()) {
+				OneToManyReferenceListDescriptor ref = 
+					new OneToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
+			} else {
+				OneToManyReferenceListDescriptor ref = 
+					new OneToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
+			}
+		}
+	}
+
+
+	public static void createManyToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
+		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
+		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
+		
+		if (relation.isBidirectional()) {
+			if (relation.isLeftOwner()) {
+				ManyToOneReferenceDescriptor leftToRight = 
+					new ManyToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, false);
+				OneToManyReferenceListDescriptor rightToLeft = 
+					new OneToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
+				
+				leftToRight.setReverse(rightToLeft, true);
+				rightToLeft.setReverse(leftToRight, false);
+			} 
+			else {
+				OneToManyReferenceListDescriptor leftToRight = 
+					new OneToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
+				
+				ManyToOneReferenceDescriptor rightToLeft = 
+					new ManyToOneReferenceDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false, false);
+				
+				leftToRight.setReverse(rightToLeft, false);
+				rightToLeft.setReverse(leftToRight, true);
+			}
+		} 
+		// Unidirectional
+		else {
+			if (relation.isLeftOwner()) {
+				ManyToOneReferenceDescriptor ref = 
+					new ManyToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, false);
+			} else {
+				ManyToOneReferenceDescriptor ref = 
+					new ManyToOneReferenceDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false, false);
+			}
+		}
+	}
+
+
+	public static void createManyToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
+		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
+		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
+		
+		if (relation.isBidirectional()) {
+			ManyToManyReferenceListDescriptor leftToRight = 
+				new ManyToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
+			ManyToManyReferenceListDescriptor rightToLeft = 
+				new ManyToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
+			leftToRight.setReverse(rightToLeft, relation.isLeftOwner());
+			rightToLeft.setReverse(leftToRight, relation.isRightOwner());
+		}
+		// Unidirectional
+		else {
+			if (relation.isLeftOwner()) {
+				ManyToManyReferenceListDescriptor ref = 
+					new ManyToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
+			} else {
+				ManyToManyReferenceListDescriptor ref = 
+					new ManyToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
+			}
+		}
+	}
+	
+	
 	/**
 	 * Add an attribute to the entity depending of the type of the attribute
 	 * @param entity the target entity
 	 * @param attribute	the attribute to add to the entity
+	 * @throws UMLComponentException 
 	 */
-	private static void addAttribute(EntityDescriptor entity, UMLClassAttribute attribute) {
+	private static void addAttribute(EntityDescriptor entity, UMLClassAttribute attribute) throws UMLComponentException {
 		String name = attribute.getName();
 		String type = attribute.getType();
 		UMLVisibility visibility = attribute.getVisibility();
@@ -91,7 +177,7 @@ public class GeneratorHelper {
 		case PRIVATE:
 			break;
 		default:
-			throw new InvalidParameterException("Pojo generator only supports private field");
+			throw new UMLComponentException("Pojo generator only supports private field");
 		}
 		
 		switch (UMLType.getUMLTypeFromString(type)) {

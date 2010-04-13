@@ -15,12 +15,15 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
 import com.objetdirect.gwt.TestUtil;
+import com.objetdirect.gwt.gen.shared.GWTGeneratorException;
 import com.objetdirect.gwt.gen.shared.GeneratedCode;
+import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLLink.LinkKind;
@@ -30,9 +33,9 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment
  * Test the generation of the one to one relations
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public class TestGeneratorServiceOneToOneReference extends TestCase {
+public class TestGeneratorServiceOneToOne extends TestCase {
 
-	GeneratorServiceImpl service = new GeneratorServiceImpl();
+	private GeneratorServiceImpl service = new GeneratorServiceImpl();
 	
 	public void testOneToOneUnidirectionnalReference() {
 		UMLClass leftEntity = new UMLClass("LeftEntity");
@@ -53,14 +56,19 @@ public class TestGeneratorServiceOneToOneReference extends TestCase {
 		relation.setRightRole("link");
 		relation.setRightTarget(rightEntity);
 
-		List<UMLClass> classes = new ArrayList<UMLClass>();
-		List<UMLRelation> relations = new ArrayList<UMLRelation>();
+		List<UMLClass> classes = new LinkedList<UMLClass>();
+		List<UMLRelation> relations = new LinkedList<UMLRelation>();
 		
 		classes.add(leftEntity);
 		classes.add(rightEntity);
 		relations.add(relation);
 		
-		List<GeneratedCode> generatedCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+		List<GeneratedCode> generatedCode = null;
+		try {
+			generatedCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+		} catch (UMLComponentException e) {
+			fail();
+		}
 		
 		TestUtil.assertExist(leftEntity.getName(), generatedCode,
 				"import javax.persistence.OneToOne;");
@@ -110,7 +118,12 @@ public class TestGeneratorServiceOneToOneReference extends TestCase {
 		classes.add(rightEntity);
 		relations.add(relation);
 		
-		List<GeneratedCode> generatedCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+		List<GeneratedCode> generatedCode = null;
+		try {
+			generatedCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+		} catch (UMLComponentException e) {
+			fail();
+		}
 		
 		TestUtil.assertExist(leftEntity.getName(), generatedCode,
 		"import javax.persistence.OneToOne;");
@@ -161,7 +174,12 @@ public class TestGeneratorServiceOneToOneReference extends TestCase {
 		classes.add(rightEntity);
 		relations.add(relation);
 		
-		List<GeneratedCode> generatedClassesCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+		List<GeneratedCode> generatedClassesCode = null;
+		try {
+			generatedClassesCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+		} catch (UMLComponentException e) {
+			fail();
+		}
 	
 		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
 				"import javax.persistence.OneToOne;"
