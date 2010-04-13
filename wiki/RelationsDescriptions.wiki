@@ -1,0 +1,102 @@
+#summary This page describes the relations supported by the generator and show the generated code for each relation.
+
+= Introduction =
+
+This page describes the relations supported by the generator and show the generated code for each relation.
+
+
+Please note that :
+
+A _one_ cardinality is represented by _"1"_ or nothing
+
+A _many_ cardinality is represented by _"*"_
+
+For a bidirectional relation, you must add a stereotype < < owner > > and the owner's side.
+ 
+== Quick access ==
+ [RelationsDescriptions#One_To_One_relations_descriptions]
+-----
+-----
+
+
+=One To One relations descriptions=
+
+==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#d0e1387 Unidirectional]==
+
+http://gwt-generator.googlecode.com/svn/wiki/relations/oneToOne.png
+
+=== Generated Code ===
+==== Body class : ====
+{{{
+@Entity
+public class Body implements Serializable {
+
+    @Id
+    @GeneratedValue
+    int id;
+    @Version
+    int version;
+    @OneToOne
+    Heart heart;
+
+    public Body() {
+    }
+    
+    public Body(boolean dummy) {
+        this.heart = null;
+    }
+
+    public int getId() {
+        return id;
+    }
+    
+    public int getVersion() {
+        return version;
+    }
+    
+    public static Body createBody() {
+        Body body = new Body();
+        return body;
+    }
+    
+    public Heart getHeart() {
+        return heart;
+    }
+    
+    public void setHeart(Heart heart) {
+        this.heart = heart;
+    }
+}
+}}}
+
+==== Heart class : ====
+{{{
+@Entity
+public class Heart implements Serializable {
+
+    @Id
+    @GeneratedValue
+    int id;
+    @Version
+    int version;
+
+    public Heart() {
+    }
+    
+    public Heart(boolean dummy) {
+    }
+
+    public int getId() {
+        return id;
+    }
+    
+    public int getVersion() {
+        return version;
+    }
+    
+    public static Heart createHeart() {
+        Heart heart = new Heart();
+        return heart;
+    }
+}
+}}}
