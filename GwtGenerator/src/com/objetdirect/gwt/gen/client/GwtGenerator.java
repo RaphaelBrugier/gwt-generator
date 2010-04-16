@@ -16,17 +16,22 @@ package com.objetdirect.gwt.gen.client;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DockPanel;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
+import com.objetdirect.gwt.gen.client.services.LoginService;
+import com.objetdirect.gwt.gen.client.services.LoginServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.Main;
+import com.objetdirect.gwt.gen.shared.LoginInfo;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
@@ -93,6 +98,12 @@ public class GwtGenerator implements EntryPoint {
 		RootLayoutPanel.get().add(GwtGenerator.appRootPanel);
 	}
 
+	/** Informations about the logged user or how to log in him. */
+	public static LoginInfo loginInfo;
+	
+	private final LoginServiceAsync loginService = GWT.create(LoginService.class); 
+	
+	private static Main mainController;
 	
 	/*
 	 * Real gwt app entry point, this code allow GWT Log to catch exception and display it (non-Javadoc)
@@ -101,10 +112,20 @@ public class GwtGenerator implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		Log.setUncaughtExceptionHandler();
-		
-		Main mainWindow = new Main();
-		DOM.setInnerHTML(RootPanel.get("loading-screen").getElement(), "");
-		RootLayoutPanel.get().add(mainWindow);
-		
+		Log.debug("uri = " + GWT.getHostPageBaseURL());
+		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
+			
+			@Override
+			public void onSuccess(LoginInfo result) {
+				loginInfo = result;
+//				RootLayoutPanel.get().add(new Main());
+				mainController = new Main();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Window.alert(caught.getMessage());
+			}
+		});
 	}
 }

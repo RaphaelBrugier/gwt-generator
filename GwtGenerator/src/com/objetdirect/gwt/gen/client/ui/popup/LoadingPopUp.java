@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui;
+package com.objetdirect.gwt.gen.client.ui.popup;
 
 
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -23,7 +23,7 @@ import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 
 
 /**
- * Loading popup
+ * A simple pop up for displaying a loading message and an "web 2.0 gif loader" 
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
 public class LoadingPopUp {
@@ -32,6 +32,7 @@ public class LoadingPopUp {
 	
 	private static Label label;
 	
+	/** Constructor of the popup. */
 	public LoadingPopUp() {
 		if (popupPanel == null) {
 			popupPanel = new PopupPanel(false, true);
@@ -49,15 +50,25 @@ public class LoadingPopUp {
 		}
 	}
 	
+	/**
+	 * Show the pop up with a default loading message : "Please wait ..."
+	 */
 	public void startProcessing() {
 		startProcessing("Please wait...");
 	}
 	
+	/**
+	 * Show the pop up with a given message.
+	 * @param message the message.
+	 */
 	public void startProcessing(String message) {
 		label.setText(message);
 		popupPanel.center();
 	}
 	
+	/**
+	 * Hide the popup.
+	 */
 	public void stopProcessing() {
 		popupPanel.hide();
 	}

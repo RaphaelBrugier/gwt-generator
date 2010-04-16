@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.objetdirect.gwt.gen.shared.GWTGeneratorException;
 import com.objetdirect.gwt.gen.shared.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -30,22 +29,13 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
  */
 @RemoteServiceRelativePath("generator")
 public interface GeneratorService extends RemoteService {
-
-	/**
-	 * Generate the class code for the given class.
-	 * @param clazz the class 
-	 * @param packageName the package name
-	 * @return the code line by line
-	 */
-//	 String[] generateClassCode(UMLClass clazz, String packageName);
-	
 	
 	/**
 	 * Generate the code from the given classes and relations.
-	 * @param classes
-	 * @param relations
-	 * @param packageName
-	 * @return A list of 
+	 * @param classes the classes as UMLComponent
+	 * @param relations the relations between the classes
+	 * @param packageName the name of the package
+	 * @return A list of GeneratedCode object which contains the generated lines of code and the classes name.
 	 * @throws UMLComponentException 
 	 */
 	public List<GeneratedCode> generateClassesCode(List<UMLClass> classes, List<UMLRelation> relations, String packageName) throws UMLComponentException;
