@@ -12,25 +12,21 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.shared;
+package com.objetdirect.gwt.gen.client.services;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.objetdirect.gwt.gen.shared.LoginInfo;
+
 
 /**
- * This class defines specific gwt-generator exception
+ * Async counter part of LoginService
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-@SuppressWarnings("serial")
-public class GWTGeneratorException extends RuntimeException {
+public interface LoginServiceAsync {
 
-	public GWTGeneratorException() {
-	}
-	
-	/**
-	 * Constructor of the exception
-	 * 
-	 * @param msg
-	 *            The String exception
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.LoginService#login(java.lang.String)
 	 */
-	public GWTGeneratorException(final String msg) {
-		super(msg);
-	}
+	void login(String requestUri, AsyncCallback<LoginInfo> callback);
+
 }

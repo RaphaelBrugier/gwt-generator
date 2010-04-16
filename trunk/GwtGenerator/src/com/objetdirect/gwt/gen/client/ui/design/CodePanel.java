@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui;
+package com.objetdirect.gwt.gen.client.ui.design;
 
 import java.util.List;
 
@@ -26,9 +26,8 @@ import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
- * Widget for displaying the generated code.
+ * Widget for displaying the generated code in a tab panel.
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
- *
  */
 public class CodePanel extends Composite {
 	private static CodePanelUiBinder uiBinder = GWT
@@ -45,6 +44,11 @@ public class CodePanel extends Composite {
 		tabPanel.setSize("100%", "750px");
 	}
 	
+	/**
+	 * Add  tab to the widget to display the code of the given class.
+	 * @param code the lines of code of the class
+	 * @param className the name of the class
+	 */
 	public void addClassCode(List<String> code, String className) {
 		StringBuilder sb = new StringBuilder();
 		for (String s : code) {
@@ -65,10 +69,12 @@ public class CodePanel extends Composite {
 		tabPanel.add(wrapper, className);
 	}
 	
+	/** Clean all code tab. */
 	public void cleanAllCode() {
 		tabPanel.clear();
 	}
 
+	/** Display the first tab. */
 	public void goToFirstClass() {
 		tabPanel.selectTab(0);
 	}

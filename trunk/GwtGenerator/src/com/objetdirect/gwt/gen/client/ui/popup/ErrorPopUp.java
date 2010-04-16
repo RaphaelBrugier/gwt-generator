@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui;
+package com.objetdirect.gwt.gen.client.ui.popup;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -31,10 +31,18 @@ public class ErrorPopUp {
 	private Command closedCommand;
 	private PopupPanel popUpPanel;
 	
+	/**
+	 * Constructor with the exception to be displayed.
+	 * @param cause
+	 */
 	public ErrorPopUp(Throwable cause) {
 		this(cause.getMessage());
 	}
 	
+	/**
+	 * Constructor with the message to be displayed by the popup.
+	 * @param message message to be displayed by the popup.
+	 */
 	public ErrorPopUp(String message) {
 		closedCommand = null;
 		
@@ -69,7 +77,7 @@ public class ErrorPopUp {
 	}
 	
 	/**
-	 * Add a command to exectude before closing the popup.
+	 * Add a command to be executed before closing the popup.
 	 * @param closedCommand
 	 * @return this.
 	 */

@@ -12,25 +12,25 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.shared;
+package com.objetdirect.gwt.gen.client.services;
+
+import com.google.gwt.user.client.rpc.RemoteService;
+import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
+import com.objetdirect.gwt.gen.shared.LoginInfo;
+
 
 /**
- * This class defines specific gwt-generator exception
+ * Services to connect an user with the Google account api on Google app Engine.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-@SuppressWarnings("serial")
-public class GWTGeneratorException extends RuntimeException {
-
-	public GWTGeneratorException() {
-	}
+@RemoteServiceRelativePath("login")
+public interface LoginService extends RemoteService {
 	
 	/**
-	 * Constructor of the exception
-	 * 
-	 * @param msg
-	 *            The String exception
+	 * Create a LoginInfo with the url where the user will be redirect after have been with the google account api on google app engine. 
+	 * @param requestUri where the user will be redirected after they log out.
+	 * Usually, you should use GWT.getHostPageBaseURL() as the parameter.
+	 * @return A loginInfo object wich contains the informations about the login/logout.
 	 */
-	public GWTGeneratorException(final String msg) {
-		super(msg);
-	}
+	public LoginInfo login(String requestUri);
 }

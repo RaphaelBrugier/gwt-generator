@@ -16,6 +16,16 @@
  	</servlet-mapping>
 
 
+	<servlet>
+    	<servlet-name>loginService</servlet-name>
+    	<servlet-class>com.objetdirect.gwt.gen.server.services.LoginServiceImpl</servlet-class>
+  	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>loginService</servlet-name>
+    	<url-pattern>/gwtgenerator/login</url-pattern>
+  	</servlet-mapping>
+
 <!-- Logging servlet -->
 	<servlet>
   		<servlet-name>remoteLoggingServiceImpl</servlet-name>
@@ -34,6 +44,9 @@
   		<servlet-name>remoteLoggerServiceImpl</servlet-name>
 		<url-pattern>/gwtgenerator/gwt-log</url-pattern>
 	</servlet-mapping>
+  
+  
+
   
   
   <!-- Default page to serve -->

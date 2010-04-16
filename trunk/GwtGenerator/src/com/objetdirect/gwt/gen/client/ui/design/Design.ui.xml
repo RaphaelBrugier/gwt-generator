@@ -19,19 +19,12 @@
 						<g:MenuItem ui:field="exportToPOJO">Export to POJO</g:MenuItem>
 		     		</g:MenuBar>
 		   		</g:MenuItem>
+		   		<g:MenuItem ui:field="backToExplorer">Back to explorer.
+			   	</g:MenuItem>
   			</g:MenuBar>
    		</g:north>
 	   	<g:center>
 			<g:SimplePanel ui:field="contentPanel"/>
-<!--		   		<g:TabLayoutPanel barUnit='EM' barHeight='2	' ui:field="tabPanel">-->
-<!--				<g:tab>-->
-<!--					<g:header size='2'>Design</g:header>-->
-<!--				 </g:tab>-->
-<!--				</g:TabLayoutPanel>-->
-	     	
 	   	</g:center>
-<!--	   	<g:west size='192'>-->
-<!--	     	<g:TextArea>Hello</g:TextArea>-->
-<!--	   	</g:west>-->
 	</g:DockLayoutPanel>
 </ui:UiBinder> 
