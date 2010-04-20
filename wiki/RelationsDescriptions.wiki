@@ -6,7 +6,7 @@ Please note that :
 
 A _one_ cardinality is represented by _"1"_ or nothing
 
-A _many_ cardinality is represented by _"*"_
+A _many_ cardinality is represented by _"`*`"_
 
 For a bidirectional relation, you must add a stereotype < < owner > > on the owner's side.
  
