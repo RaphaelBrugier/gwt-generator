@@ -19,6 +19,7 @@ import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
@@ -27,15 +28,22 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.MenuItem;
+import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.DrawerPanel;
+import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
+import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
+import com.objetdirect.gwt.gen.client.services.DiagramService;
+import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.Main;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
+import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
@@ -49,6 +57,8 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
 
+import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent.CreateDiagramEventHandler;
+
 /**
  * Widget containing the UMl Modeler.
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
@@ -61,6 +71,8 @@ public class Design extends Composite {
 	}
 
 	private final static GeneratorServiceAsync generatorService = GWT.create(GeneratorService.class);
+	
+	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 	
 	@UiField
 	MenuItem designMenuItem;
@@ -78,35 +90,47 @@ public class Design extends Composite {
 	MenuItem exportToPOJO;
 	
 	@UiField 
-	MenuItem backToExplorer;
+	MenuItem saveAndBack;
 	
 	@UiField
 	SimplePanel contentPanel;
+	
+	@UiField
+	Label diagramName;
 	
 	final private CodePanel codePanel = new CodePanel();
 	
 	final private LoadingPopUp loadingPopUp = new LoadingPopUp();
 	
-	final private DrawerPanel drawer;
-
-	final private Main parent;
+	private DrawerPanel drawer;
 	
-	public Design(Main parent) {
+	final private HandlerManager eventBus;
+	
+	public Design(HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
 		
-		this.parent = parent;
+		this.eventBus = eventBus;
 		
 		OptionsManager.initialize();
-		OptionsManager.set("DiagramType", UMLDiagram.Type.CLASS.getIndex());
 		HotKeyManager.forceStaticInit();
-		drawer = new DrawerPanel();
-		drawer.addDefaultNode(Type.CLASS);
+		HotKeyManager.setInputEnabled(false);
 		contentPanel.setHeight("100%");
 		contentPanel.setWidth("100%");
-		contentPanel.add(drawer);
+		bind();
 		bindCommands();
 	}
 	
+	
+	/** Attached handlers to the eventbus. */
+	private void bind() {
+		eventBus.addHandler(CreateDiagramEvent.TYPE, new CreateDiagramEventHandler() {
+			
+			@Override
+			public void onCreateDiagramEvent(CreateDiagramEvent event) {
+				doCreateNewDiagram(event.getDiagramInformations());
+			}
+		});
+	}
 	
 	/**
 	 * Attached command to the menu items. 
@@ -151,22 +175,59 @@ public class Design extends Composite {
 		exportToPOJO.setCommand(new Command() {
 			@Override
 			public void execute() {
-				generatePojo();
+				doGeneratePojo();
 			}
 		});
 		
-		backToExplorer.setCommand(new Command() {
+		saveAndBack.setCommand(new Command() {
 			@Override
 			public void execute() {
-				parent.goToHomeScreen();
+				HotKeyManager.setInputEnabled(false);
+				eventBus.fireEvent(new BackToHomeEvent());
 			}
 		});
 	}
 	
+	
+	/**
+	 * Create a new diagram in the base and setup the canvas with it.
+	 * @param diagramInformations
+	 */
+	private void doCreateNewDiagram(final DiagramInformations diagramInformations) {
+		final LoadingPopUp loadingPopUp = new LoadingPopUp();
+		loadingPopUp.startProcessing("Creating a new diagram and loading the designer, please wait...");
+		
+		diagramService.createDiagram(diagramInformations.getType(), diagramInformations.getName(), new 
+			AsyncCallback<Long>() {
+				@Override
+				public void onSuccess(Long result) {
+					Log.debug("Creation with succes id = " + result);
+					
+					OptionsManager.set("DiagramType", diagramInformations.getType().ordinal());
+					drawer = new DrawerPanel();
+					contentPanel.clear();
+					contentPanel.add(drawer);
+					diagramName.setText(diagramInformations.getName());
+					
+					HotKeyManager.setInputEnabled(true);
+					// DesignPanel can not be attached in the container and should be insert directly into the root of the document
+					RootLayoutPanel.get().clear();
+					RootLayoutPanel.get().add(Design.this);
+					loadingPopUp.stopProcessing();
+				}
+				
+				@Override
+				public void onFailure(Throwable caught) {
+					Log.debug(caught.getMessage());
+					eventBus.fireEvent(new BackToHomeEvent());
+				}
+			});
+	};
+	
 	/** Command to generate the pojos from the diagram. 
 	 *  Trigger the display of the codePanel after generate the code.
 	 */
-	private void generatePojo() {
+	private void doGeneratePojo() {
 		codePanel.cleanAllCode();
 		
 		List<UMLClass> umlClasses = new ArrayList<UMLClass>();
