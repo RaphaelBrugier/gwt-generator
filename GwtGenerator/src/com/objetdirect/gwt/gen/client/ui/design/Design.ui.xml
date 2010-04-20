@@ -5,9 +5,14 @@
 		.important {
 			font-weight: bold;
 		}
+		
+		.horizontal-right {
+			float: right;
+		}
 	</ui:style>
 	<g:DockLayoutPanel unit='EM'>
    		<g:north size='2'>
+   			<g:HorizontalPanel>
      		<g:MenuBar>
 			   	<g:MenuItem ui:field="designMenuItem">Design
 			   	</g:MenuItem>
@@ -19,9 +24,11 @@
 						<g:MenuItem ui:field="exportToPOJO">Export to POJO</g:MenuItem>
 		     		</g:MenuBar>
 		   		</g:MenuItem>
-		   		<g:MenuItem ui:field="backToExplorer">Save and back to explorer.
+		   		<g:MenuItem ui:field="saveAndBack">Save and back to explorer.
 			   	</g:MenuItem>
   			</g:MenuBar>
+			<g:Label ui:field="diagramName"/>
+   			</g:HorizontalPanel>
    		</g:north>
 	   	<g:center>
 			<g:SimplePanel ui:field="contentPanel"/>

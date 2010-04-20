@@ -14,26 +14,21 @@
  */
 package com.objetdirect.gwt.gen.client.ui.explorer;
 
-import java.util.Collection;
-
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.TextBox;
@@ -42,11 +37,11 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
+import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.Main;
-import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
+import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 
@@ -62,7 +57,9 @@ public class ExplorerPanel extends Composite {
 	interface ExplorerPanelUiBinder extends UiBinder<Widget, ExplorerPanel> {
 	}
 	
-	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
+	final private  DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
+	
+	final private  HandlerManager eventBus;
 	
 	@UiField
 	SpanElement nameSpan;
@@ -79,16 +76,13 @@ public class ExplorerPanel extends Composite {
 	@UiField
 	FlowPanel content;
 	
-	
-	private Main parent;
-
-	public ExplorerPanel(Main parent) {
+	public ExplorerPanel(HandlerManager eventBus) {
 		if (!GwtGenerator.loginInfo.isLoggedIn()) {
 			throw new GWTGeneratorException("A user should have been logged before construct the explorer panel");
 		}
 		
 		initWidget(uiBinder.createAndBindUi(this));
-		this.parent = parent;
+		this.eventBus = eventBus;
 
 		nameSpan.setInnerText( GwtGenerator.loginInfo.getNickname());
 		signOut.setHref(GwtGenerator.loginInfo.getLogoutUrl());
@@ -100,32 +94,7 @@ public class ExplorerPanel extends Composite {
 	
 
 	private void populateContentPanel() {
-		Image loader = new Image(ImageResources.INSTANCE.ajaxLoader());
-		content.add(loader);
-		
-		diagramService.getDiagrams(new AsyncCallback<Collection<DiagramInformations>>() {
-			
-			@Override
-			public void onSuccess(Collection<DiagramInformations> result) {
-				if (result.size()==0) {
-					content.clear();
-					content.add(new Label("No diagram found."));
-				} else {
-					for (DiagramInformations d : result) {
-						content.clear();
-						HTML text = new HTML();
-						text.setText("Type = " + d.getType() + " name = " + d.getName());
-						content.add(text);
-					}
-				}
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Log.debug(caught.getMessage());
-				Window.alert("Unable to retrieve diagrams from the base.");
-			}
-		});
+		content.add(new DiagramList(eventBus));
 	}
 
 	private void populateWestPanel() {
@@ -199,8 +168,13 @@ public class ExplorerPanel extends Composite {
 			
 			@Override
 			public void onClick(ClickEvent event) {
+				Log.debug("createButton::onClick");
 				dialogBox.hide();
-				parent.createDiagram(nameTb.getValue(), listbox.getValue(listbox.getSelectedIndex()));
+				String diagramName = nameTb.getValue();
+				Type diagramType = Type.valueOf(listbox.getValue(listbox.getSelectedIndex()));
+				DiagramInformations diagramInformations = new DiagramInformations(diagramName, diagramType);
+				
+				eventBus.fireEvent(new CreateDiagramEvent(diagramInformations));
 			}
 		}); 
 		

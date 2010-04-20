@@ -168,3 +168,43 @@
         font: bold 14px Verdana;
 }
 
+/* Gwt-Generator style */
+
+.DiagramList {
+  border-top: thin solid #444444;
+  border-left: thin solid #444444;
+  border-right: thin solid #111111;
+  border-bottom: thin solid #111111;
+  background-color:  #EFFBFB;
+  text-align: center;
+}
+
+.DiagramList-OddRow {
+  background-color: #F2F5F9;
+}
+
+.DiagramList-EvenRow {
+  background-color:  #EFFBFB;
+}
+
+
+.DiagramList-ColumnLabel {
+  color: black;
+  padding: 3px;
+}
+
+.DiagramList-ColumnLabelCell {
+  border-width: 0 0 1px 0;
+  border-style: solid;
+  border-color: black;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+}
+
+.DiagramList-Cell {
+  border-width: 0px 0px 0px 1px;
+  border-style: solid;
+  border-color: black;
+  padding: 5px;
+}
