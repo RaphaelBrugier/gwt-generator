@@ -31,7 +31,7 @@ import com.google.gwt.user.client.ui.RootPanel;
 import com.objetdirect.gwt.gen.client.services.LoginService;
 import com.objetdirect.gwt.gen.client.services.LoginServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.Main;
-import com.objetdirect.gwt.gen.shared.LoginInfo;
+import com.objetdirect.gwt.gen.shared.dto.LoginInfo;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
@@ -112,7 +112,6 @@ public class GwtGenerator implements EntryPoint {
 	 */
 	public void onModuleLoad() {
 		Log.setUncaughtExceptionHandler();
-		Log.debug("uri = " + GWT.getHostPageBaseURL());
 		loginService.login(GWT.getHostPageBaseURL(), new AsyncCallback<LoginInfo>() {
 			
 			@Override

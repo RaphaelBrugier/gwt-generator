@@ -15,11 +15,12 @@
 package com.objetdirect.gwt.gen.client.services;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.objetdirect.gwt.gen.shared.LoginInfo;
+import com.objetdirect.gwt.gen.shared.dto.LoginInfo;
 
 
 /**
  * Async counter part of LoginService
+ * @see com.objetdirect.gwt.gen.client.services.LoginService
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public interface LoginServiceAsync {

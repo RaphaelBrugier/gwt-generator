@@ -22,7 +22,7 @@ import com.objetdirect.entities.ManyToManyReferenceListDescriptor;
 import com.objetdirect.entities.ManyToOneReferenceDescriptor;
 import com.objetdirect.entities.OneToManyReferenceListDescriptor;
 import com.objetdirect.entities.OneToOneReferenceDescriptor;
-import com.objetdirect.gwt.gen.shared.GWTGeneratorException;
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
@@ -31,11 +31,19 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
 
 /**
+ * Helper methods to generate the source code from UML Components.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class GeneratorHelper {
 
-	public static EntityDescriptor convertUMLClassToEntityDescriptor(UMLClass umlClass, String packageName) throws UMLComponentException {
+	
+	/**
+	 * Take an UML Class from GWTUml and convert it in an entity class, the based class for the generator.
+	 * @param umlClass the class source
+	 * @param packageName the name of the package for the generated code.
+	 * @return An entity class used by the generator.
+	 */
+	public static EntityDescriptor convertUMLClassToEntityDescriptor(UMLClass umlClass, String packageName) {
 		EntityDescriptor entity = new EntityDescriptor(packageName, umlClass.getName());
 		
 		ArrayList<UMLClassAttribute> attributes = umlClass.getAttributes();
@@ -47,18 +55,17 @@ public class GeneratorHelper {
 		return entity;
 	}
 	
-	public static void createOneToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
+	
+	/** Create a one to one relationship between two entities from the given relation.
+	 * @see com.objetdirect.gwt.gen.server.services#convertUMLClassToEntityDescriptor
+	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
+	 * @param relation the relation OneToOne between two entities
+	 */
+	public static void createOneToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
 		if (relation.isBidirectional()) {
-//			System.out.println("leftEntity name :" + leftEntity.getName());
-//			System.out.println("rightEntity name :" + rightEntity.getName());
-//			System.out.println("\nLeftRole = " + relation.getLeftRole());
-//			System.out.println("RightRole = " + relation.getRightRole());
-//			System.out.println("\nIsRightOwner = " + relation.isRightOwner());
-//			System.out.println("\nIsLeftOwner = " + relation.isLeftOwner());
-			
 			OneToOneReferenceDescriptor refLeftToRight = 
 				new OneToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, false, false);
 			OneToOneReferenceDescriptor refRightToLeft = 
@@ -68,17 +75,23 @@ public class GeneratorHelper {
 			refRightToLeft.setReverse(refLeftToRight, relation.isRightOwner());
 		} else {
 			if (relation.isLeftOwner()) {
+				@SuppressWarnings("unused")
 				OneToOneReferenceDescriptor refLeftToRight = 
 					new OneToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, relation.isAComposition(), false);
 			} else
 			{
+				@SuppressWarnings("unused")
 				OneToOneReferenceDescriptor refRightToLeft = 
 					new OneToOneReferenceDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false, relation.isAComposition(), false);
 			}
 		}
 	}
 	
-	
+	/** Create a one to many relationship between two entities from the given relation.
+	 * @see com.objetdirect.gwt.gen.server.services#convertUMLClassToEntityDescriptor
+	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
+	 * @param relation the relation OneToOne between two entities
+	 */
 	public static void createOneToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
@@ -89,9 +102,11 @@ public class GeneratorHelper {
 		// Unidirectional
 		else {
 			if (relation.isLeftOwner()) {
+				@SuppressWarnings("unused")
 				OneToManyReferenceListDescriptor ref = 
 					new OneToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
 			} else {
+				@SuppressWarnings("unused")
 				OneToManyReferenceListDescriptor ref = 
 					new OneToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
 			}
@@ -99,6 +114,11 @@ public class GeneratorHelper {
 	}
 
 
+	/** Create a many to one relationship between two entities from the given relation.
+	 * @see com.objetdirect.gwt.gen.server.services#convertUMLClassToEntityDescriptor
+	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
+	 * @param relation the relation OneToOne between two entities
+	 */
 	public static void createManyToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
@@ -127,17 +147,23 @@ public class GeneratorHelper {
 		// Unidirectional
 		else {
 			if (relation.isLeftOwner()) {
+				@SuppressWarnings("unused")
 				ManyToOneReferenceDescriptor ref = 
 					new ManyToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, false);
 			} else {
+				@SuppressWarnings("unused")
 				ManyToOneReferenceDescriptor ref = 
 					new ManyToOneReferenceDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false, false);
 			}
 		}
 	}
 
-
-	public static void createManyToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
+	/** Create a many to many relationship between two entities from the given relation.
+	 * @see com.objetdirect.gwt.gen.server.services#convertUMLClassToEntityDescriptor
+	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
+	 * @param relation the relation OneToOne between two entities
+	 */
+	public static void createManyToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
@@ -152,9 +178,11 @@ public class GeneratorHelper {
 		// Unidirectional
 		else {
 			if (relation.isLeftOwner()) {
+				@SuppressWarnings("unused")
 				ManyToManyReferenceListDescriptor ref = 
 					new ManyToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
 			} else {
+				@SuppressWarnings("unused")
 				ManyToManyReferenceListDescriptor ref = 
 					new ManyToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
 			}
@@ -163,12 +191,11 @@ public class GeneratorHelper {
 	
 	
 	/**
-	 * Add an attribute to the entity depending of the type of the attribute
-	 * @param entity the target entity
+	 * Add an attribute to the entity depending of the type of the given UmlClassAttribute
+	 * @param entity the target entity where the attribute will be add.
 	 * @param attribute	the attribute to add to the entity
-	 * @throws UMLComponentException 
 	 */
-	private static void addAttribute(EntityDescriptor entity, UMLClassAttribute attribute) throws UMLComponentException {
+	private static void addAttribute(EntityDescriptor entity, UMLClassAttribute attribute) {
 		String name = attribute.getName();
 		String type = attribute.getType();
 		UMLVisibility visibility = attribute.getVisibility();

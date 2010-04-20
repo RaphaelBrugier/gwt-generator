@@ -17,9 +17,11 @@ package com.objetdirect.gwt.gen.client.ui.resources;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 
 /**
- * Image bundle.
+ * Images bundle.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public interface ImageResources extends ClientBundle {
@@ -28,4 +30,14 @@ public interface ImageResources extends ClientBundle {
 	
 	@Source("images/ajax-loader.gif")
 	public ImageResource ajaxLoader();
+	
+	@Source("images/odlabs.png")
+	public ImageResource ODLabsLogo();
+	
+	@Source("images/GwtGeneratorLogo.png")
+	public ImageResource GwtGeneratorLogo();
+	
+	@Source("images/background.png")
+	@ImageOptions(repeatStyle = RepeatStyle.Horizontal)
+	public ImageResource background();
 }

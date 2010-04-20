@@ -14,25 +14,29 @@
  */
 package com.objetdirect.gwt.gen.client.services;
 
-import java.util.List;
+import java.util.Collection;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
+import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
+import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
+
 
 /**
- * Asynchronous counterpart of the GeneratorService
- * 
- * @see com.objetdirect.gwt.gen.client.services.GeneratorService
- * 
+ * Async counter part of DiagramService
+ * @see com.objetdirect.gwt.gen.client.services.DiagramService
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public interface GeneratorServiceAsync {
+public interface DiagramServiceAsync {
 
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassesCode(java.util.List, java.util.List, java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type, java.lang.String)
 	 */
-	public void generateClassesCode(List<UMLClass> classes, List<UMLRelation> relations,
-			String packageName, AsyncCallback<List<GeneratedCode>> callback);
+	void createDiagram(Type type, String name, AsyncCallback<Long> callback);
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams()
+	 */
+	void getDiagrams(AsyncCallback<Collection<DiagramInformations>> callback);
+
+	
 }

@@ -16,7 +16,7 @@ package com.objetdirect.gwt.gen.client.services;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.objetdirect.gwt.gen.shared.LoginInfo;
+import com.objetdirect.gwt.gen.shared.dto.LoginInfo;
 
 
 /**

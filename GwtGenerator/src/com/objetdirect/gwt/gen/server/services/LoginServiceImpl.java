@@ -20,7 +20,7 @@ import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.LoginService;
-import com.objetdirect.gwt.gen.shared.LoginInfo;
+import com.objetdirect.gwt.gen.shared.dto.LoginInfo;
 
 /**
  * Implementation of the LoginService interface.
@@ -54,4 +54,8 @@ public class LoginServiceImpl extends RemoteServiceServlet implements LoginServi
 	    }
 	    return loginInfo;
 	  }
+	
+	public static User getCurrentUser() {
+		return UserServiceFactory.getUserService().getCurrentUser();
+	}
 }

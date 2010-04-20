@@ -18,7 +18,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
-import com.objetdirect.gwt.gen.shared.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 
 /**
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)

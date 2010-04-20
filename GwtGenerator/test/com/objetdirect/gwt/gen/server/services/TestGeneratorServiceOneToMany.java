@@ -20,7 +20,7 @@ import java.util.List;
 import junit.framework.TestCase;
 
 import com.objetdirect.gwt.TestUtil;
-import com.objetdirect.gwt.gen.shared.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
