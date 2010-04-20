@@ -31,13 +31,12 @@ import com.google.gwt.user.client.ui.MenuItem;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.DrawerPanel;
-import com.objetdirect.gwt.gen.client.HistoryManager;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.Main;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
-import com.objetdirect.gwt.gen.shared.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
@@ -66,11 +65,11 @@ public class Design extends Composite {
 	@UiField
 	MenuItem designMenuItem;
 	
-	@UiField
-	MenuItem cleanUrl;
-	
-	@UiField
-	MenuItem exportToUrl;
+//	@UiField
+//	MenuItem cleanUrl;
+//	
+//	@UiField
+//	MenuItem exportToUrl;
 	
 	@UiField
 	MenuItem exportToSVG;
@@ -105,14 +104,14 @@ public class Design extends Composite {
 		contentPanel.setHeight("100%");
 		contentPanel.setWidth("100%");
 		contentPanel.add(drawer);
-		addCommands();
+		bindCommands();
 	}
 	
 	
 	/**
 	 * Attached command to the menu items. 
 	 */
-	private void addCommands(){
+	private void bindCommands(){
 		
 		designMenuItem.setCommand(new Command() {
 			@Override
@@ -124,19 +123,19 @@ public class Design extends Composite {
 			}
 		});
 		
-		cleanUrl.setCommand(new Command() {
-			@Override
-			public void execute() {
-				HistoryManager.upgradeDiagramURL("");
-			}
-		});
-		
-		exportToUrl.setCommand(new Command() {
-			@Override
-			public void execute() {
-				HistoryManager.upgradeDiagramURL(Session.getActiveCanvas().toUrl());
-			}
-		});
+//		cleanUrl.setCommand(new Command() {
+//			@Override
+//			public void execute() {
+//				HistoryManager.upgradeDiagramURL("");
+//			}
+//		});
+//		
+//		exportToUrl.setCommand(new Command() {
+//			@Override
+//			public void execute() {
+//				HistoryManager.upgradeDiagramURL(Session.getActiveCanvas().toUrl());
+//			}
+//		});
 		
 		exportToSVG.setCommand(new Command() {
 			@Override
@@ -165,7 +164,7 @@ public class Design extends Composite {
 	}
 	
 	/** Command to generate the pojos from the diagram. 
-	 * Trigger the display of the codePanel after generate the code.
+	 *  Trigger the display of the codePanel after generate the code.
 	 */
 	private void generatePojo() {
 		codePanel.cleanAllCode();

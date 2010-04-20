@@ -5,19 +5,47 @@
 		.important {
 			font-weight: bold;
 		}
+		
+		.horizontal-left {
+			float: left;
+			padding-left: 15px;
+			padding-top: 15px;
+		}
+		
+		.horizontal-right {
+			float: right;
+			padding-right: 15px;
+			padding-top: 15px;
+		}
+		
+		.border {
+			border-style:solid;
+			border-width:1px;
+		}
 	</ui:style>
 	
 	<g:DockLayoutPanel unit='EM' height="100%" width="100%" >
-	   	<g:north size='5'>
+	   	<g:north size='4'>
 	     	<g:HTMLPanel>
-				<div> Welcome <span ui:field="nameSpan"/>.</div>
-				<g:Anchor ui:field="signOut">Sign Out</g:Anchor>
+				<div class='{style.horizontal-left}'>Welcome <span ui:field="nameSpan"/>.</div>
+				<div class='{style.horizontal-right}'><g:Anchor ui:field="signOut">Sign out</g:Anchor></div>
 			</g:HTMLPanel>
    		</g:north>
+   		
+   		<g:north size="4">
+   			<g:HTMLPanel>
+   				<div class='{style.horizontal-left}'>
+	   				<g:Button ui:field="createClassDiagram">Create a new diagram</g:Button>
+   				</div>
+   			</g:HTMLPanel>
+   		</g:north>
+   		
 		<g:center>
-			<g:FlowPanel>
-				<g:Button ui:field="createClassDiagram">Create a new class diagram</g:Button>
-			</g:FlowPanel>
+			<g:FlowPanel ui:field="content"/>
 		</g:center>
+		
+		<g:west size='15'>
+			<g:FlowPanel ui:field="westPanel"/>
+	   	</g:west>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

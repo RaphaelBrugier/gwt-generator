@@ -18,7 +18,7 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.objetdirect.gwt.gen.shared.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
@@ -29,7 +29,6 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
  */
 @RemoteServiceRelativePath("generator")
 public interface GeneratorService extends RemoteService {
-	
 	/**
 	 * Generate the code from the given classes and relations.
 	 * @param classes the classes as UMLComponent

@@ -13,13 +13,13 @@
 			   	</g:MenuItem>
 		 		<g:MenuItem>Export
 		     		<g:MenuBar vertical="true">
-		     			<g:MenuItem ui:field="cleanUrl">Clean URL</g:MenuItem>
-		       			<g:MenuItem ui:field="exportToUrl">Export to URL</g:MenuItem>
+<!--		     			<g:MenuItem ui:field="cleanUrl">Clean URL</g:MenuItem>-->
+<!--		       			<g:MenuItem ui:field="exportToUrl">Export to URL</g:MenuItem>-->
 						<g:MenuItem ui:field="exportToSVG">Export to SVG</g:MenuItem>
 						<g:MenuItem ui:field="exportToPOJO">Export to POJO</g:MenuItem>
 		     		</g:MenuBar>
 		   		</g:MenuItem>
-		   		<g:MenuItem ui:field="backToExplorer">Back to explorer.
+		   		<g:MenuItem ui:field="backToExplorer">Save and back to explorer.
 			   	</g:MenuItem>
   			</g:MenuBar>
    		</g:north>

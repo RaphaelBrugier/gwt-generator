@@ -12,27 +12,25 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.services;
-
-import java.util.List;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
+package com.objetdirect.gwt.gen.shared.exceptions;
 
 /**
- * Asynchronous counterpart of the GeneratorService
- * 
- * @see com.objetdirect.gwt.gen.client.services.GeneratorService
- * 
+ * This class defines specific gwt-generator exception
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public interface GeneratorServiceAsync {
+@SuppressWarnings("serial")
+public class GWTGeneratorException extends RuntimeException {
 
-	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassesCode(java.util.List, java.util.List, java.lang.String)
+	public GWTGeneratorException() {
+	}
+	
+	/**
+	 * Constructor of the exception
+	 * 
+	 * @param msg
+	 *            The String exception
 	 */
-	public void generateClassesCode(List<UMLClass> classes, List<UMLRelation> relations,
-			String packageName, AsyncCallback<List<GeneratedCode>> callback);
+	public GWTGeneratorException(final String msg) {
+		super(msg);
+	}
 }

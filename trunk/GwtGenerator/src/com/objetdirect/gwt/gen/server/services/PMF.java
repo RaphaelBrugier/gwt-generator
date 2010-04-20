@@ -12,27 +12,27 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.services;
+package com.objetdirect.gwt.gen.server.services;
 
-import java.util.List;
-
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
+import javax.jdo.JDOHelper;
+import javax.jdo.PersistenceManager;
+import javax.jdo.PersistenceManagerFactory;
 
 /**
- * Asynchronous counterpart of the GeneratorService
- * 
- * @see com.objetdirect.gwt.gen.client.services.GeneratorService
- * 
+ * Helper class to access to GAE datastore
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public interface GeneratorServiceAsync {
+public final class PMF {
+    private static final PersistenceManagerFactory pmfInstance =
+        JDOHelper.getPersistenceManagerFactory("transactions-optional");
 
-	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateClassesCode(java.util.List, java.util.List, java.lang.String)
-	 */
-	public void generateClassesCode(List<UMLClass> classes, List<UMLRelation> relations,
-			String packageName, AsyncCallback<List<GeneratedCode>> callback);
+    private PMF() {}
+
+    public static PersistenceManagerFactory get() {
+        return pmfInstance;
+    }
+    
+    public static PersistenceManager getPM() {
+    	return PMF.get().getPersistenceManager();
+    }
 }
