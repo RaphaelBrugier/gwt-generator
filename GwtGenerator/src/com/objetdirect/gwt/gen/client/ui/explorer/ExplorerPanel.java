@@ -14,7 +14,6 @@
  */
 package com.objetdirect.gwt.gen.client.ui.explorer;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,12 +24,13 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
+import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -49,7 +49,7 @@ import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
  * Panel to display the saved diagrams for a loged user and create new diagrams
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
-public class ExplorerPanel extends Composite {
+public class ExplorerPanel extends SimplePanel {
 
 	private static ExplorerPanelUiBinder uiBinder = GWT
 			.create(ExplorerPanelUiBinder.class);
@@ -76,25 +76,31 @@ public class ExplorerPanel extends Composite {
 	@UiField
 	FlowPanel content;
 	
+	DiagramList diagramList;
+	
 	public ExplorerPanel(HandlerManager eventBus) {
 		if (!GwtGenerator.loginInfo.isLoggedIn()) {
 			throw new GWTGeneratorException("A user should have been logged before construct the explorer panel");
 		}
 		
-		initWidget(uiBinder.createAndBindUi(this));
+		this.add(uiBinder.createAndBindUi(this));
 		this.eventBus = eventBus;
 
 		nameSpan.setInnerText( GwtGenerator.loginInfo.getNickname());
 		signOut.setHref(GwtGenerator.loginInfo.getLogoutUrl());
-		
-		populateWestPanel();
-		populateContentPanel();
+		diagramList = new DiagramList(eventBus);
 	}
 	
-	
+	public void go(HasWidgets container) {
+		container.clear();
+		populateWestPanel();
+		fetchContent();
+		
+		container.add(this);
+	}
 
-	private void populateContentPanel() {
-		content.add(new DiagramList(eventBus));
+	private void fetchContent() {
+		diagramList.go(content);
 	}
 
 	private void populateWestPanel() {
@@ -168,7 +174,6 @@ public class ExplorerPanel extends Composite {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				Log.debug("createButton::onClick");
 				dialogBox.hide();
 				String diagramName = nameTb.getValue();
 				Type diagramType = Type.valueOf(listbox.getValue(listbox.getSelectedIndex()));

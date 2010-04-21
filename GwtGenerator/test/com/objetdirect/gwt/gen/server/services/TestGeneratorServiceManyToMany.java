@@ -125,9 +125,6 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 			fail();
 		}
 		
-		TestUtil.println(generatedClassesCode.get(0).getLinesOfCode());
-		TestUtil.println(generatedClassesCode.get(1).getLinesOfCode());		
-		
 		assertExist(storeEntity.getName(), generatedClassesCode,
 			"import javax.persistence.ManyToMany;");
 		

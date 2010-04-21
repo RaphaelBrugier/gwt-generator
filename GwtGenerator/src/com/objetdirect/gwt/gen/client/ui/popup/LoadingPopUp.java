@@ -38,6 +38,7 @@ public class LoadingPopUp {
 			popupPanel = new PopupPanel(false, true);
 			label = new Label();
 			popupPanel.setTitle("Loading");
+			popupPanel.setGlassEnabled(true);
 		
 			FlowPanel panel = new FlowPanel();
 		
