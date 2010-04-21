@@ -41,13 +41,6 @@ public class Main  {
 
 	private void bind() {
 		
-//		eventBus.addHandler(CreateDiagramEvent.TYPE, new CreateDiagramEventHandler() {
-//			@Override
-//			public void onCreateDiagramEvent(CreateDiagramEvent event) {
-//				doCreateDiagram(event.getDiagramInformations());
-//			}
-//		});
-		
 		eventBus.addHandler(BackToHomeEvent.TYPE, new BackToHomeEventHandler() {
 			@Override
 			public void onBackToHomeEventEvent(BackToHomeEvent event) {
@@ -56,32 +49,6 @@ public class Main  {
 		});
 		
 	}
-
-//	private void doCreateDiagram(DiagramInformations diagramInformations) {
-//		Log.debug("creatClassDiagram");
-////		mainContainer.clear();
-//		final LoadingPopUp loadingPopUp = new LoadingPopUp();
-//		loadingPopUp.startProcessing("The designer is loading, please wait...");
-//		
-//		diagramService.createDiagram(diagramInformations.getType(), diagramInformations.getName(), new 
-//			AsyncCallback<Long>() {
-//				@Override
-//				public void onSuccess(Long result) {
-//					Log.debug("Creation with succes id = " + result);
-//					
-//					Design d = new Design(eventBus);
-//					// DesignPanel can not be attached in the container and should be insert directly to root of the document
-//					RootLayoutPanel.get().clear();
-//					RootLayoutPanel.get().add(d); 
-//					loadingPopUp.stopProcessing();
-//				}
-//				
-//				@Override
-//				public void onFailure(Throwable caught) {
-//					Log.debug(caught.getMessage());
-//				}
-//			});
-//	}
 	
 	/** Request to return to the home screen.
 	 *  Home screens means welcome screen if the user is not logged or 
@@ -93,7 +60,7 @@ public class Main  {
 			if(explorerPanel == null){
 				explorerPanel = new ExplorerPanel(eventBus);
 			}
-			mainContainer.add(explorerPanel);
+			explorerPanel.go(mainContainer);
 		} else {
 			if (welcomePanel == null) {
 				welcomePanel = new WelcomePanel(this, GwtGenerator.loginInfo.getLoginUrl());

@@ -36,11 +36,13 @@ import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.DrawerPanel;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
+import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
+import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent.CreateDiagramEventHandler;
+import com.objetdirect.gwt.gen.client.event.EditDiagramEvent.EditDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.Main;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
@@ -53,11 +55,7 @@ import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
-
-import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent.CreateDiagramEventHandler;
 
 /**
  * Widget containing the UMl Modeler.
@@ -73,6 +71,9 @@ public class Design extends Composite {
 	private final static GeneratorServiceAsync generatorService = GWT.create(GeneratorService.class);
 	
 	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
+	
+	
+	/*********************** Ui Items **********************************/
 	
 	@UiField
 	MenuItem designMenuItem;
@@ -104,7 +105,11 @@ public class Design extends Composite {
 	
 	private DrawerPanel drawer;
 	
+	/*********************** Control objects **********************************/
+	
 	final private HandlerManager eventBus;
+	
+	private DiagramInformations currentDiagram;
 	
 	public Design(HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -116,13 +121,13 @@ public class Design extends Composite {
 		HotKeyManager.setInputEnabled(false);
 		contentPanel.setHeight("100%");
 		contentPanel.setWidth("100%");
-		bind();
+		bindHandlersToEventBus();
 		bindCommands();
 	}
 	
 	
 	/** Attached handlers to the eventbus. */
-	private void bind() {
+	private void bindHandlersToEventBus() {
 		eventBus.addHandler(CreateDiagramEvent.TYPE, new CreateDiagramEventHandler() {
 			
 			@Override
@@ -130,8 +135,16 @@ public class Design extends Composite {
 				doCreateNewDiagram(event.getDiagramInformations());
 			}
 		});
+		
+		eventBus.addHandler(EditDiagramEvent.TYPE, new EditDiagramEventHandler() {
+			@Override
+			public void onEditDiagramEvent(EditDiagramEvent event) {
+				doLoadDiagram(event.getDiagramInformations());
+			}
+		});
 	}
-	
+
+
 	/**
 	 * Attached command to the menu items. 
 	 */
@@ -183,7 +196,7 @@ public class Design extends Composite {
 			@Override
 			public void execute() {
 				HotKeyManager.setInputEnabled(false);
-				eventBus.fireEvent(new BackToHomeEvent());
+				doSaveDiagram(true);
 			}
 		});
 	}
@@ -200,8 +213,8 @@ public class Design extends Composite {
 		diagramService.createDiagram(diagramInformations.getType(), diagramInformations.getName(), new 
 			AsyncCallback<Long>() {
 				@Override
-				public void onSuccess(Long result) {
-					Log.debug("Creation with succes id = " + result);
+				public void onSuccess(Long key) {
+					currentDiagram = new DiagramInformations(key, diagramInformations.getName(), diagramInformations.getType());
 					
 					OptionsManager.set("DiagramType", diagramInformations.getType().ordinal());
 					drawer = new DrawerPanel();
@@ -210,7 +223,7 @@ public class Design extends Composite {
 					diagramName.setText(diagramInformations.getName());
 					
 					HotKeyManager.setInputEnabled(true);
-					// DesignPanel can not be attached in the container and should be insert directly into the root of the document
+					// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
 					RootLayoutPanel.get().clear();
 					RootLayoutPanel.get().add(Design.this);
 					loadingPopUp.stopProcessing();
@@ -223,6 +236,70 @@ public class Design extends Composite {
 				}
 			});
 	};
+	
+	
+	/**
+	 * Load a diagram from the base and setup it on the canvas.
+	 * @param diagramInformations the diagram to load.
+	 */
+	private void doLoadDiagram(DiagramInformations diagramInformations) {
+		final LoadingPopUp loadingPopUp = new LoadingPopUp();
+		loadingPopUp.startProcessing("Loading the diagram "+ diagramInformations.getName() +" and the designer, please wait...");
+		
+		diagramService.getDiagram(diagramInformations.getKey(), new AsyncCallback<DiagramInformations>() {
+			
+			@Override
+			public void onSuccess(DiagramInformations diagramFound) {
+				currentDiagram = diagramFound;
+				OptionsManager.set("DiagramType", diagramFound.getType().ordinal());
+				drawer = new DrawerPanel();
+				contentPanel.clear();
+				contentPanel.add(drawer);
+				diagramName.setText(diagramFound.getName());
+				Log.debug("Design::Load( diagramFoundName = " + diagramFound.getName());
+				drawer.getUMLCanvas().fromURL(diagramFound.getGeneratedUrl(), false);
+				
+				HotKeyManager.setInputEnabled(true);
+				// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
+				RootLayoutPanel.get().clear();
+				RootLayoutPanel.get().add(Design.this);
+				loadingPopUp.stopProcessing();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.debug(caught.getMessage());
+				eventBus.fireEvent(new BackToHomeEvent());
+			}
+		});
+	}
+	
+	/**
+	 * Save the current diagram and its canvas in the base.
+	 * @param backToHome True if the application should close the designer and back to the home screen.
+	 */
+	private void doSaveDiagram(final boolean backToHome) {
+		final LoadingPopUp loadingPopUp = new LoadingPopUp();
+		loadingPopUp.startProcessing("Saving the diagram, please wait...");
+		currentDiagram.setGeneratedUrl(drawer.getUMLCanvas().toUrl());
+		diagramService.saveDiagram(currentDiagram, new AsyncCallback<Void>() {
+			
+			@Override
+			public void onSuccess(Void result) {
+				loadingPopUp.stopProcessing();
+				if (backToHome) {
+					eventBus.fireEvent(new BackToHomeEvent());
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				loadingPopUp.stopProcessing();
+				ErrorPopUp errorPopUp = new ErrorPopUp(caught);
+				errorPopUp.show();
+			}
+		});
+	}
 	
 	/** Command to generate the pojos from the diagram. 
 	 *  Trigger the display of the codePanel after generate the code.

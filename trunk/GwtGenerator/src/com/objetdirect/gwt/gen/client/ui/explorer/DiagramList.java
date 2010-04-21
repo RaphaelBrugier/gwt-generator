@@ -24,14 +24,16 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlexTable;
 import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
+import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
 
@@ -40,7 +42,7 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
  * From each line of the list the user can edit or delete a diagram.
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
-public class DiagramList extends Composite {
+public class DiagramList extends SimplePanel {
 
 	final private  DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 	
@@ -48,27 +50,45 @@ public class DiagramList extends Composite {
 	
 	private SimplePanel container;
 	
-	final private FlexTable table = new FlexTable();
+	private FlexTable table;
 	private int rowPosition;
 	
 	public DiagramList(HandlerManager eventBus) {
 		this.eventBus = eventBus;
 		container = new SimplePanel();
-		
-		initWidget(container);
-		
+		add(container);
+	}
+	
+	public void go(HasWidgets parentContainer) {
 		fetchDiagramList();
+		parentContainer.clear();
+		parentContainer.add(this.container);
 	}
 	
 	
 	private void doDeleteDiagram(Long key) {
 		Log.debug("Delete the diagram : " + key);
+		diagramService.deleteDiagram(key, new AsyncCallback<Void>() {
+			
+			@Override
+			public void onSuccess(Void result) {
+				fetchDiagramList();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				ErrorPopUp errorPopUp = new ErrorPopUp(caught);
+				errorPopUp.show();
+			}
+		});
 	}
 	
 	public void fetchDiagramList() {
+		Log.debug("DiagramList::FetchList()");
 		Image loader = new Image(ImageResources.INSTANCE.ajaxLoader());
+		container.clear();
 		container.add(loader);
-		
+		table = new FlexTable();
 		table.setWidth("80%");
 		table.setCellSpacing(0);
 		table.addStyleName("DiagramList");  
@@ -117,10 +137,11 @@ public class DiagramList extends Composite {
 		Anchor edit = new Anchor("edit");
 		table.setWidget(rowPosition, 2, edit);
 		table.getCellFormatter().addStyleName(rowPosition, 2, "DiagramList-Cell");
+		
 		edit.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				//TODO fire editDiagramEvent.
+				eventBus.fireEvent(new EditDiagramEvent(diagram));
 			}
 		});
 		

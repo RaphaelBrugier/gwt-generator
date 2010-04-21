@@ -42,4 +42,22 @@ public interface DiagramService extends RemoteService {
 	 */
 	public Collection<DiagramInformations> getDiagrams();
 	
+	/**
+	 * Delete a diagram in the base.
+	 * @param key the key of the diagram to delete
+	 */
+	public void deleteDiagram(Long key);
+	
+	/**
+	 * Get a Diagram from its key
+	 * @param key the key
+	 * @return the diagram found or null.
+	 */
+	public DiagramInformations getDiagram(Long key);
+	
+	/**
+	 * Save the diagram in the base.
+	 * @param diagram the diagram to save
+	 */
+	public void saveDiagram(DiagramInformations diagram);
 }

@@ -22,6 +22,7 @@ import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.users.User;
+import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
 
 /**
@@ -45,7 +46,7 @@ public class Diagram implements Serializable {
 	private Type type;
 	
 	@Persistent
-	private String serializedDiagram;
+	private String generatedUrl;
 	
 	@Persistent
 	private User user;
@@ -105,17 +106,17 @@ public class Diagram implements Serializable {
 	}
 
 	/**
-	 * @return the serializedDiagram
+	 * @return the generatedUrl
 	 */
-	public String getSerializedDiagram() {
-		return serializedDiagram;
+	public String getGeneratedUrl() {
+		return generatedUrl;
 	}
 
 	/**
-	 * @param serializedDiagram the serializedDiagram to set
+	 * @param generatedUrl the generated Url to set
 	 */
-	public void setSerializedDiagram(String serializedDiagram) {
-		this.serializedDiagram = serializedDiagram;
+	public void setGeneratedUrl(String generatedUrl) {
+		this.generatedUrl = generatedUrl;
 	}
 
 	/**
@@ -130,5 +131,18 @@ public class Diagram implements Serializable {
 	 */
 	public void setUser(User user) {
 		this.user = user;
+	}
+	
+	public void copyFromDiagramDto(DiagramInformations diagramToCopy) {
+		this.key = diagramToCopy.getKey();
+		this.type = diagramToCopy.getType();
+		this.generatedUrl = diagramToCopy.getGeneratedUrl();
+	}
+	
+	public void copyToDiagramDto(DiagramInformations diagramToCopy) {
+		diagramToCopy.setKey(this.key);
+		diagramToCopy.setType(this.type);
+		diagramToCopy.setGeneratedUrl(this.generatedUrl);
+		diagramToCopy.setName(this.name);
 	}
 }

@@ -28,6 +28,7 @@ import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.gen.shared.exceptions.NotLoggedInException;
 
 /**
@@ -67,7 +68,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		List<Diagram> queryResult = new LinkedList<Diagram>();
 		Collection<DiagramInformations> results = new LinkedList<DiagramInformations>();
 		try {
-			Query q = pm.newQuery(Diagram.class, "user == u");
+			  Query q = pm.newQuery(Diagram.class, "user == u");
 		      q.declareParameters("com.google.appengine.api.users.User u");
 		      queryResult = (List<Diagram>) q.execute(getCurrentUser());
 		      
@@ -82,16 +83,78 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		return results;
 	}
 	
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#deleteDiagram(java.lang.Long)
+	 */
+	@Override
+	public void deleteDiagram(Long key) {
+		checkLoggedIn();
+		
+		PersistenceManager pm = PMF.getPM();
+		try {
+			Diagram diagram = pm.getObjectById(Diagram.class, key);
+			if (diagram == null) 
+				throw new GWTGeneratorException("The diagram to delete was not found.");
+			
+			pm.deletePersistent(diagram);
+		} finally {
+			pm.close();
+		}
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.Long)
+	 */
+	@Override
+	public DiagramInformations getDiagram(Long key) {
+		checkLoggedIn();
+		
+		DiagramInformations diagramFound = null;
+		PersistenceManager pm = PMF.getPM();
+		try {
+			Diagram diagram = pm.getObjectById(Diagram.class, key);
+			if(diagram!=null) {
+				diagramFound = new DiagramInformations();
+				diagram.copyToDiagramDto(diagramFound);
+			}
+			
+		} finally {
+			pm.close();
+		}
+		
+		return diagramFound;
+	}
+	
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#saveDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations)
+	 */
+	@Override
+	public void saveDiagram(DiagramInformations diagramToSave) {
+		checkLoggedIn();
+		
+		PersistenceManager pm = PMF.getPM();
+		try {
+			Diagram diagram = pm.getObjectById(Diagram.class, diagramToSave.getKey());
+			if (diagram == null) 
+				throw new GWTGeneratorException("The diagram to save was not found.");
+			
+			diagram.copyFromDiagramDto(diagramToSave);
+			
+		} finally {
+			pm.close();
+		}
+	}
+	
 	
 	/** Get the current logged user on GAE or null if the user is not logged.
-	 * @return
+	 * @return the logged User object.
 	 */
 	private static User getCurrentUser() {
 		return UserServiceFactory.getUserService().getCurrentUser();
 	}
 	
 	/** Check if the user is logged in.
-	 * Throw a NotLoggedInException if not.
+	 *  Throw a NotLoggedInException if not.
 	 */
 	private void checkLoggedIn()  {
 		    if (getCurrentUser() == null) {

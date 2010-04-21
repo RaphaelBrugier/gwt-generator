@@ -38,5 +38,18 @@ public interface DiagramServiceAsync {
 	 */
 	void getDiagrams(AsyncCallback<Collection<DiagramInformations>> callback);
 
-	
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#deleteDiagram(java.lang.Long)
+	 */
+	void deleteDiagram(Long key, AsyncCallback<Void> callback);
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.Long)
+	 */
+	void getDiagram(Long key, AsyncCallback<DiagramInformations> callback);
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#saveDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations)
+	 */
+	void saveDiagram(DiagramInformations diagram, AsyncCallback<Void> callback);
 }
