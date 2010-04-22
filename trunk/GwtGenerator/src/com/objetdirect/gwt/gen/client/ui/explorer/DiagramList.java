@@ -67,7 +67,6 @@ public class DiagramList extends SimplePanel {
 	
 	
 	private void doDeleteDiagram(Long key) {
-		Log.debug("Delete the diagram : " + key);
 		diagramService.deleteDiagram(key, new AsyncCallback<Void>() {
 			
 			@Override
@@ -84,7 +83,6 @@ public class DiagramList extends SimplePanel {
 	}
 	
 	public void fetchDiagramList() {
-		Log.debug("DiagramList::FetchList()");
 		Image loader = new Image(ImageResources.INSTANCE.ajaxLoader());
 		container.clear();
 		container.add(loader);

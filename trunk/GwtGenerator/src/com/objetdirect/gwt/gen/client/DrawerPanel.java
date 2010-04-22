@@ -14,6 +14,9 @@
  */
 package com.objetdirect.gwt.gen.client;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -51,7 +54,9 @@ import com.objetdirect.gwt.umlapi.client.helpers.Session;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager.Theme;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
 
 /**
@@ -321,6 +326,13 @@ public class DrawerPanel extends AbsolutePanel {
 			defaultLifeLineArtifact.setLocation(new Point(this.width / 2, this.height / 2));
 			this.uMLCanvas.add(defaultLifeLineArtifact);
 		}
+	}
+	
+	public void addWelcomeClass() {
+		final ClassArtifact defaultclass = new ClassArtifact("You can right click on a class.");
+		defaultclass.addAttribute(new UMLClassAttribute(UMLVisibility.PRIVATE, "String", "  or right click on the canvas."));
+		defaultclass.setLocation(new Point(this.width / 2, this.height / 2));
+		this.uMLCanvas.add(defaultclass);
 	}
 
 	void clearShadow() {

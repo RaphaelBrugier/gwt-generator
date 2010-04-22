@@ -15,6 +15,7 @@
 package com.objetdirect.gwt.gen.client.ui.design;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -36,8 +37,10 @@ import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.DrawerPanel;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
+import com.objetdirect.gwt.gen.client.event.DesignAsAGuestEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent.CreateDiagramEventHandler;
+import com.objetdirect.gwt.gen.client.event.DesignAsAGuestEvent.DesignAsAGuestEventHandler;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent.EditDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
@@ -56,6 +59,7 @@ import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
 
 /**
  * Widget containing the UMl Modeler.
@@ -142,8 +146,14 @@ public class Design extends Composite {
 				doLoadDiagram(event.getDiagramInformations());
 			}
 		});
+		
+		eventBus.addHandler(DesignAsAGuestEvent.TYPE, new DesignAsAGuestEventHandler() {
+			@Override
+			public void onDesignAsAGuestEvent(DesignAsAGuestEvent event) {
+				doLoadDiagramForAGuest();
+			}
+		});
 	}
-
 
 	/**
 	 * Attached command to the menu items. 
@@ -221,6 +231,7 @@ public class Design extends Composite {
 					contentPanel.clear();
 					contentPanel.add(drawer);
 					diagramName.setText(diagramInformations.getName());
+					drawer.addDefaultNode();
 					
 					HotKeyManager.setInputEnabled(true);
 					// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
@@ -256,7 +267,6 @@ public class Design extends Composite {
 				contentPanel.clear();
 				contentPanel.add(drawer);
 				diagramName.setText(diagramFound.getName());
-				Log.debug("Design::Load( diagramFoundName = " + diagramFound.getName());
 				drawer.getUMLCanvas().fromURL(diagramFound.getGeneratedUrl(), false);
 				
 				HotKeyManager.setInputEnabled(true);
@@ -301,14 +311,34 @@ public class Design extends Composite {
 		});
 	}
 	
+	/** Load an empty class diagram for a guest without the possibility to save it. */
+	private void doLoadDiagramForAGuest() {
+		final LoadingPopUp loadingPopUp = new LoadingPopUp();
+		loadingPopUp.startProcessing("Loading a class diagram in the designer, please login for a full features access, please wait...");
+		
+		OptionsManager.set("DiagramType", Type.CLASS.getIndex()); // Class diagram by default
+		drawer = new DrawerPanel();
+		drawer.addWelcomeClass();
+		contentPanel.clear();
+		contentPanel.add(drawer);
+		
+		saveAndBack.setVisible(false);
+		
+		HotKeyManager.setInputEnabled(true);
+		// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
+		RootLayoutPanel.get().clear();
+		RootLayoutPanel.get().add(Design.this);
+		loadingPopUp.stopProcessing();
+	}
+	
 	/** Command to generate the pojos from the diagram. 
 	 *  Trigger the display of the codePanel after generate the code.
 	 */
 	private void doGeneratePojo() {
 		codePanel.cleanAllCode();
 		
-		List<UMLClass> umlClasses = new ArrayList<UMLClass>();
-		List<UMLRelation> umlRelations = new ArrayList<UMLRelation>();
+		List<UMLClass> umlClasses = new LinkedList<UMLClass>();
+		List<UMLRelation> umlRelations = new LinkedList<UMLRelation>();
 		
 		for (final UMLArtifact umlArtifact : UMLArtifact.getArtifactList().values()) {
 			if (umlArtifact instanceof ClassArtifact) {
@@ -321,7 +351,8 @@ public class Design extends Composite {
 		}
 		
 		if (umlClasses.size() ==0) {
-			//TODO display a message to inform the user that he should add at least one class before he can generate pojo
+			ErrorPopUp errorPopup = new ErrorPopUp("Your diagram must hava at least one class to generate a POJO.");
+			errorPopup.show();
 		} else {
 			Log.debug(this.getClass().getName() + "::generatePojo() Starting generation");
 			

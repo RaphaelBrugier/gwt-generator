@@ -15,12 +15,18 @@
 package com.objetdirect.gwt.gen.client.ui.welcome;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.InlineHyperlink;
 import com.google.gwt.user.client.ui.Widget;
-import com.objetdirect.gwt.gen.client.ui.Main;
+import com.objetdirect.gwt.gen.client.event.DesignAsAGuestEvent;
 
 /**
  * Panel displaying a welcome message and a link to log the user with his google account.
@@ -33,20 +39,33 @@ public class WelcomePanel extends Composite {
 
 	interface WelcomePanelUiBinder extends UiBinder<Widget, WelcomePanel> {
 	}
-
+	
 	@UiField
 	Anchor signIn;
 	
-	private Main parent;
+	@UiField
+	InlineHyperlink asAGuest;
+	
+	private HandlerManager eventBus;
 	
 	/**
 	 * @param parent The parent controller of the panel.
 	 * @param loginUrl the url to log the user with his google account.
 	 */
-	public WelcomePanel(Main parent, String loginUrl) {
+	public WelcomePanel(HandlerManager eventBus, String loginUrl) {
 		initWidget(uiBinder.createAndBindUi(this));
-		this.parent = parent;
+		this.eventBus = eventBus;
 		
 		signIn.setHref(loginUrl);
+	}
+	
+	@UiHandler(value="asAGuest")
+	void onAsAGuestClick(ClickEvent event) {
+		eventBus.fireEvent(new DesignAsAGuestEvent());
+	}
+
+	public void go(HasWidgets container) {
+		container.clear();
+		container.add(this);
 	}
 }
