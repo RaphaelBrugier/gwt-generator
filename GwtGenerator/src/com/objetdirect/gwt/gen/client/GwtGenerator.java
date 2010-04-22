@@ -30,7 +30,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.objetdirect.gwt.gen.client.services.LoginService;
 import com.objetdirect.gwt.gen.client.services.LoginServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.Main;
+import com.objetdirect.gwt.gen.client.ui.MainController;
 import com.objetdirect.gwt.gen.shared.dto.LoginInfo;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
@@ -103,7 +103,7 @@ public class GwtGenerator implements EntryPoint {
 	
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class); 
 	
-	private static Main mainController;
+	private static MainController mainController;
 	
 	/*
 	 * Real gwt app entry point, this code allow GWT Log to catch exception and display it (non-Javadoc)
@@ -118,7 +118,7 @@ public class GwtGenerator implements EntryPoint {
 			public void onSuccess(LoginInfo result) {
 				loginInfo = result;
 //				RootLayoutPanel.get().add(new Main());
-				mainController = new Main();
+				mainController = new MainController();
 			}
 			
 			@Override

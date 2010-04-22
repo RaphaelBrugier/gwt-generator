@@ -16,31 +16,30 @@
 
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
-import com.objetdirect.gwt.gen.client.event.BackToHomeEvent.BackToHomeEventHandler;
+import com.objetdirect.gwt.gen.client.event.DesignAsAGuestEvent.DesignAsAGuestEventHandler;
 
 /**
- * Event to request a back to the home page.
+ * Event to request the display of the design panel for a not logged user
  * Event system based on {@link http://code.google.com/intl/fr/webtoolkit/doc/latest/tutorial/mvp-architecture.html }
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
-public class BackToHomeEvent extends GwtEvent<BackToHomeEventHandler>{
+public class DesignAsAGuestEvent extends GwtEvent<DesignAsAGuestEventHandler>{
 
-	public static Type<BackToHomeEventHandler> TYPE = new Type<BackToHomeEventHandler>();
+	public static Type<DesignAsAGuestEventHandler> TYPE = new Type<DesignAsAGuestEventHandler>();
 	
-	public interface BackToHomeEventHandler extends EventHandler {
-		void onBackToHomeEvent(BackToHomeEvent event);
+	public interface DesignAsAGuestEventHandler extends EventHandler {
+		void onDesignAsAGuestEvent(DesignAsAGuestEvent event);
 	}
 
-	public BackToHomeEvent() {}
+	public DesignAsAGuestEvent() {}
 
 	@Override
-	protected void dispatch(BackToHomeEventHandler handler) {
-		handler.onBackToHomeEvent(this);
+	protected void dispatch(DesignAsAGuestEventHandler handler) {
+		handler.onDesignAsAGuestEvent(this);
 	}
 
 	@Override
-	public Type<BackToHomeEventHandler> getAssociatedType() {
+	public Type<DesignAsAGuestEventHandler> getAssociatedType() {
 		  return TYPE;
 	}
-	
 }

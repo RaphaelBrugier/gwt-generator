@@ -127,6 +127,7 @@
 }  
 
 /* Home Style */
+
 #logo {
 	
 	background-image:url(gwtumllogo_rev-ed.png);
@@ -168,7 +169,11 @@
         font: bold 14px Verdana;
 }
 
-/* Gwt-Generator style */
+/* Gwt-Generator styles */
+
+.overflowScroll {
+	overflow:scroll;
+}
 
 .DiagramList {
   border-top: thin solid #444444;
