@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module rename-to='gwtgenerator'>
+
+
+
+  <!-- Inherit the core Web Toolkit stuff.                        -->
+  <inherits name='com.google.gwt.user.User'/>
+  <inherits name="com.google.gwt.resources.Resources" />
+
+  <!-- Inherit the default GWT style sheet.  You can change       -->
+  <!-- the theme of your GWT application by uncommenting          -->
+  <!-- any one of the following lines.                            -->
+  <inherits name='com.google.gwt.user.theme.standard.Standard'/>
+  <!-- <inherits name='com.google.gwt.user.theme.chrome.Chrome'/> -->
+  <!-- <inherits name='com.google.gwt.user.theme.dark.Dark'/>     -->
+
+  <!-- Other module inherits                                      -->
+  	<inherits name='com.google.gwt.widgetideas.GWTCanvas' />
+	<inherits name="com.google.gwt.widgetideas.GlassPanel" />
+	<inherits name='com.objetdirect.tatami.Tatami' />
+	<inherits name='com.objetdirect.gwt.umlapi.GWTUMLAPI' />
+	<inherits name='gwt.canvas.gwt-canvas' />
+
+	<!-- Add gwt-log support -->
+	<inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />
+
+
+	<!-- <set-property name="user.agent" value="gecko1_8" /> -->
+ 	
+ 	<set-property name="log_DivLogger" value="DISABLED" />
+ 	
+
+
+
+  <!-- Specify the app entry point class.                         -->
+  <entry-point class='com.objetdirect.gwt.gen.client.GwtGenerator'/>
+
+  <!-- Specify the paths for translatable code                    -->
+  <source path='client'/>
+  <source path='shared'/>
+<!--  <source path='server'/>-->
+  
+  <servlet path='/diagram' class='com.objetdirect.gwt.gen.server.services.DiagramServiceImpl'/>
+</module>

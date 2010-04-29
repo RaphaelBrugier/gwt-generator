@@ -14,14 +14,12 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import static com.objetdirect.gwt.TestUtil.assertExist;
-
 import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.objetdirect.gwt.TestUtil;
+import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -124,36 +122,36 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 			fail();
 		}
 		
-		assertExist(soldierEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(soldierEntity.getName(), generatedClassesCode,
 			"import javax.persistence.ManyToOne;");
 
-		assertExist(soldierEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(soldierEntity.getName(), generatedClassesCode,
 			"@ManyToOne",
 			"Troop troop;",
 			"@Transient",
 	    	"boolean inDeletion = false;");
 		
 		
-		assertExist(troopEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
 			"import javax.persistence.OneToMany;");
 		
-		assertExist(troopEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
 			"@OneToMany(mappedBy=\"troop\")",
 			"List<Soldier> soldiers;",
 			"@Transient",
 			"boolean inDeletion = false;");
 
-		assertExist(troopEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
 			"public Troop(boolean dummy) {",
 	        "	this.soldiers = new ArrayList<Soldier>();");
 		
-		assertExist(troopEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
 			"public static Troop createTroop() {",
 	        "	Troop troop = new Troop();",
 	        "	troop.soldiers = new ArrayList<Soldier>();",
 	        "	return troop;");
 		
-		assertExist(troopEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
 			"public List<Soldier> getSoldiers() {",
         	"	return Collections.unmodifiableList(soldiers);");
 	}

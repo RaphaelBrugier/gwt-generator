@@ -14,14 +14,13 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import static com.objetdirect.gwt.TestUtil.assertExist;
-
+import static com.objetdirect.gwt.gen.TestUtil.assertExist;
 import java.util.LinkedList;
 import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.objetdirect.gwt.TestUtil;
+import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -72,18 +71,18 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 			fail();
 		}
 		
-		assertExist(storeEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(storeEntity.getName(), generatedClassesCode,
 			"import javax.persistence.ManyToMany;");
 		
-		assertExist(storeEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(storeEntity.getName(), generatedClassesCode,
 			"@ManyToMany",
 			"List<City> localizations;");
 		
-		assertExist(storeEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(storeEntity.getName(), generatedClassesCode,
 			"public Store(boolean dummy) {",
         	"	this.localizations = new ArrayList<City>();");
 		
-		assertExist(storeEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(storeEntity.getName(), generatedClassesCode,
 			"public static Store createStore() {",
 			"	Store store = new Store();",
 			"	store.localizations = new ArrayList<City>();",
