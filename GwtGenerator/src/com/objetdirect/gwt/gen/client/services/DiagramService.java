@@ -60,4 +60,5 @@ public interface DiagramService extends RemoteService {
 	 * @param diagram the diagram to save
 	 */
 	public void saveDiagram(DiagramInformations diagram);
+	
 }

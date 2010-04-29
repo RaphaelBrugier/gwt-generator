@@ -39,7 +39,6 @@ import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.LifeLineArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ObjectArtifact;
 import com.objetdirect.gwt.umlapi.client.engine.Direction;
-import com.objetdirect.gwt.umlapi.client.engine.GeometryManager;
 import com.objetdirect.gwt.umlapi.client.engine.Point;
 import com.objetdirect.gwt.umlapi.client.engine.Scheduler;
 import com.objetdirect.gwt.umlapi.client.gfx.GfxManager;
@@ -49,7 +48,6 @@ import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
-import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager.Theme;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
@@ -105,7 +103,7 @@ public class DrawerPanel extends AbsolutePanel {
 		
 		this.uMLCanvas = new UMLCanvas(new UMLDiagram(UMLDiagram.Type.getUMLDiagramFromIndex(OptionsManager.get("DiagramType"))), this.width, this.height);
 		this.add(this.uMLCanvas.getContainer());
-		setUpSideArrows();
+		setUpSidePanels();
 		setupShadow();
 		setupResizeHandler();
 		
@@ -131,7 +129,7 @@ public class DrawerPanel extends AbsolutePanel {
 		this.uMLCanvas = uMLCanvas;
 		this.add(this.uMLCanvas.getContainer());
 
-		setUpSideArrows();
+		setUpSidePanels();
 
 		Log.info("Canvas added");
 		setupShadow();
@@ -148,21 +146,18 @@ public class DrawerPanel extends AbsolutePanel {
 	}
 	
 	private void setupGfxPlatform() {
-		ThemeManager.setCurrentTheme((Theme.getThemeFromIndex(OptionsManager.get("Theme"))));
-		GfxManager.setPlatform(OptionsManager.get("GraphicEngine"));
-		GeometryManager.setPlatform(OptionsManager.get("GeometryStyle"));
 		if (OptionsManager.get("AutoResolution") == 0) {
 			this.width = OptionsManager.get("Width");
 			this.height = OptionsManager.get("Height");
 		} else {
-			this.width = Window.getClientWidth() - 50;
-			this.height = Window.getClientHeight() - 50;
+			this.width = Window.getClientWidth() - 0;
+			this.height = Window.getClientHeight() - 30;
 		}
 
 		
 	}
 	
-	private void setUpSideArrows() {
+	private void setUpSidePanels() {
 		final int directionPanelSizes = OptionsManager.get("DirectionPanelSizes");
 
 		final HashMap<FocusPanel, Point> panelsSizes = this.makeDirectionPanelsSizes(directionPanelSizes);
@@ -269,8 +264,8 @@ public class DrawerPanel extends AbsolutePanel {
 		this.resizeHandler = new ResizeHandler() {
 			public void onResize(final ResizeEvent resizeEvent) {
 				if (OptionsManager.get("AutoResolution") == 1) {
-					DrawerPanel.this.width = resizeEvent.getWidth() - 60;
-					DrawerPanel.this.height = resizeEvent.getHeight() - 60;
+					DrawerPanel.this.width = resizeEvent.getWidth() - 0;
+					DrawerPanel.this.height = resizeEvent.getHeight() - 30;
 					DrawerPanel.this.setPixelSize(DrawerPanel.this.width, DrawerPanel.this.height);
 					DrawerPanel.this.uMLCanvas.getContainer().setPixelSize(DrawerPanel.this.width, DrawerPanel.this.height);
 					GfxManager.getPlatform().setSize(Session.getActiveCanvas().getDrawingCanvas(), DrawerPanel.this.width, DrawerPanel.this.height);
@@ -288,7 +283,6 @@ public class DrawerPanel extends AbsolutePanel {
 					DrawerPanel.this.uMLCanvas.makeArrows();
 				}
 			}
-
 		};
 		Window.addResizeHandler(this.resizeHandler);
 	}
@@ -446,4 +440,9 @@ public class DrawerPanel extends AbsolutePanel {
 			}
 		};
 	}
+
+	public void forceResize() {
+		
+	}
+	
 }

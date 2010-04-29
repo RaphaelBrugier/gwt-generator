@@ -24,8 +24,8 @@
 						<g:MenuItem ui:field="exportToPOJO">Export to POJO</g:MenuItem>
 		     		</g:MenuBar>
 		   		</g:MenuItem>
-		   		<g:MenuItem ui:field="saveAndBack">Save and back to explorer.
-			   	</g:MenuItem>
+		   		<g:MenuItem ui:field="save">Save.</g:MenuItem>
+		   		<g:MenuItem ui:field="saveAndBack">Save and back to explorer.</g:MenuItem>
   			</g:MenuBar>
 			<g:Label ui:field="diagramName"/>
    			</g:HorizontalPanel>

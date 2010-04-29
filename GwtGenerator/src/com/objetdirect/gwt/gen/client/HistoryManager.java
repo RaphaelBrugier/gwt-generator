@@ -108,19 +108,14 @@ public class HistoryManager implements ValueChangeHandler<String> {
 		// DOM.setStyleAttribute(Log.getDivLogger().getWidget().getElement(), "display", "none");
 
 		OptionsManager.setAllFromURL(HistoryManager.lastHistoryParametersList);
-		UMLArtifact.getArtifactList().clear();
 		if (HistoryManager.lastHistoryAnchor.equals("Drawer")) {
 			drawerPanel = new DrawerPanel();
 			if (HistoryManager.urlDiagram.equals("")) {
 				drawerPanel.addDefaultNode();
 			} else {
+				Session.getActiveCanvas().getArtifactById().clear();
 				Session.getActiveCanvas().fromURL(HistoryManager.urlDiagram, false);
 			}
-			GwtGenerator.southBar.setVisible(true);
-			HistoryManager.applicationPanel.add(drawerPanel);
-		} else if (HistoryManager.lastHistoryAnchor.equals("Demo")) {
-			final DrawerPanel drawerPanel = new DrawerPanel();
-			new Demo(drawerPanel.getUMLCanvas());
 			GwtGenerator.southBar.setVisible(true);
 			HistoryManager.applicationPanel.add(drawerPanel);
 		} else if (HistoryManager.lastHistoryAnchor.equals("AnimatedDemo")) {
