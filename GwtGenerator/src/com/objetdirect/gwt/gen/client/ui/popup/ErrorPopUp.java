@@ -55,7 +55,9 @@ public class ErrorPopUp {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				closedCommand.execute();
+				if (closedCommand!=null) {
+					closedCommand.execute();
+				}
 				popUpPanel.hide();
 			}
 		});
