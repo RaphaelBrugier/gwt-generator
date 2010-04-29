@@ -20,9 +20,8 @@ import java.util.List;
 
 import junit.framework.TestCase;
 
-import com.objetdirect.gwt.TestUtil;
+import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
