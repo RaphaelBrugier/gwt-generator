@@ -122,6 +122,8 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 			pm.close();
 		}
 		
+		System.out.println("Server::getDiagram() diagramFound.canvas  " + diagramFound.getCanvas());
+		
 		return diagramFound;
 	}
 	
@@ -144,7 +146,6 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 			pm.close();
 		}
 	}
-	
 	
 	/** Get the current logged user on GAE or null if the user is not logged.
 	 * @return the logged User object.

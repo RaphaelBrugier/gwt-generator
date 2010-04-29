@@ -14,6 +14,11 @@
  */
 package com.objetdirect.gwt.gen.server.entities;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.Serializable;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
@@ -21,9 +26,11 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.User;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
+import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 
 /**
  * A diagram stored in the app egine.
@@ -47,6 +54,9 @@ public class Diagram implements Serializable {
 	
 	@Persistent
 	private String generatedUrl;
+	
+	@Persistent
+	private Blob serializedCanvas;
 	
 	@Persistent
 	private User user;
@@ -133,16 +143,65 @@ public class Diagram implements Serializable {
 		this.user = user;
 	}
 	
-	public void copyFromDiagramDto(DiagramInformations diagramToCopy) {
-		this.key = diagramToCopy.getKey();
-		this.type = diagramToCopy.getType();
-		this.generatedUrl = diagramToCopy.getGeneratedUrl();
+	/**
+	 * @return the serializedCanvas
+	 */
+	public Blob getSerializedCanvas() {
+		return serializedCanvas;
+	}
+
+	/**
+	 * @param serializedCanvas the serializedCanvas to set
+	 */
+	public void setSerializedCanvas(Blob serializedCanvas) {
+		this.serializedCanvas = serializedCanvas;
 	}
 	
+	
+	/**
+	 * Copy all the fields of the given DiagramInformations the object.
+	 * @param diagramToCopy The source diagram
+	 */
+	public void copyFromDiagramDto(DiagramInformations diagramToCopy) {
+		this.type = diagramToCopy.getType();
+		this.name = diagramToCopy.getName();
+		this.generatedUrl = diagramToCopy.getGeneratedUrl();
+		
+		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(byteOutput);
+			oos.writeObject(diagramToCopy.getCanvas());
+			this.serializedCanvas = new Blob(byteOutput.toByteArray());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	
+	/** Copy the fields of the Diagram object into the given DiagramInformations object.
+	 * @param diagramToCopy the diagram the targeted diagram
+	 */
 	public void copyToDiagramDto(DiagramInformations diagramToCopy) {
 		diagramToCopy.setKey(this.key);
 		diagramToCopy.setType(this.type);
-		diagramToCopy.setGeneratedUrl(this.generatedUrl);
 		diagramToCopy.setName(this.name);
+		diagramToCopy.setGeneratedUrl(this.generatedUrl);
+		
+		UMLCanvas canvas = null;
+		
+		if (serializedCanvas!=null) {
+			ByteArrayInputStream byteInput = new ByteArrayInputStream(serializedCanvas.getBytes());
+			ObjectInputStream ois;
+			try {
+				ois = new ObjectInputStream(byteInput);
+				canvas = (UMLCanvas)ois.readObject();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+			diagramToCopy.setCanvas(canvas);
+		}
 	}
 }

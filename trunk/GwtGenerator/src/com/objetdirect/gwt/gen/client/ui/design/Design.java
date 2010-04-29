@@ -14,7 +14,6 @@
  */
 package com.objetdirect.gwt.gen.client.ui.design;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -48,21 +47,27 @@ import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
+import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
 import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
+import com.objetdirect.gwt.umlapi.client.engine.GeometryManager;
+import com.objetdirect.gwt.umlapi.client.gfx.GfxManager;
 import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
+import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
+import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager.Theme;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
 
 /**
- * Widget containing the UMl Modeler.
+ * Widget containing the UML Modeler.
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
 public class Design extends Composite {
@@ -97,6 +102,9 @@ public class Design extends Composite {
 	@UiField 
 	MenuItem saveAndBack;
 	
+	@UiField 
+	MenuItem save;
+	
 	@UiField
 	SimplePanel contentPanel;
 	
@@ -110,7 +118,6 @@ public class Design extends Composite {
 	private DrawerPanel drawer;
 	
 	/*********************** Control objects **********************************/
-	
 	final private HandlerManager eventBus;
 	
 	private DiagramInformations currentDiagram;
@@ -120,9 +127,16 @@ public class Design extends Composite {
 		
 		this.eventBus = eventBus;
 		
+		
+		/////////// Gfx platform initialization //TODO move this in the drawer panel ?
 		OptionsManager.initialize();
 		HotKeyManager.forceStaticInit();
 		HotKeyManager.setInputEnabled(false);
+		ThemeManager.setCurrentTheme((Theme.getThemeFromIndex(OptionsManager.get("Theme"))));
+		GfxManager.setPlatform(OptionsManager.get("GraphicEngine"));
+		GeometryManager.setPlatform(OptionsManager.get("GeometryStyle"));
+		///
+		
 		contentPanel.setHeight("100%");
 		contentPanel.setWidth("100%");
 		bindHandlersToEventBus();
@@ -189,7 +203,7 @@ public class Design extends Composite {
 			public void execute() {
 				String svg = "<?xml version='1.0' standalone='no'?><!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>";
 				Session.getActiveCanvas().clearArrows();
-				svg += DOM.getInnerHTML((Element) Session.getActiveCanvas().getElement().getFirstChildElement());
+				svg += DOM.getInnerHTML((Element) Session.getActiveCanvas().getContainer().getElement().getFirstChildElement());
 				Window.open("data:image/xml+svg," + svg, "SVG export", "top");
 				Session.getActiveCanvas().makeArrows();
 			}
@@ -202,6 +216,14 @@ public class Design extends Composite {
 			}
 		});
 		
+		save.setCommand(new Command() {
+			@Override
+			public void execute() {
+				HotKeyManager.setInputEnabled(false);
+				doSaveDiagram(false);
+			}
+		});
+		
 		saveAndBack.setCommand(new Command() {
 			@Override
 			public void execute() {
@@ -209,6 +231,7 @@ public class Design extends Composite {
 				doSaveDiagram(true);
 			}
 		});
+		
 	}
 	
 	
@@ -231,7 +254,7 @@ public class Design extends Composite {
 					contentPanel.clear();
 					contentPanel.add(drawer);
 					diagramName.setText(diagramInformations.getName());
-					drawer.addDefaultNode();
+//					drawer.addDefaultNode();
 					
 					HotKeyManager.setInputEnabled(true);
 					// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
@@ -263,21 +286,31 @@ public class Design extends Composite {
 			public void onSuccess(DiagramInformations diagramFound) {
 				currentDiagram = diagramFound;
 				OptionsManager.set("DiagramType", diagramFound.getType().ordinal());
-				drawer = new DrawerPanel();
+				int canvasWidth = Window.getClientWidth() - 0;
+				int canvasHeight = Window.getClientHeight() - 30;
+				UMLCanvas umlCanvas = diagramFound.getCanvas();
+				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
+				umlCanvas.clearArrows();
+				
+				drawer = new DrawerPanel(umlCanvas);
 				contentPanel.clear();
 				contentPanel.add(drawer);
 				diagramName.setText(diagramFound.getName());
-				drawer.getUMLCanvas().fromURL(diagramFound.getGeneratedUrl(), false);
+//				drawer.getUMLCanvas().fromURL(diagramFound.getGeneratedUrl(), false);
 				
 				HotKeyManager.setInputEnabled(true);
+
 				// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
 				RootLayoutPanel.get().clear();
 				RootLayoutPanel.get().add(Design.this);
 				loadingPopUp.stopProcessing();
+				umlCanvas.clearArrows();
+				umlCanvas.makeArrows(); // Replace the arrows on the right position.
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
+				loadingPopUp.stopProcessing();
 				Log.debug(caught.getMessage());
 				eventBus.fireEvent(new BackToHomeEvent());
 			}
@@ -292,6 +325,7 @@ public class Design extends Composite {
 		final LoadingPopUp loadingPopUp = new LoadingPopUp();
 		loadingPopUp.startProcessing("Saving the diagram, please wait...");
 		currentDiagram.setGeneratedUrl(drawer.getUMLCanvas().toUrl());
+		currentDiagram.setCanvas(drawer.getUMLCanvas());
 		diagramService.saveDiagram(currentDiagram, new AsyncCallback<Void>() {
 			
 			@Override
@@ -299,6 +333,9 @@ public class Design extends Composite {
 				loadingPopUp.stopProcessing();
 				if (backToHome) {
 					eventBus.fireEvent(new BackToHomeEvent());
+				} else {
+					MessagePopUp popUp = new MessagePopUp("Saved with success");
+					popUp.show();
 				}
 			}
 			
@@ -340,7 +377,7 @@ public class Design extends Composite {
 		List<UMLClass> umlClasses = new LinkedList<UMLClass>();
 		List<UMLRelation> umlRelations = new LinkedList<UMLRelation>();
 		
-		for (final UMLArtifact umlArtifact : UMLArtifact.getArtifactList().values()) {
+		for (final UMLArtifact umlArtifact : drawer.getUMLCanvas().getArtifactById().values()) {
 			if (umlArtifact instanceof ClassArtifact) {
 				ClassArtifact classArtifact  = (ClassArtifact)umlArtifact;
 				umlClasses.add(classArtifact.toUMLComponent());

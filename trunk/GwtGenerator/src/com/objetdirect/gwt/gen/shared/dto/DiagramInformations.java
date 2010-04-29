@@ -16,6 +16,8 @@ package com.objetdirect.gwt.gen.shared.dto;
 
 import java.io.Serializable;
 
+import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+
 /**
  * Minimal informations about a diagram to populate the explorer view.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
@@ -33,6 +35,8 @@ public class DiagramInformations implements Serializable {
 	private Type type;
 	
 	private String generatedUrl;
+	
+	private UMLCanvas canvas;
 	
 	
 	/** Default constructor. */
@@ -122,5 +126,21 @@ public class DiagramInformations implements Serializable {
 	 */
 	public void setGeneratedUrl(String generatedUrl) {
 		this.generatedUrl = generatedUrl;
+	}
+
+
+	/**
+	 * @return the canvas
+	 */
+	public UMLCanvas getCanvas() {
+		return canvas;
+	}
+
+
+	/**
+	 * @param canvas the canvas to set
+	 */
+	public void setCanvas(UMLCanvas canvas) {
+		this.canvas = canvas;
 	}
 }
