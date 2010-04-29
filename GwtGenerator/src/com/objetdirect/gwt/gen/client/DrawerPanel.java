@@ -14,9 +14,6 @@
  */
 package com.objetdirect.gwt.gen.client;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.io.ObjectOutputStream;
 import java.util.HashMap;
 import java.util.Map.Entry;
 
@@ -38,7 +35,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.LifeLineArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ObjectArtifact;
@@ -101,14 +97,57 @@ public class DrawerPanel extends AbsolutePanel {
 																		}
 																	};
 
-	private final ResizeHandler					resizeHandler;
+	private ResizeHandler					resizeHandler;
 
+	public DrawerPanel() {
+		super();
+		setupGfxPlatform();
+		
+		this.uMLCanvas = new UMLCanvas(new UMLDiagram(UMLDiagram.Type.getUMLDiagramFromIndex(OptionsManager.get("DiagramType"))), this.width, this.height);
+		this.add(this.uMLCanvas.getContainer());
+		setUpSideArrows();
+		setupShadow();
+		setupResizeHandler();
+		
+		// TODO : under chrome redraw doesn't work if the canvas is at a
+		// different point than (0,0) tatami ? dojo ? chrome ?
+		// example : this.setSpacing(50);
+		Log.info("Setting active canvas");
+		Session.setActiveCanvas(this.uMLCanvas);
+		Log.info("Disabling browser events");
+		GWTUMLDrawerHelper.disableBrowserEvents();
+		Log.info("Init end");
+	}
+	
 	/**
 	 * Default constructor of a DrawerPanel
 	 * 
 	 */
-	public DrawerPanel() {
+	public DrawerPanel(final UMLCanvas uMLCanvas) {
 		super();
+		setupGfxPlatform();
+		Log.info("Creating drawer");
+
+		this.uMLCanvas = uMLCanvas;
+		this.add(this.uMLCanvas.getContainer());
+
+		setUpSideArrows();
+
+		Log.info("Canvas added");
+		setupShadow();
+		setupResizeHandler();
+
+		// TODO : under chrome redraw doesn't work if the canvas is at a
+		// different point than (0,0) tatami ? dojo ? chrome ?
+		// example : this.setSpacing(50);
+		Log.info("Setting active canvas");
+		Session.setActiveCanvas(this.uMLCanvas);
+		Log.info("Disabling browser events");
+		GWTUMLDrawerHelper.disableBrowserEvents();
+		Log.info("Init end");
+	}
+	
+	private void setupGfxPlatform() {
 		ThemeManager.setCurrentTheme((Theme.getThemeFromIndex(OptionsManager.get("Theme"))));
 		GfxManager.setPlatform(OptionsManager.get("GraphicEngine"));
 		GeometryManager.setPlatform(OptionsManager.get("GeometryStyle"));
@@ -120,12 +159,10 @@ public class DrawerPanel extends AbsolutePanel {
 			this.height = Window.getClientHeight() - 50;
 		}
 
-		final boolean isShadowed = OptionsManager.get("Shadowed") == 1;
-		Log.info("Creating drawer");
-
-		this.uMLCanvas = new UMLCanvas(new UMLDiagram(UMLDiagram.Type.getUMLDiagramFromIndex(OptionsManager.get("DiagramType"))), this.width, this.height);
-		this.add(this.uMLCanvas);
-
+		
+	}
+	
+	private void setUpSideArrows() {
 		final int directionPanelSizes = OptionsManager.get("DirectionPanelSizes");
 
 		final HashMap<FocusPanel, Point> panelsSizes = this.makeDirectionPanelsSizes(directionPanelSizes);
@@ -196,8 +233,8 @@ public class DrawerPanel extends AbsolutePanel {
 				@Override
 				public void onMouseUp(final MouseUpEvent event) {
 					DOM.setStyleAttribute(panel.getElement(), "backgroundColor", ThemeManager.getTheme().getDirectionPanelColor().toString());
-					DrawerPanel.this.uMLCanvas.moveAll(direction.withSpeed(Math.min(DrawerPanel.this.uMLCanvas.getOffsetHeight(), DrawerPanel.this.uMLCanvas
-							.getOffsetWidth())), false);
+					DrawerPanel.this.uMLCanvas.moveAll(direction.withSpeed(Math.min(DrawerPanel.this.uMLCanvas.getContainer().getOffsetHeight(), DrawerPanel.this.uMLCanvas
+							.getContainer().getOffsetWidth())), false);
 				}
 			});
 			panel.addMouseMoveHandler(new MouseMoveHandler() {
@@ -213,22 +250,29 @@ public class DrawerPanel extends AbsolutePanel {
 			this.add(panel, panelPosition.getX(), panelPosition.getY());
 
 		}
+	}
 
-		Log.info("Canvas added");
+	
+	private void setupShadow() {
+		final boolean isShadowed = OptionsManager.get("Shadowed") == 1;
 		if (isShadowed) {
 			Log.info("Making shadow");
 			this.makeShadow();
 		} else {
-			this.uMLCanvas.setStylePrimaryName("canvas");
+			this.uMLCanvas.getContainer().setStylePrimaryName("canvas");
 		}
-
+	}
+	
+	
+	private void setupResizeHandler() {
+		final int directionPanelSizes = OptionsManager.get("DirectionPanelSizes");
 		this.resizeHandler = new ResizeHandler() {
 			public void onResize(final ResizeEvent resizeEvent) {
 				if (OptionsManager.get("AutoResolution") == 1) {
 					DrawerPanel.this.width = resizeEvent.getWidth() - 60;
 					DrawerPanel.this.height = resizeEvent.getHeight() - 60;
 					DrawerPanel.this.setPixelSize(DrawerPanel.this.width, DrawerPanel.this.height);
-					DrawerPanel.this.uMLCanvas.setPixelSize(DrawerPanel.this.width, DrawerPanel.this.height);
+					DrawerPanel.this.uMLCanvas.getContainer().setPixelSize(DrawerPanel.this.width, DrawerPanel.this.height);
 					GfxManager.getPlatform().setSize(Session.getActiveCanvas().getDrawingCanvas(), DrawerPanel.this.width, DrawerPanel.this.height);
 					DrawerPanel.this.clearShadow();
 					DrawerPanel.this.makeShadow();
@@ -247,17 +291,8 @@ public class DrawerPanel extends AbsolutePanel {
 
 		};
 		Window.addResizeHandler(this.resizeHandler);
-
-		// TODO : under chrome redraw doesn't work if the canvas is at a
-		// different point than (0,0) tatami ? dojo ? chrome ?
-		// example : this.setSpacing(50);
-		Log.info("Setting active canvas");
-		Session.setActiveCanvas(this.uMLCanvas);
-		Log.info("Disabling browser events");
-		GWTUMLDrawerHelper.disableBrowserEvents();
-		Log.info("Init end");
 	}
-
+	
 	/**
 	 * Getter for the height
 	 * 
@@ -312,24 +347,24 @@ public class DrawerPanel extends AbsolutePanel {
 	
 	public void addDefaultNode(Type type) {
 		if (type.isClassType()) {
-			final ClassArtifact defaultclass = new ClassArtifact("Class1");
+			final ClassArtifact defaultclass = new ClassArtifact(uMLCanvas, "Class1");
 			defaultclass.setLocation(new Point(this.width / 2, this.height / 2));
 			this.uMLCanvas.add(defaultclass);
 		}
 		if (type.isObjectType()) {
-			final ObjectArtifact defaultobject = new ObjectArtifact("obj1", "Object1");
+			final ObjectArtifact defaultobject = new ObjectArtifact(uMLCanvas, "obj1", "Object1");
 			defaultobject.setLocation(new Point(this.width / 3, this.height / 3));
 			this.uMLCanvas.add(defaultobject);
 		}
 		if (type == Type.SEQUENCE) {
-			final LifeLineArtifact defaultLifeLineArtifact = new LifeLineArtifact("LifeLine1", "ll1");
+			final LifeLineArtifact defaultLifeLineArtifact = new LifeLineArtifact(uMLCanvas, "LifeLine1", "ll1");
 			defaultLifeLineArtifact.setLocation(new Point(this.width / 2, this.height / 2));
 			this.uMLCanvas.add(defaultLifeLineArtifact);
 		}
 	}
 	
 	public void addWelcomeClass() {
-		final ClassArtifact defaultclass = new ClassArtifact("You can right click on a class.");
+		final ClassArtifact defaultclass = new ClassArtifact(uMLCanvas, "You can right click on a class.");
 		defaultclass.addAttribute(new UMLClassAttribute(UMLVisibility.PRIVATE, "String", "  or right click on the canvas."));
 		defaultclass.setLocation(new Point(this.width / 2, this.height / 2));
 		this.uMLCanvas.add(defaultclass);
@@ -375,15 +410,10 @@ public class DrawerPanel extends AbsolutePanel {
 		this.add(this.bottomLeftCornerShadow, 0, this.height);
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see com.google.gwt.user.client.ui.Widget#onAttach()
-	 */
 	@Override
-	protected void onAttach() {
-		super.onAttach();
-
+	protected void onLoad() {
+		super.onLoad();
+		this.uMLCanvas.onLoad();
 	}
 
 	private HashMap<FocusPanel, Point> makeDirectionPanelsPositions(final int directionPanelSizes) {
