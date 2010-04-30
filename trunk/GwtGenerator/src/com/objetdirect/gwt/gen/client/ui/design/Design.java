@@ -81,7 +81,6 @@ public class Design extends Composite {
 	
 	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 	
-	
 	/*********************** Ui Items **********************************/
 	
 	@UiField
