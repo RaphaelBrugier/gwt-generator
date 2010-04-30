@@ -17,7 +17,7 @@ package com.objetdirect.gwt.gen.client.event;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent.EditDiagramEventHandler;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 
 
 
@@ -35,9 +35,9 @@ public class EditDiagramEvent extends GwtEvent<EditDiagramEventHandler>{
 		void onEditDiagramEvent(EditDiagramEvent event);
 	}
 	
-	private DiagramInformations diagramInformations;
+	private DiagramDto diagramInformations;
 
-	public EditDiagramEvent(DiagramInformations diagramInformations) {
+	public EditDiagramEvent(DiagramDto diagramInformations) {
 		this.diagramInformations = diagramInformations;
 	}
 
@@ -54,7 +54,7 @@ public class EditDiagramEvent extends GwtEvent<EditDiagramEventHandler>{
 	/**
 	 * @return the diagramInformations
 	 */
-	public DiagramInformations getDiagramInformations() {
+	public DiagramDto getDiagramInformations() {
 		return diagramInformations;
 	}
 }

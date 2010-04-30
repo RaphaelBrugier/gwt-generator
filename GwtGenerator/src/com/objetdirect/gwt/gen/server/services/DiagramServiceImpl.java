@@ -26,8 +26,8 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.gen.shared.exceptions.NotLoggedInException;
 
@@ -61,19 +61,19 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	 */
 	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<DiagramInformations> getDiagrams() {
+	public Collection<DiagramDto> getDiagrams() {
 		checkLoggedIn();
 		
 		PersistenceManager pm = PMF.getPM();
 		List<Diagram> queryResult = new LinkedList<Diagram>();
-		Collection<DiagramInformations> results = new LinkedList<DiagramInformations>();
+		Collection<DiagramDto> results = new LinkedList<DiagramDto>();
 		try {
 			  Query q = pm.newQuery(Diagram.class, "user == u");
 		      q.declareParameters("com.google.appengine.api.users.User u");
 		      queryResult = (List<Diagram>) q.execute(getCurrentUser());
 		      
 		      for (Diagram diagram : queryResult) {
-		    	  DiagramInformations diagramInformation = new DiagramInformations(diagram.getKey(), diagram.getName(), diagram.getType());
+		    	  DiagramDto diagramInformation = new DiagramDto(diagram.getKey(), diagram.getName(), diagram.getType());
 		    	  results.add(diagramInformation);
 		      } //TODO move this after the pm.close (if possible)
 		} finally {
@@ -106,15 +106,15 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.Long)
 	 */
 	@Override
-	public DiagramInformations getDiagram(Long key) {
+	public DiagramDto getDiagram(Long key) {
 		checkLoggedIn();
 		
-		DiagramInformations diagramFound = null;
+		DiagramDto diagramFound = null;
 		PersistenceManager pm = PMF.getPM();
 		try {
 			Diagram diagram = pm.getObjectById(Diagram.class, key);
 			if(diagram!=null) {
-				diagramFound = new DiagramInformations();
+				diagramFound = new DiagramDto();
 				diagram.copyToDiagramDto(diagramFound);
 			}
 			
@@ -131,7 +131,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#saveDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations)
 	 */
 	@Override
-	public void saveDiagram(DiagramInformations diagramToSave) {
+	public void saveDiagram(DiagramDto diagramToSave) {
 		checkLoggedIn();
 		
 		PersistenceManager pm = PMF.getPM();

@@ -18,8 +18,8 @@ import java.util.Collection;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 
 /**
  * Service to operate on the stored diagrams.
@@ -40,7 +40,7 @@ public interface DiagramService extends RemoteService {
 	 * Get all the diagrams of the logged user.
 	 * @return A collection of the diagrams.
 	 */
-	public Collection<DiagramInformations> getDiagrams();
+	public Collection<DiagramDto> getDiagrams();
 	
 	/**
 	 * Delete a diagram in the base.
@@ -53,12 +53,12 @@ public interface DiagramService extends RemoteService {
 	 * @param key the key
 	 * @return the diagram found or null.
 	 */
-	public DiagramInformations getDiagram(Long key);
+	public DiagramDto getDiagram(Long key);
 	
 	/**
 	 * Save the diagram in the base.
 	 * @param diagram the diagram to save
 	 */
-	public void saveDiagram(DiagramInformations diagram);
+	public void saveDiagram(DiagramDto diagram);
 	
 }

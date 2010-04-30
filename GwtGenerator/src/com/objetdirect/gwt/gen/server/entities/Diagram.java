@@ -28,8 +28,8 @@ import javax.jdo.annotations.PrimaryKey;
 
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.User;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 
 /**
@@ -162,7 +162,7 @@ public class Diagram implements Serializable {
 	 * Copy all the fields of the given DiagramInformations the object.
 	 * @param diagramToCopy The source diagram
 	 */
-	public void copyFromDiagramDto(DiagramInformations diagramToCopy) {
+	public void copyFromDiagramDto(DiagramDto diagramToCopy) {
 		this.type = diagramToCopy.getType();
 		this.name = diagramToCopy.getName();
 		this.generatedUrl = diagramToCopy.getGeneratedUrl();
@@ -182,7 +182,7 @@ public class Diagram implements Serializable {
 	/** Copy the fields of the Diagram object into the given DiagramInformations object.
 	 * @param diagramToCopy the diagram the targeted diagram
 	 */
-	public void copyToDiagramDto(DiagramInformations diagramToCopy) {
+	public void copyToDiagramDto(DiagramDto diagramToCopy) {
 		diagramToCopy.setKey(this.key);
 		diagramToCopy.setType(this.type);
 		diagramToCopy.setName(this.name);

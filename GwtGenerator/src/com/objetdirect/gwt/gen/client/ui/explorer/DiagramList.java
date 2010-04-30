@@ -35,7 +35,7 @@ import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 
 /**
  * Widget that displays the list of the stored diagrams for the logged user.
@@ -96,17 +96,17 @@ public class DiagramList extends SimplePanel {
 		addColumns("Delete", 3, "20%");
 		
 		
-		diagramService.getDiagrams(new AsyncCallback<Collection<DiagramInformations>>() {
+		diagramService.getDiagrams(new AsyncCallback<Collection<DiagramDto>>() {
 			
 			@Override
-			public void onSuccess(Collection<DiagramInformations> result) {
+			public void onSuccess(Collection<DiagramDto> result) {
 				if (result.size()==0) {
 					container.clear();
 					container.add(new Label("No diagram found."));
 				} else {
 					container.clear();
 					rowPosition = 1; // row 0 is the header row 
-					for (DiagramInformations d : result) {
+					for (DiagramDto d : result) {
 						rowPosition++;
 						addRow(d);
 					}
@@ -123,7 +123,7 @@ public class DiagramList extends SimplePanel {
 		});
 	}
 	
-	private void addRow(final DiagramInformations diagram) {
+	private void addRow(final DiagramDto diagram) {
 		Label name = new Label(diagram.getName());
 		table.setWidget(rowPosition, 0, name);
 		table.getCellFormatter().addStyleName(rowPosition, 0, "DiagramList-Cell");
@@ -162,7 +162,6 @@ public class DiagramList extends SimplePanel {
 		
 		table.setWidget(0, columnPosition, columnLabel);
 		table.getCellFormatter().addStyleName(0, columnPosition,"DiagramList-ColumnLabelCell");
-		
 	}
 	
 	private void applyDataRowStyles() {
