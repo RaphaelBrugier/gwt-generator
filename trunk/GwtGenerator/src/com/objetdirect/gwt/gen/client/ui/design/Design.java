@@ -48,7 +48,7 @@ import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
@@ -119,7 +119,7 @@ public class Design extends Composite {
 	/*********************** Control objects **********************************/
 	final private HandlerManager eventBus;
 	
-	private DiagramInformations currentDiagram;
+	private DiagramDto currentDiagram;
 	
 	public Design(HandlerManager eventBus) {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -238,7 +238,7 @@ public class Design extends Composite {
 	 * Create a new diagram in the base and setup the canvas with it.
 	 * @param diagramInformations
 	 */
-	private void doCreateNewDiagram(final DiagramInformations diagramInformations) {
+	private void doCreateNewDiagram(final DiagramDto diagramInformations) {
 		final LoadingPopUp loadingPopUp = new LoadingPopUp();
 		loadingPopUp.startProcessing("Creating a new diagram and loading the designer, please wait...");
 		
@@ -246,7 +246,7 @@ public class Design extends Composite {
 			AsyncCallback<Long>() {
 				@Override
 				public void onSuccess(Long key) {
-					currentDiagram = new DiagramInformations(key, diagramInformations.getName(), diagramInformations.getType());
+					currentDiagram = new DiagramDto(key, diagramInformations.getName(), diagramInformations.getType());
 					
 					OptionsManager.set("DiagramType", diagramInformations.getType().ordinal());
 					drawer = new DrawerPanel();
@@ -275,14 +275,14 @@ public class Design extends Composite {
 	 * Load a diagram from the base and setup it on the canvas.
 	 * @param diagramInformations the diagram to load.
 	 */
-	private void doLoadDiagram(DiagramInformations diagramInformations) {
+	private void doLoadDiagram(DiagramDto diagramInformations) {
 		final LoadingPopUp loadingPopUp = new LoadingPopUp();
 		loadingPopUp.startProcessing("Loading the diagram "+ diagramInformations.getName() +" and the designer, please wait...");
 		
-		diagramService.getDiagram(diagramInformations.getKey(), new AsyncCallback<DiagramInformations>() {
+		diagramService.getDiagram(diagramInformations.getKey(), new AsyncCallback<DiagramDto>() {
 			
 			@Override
-			public void onSuccess(DiagramInformations diagramFound) {
+			public void onSuccess(DiagramDto diagramFound) {
 				currentDiagram = diagramFound;
 				OptionsManager.set("DiagramType", diagramFound.getType().ordinal());
 				int canvasWidth = Window.getClientWidth() - 0;

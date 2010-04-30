@@ -40,8 +40,8 @@ import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 
@@ -177,7 +177,7 @@ public class ExplorerPanel extends SimplePanel {
 				dialogBox.hide();
 				String diagramName = nameTb.getValue();
 				Type diagramType = Type.valueOf(listbox.getValue(listbox.getSelectedIndex()));
-				DiagramInformations diagramInformations = new DiagramInformations(diagramName, diagramType);
+				DiagramDto diagramInformations = new DiagramDto(diagramName, diagramType);
 				
 				eventBus.fireEvent(new CreateDiagramEvent(diagramInformations));
 			}

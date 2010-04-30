@@ -23,7 +23,7 @@ import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 @SuppressWarnings("serial")
-public class DiagramInformations implements Serializable {
+public class DiagramDto implements Serializable {
 	public enum Type {
 		CLASS, OBJECT, HYBRYD, SEQUENCE
 	}
@@ -40,7 +40,7 @@ public class DiagramInformations implements Serializable {
 	
 	
 	/** Default constructor. */
-	public DiagramInformations() {}
+	public DiagramDto() {}
 	
 	
 	/**
@@ -48,7 +48,7 @@ public class DiagramInformations implements Serializable {
 	 * @param name the name of the diagram
 	 * @param type the type of the diagram : CLASS or OBJECT or HYBRYD or SEQUENCE
 	 */
-	public DiagramInformations(String name, Type type) {
+	public DiagramDto(String name, Type type) {
 		this.name = name;
 		this.type = type;
 	}
@@ -59,7 +59,7 @@ public class DiagramInformations implements Serializable {
 	 * @param name the name of the diagram
 	 * @param type the type of the diagram : CLASS or OBJECT or HYBRYD or SEQUENCE
 	 */
-	public DiagramInformations(Long key, String name, Type type) {
+	public DiagramDto(Long key, String name, Type type) {
 		this(name, type);
 		this.key = key;
 	}

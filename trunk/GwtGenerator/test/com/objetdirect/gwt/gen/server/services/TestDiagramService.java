@@ -19,7 +19,7 @@ import com.google.gwt.junit.client.GWTTestCase;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.LinkArtifact;
@@ -71,7 +71,7 @@ public class TestDiagramService extends GWTTestCase {
 		
 		umlCanvas.add(classesRelation);
 		
-		DiagramInformations diagram = new  DiagramInformations();
+		DiagramDto diagram = new  DiagramDto();
 		diagram.setCanvas(umlCanvas);
 		delayTestFinish(3000);
 

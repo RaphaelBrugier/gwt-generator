@@ -3,7 +3,7 @@ package com.objetdirect.gwt.gen.client.event;
 import com.google.gwt.event.shared.EventHandler;
 import com.google.gwt.event.shared.GwtEvent;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent.CreateDiagramEventHandler;
-import com.objetdirect.gwt.gen.shared.dto.DiagramInformations;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 
 
 
@@ -21,9 +21,9 @@ public class CreateDiagramEvent extends GwtEvent<CreateDiagramEventHandler>{
 		void onCreateDiagramEvent(CreateDiagramEvent event);
 	}
 	
-	private DiagramInformations diagramInformations;
+	private DiagramDto diagramInformations;
 
-	public CreateDiagramEvent(DiagramInformations diagramInformations) {
+	public CreateDiagramEvent(DiagramDto diagramInformations) {
 		this.diagramInformations = diagramInformations;
 	}
 
@@ -40,7 +40,7 @@ public class CreateDiagramEvent extends GwtEvent<CreateDiagramEventHandler>{
 	/**
 	 * @return the diagramInformations
 	 */
-	public DiagramInformations getDiagramInformations() {
+	public DiagramDto getDiagramInformations() {
 		return diagramInformations;
 	}
 }
