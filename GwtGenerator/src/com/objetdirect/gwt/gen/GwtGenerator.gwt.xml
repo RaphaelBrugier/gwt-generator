@@ -30,8 +30,6 @@
  	<set-property name="log_DivLogger" value="DISABLED" />
  	
 
-
-
   <!-- Specify the app entry point class.                         -->
   <entry-point class='com.objetdirect.gwt.gen.client.GwtGenerator'/>
 
