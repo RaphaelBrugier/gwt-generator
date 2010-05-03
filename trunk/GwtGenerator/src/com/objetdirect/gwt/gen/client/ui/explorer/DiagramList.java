@@ -14,26 +14,44 @@
  */
 package com.objetdirect.gwt.gen.client.ui.explorer;
 
-import java.util.Collection;
+import java.util.ArrayList;
+import java.util.Iterator;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
+import com.google.gwt.gen2.table.client.AbstractColumnDefinition;
+import com.google.gwt.gen2.table.client.CachedTableModel;
+import com.google.gwt.gen2.table.client.DefaultRowRenderer;
+import com.google.gwt.gen2.table.client.DefaultTableDefinition;
+import com.google.gwt.gen2.table.client.FixedWidthGridBulkRenderer;
+import com.google.gwt.gen2.table.client.FlexTableBulkRenderer;
+import com.google.gwt.gen2.table.client.MutableTableModel;
+import com.google.gwt.gen2.table.client.PagingOptions;
+import com.google.gwt.gen2.table.client.PagingScrollTable;
+import com.google.gwt.gen2.table.client.TableDefinition;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.ResizePolicy;
+import com.google.gwt.gen2.table.client.AbstractScrollTable.SortPolicy;
+import com.google.gwt.gen2.table.client.SelectionGrid.SelectionPolicy;
+import com.google.gwt.gen2.table.client.TableModelHelper.Request;
+import com.google.gwt.gen2.table.client.TableModelHelper.Response;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.FlexTable;
-import com.google.gwt.user.client.ui.HTMLTable;
+import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.HTML;
+import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
+import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 
@@ -50,8 +68,8 @@ public class DiagramList extends SimplePanel {
 	
 	private SimplePanel container;
 	
-	private FlexTable table;
-	private int rowPosition;
+	private DataSourceTableModel tableModel;
+	private PagingScrollTable<DiagramDto> pagingScrollTable;
 	
 	public DiagramList(HandlerManager eventBus) {
 		this.eventBus = eventBus;
@@ -65,115 +83,304 @@ public class DiagramList extends SimplePanel {
 		parentContainer.add(this.container);
 	}
 	
-	
-	private void doDeleteDiagram(Long key) {
-		diagramService.deleteDiagram(key, new AsyncCallback<Void>() {
-			
-			@Override
-			public void onSuccess(Void result) {
-				fetchDiagramList();
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				ErrorPopUp errorPopUp = new ErrorPopUp(caught);
-				errorPopUp.show();
-			}
-		});
-	}
-	
 	public void fetchDiagramList() {
-		Image loader = new Image(ImageResources.INSTANCE.ajaxLoader());
 		container.clear();
-		container.add(loader);
-		table = new FlexTable();
-		table.setWidth("80%");
-		table.setCellSpacing(0);
-		table.addStyleName("DiagramList");  
-		addColumns("Name", 0, "40%");
-		addColumns("Type", 1, "20%");
-		addColumns("Edit", 2, "20%");
-		addColumns("Delete", 3, "20%");
 		
+		PagingScrollTable<DiagramDto> pagingScrollTable = createScrollTable();
+		pagingScrollTable.setHeight("450px");
+		pagingScrollTable.setWidth("90%");
+		PagingOptions pagingOptions = new PagingOptions(pagingScrollTable);
 		
-		diagramService.getDiagrams(new AsyncCallback<Collection<DiagramDto>>() {
-			
-			@Override
-			public void onSuccess(Collection<DiagramDto> result) {
-				if (result.size()==0) {
-					container.clear();
-					container.add(new Label("No diagram found."));
-				} else {
-					container.clear();
-					rowPosition = 1; // row 0 is the header row 
-					for (DiagramDto d : result) {
-						rowPosition++;
-						addRow(d);
-					}
-					container.add(table);
-					applyDataRowStyles();
-				}
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Log.debug(caught.getMessage());
-				Window.alert("Unable to retrieve diagrams from the base.");
-			}
-		});
+		VerticalPanel vp = new VerticalPanel();
+		vp.setWidth("100%");
+		vp.setHorizontalAlignment(HasHorizontalAlignment.ALIGN_CENTER);
+		vp.add(pagingScrollTable);
+		vp.add(pagingOptions);
+		
+		container.add(vp);
+		pagingScrollTable.gotoFirstPage();
 	}
 	
-	private void addRow(final DiagramDto diagram) {
-		Label name = new Label(diagram.getName());
-		table.setWidget(rowPosition, 0, name);
-		table.getCellFormatter().addStyleName(rowPosition, 0, "DiagramList-Cell");
+	private void refreshCurrentPage() {
+		tableModel.refreshData();
+		pagingScrollTable.gotoPage(pagingScrollTable.getCurrentPage(), true);
+	}
+	
+	
+	/**
+	 * Initializes the scroll table
+	 * @return
+	 */
+	private PagingScrollTable<DiagramDto> createScrollTable() {
+		// create our own table model
+		tableModel = new DataSourceTableModel();
+		// add it to cached table model
+//		CachedTableModel<DiagramDto> cachedTableModel = createCachedTableModel(tableModel);
 		
-		Label type = new Label(diagram.getType().toString().toLowerCase());
-		table.setWidget(rowPosition, 1, type);
-		table.getCellFormatter().addStyleName(rowPosition, 1, "DiagramList-Cell");
+		// create the table definition
+		TableDefinition<DiagramDto> tableDef = createTableDefinition();
 		
-		Anchor edit = new Anchor("edit");
-		table.setWidget(rowPosition, 2, edit);
-		table.getCellFormatter().addStyleName(rowPosition, 2, "DiagramList-Cell");
+		// create the paging scroll table
+		pagingScrollTable = new PagingScrollTable<DiagramDto>(tableModel, tableDef);
+		pagingScrollTable.setPageSize(15);
+		pagingScrollTable.setEmptyTableWidget(new HTML("There is no data to display"));
+		pagingScrollTable.getDataTable().setSelectionPolicy(SelectionPolicy.ONE_ROW);
+		pagingScrollTable.getDataTable().setWidth("100%");
 		
-		edit.addClickHandler(new ClickHandler() {
+		// setup the bulk renderer
+		FixedWidthGridBulkRenderer<DiagramDto> bulkRenderer = new FixedWidthGridBulkRenderer<DiagramDto>(pagingScrollTable.getDataTable(), pagingScrollTable);
+		pagingScrollTable.setBulkRenderer(bulkRenderer);
+		
+		// setup the formatting
+		pagingScrollTable.setCellPadding(3);
+		pagingScrollTable.setCellSpacing(0);
+		pagingScrollTable.setResizePolicy(ResizePolicy.FILL_WIDTH);
+		
+		pagingScrollTable.setSortPolicy(SortPolicy.SINGLE_CELL);
+		
+		return pagingScrollTable;
+	}
+	
+	private DefaultTableDefinition<DiagramDto> createTableDefinition() {
+		DefaultTableDefinition<DiagramDto> tableDefinition = new DefaultTableDefinition<DiagramDto>();
+		
+		// set the row renderer
+		final String[] rowColors = new String[] { "#FFFFDD", "EEEEEE" };
+		tableDefinition.setRowRenderer(new DefaultRowRenderer<DiagramDto>(rowColors));
+		
+		// Name
+		{
+			NameColumnDefinition columnDef = new NameColumnDefinition();
+			columnDef.setColumnSortable(true);
+			columnDef.setColumnTruncatable(false);
+//			columnDef.setPreferredColumnWidth(90);
+			columnDef.setHeader(0, new HTML("Name"));
+			columnDef.setHeaderCount(1);
+			columnDef.setHeaderTruncatable(false);
+			tableDefinition.addColumnDefinition(columnDef);
+		}
+		// Type
+		{
+			TypeColumnDefinition columnDef = new TypeColumnDefinition();
+			columnDef.setColumnSortable(true);
+			columnDef.setColumnTruncatable(false);
+			columnDef.setPreferredColumnWidth(40);
+			columnDef.setHeader(0, new HTML("Diagram type"));
+			columnDef.setHeaderCount(1);
+			columnDef.setHeaderTruncatable(false);
+			tableDefinition.addColumnDefinition(columnDef);
+		}
+		// Action column
+		{
+			ActionColumnDefinition columnDef = new ActionColumnDefinition();
+			columnDef.setColumnSortable(false);
+			columnDef.setColumnTruncatable(false);
+			columnDef.setMaximumColumnWidth(120);
+			columnDef.setMinimumColumnWidth(120);
+			columnDef.setHeader(0, new HTML("Action"));
+			columnDef.setHeaderCount(1);
+			columnDef.setHeaderTruncatable(false);
+			tableDefinition.addColumnDefinition(columnDef);
+		}
+		return tableDefinition;
+	}
+	
+	/**
+	 * Create the {@link CachedTableModel}
+	 * @param tableModel 
+	 * @return
+	 */
+	private CachedTableModel<DiagramDto> createCachedTableModel(DataSourceTableModel tableModel) {
+		CachedTableModel<DiagramDto> tm = new CachedTableModel<DiagramDto>(tableModel);
+		tm.setPreCachedRowCount(15);
+		tm.setPostCachedRowCount(15);
+		return tm;
+	}
+	
+	
+	/**
+	 * @see http://zenoconsulting.wikidot.com/blog:17
+	 */
+	private class DataSourceTableModel extends MutableTableModel<DiagramDto> {
+		
+		private ArrayList<DiagramDto> cachedDiagrams;
+		
+		public void refreshData() {
+			cachedDiagrams = null;
+		}
+		
+		@Override
+		protected boolean onRowInserted(int beforeRow) {
+			cachedDiagrams = null;
+			return true;
+		}
+
+		@Override
+		protected boolean onRowRemoved(int row) {
+			Log.debug("TableModel onRowRemoved row = " + row);
+			cachedDiagrams = null;
+			return true;
+		}
+
+		@Override
+		protected boolean onSetRowValue(int row, DiagramDto rowValue) {
+			cachedDiagrams = null;
+			return true;
+		}
+
+		@Override
+		public void requestRows(final Request request, final Callback<DiagramDto> callback) {
+			final int startRow = request.getStartRow();
+			final int numRows = request.getNumRows();
+			
+			// If we did not have cached the data, call the service and retrieve all diagrams
+			if (cachedDiagrams == null) {
+				cachedDiagrams = new ArrayList<DiagramDto>();
+				
+				diagramService.getDiagrams(new AsyncCallback<ArrayList<DiagramDto>>() {
+					
+					@Override
+					public void onSuccess(final ArrayList<DiagramDto> result) {
+						cachedDiagrams = result;
+						
+						// Use the TableCallback to return a sublist of the cached diagrams. 
+						callback.onRowsReady(request, new Response<DiagramDto>() {
+							@Override
+							public Iterator<DiagramDto> getRowValues() {
+								LoadingPopUp.getInstance().stopProcessing();
+								return iteratorPagingList(startRow, numRows);
+							}});
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						LoadingPopUp.getInstance().stopProcessing();
+						Log.debug(caught.getLocalizedMessage());
+						callback.onFailure(caught);
+					}
+				});
+			}
+			
+			// If we have already cached the data, just return a sublist with the TableCallback.
+			else {
+				callback.onRowsReady(request, new Response<DiagramDto>() {
+					@Override
+					public Iterator<DiagramDto> getRowValues() {
+						return iteratorPagingList(startRow, numRows);
+					}
+				});
+			}
+		}
+		
+		
+		/**
+		 * Return an iterator on the sublist of the cached diagram list. 
+		 * The sublist is defined by the start row and the number of rows requested.
+		 * If the startRow is superior of the cached diagrams list, return an iterator on an empty list.
+		 * @param startRow
+		 * @param numRows
+		 * @return an iterator on the sublist.
+		 */
+		private Iterator<DiagramDto> iteratorPagingList(int startRow, int numRows) {
+			if (startRow > cachedDiagrams.size() || startRow < 0)
+				return new ArrayList<DiagramDto>().iterator();
+				
+			int toIndex;
+			if (startRow + numRows > cachedDiagrams.size())
+				toIndex = cachedDiagrams.size();
+			else
+				toIndex = startRow + numRows;
+			
+			return cachedDiagrams.subList(startRow, toIndex).iterator();
+		}
+	}
+	
+	/**
+	 * Defines the column for {@link DiagramDto#getType()} 
+	 */
+	private final class TypeColumnDefinition extends AbstractColumnDefinition<DiagramDto, String> {
+
+		@Override
+		public String getCellValue(DiagramDto rowValue) {
+			return rowValue.getType().toString().toLowerCase();
+		}
+		@Override
+		public void setCellValue(DiagramDto rowValue, String cellValue) { }
+	}
+	
+	
+	/**
+	 * Defines the column for {@link DiagramDto#getName()} 
+	 */
+	private final class NameColumnDefinition extends AbstractColumnDefinition<DiagramDto, String> {
+
+		@Override
+		public String getCellValue(DiagramDto rowValue) {
+			return rowValue.getName();
+		}
+		@Override
+		public void setCellValue(DiagramDto rowValue, String cellValue) { }
+	}
+	
+	
+	/**
+	 * Defines the column for editing a diagram. 
+	 */
+	private final class ActionColumnDefinition extends AbstractColumnDefinition<DiagramDto, Widget> {
+
+		@Override
+		public Widget getCellValue(DiagramDto rowValue) {
+			return createActionsButton(rowValue);
+		}
+		@Override
+		public void setCellValue(DiagramDto rowValue, Widget cellValue) { }
+	}
+	
+	private Widget createActionsButton(final DiagramDto diagram) {
+		FlowPanel hpanel = new FlowPanel();
+//		hpanel.setHorizontalAlignment(HorizontalPanel.ALIGN_CENTER);
+		hpanel.addStyleName("actionsContainer");
+		
+		Image editIcon = new Image(ImageResources.INSTANCE.EditIcon());
+		editIcon.addStyleDependentName("action");
+		editIcon.setTitle("edit");
+		editIcon.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				eventBus.fireEvent(new EditDiagramEvent(diagram));
 			}
 		});
 		
-		Anchor delete = new Anchor("delete");
-		delete.addClickHandler(new ClickHandler() {
-			
+		hpanel.add(editIcon);
+		
+		Image deleteIcon = new Image(ImageResources.INSTANCE.deleteIcon());
+		deleteIcon.addStyleDependentName("action");
+		deleteIcon.setTitle("delete");
+		deleteIcon.addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				doDeleteDiagram(diagram.getKey());
+				LoadingPopUp.getInstance().startProcessing("Deleting the diagram, please wait...");
+				diagramService.deleteDiagram(diagram.getKey(), new AsyncCallback<Void>() {
+					
+					@Override
+					public void onSuccess(Void result) {
+						refreshCurrentPage();
+					}
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						ErrorPopUp errorPopUp = new ErrorPopUp(caught);
+						LoadingPopUp.getInstance().stopProcessing();
+						errorPopUp.show();
+					}
+				});
 			}
 		});
-		table.setWidget(rowPosition, 3, delete);
-		table.getCellFormatter().addStyleName(rowPosition, 3, "DiagramList-Cell");
-	}
-	
-	private void addColumns(String columnHeaderLabel, int columnPosition, String width) {
-		Label columnLabel = new Label(columnHeaderLabel);
-		columnLabel.addStyleName("DiagramList-ColumnLabel");
-		table.getColumnFormatter().setWidth(columnPosition, width);
 		
-		table.setWidget(0, columnPosition, columnLabel);
-		table.getCellFormatter().addStyleName(0, columnPosition,"DiagramList-ColumnLabelCell");
+		hpanel.add(deleteIcon);
+		
+		return hpanel;
 	}
 	
-	private void applyDataRowStyles() {
-	    HTMLTable.RowFormatter rf = table.getRowFormatter();
-	    
-	    for (int row = 1; row < table.getRowCount(); ++row) {
-	      if ((row % 2) != 0) {
-	        rf.addStyleName(row, "DiagramList-OddRow");
-	      }
-	      else {
-	        rf.addStyleName(row, "DiagramList-EvenRow");
-	      }
-	    }
-	  }
+
 }

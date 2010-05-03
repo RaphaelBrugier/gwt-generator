@@ -2,20 +2,42 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
-		.important {
-			font-weight: bold;
+		.header {
+			margin-top: 18px;
+			background:#d0ffb0; 
+			-moz-border-radius:12px; 
+			-webkit-border-radius:12px;
+			position: absolute;
+			left: 0.8%;
+			right: 0.8%;
+			padding: 20px;
 		}
 		
 		.horizontal-left {
 			float: left;
 			padding-left: 15px;
-			padding-top: 15px;
+			font-size : 120%;
 		}
 		
 		.horizontal-right {
 			float: right;
 			padding-right: 15px;
-			padding-top: 15px;
+		}
+		
+		.westPanel {
+			border: 5px solid #FFE49C;
+			-moz-border-radius: 10px; 
+			-webkit-border-radius: 10px;
+			margin : 10px;
+			padding : 5px;
+		}
+		
+		.contentPanel {
+			border: 5px solid #DCE9F2;
+			-moz-border-radius: 10px; 
+			-webkit-border-radius: 10px;
+			margin : 10px;
+			padding : 5px;
 		}
 		
 		.border {
@@ -23,29 +45,30 @@
 			border-width:1px;
 		}
 	</ui:style>
-	
-	<g:DockLayoutPanel unit='EM' height="100%" width="100%" >
-	   	<g:north size='4'>
+	<g:DockLayoutPanel unit='EM' height="100%" width="100%">
+	   	<g:north size='7'>
 	     	<g:HTMLPanel>
-				<div class='{style.horizontal-left}'>Welcome <span ui:field="nameSpan"/>.</div>
-				<div class='{style.horizontal-right}'><g:Anchor ui:field="signOut">Sign out</g:Anchor></div>
+	     		<div class='{style.header}'>
+					<div class='{style.horizontal-left}'>Welcome <span ui:field="nameSpan"/>.</div>
+					<div class='{style.horizontal-right}'><g:Anchor ui:field="signOut">Sign out</g:Anchor></div>
+	     		</div>
 			</g:HTMLPanel>
    		</g:north>
    		
-   		<g:north size="4">
-   			<g:HTMLPanel>
-   				<div class='{style.horizontal-left}'>
-	   				<g:Button ui:field="createClassDiagram">Create a new diagram</g:Button>
-   				</div>
-   			</g:HTMLPanel>
-   		</g:north>
+   		<g:west size='20'>
+			<g:FlowPanel ui:field="westPanel" addStyleNames ="{style.westPanel}"/>
+	   	</g:west>
    		
 		<g:center>
-			<g:FlowPanel ui:field="content"/>
+			<g:FlowPanel ui:field="content" addStyleNames ="{style.contentPanel}"/>
 		</g:center>
-		
-		<g:west size='15'>
-			<g:FlowPanel ui:field="westPanel"/>
-	   	</g:west>
+	   	
+	   	<g:south size="4">
+   			<g:HTMLPanel>
+   				<div class='{style.horizontal-left}'>
+	   				<g:Button ui:field="createDiagramButton">Create a new diagram</g:Button>
+   				</div>
+   			</g:HTMLPanel>
+   		</g:south>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

@@ -68,8 +68,9 @@ public class ErrorPopUp {
 	}
 	
 	/** Show the popup. */
-	public void show() {
+	public ErrorPopUp show() {
 		popUpPanel.center();
+		return this;
 	}
 	
 	/** Hide the popup. */

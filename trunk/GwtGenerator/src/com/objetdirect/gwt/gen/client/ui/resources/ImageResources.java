@@ -37,6 +37,12 @@ public interface ImageResources extends ClientBundle {
 	@Source("images/GwtGeneratorLogo.png")
 	public ImageResource GwtGeneratorLogo();
 	
+	@Source("images/delete.png")
+	public ImageResource deleteIcon();
+	
+	@Source("images/EditIcon.png")
+	public ImageResource EditIcon();
+	
 	@Source("images/background.png")
 	@ImageOptions(repeatStyle = RepeatStyle.Horizontal)
 	public ImageResource background();

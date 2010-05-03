@@ -50,6 +50,7 @@ import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.exceptions.DiagramAlreadyExistException;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
@@ -111,8 +112,6 @@ public class Design extends Composite {
 	Label diagramName;
 	
 	final private CodePanel codePanel = new CodePanel();
-	
-	final private LoadingPopUp loadingPopUp = new LoadingPopUp();
 	
 	private DrawerPanel drawer;
 	
@@ -239,8 +238,7 @@ public class Design extends Composite {
 	 * @param diagramInformations
 	 */
 	private void doCreateNewDiagram(final DiagramDto diagramInformations) {
-		final LoadingPopUp loadingPopUp = new LoadingPopUp();
-		loadingPopUp.startProcessing("Creating a new diagram and loading the designer, please wait...");
+		LoadingPopUp.getInstance().startProcessing("Creating a new diagram and loading the designer, please wait...");
 		
 		diagramService.createDiagram(diagramInformations.getType(), diagramInformations.getName(), new 
 			AsyncCallback<Long>() {
@@ -259,12 +257,12 @@ public class Design extends Composite {
 					// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
 					RootLayoutPanel.get().clear();
 					RootLayoutPanel.get().add(Design.this);
-					loadingPopUp.stopProcessing();
+					LoadingPopUp.getInstance().stopProcessing();
 				}
 				
 				@Override
 				public void onFailure(Throwable caught) {
-					Log.debug(caught.getMessage());
+					new ErrorPopUp(caught).show();
 					eventBus.fireEvent(new BackToHomeEvent());
 				}
 			});
@@ -276,8 +274,7 @@ public class Design extends Composite {
 	 * @param diagramInformations the diagram to load.
 	 */
 	private void doLoadDiagram(DiagramDto diagramInformations) {
-		final LoadingPopUp loadingPopUp = new LoadingPopUp();
-		loadingPopUp.startProcessing("Loading the diagram "+ diagramInformations.getName() +" and the designer, please wait...");
+		LoadingPopUp.getInstance().startProcessing("Loading the diagram "+ diagramInformations.getName() +" and the designer, please wait...");
 		
 		diagramService.getDiagram(diagramInformations.getKey(), new AsyncCallback<DiagramDto>() {
 			
@@ -295,21 +292,20 @@ public class Design extends Composite {
 				contentPanel.clear();
 				contentPanel.add(drawer);
 				diagramName.setText(diagramFound.getName());
-//				drawer.getUMLCanvas().fromURL(diagramFound.getGeneratedUrl(), false);
 				
 				HotKeyManager.setInputEnabled(true);
 
 				// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
 				RootLayoutPanel.get().clear();
 				RootLayoutPanel.get().add(Design.this);
-				loadingPopUp.stopProcessing();
+				LoadingPopUp.getInstance().stopProcessing();
 				umlCanvas.clearArrows();
 				umlCanvas.makeArrows(); // Replace the arrows on the right position.
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				loadingPopUp.stopProcessing();
+				LoadingPopUp.getInstance().stopProcessing();
 				Log.debug(caught.getMessage());
 				eventBus.fireEvent(new BackToHomeEvent());
 			}
@@ -321,15 +317,14 @@ public class Design extends Composite {
 	 * @param backToHome True if the application should close the designer and back to the home screen.
 	 */
 	private void doSaveDiagram(final boolean backToHome) {
-		final LoadingPopUp loadingPopUp = new LoadingPopUp();
-		loadingPopUp.startProcessing("Saving the diagram, please wait...");
+		LoadingPopUp.getInstance().startProcessing("Saving the diagram, please wait...");
 		currentDiagram.setGeneratedUrl(drawer.getUMLCanvas().toUrl());
 		currentDiagram.setCanvas(drawer.getUMLCanvas());
 		diagramService.saveDiagram(currentDiagram, new AsyncCallback<Void>() {
 			
 			@Override
 			public void onSuccess(Void result) {
-				loadingPopUp.stopProcessing();
+				LoadingPopUp.getInstance().stopProcessing();
 				if (backToHome) {
 					eventBus.fireEvent(new BackToHomeEvent());
 				} else {
@@ -340,7 +335,7 @@ public class Design extends Composite {
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				loadingPopUp.stopProcessing();
+				LoadingPopUp.getInstance().stopProcessing();
 				ErrorPopUp errorPopUp = new ErrorPopUp(caught);
 				errorPopUp.show();
 			}
@@ -349,8 +344,7 @@ public class Design extends Composite {
 	
 	/** Load an empty class diagram for a guest without the possibility to save it. */
 	private void doLoadDiagramForAGuest() {
-		final LoadingPopUp loadingPopUp = new LoadingPopUp();
-		loadingPopUp.startProcessing("Loading a class diagram in the designer, please login for a full features access, please wait...");
+		LoadingPopUp.getInstance().startProcessing("Loading a class diagram in the designer, please login for a full features access, please wait...");
 		
 		OptionsManager.set("DiagramType", Type.CLASS.getIndex()); // Class diagram by default
 		drawer = new DrawerPanel();
@@ -364,7 +358,7 @@ public class Design extends Composite {
 		// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
 		RootLayoutPanel.get().clear();
 		RootLayoutPanel.get().add(Design.this);
-		loadingPopUp.stopProcessing();
+		LoadingPopUp.getInstance().stopProcessing();
 	}
 	
 	/** Command to generate the pojos from the diagram. 
@@ -396,7 +390,7 @@ public class Design extends Composite {
 			HotKeyManager.setInputEnabled(false);
 			GWTUMLDrawerHelper.enableBrowserEvents();
 			
-			loadingPopUp.startProcessing("Generating code ...");
+			LoadingPopUp.getInstance().startProcessing("Generating code ...");
 			
 			generatorService.generateClassesCode(umlClasses, umlRelations, "com.od.test", new AsyncCallback<List<GeneratedCode>>() {
 				
@@ -409,7 +403,7 @@ public class Design extends Composite {
 					
 					contentPanel.add(codePanel);
 					codePanel.goToFirstClass();
-					loadingPopUp.stopProcessing();
+					LoadingPopUp.getInstance().stopProcessing();
 				}
 				
 				@Override
@@ -425,7 +419,7 @@ public class Design extends Composite {
 						}
 					});
 					
-					loadingPopUp.stopProcessing();
+					LoadingPopUp.getInstance().stopProcessing();
 					errorPopUp.show();
 				}
 			});
