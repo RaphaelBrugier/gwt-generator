@@ -14,21 +14,17 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.LinkedList;
-import java.util.List;
-
-import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
-import com.objetdirect.gwt.gen.server.entities.Diagram;
+import com.objetdirect.gwt.gen.server.dao.DiagramDao;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
-import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
+import com.objetdirect.gwt.gen.shared.exceptions.DiagramAlreadyExistException;
 import com.objetdirect.gwt.gen.shared.exceptions.NotLoggedInException;
 
 /**
@@ -39,48 +35,28 @@ import com.objetdirect.gwt.gen.shared.exceptions.NotLoggedInException;
 @SuppressWarnings("serial")
 public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramService {
 
+	
+	private DiagramDao diagramDao = new DiagramDao();
+	
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type, java.lang.String)
 	 */
 	@Override
-	public Long createDiagram(Type type, String name) {
+	public Long createDiagram(Type type, String name) throws DiagramAlreadyExistException {
 		checkLoggedIn();
-		PersistenceManager pm = PMF.getPM();
-		
-		Diagram persistedDiagram = new Diagram(type, name, getCurrentUser());
-		try {
-			persistedDiagram = pm.makePersistent(persistedDiagram);
-		} finally  {
-			pm.close();
+		if (diagramDao.getDiagram(type, name) != null) {
+			throw new DiagramAlreadyExistException();
 		}
-		return persistedDiagram.getKey();
+		return diagramDao.createDiagram(type, name);
 	}
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams()
 	 */
-	@SuppressWarnings("unchecked")
 	@Override
-	public Collection<DiagramDto> getDiagrams() {
+	public ArrayList<DiagramDto> getDiagrams() {
 		checkLoggedIn();
-		
-		PersistenceManager pm = PMF.getPM();
-		List<Diagram> queryResult = new LinkedList<Diagram>();
-		Collection<DiagramDto> results = new LinkedList<DiagramDto>();
-		try {
-			  Query q = pm.newQuery(Diagram.class, "user == u");
-		      q.declareParameters("com.google.appengine.api.users.User u");
-		      queryResult = (List<Diagram>) q.execute(getCurrentUser());
-		      
-		      for (Diagram diagram : queryResult) {
-		    	  DiagramDto diagramInformation = new DiagramDto(diagram.getKey(), diagram.getName(), diagram.getType());
-		    	  results.add(diagramInformation);
-		      } //TODO move this after the pm.close (if possible)
-		} finally {
-			pm.close();
-		}
-		
-		return results;
+		return diagramDao.getDiagrams();
 	}
 	
 	/* (non-Javadoc)
@@ -89,17 +65,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	@Override
 	public void deleteDiagram(Long key) {
 		checkLoggedIn();
-		
-		PersistenceManager pm = PMF.getPM();
-		try {
-			Diagram diagram = pm.getObjectById(Diagram.class, key);
-			if (diagram == null) 
-				throw new GWTGeneratorException("The diagram to delete was not found.");
-			
-			pm.deletePersistent(diagram);
-		} finally {
-			pm.close();
-		}
+		diagramDao.deleteDiagram(key);
 	}
 	
 	/* (non-Javadoc)
@@ -108,23 +74,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	@Override
 	public DiagramDto getDiagram(Long key) {
 		checkLoggedIn();
-		
-		DiagramDto diagramFound = null;
-		PersistenceManager pm = PMF.getPM();
-		try {
-			Diagram diagram = pm.getObjectById(Diagram.class, key);
-			if(diagram!=null) {
-				diagramFound = new DiagramDto();
-				diagram.copyToDiagramDto(diagramFound);
-			}
-			
-		} finally {
-			pm.close();
-		}
-		
-		System.out.println("Server::getDiagram() diagramFound.canvas  " + diagramFound.getCanvas());
-		
-		return diagramFound;
+		return diagramDao.getDiagram(key);
 	}
 	
 	/* (non-Javadoc)
@@ -133,18 +83,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	@Override
 	public void saveDiagram(DiagramDto diagramToSave) {
 		checkLoggedIn();
-		
-		PersistenceManager pm = PMF.getPM();
-		try {
-			Diagram diagram = pm.getObjectById(Diagram.class, diagramToSave.getKey());
-			if (diagram == null) 
-				throw new GWTGeneratorException("The diagram to save was not found.");
-			
-			diagram.copyFromDiagramDto(diagramToSave);
-			
-		} finally {
-			pm.close();
-		}
+		diagramDao.saveDiagram(diagramToSave);
 	}
 	
 	/** Get the current logged user on GAE or null if the user is not logged.

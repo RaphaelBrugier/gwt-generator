@@ -15,17 +15,13 @@
 package com.objetdirect.gwt.gen.shared.exceptions;
 
 /**
- * This exception is thrown when a user not logged try access a protected service.
+ * This exception is thrown when a try to create a new diagram with a name and type already existing.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 @SuppressWarnings("serial")
-public class NotLoggedInException extends RuntimeException {
+public class DiagramAlreadyExistException extends RuntimeException {
 
-  public NotLoggedInException() {
-    super();
-  }
-
-  public NotLoggedInException(String message) {
-    super(message);
+  public DiagramAlreadyExistException() {
+    super("A diagram of this type and with this name already exist. Please use an other name.");
   }
 }

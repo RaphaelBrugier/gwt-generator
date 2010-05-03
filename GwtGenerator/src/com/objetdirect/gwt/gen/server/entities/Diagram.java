@@ -41,7 +41,6 @@ import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 @SuppressWarnings("serial")
 @PersistenceCapable
 public class Diagram implements Serializable {
-
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long key;
@@ -182,7 +181,8 @@ public class Diagram implements Serializable {
 	/** Copy the fields of the Diagram object into the given DiagramInformations object.
 	 * @param diagramToCopy the diagram the targeted diagram
 	 */
-	public void copyToDiagramDto(DiagramDto diagramToCopy) {
+	public DiagramDto copyToDiagramDto() {
+		DiagramDto diagramToCopy = new DiagramDto();
 		diagramToCopy.setKey(this.key);
 		diagramToCopy.setType(this.type);
 		diagramToCopy.setName(this.name);
@@ -203,5 +203,6 @@ public class Diagram implements Serializable {
 			}
 			diagramToCopy.setCanvas(canvas);
 		}
+		return diagramToCopy;
 	}
 }
