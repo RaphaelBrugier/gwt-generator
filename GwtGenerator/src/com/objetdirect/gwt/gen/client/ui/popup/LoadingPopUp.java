@@ -27,28 +27,38 @@ import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
 public class LoadingPopUp {
-
-	private static PopupPanel popupPanel;
 	
-	private static Label label;
+	public static LoadingPopUp getInstance() {
+		if (INSTANCE == null)
+			INSTANCE = new LoadingPopUp();
+		
+		return INSTANCE;
+	}
+	
+	private static LoadingPopUp INSTANCE;
+	
+	private PopupPanel popupPanel;
+	
+	private Label label;
+	
+	private boolean processing;
 	
 	/** Constructor of the popup. */
-	public LoadingPopUp() {
-		if (popupPanel == null) {
-			popupPanel = new PopupPanel(false, true);
-			label = new Label();
-			popupPanel.setTitle("Loading");
-			popupPanel.setGlassEnabled(true);
+	private LoadingPopUp() {
+		popupPanel = new PopupPanel(false, true);
+		label = new Label();
+		popupPanel.setTitle("Loading");
+		popupPanel.setGlassEnabled(true);
+	
+		FlowPanel panel = new FlowPanel();
+	
+		Image ajaxLoader = new Image(ImageResources.INSTANCE.ajaxLoader());
 		
-			FlowPanel panel = new FlowPanel();
+		panel.add(ajaxLoader);
+		panel.add(label);
 		
-			Image ajaxLoader = new Image(ImageResources.INSTANCE.ajaxLoader());
-			
-			panel.add(ajaxLoader);
-			panel.add(label);
-			
-			popupPanel.add(panel);
-		}
+		popupPanel.add(panel);
+		processing = false;
 	}
 	
 	/**
@@ -63,14 +73,18 @@ public class LoadingPopUp {
 	 * @param message the message.
 	 */
 	public void startProcessing(String message) {
-		label.setText(message);
-		popupPanel.center();
+		if(! processing) {
+			label.setText(message);
+			popupPanel.center();
+			processing = true;
+		}
 	}
 	
 	/**
 	 * Hide the popup.
 	 */
 	public void stopProcessing() {
+		processing = false;
 		popupPanel.hide();
 	}
 }

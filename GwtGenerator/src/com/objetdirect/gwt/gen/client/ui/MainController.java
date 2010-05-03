@@ -1,14 +1,11 @@
 package com.objetdirect.gwt.gen.client.ui;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent.BackToHomeEventHandler;
-import com.objetdirect.gwt.gen.client.services.DiagramService;
-import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.design.Design;
 import com.objetdirect.gwt.gen.client.ui.explorer.ExplorerPanel;
 import com.objetdirect.gwt.gen.client.ui.welcome.WelcomePanel;
@@ -27,7 +24,6 @@ public class MainController  {
 	
 	private HandlerManager eventBus;
 	
-	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 	
 	public MainController() {
 		mainContainer = new SimplePanel();

@@ -38,8 +38,6 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
-import com.objetdirect.gwt.gen.client.services.DiagramService;
-import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
@@ -57,8 +55,6 @@ public class ExplorerPanel extends SimplePanel {
 	interface ExplorerPanelUiBinder extends UiBinder<Widget, ExplorerPanel> {
 	}
 	
-	final private  DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
-	
 	final private  HandlerManager eventBus;
 	
 	@UiField
@@ -68,7 +64,7 @@ public class ExplorerPanel extends SimplePanel {
 	Anchor signOut;
 	
 	@UiField
-	Button createClassDiagram;
+	Button createDiagramButton;
 	
 	@UiField
 	FlowPanel westPanel;
@@ -128,12 +124,11 @@ public class ExplorerPanel extends SimplePanel {
 		
 		westPanel.clear();
 		westPanel.add(tree);
-		
 		root.setState(true);
 	}
 
 
-	@UiHandler(value="createClassDiagram")
+	@UiHandler(value="createDiagramButton")
 	void onClickCreateClassDiagram(ClickEvent event) {
 		
 		// Construct a dialogBox to get the type and the name of the diagram.
