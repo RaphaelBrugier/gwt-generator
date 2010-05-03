@@ -14,7 +14,7 @@
  */
 package com.objetdirect.gwt.gen.client.services;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
@@ -36,7 +36,7 @@ public interface DiagramServiceAsync {
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams()
 	 */
-	void getDiagrams(AsyncCallback<Collection<DiagramDto>> callback);
+	void getDiagrams(AsyncCallback<ArrayList<DiagramDto>> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#deleteDiagram(java.lang.Long)

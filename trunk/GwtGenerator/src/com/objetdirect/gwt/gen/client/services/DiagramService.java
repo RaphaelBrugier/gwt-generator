@@ -14,12 +14,13 @@
  */
 package com.objetdirect.gwt.gen.client.services;
 
-import java.util.Collection;
+import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
+import com.objetdirect.gwt.gen.shared.exceptions.DiagramAlreadyExistException;
 
 /**
  * Service to operate on the stored diagrams.
@@ -34,13 +35,13 @@ public interface DiagramService extends RemoteService {
 	 * @param name the name of the diagram
 	 * @return the generated key
 	 */
-	public Long createDiagram(Type type, String name);
+	public Long createDiagram(Type type, String name) throws DiagramAlreadyExistException;
 	
 	/**
 	 * Get all the diagrams of the logged user.
-	 * @return A collection of the diagrams.
+	 * @return A list of the diagrams.
 	 */
-	public Collection<DiagramDto> getDiagrams();
+	public ArrayList<DiagramDto> getDiagrams();
 	
 	/**
 	 * Delete a diagram in the base.
