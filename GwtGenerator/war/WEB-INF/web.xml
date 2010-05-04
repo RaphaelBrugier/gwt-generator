@@ -35,6 +35,16 @@
     	<servlet-name>diagramService</servlet-name>
     	<url-pattern>/gwtgenerator/diagram</url-pattern>
   	</servlet-mapping>
+  	
+	<servlet>
+    	<servlet-name>projectService</servlet-name>
+    	<servlet-class>com.objetdirect.gwt.gen.server.services.ProjectServiceImpl</servlet-class>
+  	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>projectService</servlet-name>
+    	<url-pattern>/gwtgenerator/project</url-pattern>
+  	</servlet-mapping>
 
 <!-- Logging servlet -->
 	<servlet>

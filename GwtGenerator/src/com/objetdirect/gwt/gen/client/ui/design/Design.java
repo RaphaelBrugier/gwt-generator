@@ -50,7 +50,6 @@ import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
@@ -78,7 +77,7 @@ public class Design extends Composite {
 	interface DesignUiBinder extends UiBinder<Widget, Design> {
 	}
 
-	private final static GeneratorServiceAsync generatorService = GWT.create(GeneratorService.class);
+	private final GeneratorServiceAsync generatorService = GWT.create(GeneratorService.class);
 	
 	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 	
@@ -318,7 +317,6 @@ public class Design extends Composite {
 	 */
 	private void doSaveDiagram(final boolean backToHome) {
 		LoadingPopUp.getInstance().startProcessing("Saving the diagram, please wait...");
-		currentDiagram.setGeneratedUrl(drawer.getUMLCanvas().toUrl());
 		currentDiagram.setCanvas(drawer.getUMLCanvas());
 		diagramService.saveDiagram(currentDiagram, new AsyncCallback<Void>() {
 			

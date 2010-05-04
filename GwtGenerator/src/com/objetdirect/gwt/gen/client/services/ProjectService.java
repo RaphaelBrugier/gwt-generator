@@ -14,52 +14,37 @@
  */
 package com.objetdirect.gwt.gen.client.services;
 
-import java.util.ArrayList;
+import java.util.Collection;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
-import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
+import com.objetdirect.gwt.gen.shared.entities.Project;
 
 /**
- * Service to operate on the stored diagrams.
+ * Service to operate on the stored projects.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-@RemoteServiceRelativePath("diagram")
-public interface DiagramService extends RemoteService {
+@RemoteServiceRelativePath("project")
+public interface ProjectService extends RemoteService {
+
+	/**
+	 * Create a new project for the logged user.
+	 * @param name name of the project.
+	 * @return the id of the created project.
+	 * @throws CreateProjectException if the name is already existing or blank.
+	 */
+	public Long createProject(String name);
+
+	/**
+	 * Get all the project of the logged user.
+	 * @return a collection of projects.
+	 */
+	public Collection<Project> getProjects();
 	
 	/**
-	 * Create a new diagram
-	 * @param type the type of diagram
-	 * @param name the name of the diagram
-	 * @return the generated key
+	 * Update the givent project by saving it on the base.
+	 * @param project The project to save.
 	 */
-	public Long createDiagram(Type type, String name) throws CreateDiagramException;
-	
-	/**
-	 * Get all the diagrams of the logged user.
-	 * @return A list of the diagrams.
-	 */
-	public ArrayList<DiagramDto> getDiagrams();
-	
-	/**
-	 * Delete a diagram in the base.
-	 * @param key the key of the diagram to delete
-	 */
-	public void deleteDiagram(Long key);
-	
-	/**
-	 * Get a Diagram from its key
-	 * @param key the key
-	 * @return the diagram found or null.
-	 */
-	public DiagramDto getDiagram(Long key);
-	
-	/**
-	 * Save the diagram in the base.
-	 * @param diagram the diagram to save
-	 */
-	public void saveDiagram(DiagramDto diagram);
+	public void updateProject(Project project);
 	
 }
