@@ -15,7 +15,6 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import java.util.ArrayList;
-import java.util.Collection;
 
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserServiceFactory;
@@ -24,8 +23,9 @@ import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
-import com.objetdirect.gwt.gen.shared.exceptions.DiagramAlreadyExistException;
+import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 import com.objetdirect.gwt.gen.shared.exceptions.NotLoggedInException;
+import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isNotBlank;;
 
 /**
  * Real implementation of DiagramService.
@@ -42,10 +42,13 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type, java.lang.String)
 	 */
 	@Override
-	public Long createDiagram(Type type, String name) throws DiagramAlreadyExistException {
+	public Long createDiagram(Type type, String name) throws CreateDiagramException {
 		checkLoggedIn();
+		if (! isNotBlank(name)) {
+			throw new CreateDiagramException("You must specify a name for your diagram.");
+		}
 		if (diagramDao.getDiagram(type, name) != null) {
-			throw new DiagramAlreadyExistException();
+			throw new CreateDiagramException("A diagram of this type and with this name already exist. Please use an other name.");
 		}
 		return diagramDao.createDiagram(type, name);
 	}
