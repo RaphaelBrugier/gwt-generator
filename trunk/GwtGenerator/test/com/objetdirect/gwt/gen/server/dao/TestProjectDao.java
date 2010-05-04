@@ -14,6 +14,9 @@
  */
 package com.objetdirect.gwt.gen.server.dao;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -22,19 +25,20 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
+import com.objetdirect.gwt.gen.shared.entities.Project;
 
 /**
- * Tests for the diagram dao.
+ * Tests for the project dao.
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
-public class TestDiagramDao extends TestCase {
+public class TestProjectDao extends TestCase {
 
 	private final LocalServiceTestHelper helper =
-        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig(), new LocalUserServiceTestConfig());
+        new LocalServiceTestHelper(
+        		new LocalDatastoreServiceTestConfig(), 
+        		new LocalUserServiceTestConfig());
 
-	private final DiagramDao dao = new DiagramDao();
+	private final ProjectDao dao = new ProjectDao();
 	
 	private final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 	
@@ -42,22 +46,41 @@ public class TestDiagramDao extends TestCase {
 		super.setUp();
 		helper.setUp();
 	}
-
 	
-	public void testCreateDiagram() {
-		Long id = dao.createDiagram(Type.CLASS, "name");
-		assertNotNull(id);
-		id = dao.createDiagram(Type.HYBRYD, "name 2");
-
-		assertEquals(2, ds.prepare(new Query("Diagram")).countEntities());
+	public void testUpdateProject() {
+		helper	.setEnvIsLoggedIn(true)
+				.setEnvEmail("MyEmail@gmail.com")
+				.setEnvAuthDomain("google.com");
+		
+		Long id  = dao.createProject("name");
+		
+		List<Project> projects = new ArrayList<Project>(dao.getProjects());
+		
+		Project p = projects.get(0);
+		
+		assertEquals(id, p.getKey());
+		
+		p.setName("newName");
+		p = dao.updateProject(p);
+	
+		assertEquals(id, p.getKey());
 	}
 	
-	
-	public void testGetDiagramFromNameAndType() {
-		Long id = dao.createDiagram(Type.CLASS, "name");
-
-		DiagramDto dto = dao.getDiagram(Type.CLASS, "name");
-		assertEquals(Type.CLASS, dto.getType() );
-		assertEquals("name", dto.getName());
+	public void testDeleteProject() {
+		helper	.setEnvIsLoggedIn(true)
+		.setEnvEmail("MyEmail@gmail.com")
+		.setEnvAuthDomain("google.com");
+		
+		Long id  = dao.createProject("name");
+		
+		List<Project> projects = new ArrayList<Project>(dao.getProjects());
+		
+		Project p = projects.get(0);
+		
+		assertEquals(id, p.getKey());
+		
+		dao.deleteProject(p);
+		
+		assertEquals(0, ds.prepare(new Query("Project")).countEntities());
 	}
 }

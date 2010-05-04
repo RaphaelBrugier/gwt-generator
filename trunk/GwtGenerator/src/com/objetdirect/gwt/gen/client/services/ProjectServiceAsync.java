@@ -12,27 +12,32 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.services;
+package com.objetdirect.gwt.gen.client.services;
 
-import javax.jdo.JDOHelper;
-import javax.jdo.PersistenceManager;
-import javax.jdo.PersistenceManagerFactory;
+import java.util.Collection;
+
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.objetdirect.gwt.gen.shared.entities.Project;
 
 /**
- * Helper class to access to GAE datastore
+ * Async counter part of ProjectService
+ * @see com.objetdirect.gwt.gen.client.services.ProjectService
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public final class PMF {
-    private static final PersistenceManagerFactory pmfInstance =
-        JDOHelper.getPersistenceManagerFactory("transactions-optional");
+public interface ProjectServiceAsync {
 
-    private PMF() {}
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String)
+	 */
+	void createProject(String name, AsyncCallback<Long> callback);
 
-    public static PersistenceManagerFactory get() {
-        return pmfInstance;
-    }
-    
-    public static PersistenceManager getPM() {
-    	return PMF.get().getPersistenceManager();
-    }
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#getProjects()
+	 */
+	void getProjects(AsyncCallback<Collection<Project>> callback);
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#updateProject(com.objetdirect.gwt.gen.shared.entities.Project)
+	 */
+	void updateProject(Project project, AsyncCallback<Void> callback);
 }

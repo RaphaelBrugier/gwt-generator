@@ -14,6 +14,11 @@
  */
 package com.objetdirect.gwt.gen.client.ui.explorer;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -22,6 +27,8 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -38,8 +45,11 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
+import com.objetdirect.gwt.gen.client.services.ProjectService;
+import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
+import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 
@@ -55,7 +65,8 @@ public class ExplorerPanel extends SimplePanel {
 	interface ExplorerPanelUiBinder extends UiBinder<Widget, ExplorerPanel> {
 	}
 	
-	final private  HandlerManager eventBus;
+	private final ProjectServiceAsync projectService = GWT.create(ProjectService.class);
+	final private HandlerManager eventBus;
 	
 	@UiField
 	SpanElement nameSpan;
@@ -124,6 +135,48 @@ public class ExplorerPanel extends SimplePanel {
 		
 		westPanel.clear();
 		westPanel.add(tree);
+		
+//		Button createProjectButton = new Button("create Project");
+//		createProjectButton.addClickHandler(new ClickHandler() {
+//			
+//			@Override
+//			public void onClick(ClickEvent event) {
+//				projectService.getProjects(new AsyncCallback<Collection<Project>>() {
+//					
+//					@Override
+//					public void onSuccess(Collection<Project> result) {
+//						if (result.size() >0) {
+//							List<Project> projects = new ArrayList<Project>(result);
+//							Project project = projects.get(0);
+//							project.setName("newName");
+//							
+//							projectService.updateProject(project, new AsyncCallback<Void>() {
+//								
+//								@Override
+//								public void onSuccess(Void result) {
+//									Window.alert("project updated");
+//								}
+//								
+//								@Override
+//								public void onFailure(Throwable caught) {
+//									Log.debug(caught.getMessage());
+//								}
+//							});
+//						} else {
+//							Window.alert("no project found");
+//						}
+//					}
+//					
+//					@Override
+//					public void onFailure(Throwable caught) {
+//						Log.debug(caught.getMessage());
+//					}
+//				});
+//			}
+//		});
+//		westPanel.add(createProjectButton);
+		
+		
 		root.setState(true);
 	}
 

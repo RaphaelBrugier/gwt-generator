@@ -14,18 +14,17 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
+import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isNotBlank;
+
 import java.util.ArrayList;
 
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
-import com.objetdirect.gwt.gen.shared.exceptions.NotLoggedInException;
-import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isNotBlank;;
 
 /**
  * Real implementation of DiagramService.
@@ -34,9 +33,8 @@ import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isNot
  */
 @SuppressWarnings("serial")
 public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramService {
-
 	
-	private DiagramDao diagramDao = new DiagramDao();
+	private final DiagramDao diagramDao = new DiagramDao();
 	
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type, java.lang.String)
@@ -88,20 +86,4 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		checkLoggedIn();
 		diagramDao.saveDiagram(diagramToSave);
 	}
-	
-	/** Get the current logged user on GAE or null if the user is not logged.
-	 * @return the logged User object.
-	 */
-	private static User getCurrentUser() {
-		return UserServiceFactory.getUserService().getCurrentUser();
-	}
-	
-	/** Check if the user is logged in.
-	 *  Throw a NotLoggedInException if not.
-	 */
-	private void checkLoggedIn()  {
-		    if (getCurrentUser() == null) {
-		      throw new NotLoggedInException("Not logged in.");
-		    }
-	 }
 }

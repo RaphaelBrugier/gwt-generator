@@ -14,17 +14,16 @@
  */
 package com.objetdirect.gwt.gen.server.dao;
 
+import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
+
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.google.appengine.api.users.User;
-import com.google.appengine.api.users.UserServiceFactory;
+import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
-import com.objetdirect.gwt.gen.server.services.PMF;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
@@ -42,7 +41,7 @@ public class DiagramDao {
 	 * @return the generated id for the diagram.
 	 */
 	public Long createDiagram(Type type, String name) {
-		PersistenceManager pm = PMF.getPM();
+		PersistenceManager pm = ServerHelper.getPM();
 		Diagram persistedDiagram = new Diagram(type, name, getCurrentUser());
 		try {
 			persistedDiagram = pm.makePersistent(persistedDiagram);
@@ -58,7 +57,7 @@ public class DiagramDao {
 	 * @return
 	 */
 	public DiagramDto getDiagram(Long key) {
-		PersistenceManager pm = PMF.getPM();
+		PersistenceManager pm = ServerHelper.getPM();
 		DiagramDto diagramFound = null;
 		try {
 			Diagram diagram = pm.getObjectById(Diagram.class, key);
@@ -75,9 +74,15 @@ public class DiagramDao {
 		return diagramFound;
 	}
 	
+	/**
+	 * Get a diagram from its name and its type for the logged user.
+	 * @param type the type of the diagram
+	 * @param name the name of the diagram. 
+	 * @return the diagram found or null if not diagram was found. 
+	 */
 	@SuppressWarnings("unchecked")
 	public DiagramDto getDiagram(Type type, String name) {
-		PersistenceManager pm = PMF.getPM();
+		PersistenceManager pm = ServerHelper.getPM();
 		DiagramDto diagramFound = null;
 		List<Diagram> queryResult;
 		try {
@@ -106,7 +111,7 @@ public class DiagramDao {
 	 */
 	@SuppressWarnings("unchecked")
 	public ArrayList<DiagramDto> getDiagrams() {
-		PersistenceManager pm = PMF.getPM();
+		PersistenceManager pm = ServerHelper.getPM();
 		List<Diagram> queryResult;
 		ArrayList<DiagramDto> results = new ArrayList<DiagramDto>();
 		try {
@@ -130,7 +135,7 @@ public class DiagramDao {
 	 * @param key the id of the diagram.
 	 */
 	public void deleteDiagram(Long key) {
-		PersistenceManager pm = PMF.getPM();
+		PersistenceManager pm = ServerHelper.getPM();
 		try {
 			Diagram diagram = pm.getObjectById(Diagram.class, key);
 			if (! diagram.getUser().equals(getCurrentUser())) {
@@ -151,7 +156,7 @@ public class DiagramDao {
 	 * @param diagramToSave dto to copy in base.
 	 */
 	public void saveDiagram(DiagramDto diagramToSave) {
-		PersistenceManager pm = PMF.getPM();
+		PersistenceManager pm = ServerHelper.getPM();
 		try {
 			Diagram diagram = pm.getObjectById(Diagram.class, diagramToSave.getKey());
 			if (diagram == null) 
@@ -165,12 +170,5 @@ public class DiagramDao {
 		} finally {
 			pm.close();
 		}
-	}
-	
-	/** Get the current logged user on GAE or null if the user is not logged.
-	 * @return the logged User object.
-	 */
-	private static User getCurrentUser() {
-		return UserServiceFactory.getUserService().getCurrentUser();
 	}
 }
