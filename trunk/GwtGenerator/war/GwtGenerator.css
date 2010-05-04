@@ -175,41 +175,57 @@
 	overflow:scroll;
 }
 
-.DiagramList {
-  border-top: thin solid #444444;
-  border-left: thin solid #444444;
-  border-right: thin solid #111111;
-  border-bottom: thin solid #111111;
-  background-color:  #EFFBFB;
-  text-align: center;
+.gwt-image-action {
+	margin-right: 15px;
+	cursor: pointer;
 }
 
-.DiagramList-OddRow {
-  background-color: #F2F5F9;
-}
-
-.DiagramList-EvenRow {
-  background-color:  #EFFBFB;
-}
-
-
-.DiagramList-ColumnLabel {
-  color: black;
-  padding: 3px;
-}
-
-.DiagramList-ColumnLabelCell {
-  border-width: 0 0 1px 0;
+/*
+ * ScrollTable
+ */
+.gwt-ScrollTable {
+  border-color: #aaa;
   border-style: solid;
-  border-color: black;
-  margin: 0;
-  padding: 0;
-  text-align: center;
+  border-width: 1px 1px 1px 1px;
 }
 
-.DiagramList-Cell {
-  border-width: 0px 0px 0px 1px;
+.gwt-ScrollTable .headerWrapper {
+  background: #8bd url(images/bg_header_gradient.gif) repeat-x bottom left;
+}
+
+.gwt-ScrollTable .dataTable td,
+.gwt-ScrollTable .headerTable td {
+  border-color: #aaa;
   border-style: solid;
-  border-color: black;
-  padding: 5px;
+  border-width: 0px 1px 1px 0px;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+
+.gwt-ScrollTable .headerTable td,
+.gwt-ScrollTable .footerTable td {
+  color: #fff;
+}
+	
+
+/**
+ * Applied to the options at the bottom of the page.
+ */
+.gwt-PagingOptions {
+  background: #e8eef7;
+  border: 1px solid #aaa;
+  border-top: none;
+}
+
+.pagingOptionsFirstPage,
+.pagingOptionsLastPage,
+.pagingOptionsNextPage,
+.pagingOptionsPreviousPage {
+  cursor: hand;
+  cursor: pointer;
+}
+
+.actionsContainer {
+	text-align: center;
 }

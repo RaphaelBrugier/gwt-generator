@@ -50,7 +50,7 @@ import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.gen.shared.exceptions.DiagramAlreadyExistException;
+import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;

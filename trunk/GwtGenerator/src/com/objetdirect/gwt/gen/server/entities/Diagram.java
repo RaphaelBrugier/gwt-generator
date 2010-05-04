@@ -19,7 +19,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -38,9 +37,8 @@ import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
  * A diagram could be a class or an object or a sequence diagram.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-@SuppressWarnings("serial")
 @PersistenceCapable
-public class Diagram implements Serializable {
+public class Diagram {
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long key;
@@ -50,9 +48,6 @@ public class Diagram implements Serializable {
 	
 	@Persistent
 	private Type type;
-	
-	@Persistent
-	private String generatedUrl;
 	
 	@Persistent
 	private Blob serializedCanvas;
@@ -115,20 +110,6 @@ public class Diagram implements Serializable {
 	}
 
 	/**
-	 * @return the generatedUrl
-	 */
-	public String getGeneratedUrl() {
-		return generatedUrl;
-	}
-
-	/**
-	 * @param generatedUrl the generated Url to set
-	 */
-	public void setGeneratedUrl(String generatedUrl) {
-		this.generatedUrl = generatedUrl;
-	}
-
-	/**
 	 * @return the user
 	 */
 	public User getUser() {
@@ -164,7 +145,6 @@ public class Diagram implements Serializable {
 	public void copyFromDiagramDto(DiagramDto diagramToCopy) {
 		this.type = diagramToCopy.getType();
 		this.name = diagramToCopy.getName();
-		this.generatedUrl = diagramToCopy.getGeneratedUrl();
 		
 		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 		ObjectOutputStream oos;
@@ -186,7 +166,6 @@ public class Diagram implements Serializable {
 		diagramToCopy.setKey(this.key);
 		diagramToCopy.setType(this.type);
 		diagramToCopy.setName(this.name);
-		diagramToCopy.setGeneratedUrl(this.generatedUrl);
 		
 		UMLCanvas canvas = null;
 		

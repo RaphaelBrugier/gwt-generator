@@ -23,11 +23,9 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.gen2.table.client.AbstractColumnDefinition;
-import com.google.gwt.gen2.table.client.CachedTableModel;
 import com.google.gwt.gen2.table.client.DefaultRowRenderer;
 import com.google.gwt.gen2.table.client.DefaultTableDefinition;
 import com.google.gwt.gen2.table.client.FixedWidthGridBulkRenderer;
-import com.google.gwt.gen2.table.client.FlexTableBulkRenderer;
 import com.google.gwt.gen2.table.client.MutableTableModel;
 import com.google.gwt.gen2.table.client.PagingOptions;
 import com.google.gwt.gen2.table.client.PagingScrollTable;
@@ -42,7 +40,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasHorizontalAlignment;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -58,6 +55,10 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 /**
  * Widget that displays the list of the stored diagrams for the logged user.
  * From each line of the list the user can edit or delete a diagram.
+ * 
+ * This widget wrap a PaginScrollTable from the gwt-incubator page.
+ * For a complete tutorial about using PagingScrollTable, see http://zenoconsulting.wikidot.com/blog:17
+ * @see http://zenoconsulting.wikidot.com/blog:17
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
 public class DiagramList extends SimplePanel {
@@ -123,7 +124,7 @@ public class DiagramList extends SimplePanel {
 		// create the paging scroll table
 		pagingScrollTable = new PagingScrollTable<DiagramDto>(tableModel, tableDef);
 		pagingScrollTable.setPageSize(15);
-		pagingScrollTable.setEmptyTableWidget(new HTML("There is no data to display"));
+		pagingScrollTable.setEmptyTableWidget(new HTML("There is no diagram to display. Go to page 1 or create a new diagram."));
 		pagingScrollTable.getDataTable().setSelectionPolicy(SelectionPolicy.ONE_ROW);
 		pagingScrollTable.getDataTable().setWidth("100%");
 		
@@ -190,16 +191,15 @@ public class DiagramList extends SimplePanel {
 	 * @param tableModel 
 	 * @return
 	 */
-	private CachedTableModel<DiagramDto> createCachedTableModel(DataSourceTableModel tableModel) {
-		CachedTableModel<DiagramDto> tm = new CachedTableModel<DiagramDto>(tableModel);
-		tm.setPreCachedRowCount(15);
-		tm.setPostCachedRowCount(15);
-		return tm;
-	}
-	
+//	private CachedTableModel<DiagramDto> createCachedTableModel(DataSourceTableModel tableModel) {
+//		CachedTableModel<DiagramDto> tm = new CachedTableModel<DiagramDto>(tableModel);
+//		tm.setPreCachedRowCount(15);
+//		tm.setPostCachedRowCount(15);
+//		return tm;
+//	}
 	
 	/**
-	 * @see http://zenoconsulting.wikidot.com/blog:17
+	 * Model used by the paging scroll table to request the data.
 	 */
 	private class DataSourceTableModel extends MutableTableModel<DiagramDto> {
 		

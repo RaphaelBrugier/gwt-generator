@@ -19,7 +19,7 @@ import java.io.Serializable;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 
 /**
- * Minimal informations about a diagram to populate the explorer view.
+ * Data Transfert Object for the diagram entity.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 @SuppressWarnings("serial")
@@ -33,8 +33,6 @@ public class DiagramDto implements Serializable {
 	private String name;
 	
 	private Type type;
-	
-	private String generatedUrl;
 	
 	private UMLCanvas canvas;
 	
@@ -110,22 +108,6 @@ public class DiagramDto implements Serializable {
 	 */
 	public void setType(Type type) {
 		this.type = type;
-	}
-
-
-	/**
-	 * @return the generatedUrl
-	 */
-	public String getGeneratedUrl() {
-		return generatedUrl;
-	}
-
-
-	/**
-	 * @param generatedUrl the generatedUrl to set
-	 */
-	public void setGeneratedUrl(String generatedUrl) {
-		this.generatedUrl = generatedUrl;
 	}
 
 

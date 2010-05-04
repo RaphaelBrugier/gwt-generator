@@ -1,0 +1,5 @@
+Icons used in gwt-generator :
+
+Delete icon : http://findicons.com/icon/263490/delete?id=264244
+
+Edit icon : http://findicons.com/icon/259247/package_editors?id=259664

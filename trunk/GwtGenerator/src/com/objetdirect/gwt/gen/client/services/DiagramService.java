@@ -20,7 +20,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
-import com.objetdirect.gwt.gen.shared.exceptions.DiagramAlreadyExistException;
+import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 
 /**
  * Service to operate on the stored diagrams.
@@ -35,7 +35,7 @@ public interface DiagramService extends RemoteService {
 	 * @param name the name of the diagram
 	 * @return the generated key
 	 */
-	public Long createDiagram(Type type, String name) throws DiagramAlreadyExistException;
+	public Long createDiagram(Type type, String name) throws CreateDiagramException;
 	
 	/**
 	 * Get all the diagrams of the logged user.

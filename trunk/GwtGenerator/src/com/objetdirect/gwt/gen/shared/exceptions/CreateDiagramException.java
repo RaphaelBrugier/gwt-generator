@@ -15,13 +15,17 @@
 package com.objetdirect.gwt.gen.shared.exceptions;
 
 /**
- * This exception is thrown when a try to create a new diagram with a name and type already existing.
+ * This exception is thrown when an exception occured while creating a diagram.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 @SuppressWarnings("serial")
-public class DiagramAlreadyExistException extends RuntimeException {
+public class CreateDiagramException extends RuntimeException {
 
-  public DiagramAlreadyExistException() {
-    super("A diagram of this type and with this name already exist. Please use an other name.");
-  }
+	public CreateDiagramException() {
+		super();
+	}
+	
+	public CreateDiagramException(String message) {
+		super(message);
+	}
 }
