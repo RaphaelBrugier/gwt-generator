@@ -58,6 +58,13 @@ public class ProjectDao {
 	@SuppressWarnings("unchecked")
 	public Collection<Project> getProjects() {
 		PersistenceManager pm = ServerHelper.getPM();
+		
+		// Adding the "directory" group will force the detach of the "directories" field of the Project class
+		// The directory group is configure in the top of the project class.
+		// See this post for more informations about detaching children :
+		// http://groups.google.com/group/google-appengine-java/browse_thread/thread/4a55b8ec08343229/8dace46252053dd8?show_docid=8dace46252053dd8&fwc=1
+		pm.getFetchPlan().addGroup("directory"); 
+		
 		List<Project> queryResult;
 		Collection<Project> projectsFound = null;
 		try {
@@ -65,7 +72,6 @@ public class ProjectDao {
 		    q.declareParameters("String e");
 		    queryResult = (List<Project>) q.execute(getCurrentUser().getEmail());
 		    projectsFound = pm.detachCopyAll(queryResult);
-		    
 		} finally {
 			pm.close();
 		}
@@ -79,6 +85,7 @@ public class ProjectDao {
 	 */
 	public Project updateProject(Project project) {
 		PersistenceManager pm = ServerHelper.getPM();
+		pm.getFetchPlan().addGroup("directory");
 		Project persistedProject = null;
 		try {
 			persistedProject = pm.makePersistent(project);
@@ -109,6 +116,5 @@ public class ProjectDao {
 		} finally {
 			pm.close();
 		}
-		
 	}
 }

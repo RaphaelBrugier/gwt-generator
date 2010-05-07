@@ -15,13 +15,16 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
+import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
 import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isBlank;
 
 import java.util.Collection;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.server.dao.ProjectDao;
+import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
 
@@ -45,6 +48,7 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 		if (isBlank(name)) {
 			throw new CreateProjectException("You must specify a name to your project");
 		}
+		//TODO check if a project with the same name already exist
 		
 		return projectDao.createProject(name);
 	}
@@ -65,5 +69,30 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	@Override
 	public void updateProject(Project project) {
 		projectDao.updateProject(project);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#addDirectory(com.objetdirect.gwt.gen.shared.entities.Project, java.lang.String)
+	 */
+	@Override
+	public void addDirectory(Project project, String directoryName) {
+		checkLoggedIn();
+		
+		if (isBlank(directoryName)) {
+			throw new CreateProjectException("You must specify a name to your directory");
+		}
+		//TODO check if a project with the same name already exist
+		
+		Directory newDirectory = new Directory(directoryName, getCurrentUser().getEmail());
+		project.addDirectory(newDirectory);
+		projectDao.updateProject(project);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#deleteProject(com.objetdirect.gwt.gen.shared.entities.Project)
+	 */
+	@Override
+	public void deleteProject(Project projectToDelete) {
+		projectDao.deleteProject(projectToDelete);
 	}
 }

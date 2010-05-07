@@ -15,52 +15,48 @@
 package com.objetdirect.gwt.gen.shared.entities;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
-import javax.jdo.annotations.FetchGroup;
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
 /**
- * Represent a Project of a user.
+ * Represent a Directory of a user.
+ * A directory is owned by a project.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 @SuppressWarnings("serial")
 @PersistenceCapable(detachable="true")
-@FetchGroup(name="directory", members={@Persistent(name="directories")})
-public class Project implements Serializable {
+public class Directory implements Serializable {
 	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long key;
+    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
+    private String key;
 	
 	@Persistent
 	private String name;
 	
 	@Persistent
 	private String email;
-	
-	@Persistent
-	private List<Directory> directories;
 
 	
 	/** Default constructor ONLY for gwt-rpc serialization. */
 	@SuppressWarnings("unused")
-	private Project() {}
+	private Directory() {}
 	
-	public Project(String name, String email) {
+	public Directory(String name, String email) {
 		this.name = name;
 		this.email = email;
-		directories = new ArrayList<Directory>();
 	}
+	
 	
 	/**
 	 * @return the key
 	 */
-	public Long getKey() {
+	public String getKey() {
 		return key;
 	}
 
@@ -84,24 +80,9 @@ public class Project implements Serializable {
 	public String getEmail() {
 		return email;
 	}
-
-	/**
-	 * @return the directories
-	 */
-	public List<Directory> getDirectories() {
-		return directories;
-	}
-	
-	public void addDirectory(Directory directory) {
-		directories.add(directory);
-	}
-	
-	public void removeDirectory(Directory directory) {
-		directories.remove(directory);
-	}
 	
 	@Override
 	public String toString() {
-		return "Project key = " + key + " name = " + name + " owner = " + email;  
+		return "Directory  key = " + key + "  name = " + name + "  email = " + email;
 	}
 }
