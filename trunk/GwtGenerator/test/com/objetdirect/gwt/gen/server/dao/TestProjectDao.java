@@ -25,6 +25,8 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
+import com.objetdirect.gwt.gen.server.ServerHelper;
+import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 
 /**
@@ -82,5 +84,37 @@ public class TestProjectDao extends TestCase {
 		dao.deleteProject(p);
 		
 		assertEquals(0, ds.prepare(new Query("Project")).countEntities());
+	}
+	
+	public void testCreateDirectoryInProject() {
+		helper	.setEnvIsLoggedIn(true)
+		.setEnvEmail("MyEmail@gmail.com")
+		.setEnvAuthDomain("google.com");
+	
+		//Given a new project
+		Long id  = dao.createProject("name");
+		List<Project> projects = new ArrayList<Project>(dao.getProjects());
+		Project newProject = projects.get(0);
+	
+		//Given a new directory
+		Directory newDirectory = new Directory("Dname", ServerHelper.getCurrentUser().getEmail());
+		
+		// Add the directory to the project and update the project.
+		newProject.addDirectory(newDirectory);
+		dao.updateProject(newProject);
+		
+		// Expect the directory to be saved
+		assertEquals(1, ds.prepare(new Query("Directory")).countEntities());
+		
+		DirectoryDao directoryDao = new DirectoryDao();
+		List<Directory> directories = new ArrayList<Directory>(directoryDao.getDirectories());
+		Directory directoryFound = directories.get(0);
+						
+		projects = new ArrayList<Project>(dao.getProjects());
+		newProject = projects.get(0);
+		Directory directorySaveInProject = newProject.getDirectories().get(0);
+		
+		// Expect directory in the project and the one from the base to have the same key.
+		assertEquals(directoryFound.getKey(), directorySaveInProject.getKey());
 	}
 }
