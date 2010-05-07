@@ -3,3 +3,15 @@ Icons used in gwt-generator :
 Delete icon : http://findicons.com/icon/263490/delete?id=264244
 
 Edit icon : http://findicons.com/icon/259247/package_editors?id=259664
+
+project icon : http://findicons.com/icon/126616/projects_folder_badged
+
+directory icon : http://findicons.com/icon/126650/folder_open
+
+Add diagram : http://findicons.com/icon/164100/chart_organisation_add
+
+Delete Folder : http://findicons.com/icon/164273/folder_delete
+
+Delete Icon for tree panel : http://findicons.com/icon/219214/delete?id=219390
+
+add icon for tree panel : http://findicons.com/icon/79599/add?id=79776

@@ -42,9 +42,22 @@ public interface ProjectService extends RemoteService {
 	public Collection<Project> getProjects();
 	
 	/**
-	 * Update the givent project by saving it on the base.
+	 * Update the given project by saving it on the base.
 	 * @param project The project to save.
 	 */
 	public void updateProject(Project project);
+	
+	/**
+	 * Delete the given Project
+	 * @param projectToDelete the project to delete. 
+	 */
+	public void deleteProject(Project projectToDelete);
+	
+	/**
+	 * Add a directory to the given project
+	 * @param project the project 
+	 * @param directoryName the name of the directory to add;
+	 */
+	public void addDirectory(Project project, String directoryName);
 	
 }

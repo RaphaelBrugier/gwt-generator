@@ -180,8 +180,12 @@
 	cursor: pointer;
 }
 
+.gwt-TreeItem-selected span {
+	background: url("images/hborder.png") repeat-x scroll 0 -1463px #93C2F1
+}
+ 
 /*
- * ScrollTable
+ * ScrollTable in the explorer page.
  */
 .gwt-ScrollTable {
   border-color: #aaa;
@@ -210,7 +214,7 @@
 	
 
 /**
- * Applied to the options at the bottom of the page.
+ * Applied to the options at the bottom of the explorer page.
  */
 .gwt-PagingOptions {
   background: #e8eef7;

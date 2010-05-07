@@ -35,10 +35,10 @@ public class EditDiagramEvent extends GwtEvent<EditDiagramEventHandler>{
 		void onEditDiagramEvent(EditDiagramEvent event);
 	}
 	
-	private DiagramDto diagramInformations;
+	private DiagramDto diagramDto;
 
 	public EditDiagramEvent(DiagramDto diagramInformations) {
-		this.diagramInformations = diagramInformations;
+		this.diagramDto = diagramInformations;
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public class EditDiagramEvent extends GwtEvent<EditDiagramEventHandler>{
 	/**
 	 * @return the diagramInformations
 	 */
-	public DiagramDto getDiagramInformations() {
-		return diagramInformations;
+	public DiagramDto getDiagramDto() {
+		return diagramDto;
 	}
 }

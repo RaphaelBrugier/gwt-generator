@@ -1,0 +1,15 @@
+/*
+ * TreePanel
+ */
+ .actionIcon {
+ 	opacity: 0.4;
+ 	margin-left: 10px;
+ }
+ 
+ .actionIcon:hover {
+ 	opacity: 1;
+ }
+ 
+ .itemIcon {
+ 	margin-right: 5px;
+ }

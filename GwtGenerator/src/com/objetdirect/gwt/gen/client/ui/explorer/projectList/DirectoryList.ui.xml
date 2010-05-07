@@ -1,0 +1,17 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style>
+		.anchor {
+    		margin: 0 8px;
+  		}
+		
+	</ui:style>
+	
+	<g:FlowPanel>
+		<g:Anchor styleName='{style.anchor}' ui:field="createProjectButton" href='javascript:;'>
+			New Project
+		</g:Anchor>
+		<g:SimplePanel ui:field="treeContainer"/>
+	</g:FlowPanel>
+</ui:UiBinder> 

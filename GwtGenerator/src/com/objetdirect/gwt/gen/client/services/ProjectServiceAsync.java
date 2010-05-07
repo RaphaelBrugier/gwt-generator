@@ -40,4 +40,15 @@ public interface ProjectServiceAsync {
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#updateProject(com.objetdirect.gwt.gen.shared.entities.Project)
 	 */
 	void updateProject(Project project, AsyncCallback<Void> callback);
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#addDirectory(com.objetdirect.gwt.gen.shared.entities.Project, java.lang.String)
+	 */
+	void addDirectory(Project project, String directoryName,
+			AsyncCallback<Void> callback);
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#deleteProject(com.objetdirect.gwt.gen.shared.entities.Project)
+	 */
+	void deleteProject(Project projectToDelete, AsyncCallback<Void> callback);
 }

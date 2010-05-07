@@ -61,7 +61,7 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
  * @see http://zenoconsulting.wikidot.com/blog:17
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
-public class DiagramList extends SimplePanel {
+public class DiagramList {
 
 	final private  DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 	
@@ -75,7 +75,6 @@ public class DiagramList extends SimplePanel {
 	public DiagramList(HandlerManager eventBus) {
 		this.eventBus = eventBus;
 		container = new SimplePanel();
-		add(container);
 	}
 	
 	public void go(HasWidgets parentContainer) {
