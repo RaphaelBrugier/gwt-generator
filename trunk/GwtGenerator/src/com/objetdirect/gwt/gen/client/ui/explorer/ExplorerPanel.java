@@ -14,11 +14,6 @@
  */
 package com.objetdirect.gwt.gen.client.ui.explorer;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -27,8 +22,6 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.DialogBox;
@@ -45,11 +38,9 @@ import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
-import com.objetdirect.gwt.gen.client.services.ProjectService;
-import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
+import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListPresenter;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
-import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 
@@ -65,7 +56,6 @@ public class ExplorerPanel extends SimplePanel {
 	interface ExplorerPanelUiBinder extends UiBinder<Widget, ExplorerPanel> {
 	}
 	
-	private final ProjectServiceAsync projectService = GWT.create(ProjectService.class);
 	final private HandlerManager eventBus;
 	
 	@UiField
@@ -111,30 +101,8 @@ public class ExplorerPanel extends SimplePanel {
 	}
 
 	private void populateWestPanel() {
-		TreeItem item1 = new TreeItem("Class diagrams");
-		TreeItem item2 = new TreeItem("Object diagrams");
-		TreeItem item3 = new TreeItem("Sequence diagrams");
-		
-		TreeItem project1 = new TreeItem("Project 1");
-		project1.addItem(item1);
-		project1.addItem(item2);
-		project1.addItem(item3);
-		project1.setState(true);
-		
-		TreeItem project2 = new TreeItem("Project 2");
-		project2.addItem(new TreeItem("Class diagrams"));
-		project2.addItem(new TreeItem("Object diagrams"));
-		project2.addItem(new TreeItem("Sequence diagrams"));
-		
-		TreeItem root = new TreeItem("Projects");
-		root.addItem(project1);
-		root.addItem(project2);
-		
-		Tree tree = new Tree();
-		tree.addItem(root);
-		
 		westPanel.clear();
-		westPanel.add(tree);
+		westPanel.add(new DirectoryListPresenter(eventBus));
 		
 //		Button createProjectButton = new Button("create Project");
 //		createProjectButton.addClickHandler(new ClickHandler() {
@@ -175,9 +143,6 @@ public class ExplorerPanel extends SimplePanel {
 //			}
 //		});
 //		westPanel.add(createProjectButton);
-		
-		
-		root.setState(true);
 	}
 
 

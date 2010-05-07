@@ -19,6 +19,9 @@ import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.DomEvent;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -154,7 +157,7 @@ public class Design extends Composite {
 		eventBus.addHandler(EditDiagramEvent.TYPE, new EditDiagramEventHandler() {
 			@Override
 			public void onEditDiagramEvent(EditDiagramEvent event) {
-				doLoadDiagram(event.getDiagramInformations());
+				doLoadDiagram(event.getDiagramDto());
 			}
 		});
 		
@@ -270,12 +273,12 @@ public class Design extends Composite {
 	
 	/**
 	 * Load a diagram from the base and setup it on the canvas.
-	 * @param diagramInformations the diagram to load.
+	 * @param diagramDto the diagram to load.
 	 */
-	private void doLoadDiagram(DiagramDto diagramInformations) {
-		LoadingPopUp.getInstance().startProcessing("Loading the diagram "+ diagramInformations.getName() +" and the designer, please wait...");
+	private void doLoadDiagram(DiagramDto diagramDto) {
+		LoadingPopUp.getInstance().startProcessing("Loading the diagram "+ diagramDto.getName() +" and the designer, please wait...");
 		
-		diagramService.getDiagram(diagramInformations.getKey(), new AsyncCallback<DiagramDto>() {
+		diagramService.getDiagram(diagramDto.getKey(), new AsyncCallback<DiagramDto>() {
 			
 			@Override
 			public void onSuccess(DiagramDto diagramFound) {
