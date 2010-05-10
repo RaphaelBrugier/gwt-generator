@@ -14,6 +14,8 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import java.util.ArrayList;
+
 import junit.framework.TestCase;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -72,12 +74,48 @@ public class TestDiagramService extends TestCase {
 	}
 	
 	
-	public void testGetDiagramFromNameAndType() {
+	public void testGetDiagramFromId() {
 		Long id = diagramService.createDiagram(directory.getKey(), Type.CLASS, "name");
 
 		DiagramDto dto = diagramService.getDiagram(id);
 		assertEquals(Type.CLASS, dto.getType() );
 		assertEquals("name", dto.getName());
+		assertEquals(directory.getKey(), dto.getDirectoryKey());
 	}
 	
+	public void testGetDiagrams() {
+		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name 2");
+
+		ArrayList<DiagramDto> diagrams =  diagramService.getDiagrams();
+		assertEquals(2, diagrams.size());
+
+		DiagramDto dto = diagrams.get(0);
+		assertEquals(Type.CLASS, dto.getType());
+		assertEquals("name", dto.getName());
+		assertEquals(id, dto.getKey());
+		assertEquals(directory.getKey(), dto.getDirectoryKey());
+	}
+	
+	public void testDelete() throws Exception {
+		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		
+		diagramService.deleteDiagram(id);
+		assertEquals(0, ds.prepare(new Query("Diagram")).countEntities());
+	}
+	
+	public void testSaveDiagram() throws Exception {
+		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		DiagramDto dto = diagramService.getDiagram(id);
+		dto.setName("newName");
+		
+		diagramService.saveDiagram(dto);
+		dto = diagramService.getDiagram(id);
+		
+		assertEquals(Type.CLASS, dto.getType());
+		assertEquals("newName", dto.getName());
+		assertEquals(id, dto.getKey());
+		assertEquals(directory.getKey(), dto.getDirectoryKey());
+	}
+
 }

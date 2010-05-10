@@ -58,6 +58,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	@Override
 	public ArrayList<DiagramDto> getDiagrams() {
 		checkLoggedIn();
+		
 		return diagramDao.getDiagrams();
 	}
 	
