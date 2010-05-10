@@ -55,16 +55,21 @@ public class Diagram {
 	@Persistent
 	private User user;
 
+	@Persistent
+	private String directoryKey; 
+	
+	
 	/**
 	 * Default constructor ONLY for gwt-rpc serialization
 	 */
 	protected Diagram() {
 	}
 	
-	public Diagram(Type type, String name, User user) {
+	public Diagram(String directoryKey, Type type, String name, User user) {
 		this.type = type;
 		this.name = name;
 		this.user = user;
+		this.directoryKey = directoryKey;
 	}
 
 	/**
@@ -137,6 +142,14 @@ public class Diagram {
 		this.serializedCanvas = serializedCanvas;
 	}
 	
+
+	/**
+	 * @return the directoryKey
+	 */
+	public String getDirectoryKey() {
+		return directoryKey;
+	}
+	
 	
 	/**
 	 * Copy all the fields of the given DiagramInformations the object.
@@ -184,4 +197,5 @@ public class Diagram {
 		}
 		return diagramToCopy;
 	}
+
 }

@@ -36,11 +36,12 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	
 	private final DiagramDao diagramDao = new DiagramDao();
 	
+	
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type, java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(java.lang.String, com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type, java.lang.String)
 	 */
 	@Override
-	public Long createDiagram(Type type, String name) throws CreateDiagramException {
+	public Long createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException {
 		checkLoggedIn();
 		if (! isNotBlank(name)) {
 			throw new CreateDiagramException("You must specify a name for your diagram.");
@@ -48,7 +49,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		if (diagramDao.getDiagram(type, name) != null) {
 			throw new CreateDiagramException("A diagram of this type and with this name already exist. Please use an other name.");
 		}
-		return diagramDao.createDiagram(type, name);
+		return diagramDao.createDiagram(directoryKey, type, name);
 	}
 
 	/* (non-Javadoc)
