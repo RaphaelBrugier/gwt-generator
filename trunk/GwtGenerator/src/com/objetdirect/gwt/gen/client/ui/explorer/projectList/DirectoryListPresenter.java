@@ -36,6 +36,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
+import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.DisplayDiagramsEvent;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
@@ -45,6 +46,8 @@ import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 
@@ -61,6 +64,10 @@ public class DirectoryListPresenter extends Composite {
 	public interface DirectoryListStyle extends CssResource {
 		String actionIcon();
 		String itemIcon();
+		String createButton();
+		String popupTitle();
+		String popupContent();
+		String label();
 	}
 	
 	public interface ProjectListResources extends ClientBundle {
@@ -338,7 +345,8 @@ public class DirectoryListPresenter extends Composite {
 	 * @param directory The directory to delete.
 	 */
 	private void doDeleteDirectory(final Project project, final Directory directory) {
-		projectService.deleteDirectory(project, directory, new AsyncCallback<Void>() { //TODO
+
+		projectService.deleteDirectory(project, directory, new AsyncCallback<Void>() {
 			
 			@Override
 			public void onSuccess(Void result) {
@@ -365,7 +373,9 @@ public class DirectoryListPresenter extends Composite {
 	 * @param diagramType The diagram type.
 	 */
 	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String diagramName, String diagramType) {
-		//TODO
+		Type type = Type.valueOf(diagramType.toUpperCase());
+		DiagramDto diagramInformations = new DiagramDto(diagramName, type);
+		eventBus.fireEvent(new CreateDiagramEvent(diagramInformations));
 	}
 
 
@@ -381,7 +391,6 @@ public class DirectoryListPresenter extends Composite {
 				for (Project project : projectsFound) {
 					tree.addItem(createProjectItem(project));
 				}
-//				tree.setState(true);
 			}
 			
 			@Override
