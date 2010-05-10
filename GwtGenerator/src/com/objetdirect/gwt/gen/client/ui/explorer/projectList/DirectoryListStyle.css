@@ -13,3 +13,29 @@
  .itemIcon {
  	margin-right: 5px;
  }
+ 
+ 
+ 
+ /*
+  * Common styles for the popups
+  */
+ .createButton {
+ 	float: right;
+ 	margin: 15px;
+ }
+ 
+ .popupTitle {
+ 	text-align: center;
+	margin: 5px;
+ }
+ 
+ .popupContent {
+ 	margin: 15 15 0 15;
+ }
+ 
+.label {
+	display:block;
+	width:100px;
+	float:left;
+}
+ 

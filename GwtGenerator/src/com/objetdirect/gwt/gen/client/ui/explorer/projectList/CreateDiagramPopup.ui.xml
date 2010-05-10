@@ -1,15 +1,29 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
-				
+	<ui:style src="DirectoryListStyle.css">
+		.field {
+			margin : 5px 0px;	
+		}
 	</ui:style>
-	
-	<g:DecoratedPopupPanel glassEnabled='true' autoHideEnabled='true'>
+	<g:DialogBox glassEnabled='true' autoHideEnabled='true'>
+		<g:caption>
+			<h4 class="{style.popupTitle}">Create a new diagram</h4>
+		</g:caption>
 		<g:HTMLPanel>
-			<g:TextBox ui:field="diagramNameTb"/>
-			<g:ListBox ui:field="typeList"/>
-			<g:Button ui:field="createDiagramButton">Create</g:Button>
+			<div class="{style.popupContent}">
+				<div  class="{style.field}">
+					<span class="{style.label}">Diagram name :</span>
+					<g:TextBox ui:field="diagramNameTb"/>
+				</div>
+				<div class="{style.field}">
+					<span class="{style.label}">Diagram type :</span>
+					<g:ListBox ui:field="typeList"/>
+				</div>
+			</div>		
+			<div>
+				<g:Button styleName="{style.createButton}" ui:field="createDiagramButton">Create</g:Button>
+			</div>
 		</g:HTMLPanel>
-	</g:DecoratedPopupPanel>
+	</g:DialogBox>
 </ui:UiBinder> 

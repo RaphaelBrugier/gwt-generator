@@ -101,48 +101,7 @@ public class ExplorerPanel extends SimplePanel {
 	}
 
 	private void populateWestPanel() {
-		westPanel.clear();
 		westPanel.add(new DirectoryListPresenter(eventBus));
-		
-//		Button createProjectButton = new Button("create Project");
-//		createProjectButton.addClickHandler(new ClickHandler() {
-//			
-//			@Override
-//			public void onClick(ClickEvent event) {
-//				projectService.getProjects(new AsyncCallback<Collection<Project>>() {
-//					
-//					@Override
-//					public void onSuccess(Collection<Project> result) {
-//						if (result.size() >0) {
-//							List<Project> projects = new ArrayList<Project>(result);
-//							Project project = projects.get(0);
-//							project.setName("newName");
-//							
-//							projectService.updateProject(project, new AsyncCallback<Void>() {
-//								
-//								@Override
-//								public void onSuccess(Void result) {
-//									Window.alert("project updated");
-//								}
-//								
-//								@Override
-//								public void onFailure(Throwable caught) {
-//									Log.debug(caught.getMessage());
-//								}
-//							});
-//						} else {
-//							Window.alert("no project found");
-//						}
-//					}
-//					
-//					@Override
-//					public void onFailure(Throwable caught) {
-//						Log.debug(caught.getMessage());
-//					}
-//				});
-//			}
-//		});
-//		westPanel.add(createProjectButton);
 	}
 
 
