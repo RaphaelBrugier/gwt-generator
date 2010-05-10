@@ -22,7 +22,6 @@ import com.objetdirect.entities.ManyToManyReferenceListDescriptor;
 import com.objetdirect.entities.ManyToOneReferenceDescriptor;
 import com.objetdirect.entities.OneToManyReferenceListDescriptor;
 import com.objetdirect.entities.OneToOneReferenceDescriptor;
-import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.UMLComponentException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;

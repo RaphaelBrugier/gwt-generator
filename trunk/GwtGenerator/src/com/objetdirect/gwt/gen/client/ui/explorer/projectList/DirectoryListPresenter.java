@@ -72,10 +72,10 @@ public class DirectoryListPresenter extends Composite {
 
 	@UiField
 	Anchor createProjectButton;
-	
+
 	@UiField
 	SimplePanel treeContainer;
-	
+
 	private final ProjectServiceAsync projectService = GWT.create(ProjectService.class);
 	
 	private final HandlerManager eventBus;
@@ -113,7 +113,7 @@ public class DirectoryListPresenter extends Composite {
 				
 				// Dirty workaround for this bug 
 				//http://code.google.com/p/google-web-toolkit/issues/detail?id=3660
-				//TODO find a better workaround and remove the noimage for nodes/leaf
+				//TODO find a better workaround
 				TreeItem item = event.getSelectedItem();
 
 				if (! item.equals(previousSelectedItem )) {
@@ -143,24 +143,17 @@ public class DirectoryListPresenter extends Composite {
 		});
 	}
 	
-	/** 
-	 * Request the display of the list of diagrams contains in the selected directory
-	 */
-	private void doDisplayDiagrams(Directory directory) {
-		eventBus.fireEvent(new DisplayDiagramsEvent(directory));
-	}
 	
 	@UiHandler("createProjectButton")
 	void bindCreateProjectButton(ClickEvent event) {
-		final CreateProjectPopup createPopUp = new CreateProjectPopup();
-		createPopUp.getCreateButton().addClickHandler(new ClickHandler() {
-			
+		final CreateProjectPopup createProjectPopUp = new CreateProjectPopup();
+		createProjectPopUp.getCreateButton().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
-				doCreateProject(createPopUp, createPopUp.getProjectName());
+			public void onClick(ClickEvent e) {
+				doCreateProject(createProjectPopUp, createProjectPopUp.getProjectName());
 			}
 		});
-		createPopUp.show();
+		createProjectPopUp.show();
 	}
 
 
@@ -169,21 +162,21 @@ public class DirectoryListPresenter extends Composite {
 	 * @param project
 	 * @return The item representing the project with its directory children.
 	 */
-	private TreeItem createProjectItem(Project project) {
+	private TreeItem createProjectItem(final Project project) {
 		ProjectTreeItem projectItem = new ProjectTreeItem(project);
 		bindProjectTreeItem(projectItem);
 		
 		for (Directory directory : project.getDirectories()) {
 			DirectoryTreeItem directoryTreeItem = new DirectoryTreeItem(directory);
 			projectItem.addItem(directoryTreeItem);
-			bindDirectoryItem(directoryTreeItem);
+			bindDirectoryItem(project, directoryTreeItem);
 		}
 		
 		return projectItem;
 	}
 
 	/**
-	 * Bind the projectTreeItem buttons with the actions.
+	 * Bind a projectTreeItem buttons with the actions.
 	 * Actions are :
 	 *  - add a directory
 	 *  - delete the project
@@ -224,7 +217,9 @@ public class DirectoryListPresenter extends Composite {
 	 *  - delete the directory 
 	 * @param directoryTreeItem The directory tree item where the actions are added.
 	 */
-	private void bindDirectoryItem(final DirectoryTreeItem directoryTreeItem) {
+	private void bindDirectoryItem(final Project project, final DirectoryTreeItem directoryTreeItem) {
+		Log.debug("Presenter::BindDirectoryItem directory = " + directoryTreeItem.getDirectory() );
+		
 		// Bind the add diagram button
 		directoryTreeItem.getAddDiagramButton().addClickHandler(new ClickHandler() {
 			
@@ -241,14 +236,16 @@ public class DirectoryListPresenter extends Composite {
 				createDiagramPopup.show();
 			}
 		});
-		
+
 		// Bind the delete directory button.
 		directoryTreeItem.getDeleteDirectoryButton().addClickHandler(new ClickHandler() {
 			
 			@Override
 			public void onClick(ClickEvent event) {
+				Log.debug("Presenter:: directoryItem.OnClick on delete button, directory = " + directoryTreeItem.getDirectory());
+				
 				// Display a popup to ask to delete or not the directory ?
-				doDeleteDirectory(directoryTreeItem.getDirectory());
+				doDeleteDirectory(project, directoryTreeItem.getDirectory());
 			}
 		});
 	}	
@@ -257,23 +254,23 @@ public class DirectoryListPresenter extends Composite {
 	/**
 	 * Create a project.
 	 * When the action is finish (with success or not), close the popup and display a message.
-	 * @param popup The popup to hide when the action of creation is finished.
+	 * @param createProjectPopup The popup to hide when the action of creation is finished.
 	 * @param projectName The name of the project to create.
 	 */
-	private void doCreateProject(final CreateProjectPopup popup, final String projectName) {
+	private void doCreateProject(final CreateProjectPopup createProjectPopup, final String projectName) {
 		projectService.createProject(projectName, new AsyncCallback<Long>() {
 			
 			@Override
 			public void onSuccess(Long result) {
 				doFectchProjects();
-				popup.hide();
+				createProjectPopup.hide();
 				MessagePopUp messagePopUp = new MessagePopUp("Project " + projectName + " created with success.");
 				messagePopUp.show();
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				popup.hide();
+				createProjectPopup.hide();
 				Log.error("Failed to create the project " + projectName);
 				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to create the project " + projectName);
 				errorPopUp.show();
@@ -309,24 +306,24 @@ public class DirectoryListPresenter extends Composite {
 	/**
 	 * Create a directory in the given project.
 	 * When the directory is created with success, display a message and reload the tree of projects.
-	 * @param createPopup The popup to hide when the action is finished.
+	 * @param createDirectoryPopup The popup to hide when the action is finished.
 	 * @param project The project where the directory will be created
 	 * @param directoryName The name of the directory to create.
 	 */
-	private void doCreateDirectory(final CreateDirectoryPopup createPopup, Project project, final String directoryName) {
+	private void doCreateDirectory(final CreateDirectoryPopup createDirectoryPopup, Project project, final String directoryName) {
 		projectService.addDirectory(project, directoryName, new AsyncCallback<Void>() {
 
 			@Override
 			public void onSuccess(Void result) {
 				doFectchProjects();
-				createPopup.hide();
+				createDirectoryPopup.hide();
 				MessagePopUp messagePopUp = new MessagePopUp("Directory " + directoryName + " created with success.");
 				messagePopUp.show();
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				createPopup.hide();
+				createDirectoryPopup.hide();
 				Log.error("Failed to create the directory " + directoryName);
 				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to create the directory");
 				errorPopUp.show();
@@ -335,8 +332,28 @@ public class DirectoryListPresenter extends Composite {
 	}
 
 	
-	protected void doDeleteDirectory(Directory directory) {
-		//TODO
+	/**
+	 * Delete a directory
+	 * When the directory is deleted with success, display a message and reload the tree of projects.
+	 * @param directory The directory to delete.
+	 */
+	private void doDeleteDirectory(final Project project, final Directory directory) {
+		projectService.deleteDirectory(project, directory, new AsyncCallback<Void>() { //TODO
+			
+			@Override
+			public void onSuccess(Void result) {
+				doFectchProjects();
+				MessagePopUp messagePopUp = new MessagePopUp("Directory " + directory.getName() + " deleted with success.");
+				messagePopUp.show();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.error("Failed to delete the directory " + directory.getName());
+				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to delete the directory " + directory.getName());
+				errorPopUp.show();
+			}
+		});
 	}
 	
 	/**
@@ -369,8 +386,17 @@ public class DirectoryListPresenter extends Composite {
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				Log.debug(caught.getMessage());
+				Log.error("Error while fetching the projects : " + caught.getMessage());
 			}
 		});
+	}
+
+
+	/**
+	 * Request the display of the list of diagrams contains in the selected directory
+	 * @param directory The selected directory
+	 */
+	private void doDisplayDiagrams(Directory directory) {
+		eventBus.fireEvent(new DisplayDiagramsEvent(directory));
 	}
 }

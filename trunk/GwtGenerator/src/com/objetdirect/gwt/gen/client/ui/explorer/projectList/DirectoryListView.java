@@ -27,7 +27,7 @@ import com.google.gwt.user.client.ui.TextBox;
 
 /**
  * View for the explorer list.
- * Contains the Popup views
+ * Contains the Popup views.
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
 public class DirectoryListView {
@@ -35,6 +35,7 @@ public class DirectoryListView {
 	public DirectoryListView() {
 
 	}
+	
 	
 	/**
 	 * Passive view : A simple popup that displays a textbox and a button to create a new Project.
@@ -55,10 +56,9 @@ public class DirectoryListView {
 		
 		public CreateProjectPopup() {
 			popuPanel = uiBinder.createAndBindUi(this);
-			add(uiBinder.createAndBindUi(this));
 			setWidget(popuPanel);
 		}
-		
+
 		public HasClickHandlers getCreateButton() {
 			return createProject;
 		}

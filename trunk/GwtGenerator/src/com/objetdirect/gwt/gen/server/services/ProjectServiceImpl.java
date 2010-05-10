@@ -20,9 +20,9 @@ import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isBla
 
 import java.util.Collection;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
+import com.objetdirect.gwt.gen.server.dao.DirectoryDao;
 import com.objetdirect.gwt.gen.server.dao.ProjectDao;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
@@ -37,6 +37,7 @@ import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
 public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectService {
 
 	private final ProjectDao projectDao = new ProjectDao();
+	private final DirectoryDao directoryDao = new DirectoryDao();
 	
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String)
@@ -49,7 +50,7 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 			throw new CreateProjectException("You must specify a name to your project");
 		}
 		//TODO check if a project with the same name already exist
-		
+
 		return projectDao.createProject(name);
 	}
 
@@ -59,7 +60,6 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	@Override
 	public Collection<Project> getProjects() {
 		checkLoggedIn();
-		
 		return projectDao.getProjects();
 	}
 
@@ -68,7 +68,17 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	 */
 	@Override
 	public void updateProject(Project project) {
+		checkLoggedIn();
 		projectDao.updateProject(project);
+	}
+
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#deleteProject(com.objetdirect.gwt.gen.shared.entities.Project)
+	 */
+	@Override
+	public void deleteProject(Project projectToDelete) {
+		checkLoggedIn();
+		projectDao.deleteProject(projectToDelete);
 	}
 
 	/* (non-Javadoc)
@@ -81,18 +91,27 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 		if (isBlank(directoryName)) {
 			throw new CreateProjectException("You must specify a name to your directory");
 		}
-		//TODO check if a project with the same name already exist
-		
+		//TODO check if a directory with the same name already exist
+
 		Directory newDirectory = new Directory(directoryName, getCurrentUser().getEmail());
 		project.addDirectory(newDirectory);
 		projectDao.updateProject(project);
 	}
 
+
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#deleteProject(com.objetdirect.gwt.gen.shared.entities.Project)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#deleteDirectory(com.objetdirect.gwt.gen.shared.entities.Project, com.objetdirect.gwt.gen.shared.entities.Directory)
 	 */
 	@Override
-	public void deleteProject(Project projectToDelete) {
-		projectDao.deleteProject(projectToDelete);
+	public void deleteDirectory(Project project, Directory directory) {
+		checkLoggedIn();
+		
+		System.out.println("deleteDirectory  " + directory + "  on project " + project);
+		System.out.println("dir key = " + directory.getKey());
+		Project projectOwner = projectDao.getProjectById(project.getKey());
+		projectOwner.removeDirectory(directory);
+		projectDao.updateProject(projectOwner);
+		directoryDao.deleteDirectory(directory);
 	}
+
 }

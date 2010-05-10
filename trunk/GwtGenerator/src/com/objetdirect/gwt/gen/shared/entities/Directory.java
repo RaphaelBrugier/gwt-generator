@@ -41,7 +41,6 @@ public class Directory implements Serializable {
 	
 	@Persistent
 	private String email;
-
 	
 	/** Default constructor ONLY for gwt-rpc serialization. */
 	@SuppressWarnings("unused")
@@ -80,7 +79,8 @@ public class Directory implements Serializable {
 	public String getEmail() {
 		return email;
 	}
-	
+
+
 	@Override
 	public String toString() {
 		return "Directory  key = " + key + "  name = " + name + "  email = " + email;

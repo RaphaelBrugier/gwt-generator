@@ -18,6 +18,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.jdo.annotations.Element;
 import javax.jdo.annotations.FetchGroup;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
@@ -39,14 +40,14 @@ public class Project implements Serializable {
 	
 	@Persistent
 	private String name;
-	
+
 	@Persistent
 	private String email;
 	
-	@Persistent
+	@Element(dependent = "true")
 	private List<Directory> directories;
 
-	
+
 	/** Default constructor ONLY for gwt-rpc serialization. */
 	@SuppressWarnings("unused")
 	private Project() {}
@@ -91,17 +92,17 @@ public class Project implements Serializable {
 	public List<Directory> getDirectories() {
 		return directories;
 	}
-	
+
 	public void addDirectory(Directory directory) {
 		directories.add(directory);
 	}
-	
+
 	public void removeDirectory(Directory directory) {
 		directories.remove(directory);
 	}
-	
+
 	@Override
 	public String toString() {
-		return "Project key = " + key + " name = " + name + " owner = " + email;  
+		return "Project key = " + key + " name = " + name + " email = " + email;  
 	}
 }

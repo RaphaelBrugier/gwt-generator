@@ -51,6 +51,20 @@ public class ProjectDao {
 		return persistedProject.getKey();
 	}
 	
+	public Project getProjectById(Long id){
+		Project projectFound = null;
+		
+		PersistenceManager pm = ServerHelper.getPM();
+		pm.getFetchPlan().addGroup("directory");
+		try {
+			projectFound = pm.getObjectById(Project.class, id);
+		} finally {
+			pm.close();
+		}
+		
+		return projectFound;
+	}
+
 	/**
 	 * Get all the projects of the logged user
 	 * @return a list of project.
@@ -78,7 +92,7 @@ public class ProjectDao {
 
 		return projectsFound;
 	}
-	
+
 	/**
 	 * Update a project in the base;
 	 * @param project

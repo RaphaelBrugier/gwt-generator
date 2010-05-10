@@ -14,39 +14,71 @@
  */
 package com.objetdirect.gwt.gen.server.dao;
 
-import java.util.Collection;
-import java.util.List;
+import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
 
 import javax.jdo.PersistenceManager;
-import javax.jdo.Query;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
+
 
 /**
  * Data access object for the directory entities.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class DirectoryDao {
-	/**
-	 * Get all the projects of the logged user
-	 * @return a list of project.
-	 */
-	@SuppressWarnings("unchecked")
-	public Collection<Directory> getDirectories() {
+
+//	public String createDirectory(Directory directory) {
+//		PersistenceManager pm = ServerHelper.getPM();
+//		try {
+//			System.out.println("Key : " + directory.getProjectParent().getKey().toString());
+//			directory = pm.makePersistent(directory);
+//		} finally  {
+//			pm.close();
+//		}
+//		return directory.getKey();
+//	}
+	
+	
+	public Directory getDirectory(Long id) {
 		PersistenceManager pm = ServerHelper.getPM();
-		List<Directory> queryResult;
-		Collection<Directory> directoryFound = null;
+		Directory result;
 		try {
-			Query q = pm.newQuery(Directory.class, "email == e");
-		    q.declareParameters("String e");
-		    queryResult = (List<Directory>) q.execute(ServerHelper.getCurrentUser().getEmail());
-		    directoryFound = pm.detachCopyAll(queryResult);
-		    
+			result = pm.getObjectById(Directory.class, id);
+			result = pm.detachCopy(result);
 		} finally {
 			pm.close();
 		}
 
-		return directoryFound;
+		return result;
+	}
+
+	/**
+	 * Delete the given Directory.
+	 * The directory to delete must be owned by the logged user.
+ 	 * @param directory The directory to delete
+	 */
+	public void deleteDirectory(Directory directory) {
+		PersistenceManager pm = ServerHelper.getPM();
+		pm.currentTransaction().begin();
+		try {
+			Directory directoryFound = pm.getObjectById(Directory.class, directory.getKey());
+			if (! directoryFound.getEmail().equals(getCurrentUser().getEmail())) {
+				Log.error("Trying to delete a Directory not owned by the user logged.");
+				throw new GWTGeneratorException("Trying to delete a directory not owned by the user logged.");
+			}
+
+			if (directoryFound == null) 
+				throw new GWTGeneratorException("The directory to delete was not found.");
+			pm.deletePersistent(directoryFound);
+			
+			pm.currentTransaction().commit();
+		} finally {
+			 if (pm.currentTransaction().isActive()) {
+		            pm.currentTransaction().rollback();
+		        }
+		}
 	}
 }
