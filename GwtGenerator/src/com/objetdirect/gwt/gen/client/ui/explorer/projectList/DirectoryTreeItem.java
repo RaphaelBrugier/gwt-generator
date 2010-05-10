@@ -29,7 +29,7 @@ import com.objetdirect.gwt.gen.shared.entities.Directory;
  */
 public class DirectoryTreeItem extends TreeItem {
 	
-	private Directory directory;
+	final private Directory directory;
 	
 	private Image addDiagramIcon;
 	
@@ -37,7 +37,8 @@ public class DirectoryTreeItem extends TreeItem {
 	
 	public DirectoryTreeItem(Directory directory) {
 		super();
-
+		this.directory = directory;
+		
 		HorizontalPanel panel = new HorizontalPanel();
 		Image projectIcon = new Image(TreeProjectsResources.INSTANCE.directoryIcon());
 		InlineLabel projectName = new InlineLabel(directory.getName());
