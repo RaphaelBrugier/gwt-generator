@@ -236,7 +236,8 @@ public class DirectoryListPresenter extends Composite {
 				createDiagramPopup.getCreateButton().addClickHandler(new ClickHandler() {
 					@Override
 					public void onClick(ClickEvent event) {
-						doCreateDiagram(createDiagramPopup, createDiagramPopup.getDiagramName(), createDiagramPopup.getDiagramType());
+						String directoryKey = directoryTreeItem.getDirectory().getKey();
+						doCreateDiagram(createDiagramPopup, directoryKey, createDiagramPopup.getDiagramName(), createDiagramPopup.getDiagramType());
 					}
 				});
 				
@@ -372,9 +373,9 @@ public class DirectoryListPresenter extends Composite {
 	 * @param diagramName The diagram name.
 	 * @param diagramType The diagram type.
 	 */
-	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String diagramName, String diagramType) {
+	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, String diagramName, String diagramType) {
 		Type type = Type.valueOf(diagramType.toUpperCase());
-		DiagramDto diagramInformations = new DiagramDto(diagramName, type);
+		DiagramDto diagramInformations = new DiagramDto(directoryKey, diagramName, type);
 		eventBus.fireEvent(new CreateDiagramEvent(diagramInformations));
 	}
 

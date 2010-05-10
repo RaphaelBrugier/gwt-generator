@@ -14,79 +14,70 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.junit.client.GWTTestCase;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import junit.framework.TestCase;
+
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
+import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
+import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
-import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
+import com.objetdirect.gwt.gen.client.services.ProjectService;
+import com.objetdirect.gwt.gen.server.services.DiagramServiceImpl;
+import com.objetdirect.gwt.gen.server.services.ProjectServiceImpl;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.LinkArtifact;
-import com.objetdirect.gwt.umlapi.client.engine.GeometryManager;
-import com.objetdirect.gwt.umlapi.client.engine.Point;
-import com.objetdirect.gwt.umlapi.client.gfx.GfxManager;
-import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
-import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
-import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
-import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
-import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager.Theme;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLLink.LinkKind;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
+import com.objetdirect.gwt.gen.shared.entities.Directory;
+import com.objetdirect.gwt.gen.shared.entities.Project;
 
+/**
+ * Tests for the diagram dao.
+ * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
+ */
+public class TestDiagramService extends TestCase {
 
-public class TestDiagramService extends GWTTestCase {
+	private final LocalServiceTestHelper helper =
+        new LocalServiceTestHelper(new LocalDatastoreServiceTestConfig(), new LocalUserServiceTestConfig());
 
-	@Override
-	public String getModuleName() {
-		return "com.objetdirect.gwt.gen.GwtGeneratorTestSuite";
+	private final DiagramService diagramService = new DiagramServiceImpl();
+	
+	private final ProjectService projectService = new ProjectServiceImpl(); 
+	
+	private final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
+	
+	private Directory directory;
+	
+	protected void setUp() throws Exception {
+		super.setUp();
+		helper.setUp();
+		helper.setEnvIsLoggedIn(true)
+		  .setEnvEmail("MyEmail@gmail.com")
+	      .setEnvAuthDomain("google.com");
+		
+		projectService.createProject("projectTest");
+		Project p = projectService.getProjects().iterator().next();
+		projectService.addDirectory(p, "dirTest");
+		directory = projectService.getProjects().iterator().next().getDirectories().get(0);
+		
+	}
+
+	
+	public void testCreateDiagram() {
+		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		assertNotNull(id);
+		id = diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name 2");
+
+		assertEquals(2, ds.prepare(new Query("Diagram")).countEntities());
 	}
 	
-	/** Setup the gfx platform. */
-	private void setUpPlatform() {
-		OptionsManager.initialize();
-		HotKeyManager.forceStaticInit();
-		OptionsManager.set("DiagramType", 0);
-		ThemeManager.setCurrentTheme((Theme.getThemeFromIndex(OptionsManager.get("Theme"))));
-		GfxManager.setPlatform(OptionsManager.get("GraphicEngine"));
-		GeometryManager.setPlatform(OptionsManager.get("GeometryStyle"));
+	
+	public void testGetDiagramFromNameAndType() {
+		Long id = diagramService.createDiagram(directory.getKey(), Type.CLASS, "name");
+
+		DiagramDto dto = diagramService.getDiagram(id);
+		assertEquals(Type.CLASS, dto.getType() );
+		assertEquals("name", dto.getName());
 	}
 	
-	public void testSerializeUmlCanvas() {
-		final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
-		setUpPlatform();
-		
-		UMLCanvas umlCanvas = new UMLCanvas(new UMLDiagram(Type.CLASS));
-
-		final ClassArtifact class1 = new ClassArtifact(umlCanvas, "Class1");
-		class1.setLocation(new Point( 2, 2));
-		umlCanvas.add(class1);
-		
-		final ClassArtifact class2 = new ClassArtifact(umlCanvas, "Class2");
-		class2.setLocation(new Point( 20, 20));
-		umlCanvas.add(class2);
-		
-		final LinkArtifact classesRelation = new ClassRelationLinkArtifact(umlCanvas, class1, class2, LinkKind.AGGREGATION_RELATION);
-		
-		umlCanvas.add(classesRelation);
-		
-		DiagramDto diagram = new  DiagramDto();
-		diagram.setCanvas(umlCanvas);
-		delayTestFinish(3000);
-
-		diagramService.saveDiagram(diagram, new AsyncCallback<Void>() {
-			@Override
-			public void onSuccess(Void result) {
-//				System.out.println("service called with success");
-				finishTest();
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-//				System.out.println("service failed");
-				caught.printStackTrace();
-			}
-		});
-	}
 }

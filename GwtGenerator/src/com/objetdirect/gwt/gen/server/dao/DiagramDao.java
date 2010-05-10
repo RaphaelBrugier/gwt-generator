@@ -36,13 +36,14 @@ public class DiagramDao {
 	
 	/**
 	 * Create a diagram and return its generated id.
-	 * @param type the type of the diagram
+	 * @param directoryKey the key of the owner directory.
+	 * @param type the type of the diagram.
 	 * @param name the diagram name.
 	 * @return the generated id for the diagram.
 	 */
-	public Long createDiagram(Type type, String name) {
+	public Long createDiagram(String directoryKey, Type type, String name) {
 		PersistenceManager pm = ServerHelper.getPM();
-		Diagram persistedDiagram = new Diagram(type, name, getCurrentUser());
+		Diagram persistedDiagram = new Diagram(directoryKey, type, name, getCurrentUser());
 		try {
 			persistedDiagram = pm.makePersistent(persistedDiagram);
 		} finally  {
@@ -106,7 +107,7 @@ public class DiagramDao {
 	/**
 	 * Return the diagrams of the logged user.
 	 * Please note that returned dto will NOT contained the serialized umlCanvas.
-	 * Use getDiagram(Long key) to get a dto with the serialized field.
+	 * Use getDiagram(Long key) to get a dto with the serialized umlCanvas field.
 	 * @return a collection of all the user's diagrams.
 	 */
 	@SuppressWarnings("unchecked")
@@ -120,9 +121,9 @@ public class DiagramDao {
 		    queryResult = (List<Diagram>) q.execute(getCurrentUser());
 		      
 		    for (Diagram diagram : queryResult) {
-		    	DiagramDto diagramInformation = new DiagramDto(diagram.getKey(), diagram.getName(), diagram.getType());
+		    	DiagramDto diagramInformation = new DiagramDto(diagram.getKey(), diagram.getDirectoryKey(), diagram.getName(), diagram.getType());
 		    	results.add(diagramInformation);
-		    } //TODO move this after the pm.close (if possible)
+		    }
 		} finally {
 			pm.close();
 		}

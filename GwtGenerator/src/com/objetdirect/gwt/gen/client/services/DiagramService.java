@@ -31,11 +31,12 @@ public interface DiagramService extends RemoteService {
 	
 	/**
 	 * Create a new diagram
+	 * @param directoryKey The key of the owner directory
 	 * @param type the type of diagram
 	 * @param name the name of the diagram
 	 * @return the generated key
 	 */
-	public Long createDiagram(Type type, String name) throws CreateDiagramException;
+	public Long createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException;
 	
 	/**
 	 * Get all the diagrams of the logged user.

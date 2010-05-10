@@ -29,9 +29,9 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 public interface DiagramServiceAsync {
 
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations.Type, java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(java.lang.String, com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type, java.lang.String)
 	 */
-	void createDiagram(Type type, String name, AsyncCallback<Long> callback);
+	void createDiagram(String directoryKey, Type type, String name, AsyncCallback<Long> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams()
