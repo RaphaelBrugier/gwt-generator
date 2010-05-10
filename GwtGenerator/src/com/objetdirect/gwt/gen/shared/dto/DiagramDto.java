@@ -52,6 +52,7 @@ public class DiagramDto implements Serializable {
 	public DiagramDto(String directoryKey, String name, Type type) {
 		this.name = name;
 		this.type = type;
+		this.directoryKey = directoryKey;
 	}
 	
 	/**
@@ -144,5 +145,14 @@ public class DiagramDto implements Serializable {
 	 */
 	public void setDirectoryKey(String directoryKey) {
 		this.directoryKey = directoryKey;
+	}
+	
+	@Override
+	public String toString() {
+		return "DiagramDto  \n" +
+				"\t key = " + key + "\n" +
+				"\t name = " + name + "\n" +
+				"\t type = " + type +"\n" +
+				"\t directoryKey = " + directoryKey;
 	}
 }

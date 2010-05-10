@@ -159,6 +159,7 @@ public class Diagram {
 		this.type = diagramToCopy.getType();
 		this.name = diagramToCopy.getName();
 		
+		// copy serializedCanvas field
 		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 		ObjectOutputStream oos;
 		try {
@@ -179,6 +180,7 @@ public class Diagram {
 		diagramToCopy.setKey(this.key);
 		diagramToCopy.setType(this.type);
 		diagramToCopy.setName(this.name);
+		diagramToCopy.setDirectoryKey(this.directoryKey);
 		
 		UMLCanvas canvas = null;
 		
