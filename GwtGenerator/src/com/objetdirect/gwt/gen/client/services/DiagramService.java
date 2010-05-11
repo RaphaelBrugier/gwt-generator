@@ -39,10 +39,12 @@ public interface DiagramService extends RemoteService {
 	public Long createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException;
 	
 	/**
-	 * Get all the diagrams of the logged user.
+	 * Get all the diagrams of the logged user on a directory
+	 *
+	 * @param directory Directory where the diagrams are stored.
 	 * @return A list of the diagrams.
 	 */
-	public ArrayList<DiagramDto> getDiagrams();
+	public ArrayList<DiagramDto> getDiagrams(String directory);
 	
 	/**
 	 * Delete a diagram in the base.

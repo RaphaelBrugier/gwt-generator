@@ -19,9 +19,6 @@ import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.DomEvent;
-import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -242,11 +239,11 @@ public class Design extends Composite {
 	private void doCreateNewDiagram(final DiagramDto diagramInformations) {
 		LoadingPopUp.getInstance().startProcessing("Creating a new diagram and loading the designer, please wait...");
 		
-		diagramService.createDiagram(diagramInformations.getType(), diagramInformations.getName(), new 
+		diagramService.createDiagram(diagramInformations.getDirectoryKey(), diagramInformations.getType(), diagramInformations.getName(), new 
 			AsyncCallback<Long>() {
 				@Override
 				public void onSuccess(Long key) {
-					currentDiagram = new DiagramDto(key, diagramInformations.getName(), diagramInformations.getType());
+					currentDiagram = new DiagramDto(key,diagramInformations.getDirectoryKey(), diagramInformations.getName(), diagramInformations.getType());
 					
 					OptionsManager.set("DiagramType", diagramInformations.getType().ordinal());
 					drawer = new DrawerPanel();

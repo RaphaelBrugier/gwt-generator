@@ -63,7 +63,13 @@ public class TestDiagramService extends TestCase {
 		directory = projectService.getProjects().iterator().next().getDirectories().get(0);
 		
 	}
-
+	
+	private void assertEquals(Long key, String name, Type type, String directoryKey, DiagramDto diagramDto) {
+		assertEquals(key, diagramDto.getKey());
+		assertEquals(name, diagramDto.getName());
+		assertEquals(type, diagramDto.getType());
+		assertEquals(directoryKey, diagramDto.getDirectoryKey());
+	}
 	
 	public void testCreateDiagram() {
 		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
@@ -85,16 +91,14 @@ public class TestDiagramService extends TestCase {
 	
 	public void testGetDiagrams() {
 		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
-		diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name 2");
+		diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name2");
+		diagramService.createDiagram("otherKeyDirectory", Type.HYBRYD, "name2"); // We can create a diagram with the same name in an other directory.
 
-		ArrayList<DiagramDto> diagrams =  diagramService.getDiagrams();
+		ArrayList<DiagramDto> diagrams =  diagramService.getDiagrams(directory.getKey());
 		assertEquals(2, diagrams.size());
 
 		DiagramDto dto = diagrams.get(0);
-		assertEquals(Type.CLASS, dto.getType());
-		assertEquals("name", dto.getName());
-		assertEquals(id, dto.getKey());
-		assertEquals(directory.getKey(), dto.getDirectoryKey());
+		assertEquals(id, "name", Type.CLASS, directory.getKey(), dto);
 	}
 	
 	public void testDelete() throws Exception {
@@ -112,10 +116,7 @@ public class TestDiagramService extends TestCase {
 		diagramService.saveDiagram(dto);
 		dto = diagramService.getDiagram(id);
 		
-		assertEquals(Type.CLASS, dto.getType());
-		assertEquals("newName", dto.getName());
-		assertEquals(id, dto.getKey());
-		assertEquals(directory.getKey(), dto.getDirectoryKey());
+		assertEquals(id, "newName", Type.CLASS, directory.getKey(), dto);
 	}
 
 }

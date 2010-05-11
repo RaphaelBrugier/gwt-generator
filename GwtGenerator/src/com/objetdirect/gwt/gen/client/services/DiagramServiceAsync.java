@@ -34,9 +34,9 @@ public interface DiagramServiceAsync {
 	void createDiagram(String directoryKey, Type type, String name, AsyncCallback<Long> callback);
 
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams()
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams(java.lang.String)
 	 */
-	void getDiagrams(AsyncCallback<ArrayList<DiagramDto>> callback);
+	void getDiagrams(String directoryKey, AsyncCallback<ArrayList<DiagramDto>> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#deleteDiagram(java.lang.Long)
