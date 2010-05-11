@@ -62,8 +62,12 @@ public class DirectoryListPresenter extends Composite {
 	interface DirectoryListUiBinder extends UiBinder<Widget, DirectoryListPresenter> {}
 	
 	public interface DirectoryListStyle extends CssResource {
+		/* Tree items styles */
 		String actionIcon();
 		String itemIcon();
+		String itemText();
+		
+		/* Popup styles */
 		String createButton();
 		String popupTitle();
 		String popupContent();
@@ -127,9 +131,6 @@ public class DirectoryListPresenter extends Composite {
 					item.setState(!item.getState());
 					previousSelectedItem = item;
 					prevOpenState = !item.getState();
-					if (item instanceof DirectoryTreeItem) {
-						doDisplayDiagrams(((DirectoryTreeItem) item).getDirectory());
-					}
 				} else {
 					if (comingFromSetState == 1 && prevOpenState) {
 						comingFromSetState++;
@@ -138,9 +139,6 @@ public class DirectoryListPresenter extends Composite {
 						comingFromSetState++;
 						item.setState(!item.getState());
 						prevOpenState = !item.getState();
-						if (item instanceof DirectoryTreeItem) {
-							doDisplayDiagrams(((DirectoryTreeItem) item).getDirectory());
-						}
 					} else {
 						comingFromSetState = 0;
 						prevOpenState = true;
@@ -220,12 +218,23 @@ public class DirectoryListPresenter extends Composite {
 
 	/**
 	 * Bind the directoryTreeItem buttons with the actions :
+	 *  - display the diagrams of the directory when the a click occurs on the directory icon or the directory name
 	 *  - create a new diagram
 	 *  - delete the directory 
 	 * @param directoryTreeItem The directory tree item where the actions are added.
 	 */
 	private void bindDirectoryItem(final Project project, final DirectoryTreeItem directoryTreeItem) {
-		Log.debug("Presenter::BindDirectoryItem directory = " + directoryTreeItem.getDirectory() );
+
+		// Bind the directory icon and directory name
+		final ClickHandler diplayDiagramsClickHandlers = new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				doDisplayDiagrams(directoryTreeItem.getDirectory());
+			}
+		};
+		directoryTreeItem.getDirectoryIcon().addClickHandler(diplayDiagramsClickHandlers);
+		directoryTreeItem.getDirectoryName().addClickHandler(diplayDiagramsClickHandlers);
 		
 		// Bind the add diagram button
 		directoryTreeItem.getAddDiagramButton().addClickHandler(new ClickHandler() {
@@ -250,8 +259,6 @@ public class DirectoryListPresenter extends Composite {
 			
 			@Override
 			public void onClick(ClickEvent event) {
-				Log.debug("Presenter:: directoryItem.OnClick on delete button, directory = " + directoryTreeItem.getDirectory());
-				
 				// Display a popup to ask to delete or not the directory ?
 				doDeleteDirectory(project, directoryTreeItem.getDirectory());
 			}
@@ -376,11 +383,12 @@ public class DirectoryListPresenter extends Composite {
 	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, String diagramName, String diagramType) {
 		Type type = Type.valueOf(diagramType.toUpperCase());
 		DiagramDto diagramInformations = new DiagramDto(directoryKey, diagramName, type);
+		createDiagramPopup.hide();
 		eventBus.fireEvent(new CreateDiagramEvent(diagramInformations));
 	}
 
 
-	/** Fetch the tree with the projects of the user.
+	/** Fetch the tree with the projects and directories of the user.
 	 * If the user has no project, display a message.
 	 */
 	private void doFectchProjects() {

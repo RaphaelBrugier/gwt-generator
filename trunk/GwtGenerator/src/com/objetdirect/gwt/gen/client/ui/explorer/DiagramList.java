@@ -235,7 +235,6 @@ public class DiagramList {
 
 		@Override
 		protected boolean onRowRemoved(int row) {
-			Log.debug("TableModel onRowRemoved row = " + row);
 			cachedDiagrams = null;
 			return true;
 		}
@@ -254,7 +253,6 @@ public class DiagramList {
 			// If we did not have cached the data, call the service and retrieve all diagrams
 			if (cachedDiagrams == null) {
 				cachedDiagrams = new ArrayList<DiagramDto>();
-				
 				diagramService.getDiagrams(directoryKey, new AsyncCallback<ArrayList<DiagramDto>>() {
 					
 					@Override
@@ -273,7 +271,7 @@ public class DiagramList {
 					@Override
 					public void onFailure(Throwable caught) {
 						LoadingPopUp.getInstance().stopProcessing();
-						Log.debug(caught.getLocalizedMessage());
+						Log.error(caught.getLocalizedMessage());
 						callback.onFailure(caught);
 					}
 				});
@@ -399,6 +397,4 @@ public class DiagramList {
 		
 		return hpanel;
 	}
-	
-
 }

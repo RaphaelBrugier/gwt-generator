@@ -34,6 +34,8 @@ public class ProjectTreeItem extends TreeItem {
 	private Image addDirectoryIcon;
 
 	private Image deleteProjectIcon;
+	
+	private InlineLabel projectName;
 
 	public ProjectTreeItem(Project project) {
 		super();
@@ -42,7 +44,10 @@ public class ProjectTreeItem extends TreeItem {
 		FlowPanel panel = new FlowPanel();
 
 		Image projectIcon = new Image(TreeProjectsResources.INSTANCE.projectIcon());
-		InlineLabel projectName = new InlineLabel(project.getName());
+		
+		projectName = new InlineLabel(project.getName());
+		projectName.addStyleName(ProjectListResources.INSTANCE.css().itemText());
+		
 		addDirectoryIcon = new Image(TreeProjectsResources.INSTANCE.addIcon());
 		addDirectoryIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
 		addDirectoryIcon.setTitle("Add a directory in this project");

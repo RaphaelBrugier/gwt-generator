@@ -106,8 +106,6 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	public void deleteDirectory(Project project, Directory directory) {
 		checkLoggedIn();
 		
-		System.out.println("deleteDirectory  " + directory + "  on project " + project);
-		System.out.println("dir key = " + directory.getKey());
 		Project projectOwner = projectDao.getProjectById(project.getKey());
 		projectOwner.removeDirectory(directory);
 		projectDao.updateProject(projectOwner);

@@ -175,11 +175,10 @@
 	overflow:scroll;
 }
 
-.gwt-image-action {
-	margin-right: 15px;
-	cursor: pointer;
-}
 
+/*
+ * Tree panel item in the explorer page.
+*/
 .gwt-TreeItem-selected span {
 	background: url("images/hborder.png") repeat-x scroll 0 -1463px #93C2F1
 }
