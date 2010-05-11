@@ -55,7 +55,7 @@ public class DiagramDao {
 	/**
 	 * Get a diagram for the logged user from its key.
 	 * @param key
-	 * @return
+	 * @return the diagram found or null.
 	 */
 	public DiagramDto getDiagram(Long key) {
 		PersistenceManager pm = ServerHelper.getPM();
@@ -76,23 +76,26 @@ public class DiagramDao {
 	}
 	
 	/**
-	 * Get a diagram from its name and its type for the logged user.
+	 * Get a diagram from its name, its type and its directoryKey for the logged user.
+	 * 
 	 * @param type the type of the diagram
-	 * @param name the name of the diagram. 
-	 * @return the diagram found or null if not diagram was found. 
+	 * @param name the name of the diagram
+	 * @param directoryKey the directoryKey of the diagram
+	 * @return the diagram found or null if not diagram was found
 	 */
 	@SuppressWarnings("unchecked")
-	public DiagramDto getDiagram(Type type, String name) {
+	public DiagramDto getDiagram(Type type, String name, String directoryKey) {
 		PersistenceManager pm = ServerHelper.getPM();
 		DiagramDto diagramFound = null;
 		List<Diagram> queryResult;
 		try {
-			Query q = pm.newQuery(Diagram.class, "user == u && type == t && name == n");
+			Query q = pm.newQuery(Diagram.class, "user == u && type == t && name == n && directoryKey == d");
 			q.declareParameters(
 					"com.google.appengine.api.users.User u, " +
 					"String t, "+
-					"String n");
-			queryResult = (List<Diagram>) q.execute(getCurrentUser(), type, name);
+					"String n, " +
+					"String d");
+			queryResult = (List<Diagram>) q.executeWithArray(getCurrentUser(), type, name, directoryKey);
 
 			if (queryResult.size() == 1) {
 				diagramFound = queryResult.get(0).copyToDiagramDto();
@@ -105,20 +108,22 @@ public class DiagramDao {
 	}
 	
 	/**
-	 * Return the diagrams of the logged user.
+	 * Return the diagrams of the logged user in the given directory.
 	 * Please note that returned dto will NOT contained the serialized umlCanvas.
 	 * Use getDiagram(Long key) to get a dto with the serialized umlCanvas field.
+	 * @param directoryKey The key of the directory
 	 * @return a collection of all the user's diagrams.
 	 */
 	@SuppressWarnings("unchecked")
-	public ArrayList<DiagramDto> getDiagrams() {
+	public ArrayList<DiagramDto> getDiagrams(String directoryKey) {
 		PersistenceManager pm = ServerHelper.getPM();
 		List<Diagram> queryResult;
 		ArrayList<DiagramDto> results = new ArrayList<DiagramDto>();
 		try {
-			Query q = pm.newQuery(Diagram.class, "user == u");
-		    q.declareParameters("com.google.appengine.api.users.User u");
-		    queryResult = (List<Diagram>) q.execute(getCurrentUser());
+			Query q = pm.newQuery(Diagram.class, "user == u && directoryKey == d");
+		    q.declareParameters("com.google.appengine.api.users.User u, " +
+		    		"String d");
+		    queryResult = (List<Diagram>) q.execute(getCurrentUser(), directoryKey);
 		      
 		    for (Diagram diagram : queryResult) {
 		    	DiagramDto diagramInformation = new DiagramDto(diagram.getKey(), diagram.getDirectoryKey(), diagram.getName(), diagram.getType());

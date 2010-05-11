@@ -46,20 +46,21 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		if (! isNotBlank(name)) {
 			throw new CreateDiagramException("You must specify a name for your diagram.");
 		}
-		if (diagramDao.getDiagram(type, name) != null) {
+		if (diagramDao.getDiagram(type, name, directoryKey) != null) {
 			throw new CreateDiagramException("A diagram of this type and with this name already exist. Please use an other name.");
 		}
 		return diagramDao.createDiagram(directoryKey, type, name);
 	}
 
+	
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams()
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams(java.lang.String)
 	 */
 	@Override
-	public ArrayList<DiagramDto> getDiagrams() {
+	public ArrayList<DiagramDto> getDiagrams(String directoryKey) {
 		checkLoggedIn();
 		
-		return diagramDao.getDiagrams();
+		return diagramDao.getDiagrams(directoryKey);
 	}
 	
 	/* (non-Javadoc)

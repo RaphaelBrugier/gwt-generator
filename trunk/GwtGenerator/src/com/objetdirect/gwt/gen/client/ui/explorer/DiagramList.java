@@ -44,7 +44,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.objetdirect.gwt.gen.client.event.DisplayDiagramsEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
+import com.objetdirect.gwt.gen.client.event.DisplayDiagramsEvent.DisplayDiagramsEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
@@ -75,18 +77,29 @@ public class DiagramList {
 	public DiagramList(HandlerManager eventBus) {
 		this.eventBus = eventBus;
 		container = new SimplePanel();
+		bindHandlers();
+	}
+	
+	private void bindHandlers() {
+		eventBus.addHandler(DisplayDiagramsEvent.TYPE, new DisplayDiagramsEventHandler() {
+
+			@Override
+			public void onDisplayDiagramsEvent(DisplayDiagramsEvent event) {
+				fetchDiagramList(event.getDirectory().getKey());
+			}
+			
+		});
 	}
 	
 	public void go(HasWidgets parentContainer) {
-		fetchDiagramList();
 		parentContainer.clear();
 		parentContainer.add(this.container);
 	}
 	
-	public void fetchDiagramList() {
+	private void fetchDiagramList(String directoryKey) {
 		container.clear();
 		
-		PagingScrollTable<DiagramDto> pagingScrollTable = createScrollTable();
+		PagingScrollTable<DiagramDto> pagingScrollTable = createScrollTable(directoryKey);
 		pagingScrollTable.setHeight("450px");
 		pagingScrollTable.setWidth("90%");
 		PagingOptions pagingOptions = new PagingOptions(pagingScrollTable);
@@ -111,9 +124,9 @@ public class DiagramList {
 	 * Initializes the scroll table
 	 * @return
 	 */
-	private PagingScrollTable<DiagramDto> createScrollTable() {
+	private PagingScrollTable<DiagramDto> createScrollTable(String directoryKey) {
 		// create our own table model
-		tableModel = new DataSourceTableModel();
+		tableModel = new DataSourceTableModel(directoryKey);
 		// add it to cached table model
 //		CachedTableModel<DiagramDto> cachedTableModel = createCachedTableModel(tableModel);
 		
@@ -203,6 +216,12 @@ public class DiagramList {
 	private class DataSourceTableModel extends MutableTableModel<DiagramDto> {
 		
 		private ArrayList<DiagramDto> cachedDiagrams;
+		private final String directoryKey;
+		
+		public DataSourceTableModel(String directoryKey) {
+			super();
+			this.directoryKey = directoryKey;
+		}
 		
 		public void refreshData() {
 			cachedDiagrams = null;
@@ -236,7 +255,7 @@ public class DiagramList {
 			if (cachedDiagrams == null) {
 				cachedDiagrams = new ArrayList<DiagramDto>();
 				
-				diagramService.getDiagrams(new AsyncCallback<ArrayList<DiagramDto>>() {
+				diagramService.getDiagrams(directoryKey, new AsyncCallback<ArrayList<DiagramDto>>() {
 					
 					@Override
 					public void onSuccess(final ArrayList<DiagramDto> result) {
