@@ -19,7 +19,7 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListPresenter.ProjectListResources;
+import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.ProjectListResources;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 

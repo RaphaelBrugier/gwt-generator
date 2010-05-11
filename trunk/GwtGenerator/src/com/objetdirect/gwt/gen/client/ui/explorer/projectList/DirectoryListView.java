@@ -16,24 +16,90 @@ package com.objetdirect.gwt.gen.client.ui.explorer.projectList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.resources.client.ClientBundle;
+import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
+import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
+import com.google.gwt.user.client.ui.Widget;
 
 /**
  * View for the explorer list.
  * Contains the Popup views.
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
-public class DirectoryListView {
+public class DirectoryListView extends Composite implements DirectoryListPresenter.Display {
 
+	private static Binder uiBinder = GWT.create(Binder.class);
+
+	@UiTemplate("DirectoryList.ui.xml")
+	interface Binder extends UiBinder<Widget, DirectoryListView> {}
+	
+	public interface DirectoryListStyle extends CssResource {
+		/* Tree items styles */
+		String actionIcon();
+		String itemIcon();
+		String itemText();
+
+		/* Popup styles */
+		String createButton();
+		String popupTitle();
+		String popupContent();
+		String label();
+	}
+	
+	public interface ProjectListResources extends ClientBundle {
+		public ProjectListResources INSTANCE = GWT.create(ProjectListResources.class);
+		
+		@Source("DirectoryListStyle.css")
+		DirectoryListStyle css();
+	}
+	
+	@UiField
+	Anchor createProjectButton;
+
+	@UiField
+	SimplePanel treeContainer;
+	
 	public DirectoryListView() {
+		initWidget(uiBinder.createAndBindUi(this));
+		ProjectListResources.INSTANCE.css().ensureInjected();
+	}
+	
+	@Override
+	public Widget asWidget() {
+		return this;
+	}
 
+	@Override
+	public HasWidgets getContainer() {
+		return treeContainer;
+	}
+
+	@Override
+	public HasClickHandlers getCreateProjectButton() {
+		return createProjectButton;
+	}
+
+	@Override
+	public Widget getLoadingWidget() {
+		//TODO
+		return new Label("loading");
+	}
+
+	@Override
+	public Widget getNoProjectWidget() {
+		//TODO
+		return new Label("no project to display");
 	}
 	
 	

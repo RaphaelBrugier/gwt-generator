@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListPresenter;
+import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 
@@ -55,7 +56,9 @@ public class ExplorerPanel extends SimplePanel {
 	@UiField
 	FlowPanel content;
 	
-	DiagramList diagramList;
+	private DiagramList diagramList;
+	
+	private DirectoryListPresenter directoryListPresenter;
 	
 	public ExplorerPanel(HandlerManager eventBus) {
 		if (!GwtGenerator.loginInfo.isLoggedIn()) {
@@ -83,8 +86,8 @@ public class ExplorerPanel extends SimplePanel {
 	}
 
 	private void populateWestPanel() {
-		westPanel.clear();
-		westPanel.add(new DirectoryListPresenter(eventBus));
+		directoryListPresenter = new DirectoryListPresenter(eventBus, new DirectoryListView());
+		directoryListPresenter.go(westPanel);
 	}
 
 }
