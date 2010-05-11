@@ -20,19 +20,12 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.CssResource;
-import com.google.gwt.uibinder.client.UiBinder;
-import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Anchor;
-import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
@@ -52,46 +45,46 @@ import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 
 /**
+ * Presenter for the explorer list of projects and directories on the explorer page.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public class DirectoryListPresenter extends Composite {
-
-	private static DirectoryListUiBinder uiBinder = GWT.create(DirectoryListUiBinder.class);
-
-	@UiTemplate("DirectoryList.ui.xml")
-	interface DirectoryListUiBinder extends UiBinder<Widget, DirectoryListPresenter> {}
+public class DirectoryListPresenter {
 	
-	public interface DirectoryListStyle extends CssResource {
-		/* Tree items styles */
-		String actionIcon();
-		String itemIcon();
-		String itemText();
+	public interface Display {
+		/**
+		 * @return a button for creating a new project 
+		 */
+		HasClickHandlers getCreateProjectButton();
 		
-		/* Popup styles */
-		String createButton();
-		String popupTitle();
-		String popupContent();
-		String label();
-	}
-	
-	public interface ProjectListResources extends ClientBundle {
-		public ProjectListResources INSTANCE = GWT.create(ProjectListResources.class);
+		/**
+		 * @return The main container
+		 */
+		HasWidgets getContainer();
 		
-		@Source("DirectoryListStyle.css")
-		DirectoryListStyle css();
+		/**
+		 * @return A widget to display when loading project and directories.
+		 */
+		Widget getLoadingWidget();
+		
+		/**
+		 * @return A widget to display a message when the use has no project
+		 */
+		Widget getNoProjectWidget();
+		
+		/**
+		 * @return The view as a widget.
+		 */
+		Widget asWidget();
 	}
 
-	@UiField
-	Anchor createProjectButton;
-
-	@UiField
-	SimplePanel treeContainer;
 
 	private final ProjectServiceAsync projectService = GWT.create(ProjectService.class);
 	
 	private final HandlerManager eventBus;
 	
 	private final Tree tree;
+	
+	private final Display display;
 	
 	/**
 	 * We need to save the previous selected item to get a workaround for this bug :
@@ -101,16 +94,21 @@ public class DirectoryListPresenter extends Composite {
 	int comingFromSetState = 0;
 	boolean prevOpenState = true;
 	
-	public DirectoryListPresenter(HandlerManager eventBus) {
-		initWidget(uiBinder.createAndBindUi(this));
-		ProjectListResources.INSTANCE.css().ensureInjected();
+	public DirectoryListPresenter(HandlerManager eventBus, Display display) {
+		
 		this.eventBus = eventBus;
+		this.display = display;
 		
 		this.tree = new Tree(TreeProjectsResources.INSTANCE, true);
-		treeContainer.add(tree);
-		
+		display.getContainer().add(tree);
+		bindCreateProjectButton();
 		addTreeHandlers();
 		doFectchProjects();
+	}
+	
+	public void go(HasWidgets container) {
+		container.clear();
+		container.add(display.asWidget());
 	}
 
 	
@@ -149,16 +147,22 @@ public class DirectoryListPresenter extends Composite {
 	}
 	
 	
-	@UiHandler("createProjectButton")
-	void bindCreateProjectButton(ClickEvent event) {
-		final CreateProjectPopup createProjectPopUp = new CreateProjectPopup();
-		createProjectPopUp.getCreateButton().addClickHandler(new ClickHandler() {
+	void bindCreateProjectButton() {
+		display.getCreateProjectButton().addClickHandler(new ClickHandler() {
 			@Override
-			public void onClick(ClickEvent e) {
-				doCreateProject(createProjectPopUp, createProjectPopUp.getProjectName());
+			public void onClick(ClickEvent event) {
+				
+				final CreateProjectPopup createProjectPopUp = new CreateProjectPopup();
+				createProjectPopUp.getCreateButton().addClickHandler(new ClickHandler() {
+					@Override
+					public void onClick(ClickEvent e) {
+						doCreateProject(createProjectPopUp, createProjectPopUp.getProjectName());
+					}
+				});
+				createProjectPopUp.show();
+				
 			}
 		});
-		createProjectPopUp.show();
 	}
 
 
@@ -392,13 +396,23 @@ public class DirectoryListPresenter extends Composite {
 	 * If the user has no project, display a message.
 	 */
 	private void doFectchProjects() {
+		display.getContainer().clear();
+		display.getContainer().add(display.getLoadingWidget());
+		
 		tree.removeItems();
 		projectService.getProjects(new AsyncCallback<Collection<Project>>() {
 			
 			@Override
 			public void onSuccess(Collection<Project> projectsFound) {
-				for (Project project : projectsFound) {
-					tree.addItem(createProjectItem(project));
+				if (projectsFound.size() == 0) {
+					display.getContainer().clear();
+					display.getContainer().add(display.getNoProjectWidget());
+				} else {
+					for (Project project : projectsFound) {
+						tree.addItem(createProjectItem(project));
+					}
+					display.getContainer().clear();
+					display.getContainer().add(tree);
 				}
 			}
 			
