@@ -83,6 +83,7 @@ public class ExplorerPanel extends SimplePanel {
 	}
 
 	private void populateWestPanel() {
+		westPanel.clear();
 		westPanel.add(new DirectoryListPresenter(eventBus));
 	}
 

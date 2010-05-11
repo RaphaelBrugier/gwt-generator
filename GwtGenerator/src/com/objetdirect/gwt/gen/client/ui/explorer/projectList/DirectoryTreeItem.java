@@ -29,7 +29,11 @@ import com.objetdirect.gwt.gen.shared.entities.Directory;
  */
 public class DirectoryTreeItem extends TreeItem {
 	
-	final private Directory directory;
+	private final Directory directory;
+	
+	private Image directoryIcon; 
+	
+	private InlineLabel directoryName;
 	
 	private Image addDiagramIcon;
 	
@@ -40,8 +44,13 @@ public class DirectoryTreeItem extends TreeItem {
 		this.directory = directory;
 		
 		HorizontalPanel panel = new HorizontalPanel();
-		Image projectIcon = new Image(TreeProjectsResources.INSTANCE.directoryIcon());
-		InlineLabel projectName = new InlineLabel(directory.getName());
+		
+		directoryIcon = new Image(TreeProjectsResources.INSTANCE.directoryIcon());
+		
+		
+		directoryName = new InlineLabel(directory.getName());
+		directoryName.addStyleName(ProjectListResources.INSTANCE.css().itemText());
+		
 		addDiagramIcon = new Image(TreeProjectsResources.INSTANCE.createDiagramIcon());
 		addDiagramIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
 		addDiagramIcon.setTitle("Create a new diagram");
@@ -50,8 +59,8 @@ public class DirectoryTreeItem extends TreeItem {
 		deleteDirectoryIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
 		deleteDirectoryIcon.setTitle("Delete this directory");
 		
-		panel.add(projectIcon);
-		panel.add(projectName);
+		panel.add(directoryIcon);
+		panel.add(directoryName);
 		panel.add(addDiagramIcon);
 		panel.add(deleteDirectoryIcon);
 		
@@ -71,5 +80,13 @@ public class DirectoryTreeItem extends TreeItem {
 	
 	public HasClickHandlers getDeleteDirectoryButton() {
 		return deleteDirectoryIcon;
+	}
+	
+	public HasClickHandlers getDirectoryName() {
+		return directoryName;
+	}
+	
+	public HasClickHandlers getDirectoryIcon() {
+		return directoryIcon;
 	}
 }
