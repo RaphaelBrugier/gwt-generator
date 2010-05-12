@@ -16,6 +16,7 @@ package com.objetdirect.gwt.gen.server.dao;
 
 import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class ProjectDao {
 	 * @param name
 	 * @return
 	 */
-	public Long createProject(String name) {
+	public Project createProject(String name) {
 		PersistenceManager pm = ServerHelper.getPM();
 		String email = ServerHelper.getCurrentUser().getEmail();
 		
@@ -48,7 +49,7 @@ public class ProjectDao {
 		} finally  {
 			pm.close();
 		}
-		return persistedProject.getKey();
+		return persistedProject;
 	}
 	
 	public Project getProjectById(Long id){
@@ -70,7 +71,7 @@ public class ProjectDao {
 	 * @return a list of project.
 	 */
 	@SuppressWarnings("unchecked")
-	public Collection<Project> getProjects() {
+	public List<Project> getProjects() {
 		PersistenceManager pm = ServerHelper.getPM();
 		
 		// Adding the "directory" group will force the detach of the "directories" field of the Project class
@@ -90,7 +91,7 @@ public class ProjectDao {
 			pm.close();
 		}
 
-		return projectsFound;
+		return new ArrayList<Project>(projectsFound);
 	}
 
 	/**

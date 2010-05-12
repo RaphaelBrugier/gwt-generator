@@ -18,7 +18,7 @@ import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
 import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
 import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isBlank;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
@@ -26,6 +26,7 @@ import com.objetdirect.gwt.gen.server.dao.DirectoryDao;
 import com.objetdirect.gwt.gen.server.dao.ProjectDao;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
+import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
 
 /**
@@ -51,14 +52,22 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 		}
 		//TODO check if a project with the same name already exist
 
-		return projectDao.createProject(name);
+		Project persistedProject = projectDao.createProject(name);
+		
+		for (DirType dirType : DirType.values()) {
+			Directory newDirectory = new Directory(dirType.toString().toLowerCase(), getCurrentUser().getEmail(), dirType);
+			persistedProject.addDirectory(newDirectory);
+		}
+		projectDao.updateProject(persistedProject);
+		
+		return persistedProject.getKey();
 	}
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#getProjects()
 	 */
 	@Override
-	public Collection<Project> getProjects() {
+	public List<Project> getProjects() {
 		checkLoggedIn();
 		return projectDao.getProjects();
 	}
@@ -93,7 +102,7 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 		}
 		//TODO check if a directory with the same name already exist
 
-		Directory newDirectory = new Directory(directoryName, getCurrentUser().getEmail());
+		Directory newDirectory = new Directory(directoryName, getCurrentUser().getEmail(), DirType.DOMAIN);
 		project.addDirectory(newDirectory);
 		projectDao.updateProject(project);
 	}

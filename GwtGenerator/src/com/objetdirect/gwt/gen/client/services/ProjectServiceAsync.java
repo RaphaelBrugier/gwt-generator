@@ -14,7 +14,7 @@
  */
 package com.objetdirect.gwt.gen.client.services;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
@@ -35,7 +35,7 @@ public interface ProjectServiceAsync {
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#getProjects()
 	 */
-	void getProjects(AsyncCallback<Collection<Project>> callback);
+	void getProjects(AsyncCallback<List<Project>> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#updateProject(com.objetdirect.gwt.gen.shared.entities.Project)
@@ -45,6 +45,7 @@ public interface ProjectServiceAsync {
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#addDirectory(com.objetdirect.gwt.gen.shared.entities.Project, java.lang.String)
 	 */
+	@Deprecated
 	void addDirectory(Project project, String directoryName, AsyncCallback<Void> callback);
 
 	/* (non-Javadoc)
@@ -55,5 +56,6 @@ public interface ProjectServiceAsync {
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#deleteDirectory(com.objetdirect.gwt.gen.shared.entities.Project, com.objetdirect.gwt.gen.shared.entities.Directory)
 	 */
+	@Deprecated
 	void deleteDirectory(Project project, Directory directory, AsyncCallback<Void> callback);
 }
