@@ -89,5 +89,4 @@ public class ExplorerPanel extends SimplePanel {
 		directoryListPresenter = new DirectoryListPresenter(eventBus, new DirectoryListView());
 		directoryListPresenter.go(westPanel);
 	}
-
 }

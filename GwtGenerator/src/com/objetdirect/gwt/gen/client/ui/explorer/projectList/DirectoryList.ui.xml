@@ -12,6 +12,6 @@
 		<g:Anchor styleName='{style.anchor}' ui:field="createProjectButton" href='javascript:;'>
 			New Project
 		</g:Anchor>
-		<g:SimplePanel ui:field="treeContainer"/>
+		<g:SimplePanel ui:field="mainContainer"/>
 	</g:FlowPanel>
 </ui:UiBinder> 

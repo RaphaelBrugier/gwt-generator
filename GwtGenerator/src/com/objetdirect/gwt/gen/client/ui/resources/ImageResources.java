@@ -30,6 +30,8 @@ public interface ImageResources extends ClientBundle {
 	
 	@Source("images/ajax-loader.gif")
 	public ImageResource ajaxLoader();
+	@Source("images/circleAjaxLoader.gif")
+	public ImageResource circleAjaxLoader();
 	
 	@Source("images/odlabs.png")
 	public ImageResource ODLabsLogo();
