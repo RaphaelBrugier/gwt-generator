@@ -50,6 +50,8 @@ public class TestDiagramService extends TestCase {
 	
 	private Directory directory;
 	
+	private Directory otherDirectory;
+	
 	protected void setUp() throws Exception {
 		super.setUp();
 		helper.setUp();
@@ -60,8 +62,14 @@ public class TestDiagramService extends TestCase {
 		projectService.createProject("projectTest");
 		Project p = projectService.getProjects().get(0);
 		directory = p.getDirectories().get(0);
+		
+		otherDirectory = p.getDirectories().get(1);
 	}
 	
+	
+	/**
+	 * Helper method to check if all the fields of the given diagramDto are equals to the others parameters.
+	 */
 	private void assertEquals(String key, String name, Type type, String directoryKey, DiagramDto diagramDto) {
 		assertEquals(key, diagramDto.getKey());
 		assertEquals(name, diagramDto.getName());
@@ -90,7 +98,7 @@ public class TestDiagramService extends TestCase {
 	public void testGetDiagrams() {
 		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
 		diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name2");
-		diagramService.createDiagram("otherKeyDirectory", Type.HYBRYD, "name2"); // We can create a diagram with the same name in an other directory.
+		diagramService.createDiagram(otherDirectory.getKey() , Type.HYBRYD, "name2"); // We can create a diagram with the same name in an other directory.
 
 		ArrayList<DiagramDto> diagrams =  diagramService.getDiagrams(directory.getKey());
 		assertEquals(2, diagrams.size());
