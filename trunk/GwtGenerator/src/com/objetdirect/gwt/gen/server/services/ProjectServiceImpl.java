@@ -93,14 +93,5 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 		
 		projectDao.deleteProject(projectToDelete);
 	}
-	
-	private void deleteProjectInDirectory(Directory directory) {
-		ArrayList<DiagramDto> diagrams = diagramService.getDiagrams(directory.getKey());
-		
-		for (DiagramDto diagramDto : diagrams) {
-			diagramService.deleteDiagram(diagramDto.getKey());
-		}
-	}
-
 
 }

@@ -74,12 +74,6 @@ public class ProjectDao {
 				persistedProject[0] = pm.makePersistent(persistedProject[0]);
 			}
 		});
-		
-//		try {
-//			persistedProject = pm.makePersistent(persistedProject);
-//		} finally  {
-//			pm.close();
-//		}
 		return persistedProject[0];
 	}
 	
@@ -148,7 +142,9 @@ public class ProjectDao {
  	 * @param project The project to delete
 	 */
 	public void deleteProject(final Project project) {
-	execute(new Action() { public void run(PersistenceManager pm) {
+	execute(new Action() { @SuppressWarnings("unchecked")
+	public void run(PersistenceManager pm) {
+		
 		List<Diagram> queryResult;
 		Project projectFound = pm.getObjectById(Project.class, project.getKey());
 		if (! projectFound.getEmail().equals(getCurrentUser().getEmail())) {
@@ -157,6 +153,7 @@ public class ProjectDao {
 		if (projectFound == null) 
 			throw new GWTGeneratorException("The Project to delete was not found.");
 		
+		// Delete all the diagrams in all the directories of the project to delete before deleting the project.
 		for (Directory directory : projectFound.getDirectories()) {
 			Query q = pm.newQuery(Diagram.class, "user == u && directoryKey == d");
 		    q.declareParameters("com.google.appengine.api.users.User u, " + "String d");

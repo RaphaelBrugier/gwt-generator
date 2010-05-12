@@ -14,10 +14,7 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import java.util.ArrayList;
 import java.util.List;
-
-import javax.jdo.PersistenceManager;
 
 import junit.framework.TestCase;
 
@@ -31,10 +28,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
-import com.objetdirect.gwt.gen.client.services.ProjectService;
-import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
-import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
 

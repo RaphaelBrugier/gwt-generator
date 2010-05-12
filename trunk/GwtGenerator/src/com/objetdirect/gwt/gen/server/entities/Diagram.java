@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
+import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
@@ -41,8 +42,13 @@ import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 public class Diagram {
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
+    @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
     private String key;
 	
+	@Persistent
+	@Extension(vendorName="datanucleus", key="gae.parent-pk", value="true")
+	private String directoryKey;
+
 	@Persistent
 	private String name;
 	
@@ -55,8 +61,6 @@ public class Diagram {
 	@Persistent
 	private User user;
 
-	@Persistent
-	private String directoryKey; 
 	
 	/**
 	 * Default constructor ONLY for gwt-rpc serialization
