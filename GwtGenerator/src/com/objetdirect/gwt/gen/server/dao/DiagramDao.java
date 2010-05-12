@@ -34,6 +34,19 @@ import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
  */
 public class DiagramDao {
 	
+	public interface Action {
+		void run(PersistenceManager pm);
+	}
+	
+	public void execute(Action a) {
+		PersistenceManager pm = ServerHelper.getPM();
+		try {
+			a.run(pm);
+		} finally  {
+			pm.close();
+		}
+	}
+	
 	/**
 	 * Create a diagram and return its generated id.
 	 * @param directoryKey the key of the owner directory.
@@ -42,14 +55,14 @@ public class DiagramDao {
 	 * @return the generated id for the diagram.
 	 */
 	public Long createDiagram(String directoryKey, Type type, String name) {
-		PersistenceManager pm = ServerHelper.getPM();
-		Diagram persistedDiagram = new Diagram(directoryKey, type, name, getCurrentUser());
-		try {
-			persistedDiagram = pm.makePersistent(persistedDiagram);
-		} finally  {
-			pm.close();
-		}
-		return persistedDiagram.getKey();
+		final Diagram persistedDiagram[] = new Diagram[1];
+		persistedDiagram[0] = new Diagram(directoryKey, type, name, getCurrentUser());
+		execute(new Action() {
+			public void run(PersistenceManager pm) {
+				persistedDiagram[0] = pm.makePersistent(persistedDiagram[0]);
+			}
+		});
+		return persistedDiagram[0].getKey();
 	}
 	
 	/**

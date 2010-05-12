@@ -37,8 +37,6 @@ public class DirectoryTreeItem extends TreeItem {
 	
 	private Image addDiagramIcon;
 	
-	private Image deleteDirectoryIcon;
-	
 	public DirectoryTreeItem(Directory directory) {
 		super();
 		this.directory = directory;
@@ -55,14 +53,10 @@ public class DirectoryTreeItem extends TreeItem {
 		addDiagramIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
 		addDiagramIcon.setTitle("Create a new diagram");
 		
-		deleteDirectoryIcon = new Image(TreeProjectsResources.INSTANCE.deleteIcon());
-		deleteDirectoryIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
-		deleteDirectoryIcon.setTitle("Delete this directory");
 		
 		panel.add(directoryIcon);
 		panel.add(directoryName);
 		panel.add(addDiagramIcon);
-		panel.add(deleteDirectoryIcon);
 		
 		this.setWidget(panel);
 	}
@@ -76,10 +70,6 @@ public class DirectoryTreeItem extends TreeItem {
 
 	public HasClickHandlers getAddDiagramButton() {
 		return addDiagramIcon;
-	}
-	
-	public HasClickHandlers getDeleteDirectoryButton() {
-		return deleteDirectoryIcon;
 	}
 	
 	public HasClickHandlers getDirectoryName() {
