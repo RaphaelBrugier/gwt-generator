@@ -59,7 +59,6 @@ public class Directory implements Serializable {
 		this.dirType= dirType;
 	}
 	
-	
 	/**
 	 * @return the key
 	 */
@@ -88,9 +87,16 @@ public class Directory implements Serializable {
 		return email;
 	}
 
-
+	/**
+	 * @return the dirType
+	 */
+	public DirType getDirType() {
+		return dirType;
+	}
+	
 	@Override
 	public String toString() {
 		return "Directory  key = " + key + "  name = " + name + "  email = " + email;
 	}
+
 }

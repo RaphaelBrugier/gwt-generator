@@ -194,24 +194,6 @@ public class DirectoryListPresenter {
 	 * @param projectItem The project tree item where the actions are added.
 	 */
 	private void bindProjectTreeItem(final ProjectTreeItem projectItem) {
-		// Bind the add directory button
-		projectItem.getAddDirectoryButton().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				final CreateDirectoryPopup createDirectoryPopup = new CreateDirectoryPopup();
-				
-				createDirectoryPopup.getCreateButton().addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent event) {
-						doCreateDirectory(createDirectoryPopup, projectItem.getProject(), createDirectoryPopup.getDirectoryName());
-					}
-				});
-				
-				createDirectoryPopup.show();
-			}
-		});
-
 		// Bind the delete button
 		projectItem.getDeleteProjectButton().addClickHandler(new ClickHandler() {
 			@Override
@@ -257,16 +239,6 @@ public class DirectoryListPresenter {
 				});
 				
 				createDiagramPopup.show();
-			}
-		});
-
-		// Bind the delete directory button.
-		directoryTreeItem.getDeleteDirectoryButton().addClickHandler(new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				// Display a popup to ask to delete or not the directory ?
-				doDeleteDirectory(project, directoryTreeItem.getDirectory());
 			}
 		});
 	}	
@@ -321,58 +293,6 @@ public class DirectoryListPresenter {
 		});
 	}
 	
-	
-	/**
-	 * Create a directory in the given project.
-	 * When the directory is created with success, display a message and reload the tree of projects.
-	 * @param createDirectoryPopup The popup to hide when the action is finished.
-	 * @param project The project where the directory will be created
-	 * @param directoryName The name of the directory to create.
-	 */
-	private void doCreateDirectory(final CreateDirectoryPopup createDirectoryPopup, Project project, final String directoryName) {
-		projectService.addDirectory(project, directoryName, new AsyncCallback<Void>() {
-
-			@Override
-			public void onSuccess(Void result) {
-				doFectchProjects();
-				createDirectoryPopup.hide();
-				MessageToaster.show("Directory " + directoryName + " created with success.");
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				createDirectoryPopup.hide();
-				Log.error("Failed to create the directory " + directoryName);
-				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to create the directory");
-				errorPopUp.show();
-			}
-		});
-	}
-
-	
-	/**
-	 * Delete a directory
-	 * When the directory is deleted with success, display a message and reload the tree of projects.
-	 * @param directory The directory to delete.
-	 */
-	private void doDeleteDirectory(final Project project, final Directory directory) {
-
-		projectService.deleteDirectory(project, directory, new AsyncCallback<Void>() {
-			
-			@Override
-			public void onSuccess(Void result) {
-				doFectchProjects();
-				MessageToaster.show("Directory " + directory.getName() + " deleted with success.");
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Log.error("Failed to delete the directory " + directory.getName());
-				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to delete the directory " + directory.getName());
-				errorPopUp.show();
-			}
-		});
-	}
 	
 	/**
 	 * Create a diagram in the given directory

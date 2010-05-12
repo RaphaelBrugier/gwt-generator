@@ -123,6 +123,7 @@ public class GwtGenerator implements EntryPoint {
 			
 			@Override
 			public void onFailure(Throwable caught) {
+				Log.error(caught.getMessage());
 				Window.alert(caught.getMessage());
 			}
 		});

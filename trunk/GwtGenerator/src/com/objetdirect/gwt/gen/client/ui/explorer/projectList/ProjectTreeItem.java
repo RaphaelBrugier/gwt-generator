@@ -31,8 +31,6 @@ public class ProjectTreeItem extends TreeItem {
 
 	private Project project;
 
-	private Image addDirectoryIcon;
-
 	private Image deleteProjectIcon;
 	
 	private InlineLabel projectName;
@@ -48,17 +46,12 @@ public class ProjectTreeItem extends TreeItem {
 		projectName = new InlineLabel(project.getName());
 		projectName.addStyleName(ProjectListResources.INSTANCE.css().itemText());
 		
-		addDirectoryIcon = new Image(TreeProjectsResources.INSTANCE.addIcon());
-		addDirectoryIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
-		addDirectoryIcon.setTitle("Add a directory in this project");
-		
 		deleteProjectIcon = new Image(TreeProjectsResources.INSTANCE.deleteIcon());
 		deleteProjectIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
 		deleteProjectIcon.setTitle("Delete this project");
 		
 		panel.add(projectIcon);
 		panel.add(projectName);
-		panel.add(addDirectoryIcon);
 		panel.add(deleteProjectIcon);
 		
 		this.setWidget(panel);
@@ -69,10 +62,6 @@ public class ProjectTreeItem extends TreeItem {
 	 */
 	public Project getProject() {
 		return project;
-	}
-	
-	public HasClickHandlers getAddDirectoryButton() {
-		return addDirectoryIcon;
 	}
 	
 	public HasClickHandlers getDeleteProjectButton() {
