@@ -31,6 +31,10 @@ import javax.jdo.annotations.PrimaryKey;
 @PersistenceCapable(detachable="true")
 public class Directory implements Serializable {
 	
+	public enum DirType {
+		DOMAIN, HCI, SERVICE
+	}
+	
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     @Extension(vendorName="datanucleus", key="gae.encoded-pk", value="true")
@@ -42,13 +46,17 @@ public class Directory implements Serializable {
 	@Persistent
 	private String email;
 	
+	@Persistent
+	private DirType dirType;
+	
 	/** Default constructor ONLY for gwt-rpc serialization. */
 	@SuppressWarnings("unused")
 	private Directory() {}
 	
-	public Directory(String name, String email) {
+	public Directory(String name, String email, DirType dirType) {
 		this.name = name;
 		this.email = email;
+		this.dirType= dirType;
 	}
 	
 	

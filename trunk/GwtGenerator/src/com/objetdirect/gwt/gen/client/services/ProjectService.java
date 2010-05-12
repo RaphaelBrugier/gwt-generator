@@ -14,12 +14,13 @@
  */
 package com.objetdirect.gwt.gen.client.services;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
+import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
 
 /**
  * Service to operate on the stored projects.
@@ -40,7 +41,7 @@ public interface ProjectService extends RemoteService {
 	 * Get all the project of the logged user.
 	 * @return a collection of projects.
 	 */
-	public Collection<Project> getProjects();
+	public List<Project> getProjects();
 	
 	/**
 	 * Update the given project by saving it on the base.
@@ -59,6 +60,7 @@ public interface ProjectService extends RemoteService {
 	 * @param project the project 
 	 * @param directoryName the name of the directory to add;
 	 */
+	@Deprecated
 	public void addDirectory(Project project, String directoryName);
 	
 	/**
@@ -66,6 +68,7 @@ public interface ProjectService extends RemoteService {
 	 * @param project the project 
 	 * @param directoryName the name of the directory to add;
 	 */
+	@Deprecated
 	public void deleteDirectory(Project project, Directory directory);
 	
 }

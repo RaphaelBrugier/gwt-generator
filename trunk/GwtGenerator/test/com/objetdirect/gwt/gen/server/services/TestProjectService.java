@@ -35,6 +35,7 @@ import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
+import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
 
 /**
  * Tests for the project services.
@@ -51,15 +52,25 @@ public class TestProjectService extends TestCase {
 	
 	private final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 	
+	private final static String EMAIL = "MyEmail@gmail.com";
+	
+	private final static int NumberOfDefaultDirectories = DirType.values().length;
+	
 	protected void setUp() throws Exception {
 		super.setUp();
 		helper.setUp();
 		helper.setEnvIsLoggedIn(true)
-			  .setEnvEmail("MyEmail@gmail.com")
+			  .setEnvEmail(EMAIL)
 		      .setEnvAuthDomain("google.com");
 		
 	}
 	
+	/**
+	 * Helper method to get a property of an object based on its id.
+	 * @param id
+	 * @param property
+	 * @return
+	 */
 	private Object getProjectProperty(Long id, String property) {
 		Key key = new KeyFactory.Builder("Project", id).getKey();
 		Entity entity = null;
@@ -73,7 +84,6 @@ public class TestProjectService extends TestCase {
 	}
 	
 	public void testCreateProject() {
-		// Call the service
 		final Long id  = service.createProject("name");
 		
 		// Check if the returned id gets an entity from the datastore
@@ -85,10 +95,30 @@ public class TestProjectService extends TestCase {
 		}
 	}
 	
+	public void testCreatingAProjectAlsoCreateDefaultDirectories() {
+		final Long id  = service.createProject("name");
+		
+		assertEquals(NumberOfDefaultDirectories, ds.prepare(new Query("Directory")).countEntities());
+	}
+	
+	public void testGetProjects() {
+		Long id  = service.createProject("name");
+		service.createProject("name2");
+		
+		List<Project> projects = service.getProjects();
+		
+		assertEquals(2, projects.size());
+		
+		Project p = projects.get(0);
+		assertEquals(id, p.getKey());
+		assertEquals("name", p.getName());
+		assertEquals(EMAIL, p.getEmail());
+		assertEquals(NumberOfDefaultDirectories, p.getDirectories().size());
+	}
+
 	public void testUpdateProject() {		
 		final Long id  = service.createProject("name");
-		List<Project> projects = new ArrayList<Project>(service.getProjects());
-		Project p = projects.get(0);
+		Project p = service.getProjects().get(0);
 		
 		assertEquals(id, p.getKey());
 		
@@ -101,8 +131,7 @@ public class TestProjectService extends TestCase {
 	
 	public void testDeleteProject() {
 		Long id  = service.createProject("name");
-		List<Project> projects = new ArrayList<Project>(service.getProjects());
-		Project p = projects.get(0);
+		Project p = service.getProjects().get(0);
 		
 		assertEquals(id, p.getKey());
 		
@@ -110,6 +139,18 @@ public class TestProjectService extends TestCase {
 		
 		assertEquals(0, ds.prepare(new Query("Project")).countEntities());
 	}
+	
+	public void testDeleteProjectAlsoDeleteDirectories() {
+		Long id  = service.createProject("name");
+		Project p = service.getProjects().get(0);
+		
+		assertEquals(id, p.getKey());
+		
+		service.deleteProject(p);
+		
+		assertEquals(0, ds.prepare(new Query("Directory")).countEntities());
+	}
+	
 
 	public void testAddDirectory() {
 		PersistenceManager pm = ServerHelper.getPM();
@@ -148,8 +189,7 @@ public class TestProjectService extends TestCase {
 		
 		service.deleteDirectory(persistedProject,persistedDir);
 
-		List<Project> projects = new ArrayList<Project>(service.getProjects());
-		Project projectFound = projects.get(0);
+		Project projectFound = service.getProjects().get(0);
 		
 		assertEquals(0, projectFound.getDirectories().size());
 		

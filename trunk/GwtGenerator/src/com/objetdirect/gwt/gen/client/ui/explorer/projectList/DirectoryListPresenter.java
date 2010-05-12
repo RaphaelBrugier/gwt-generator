@@ -14,7 +14,7 @@
  */
 package com.objetdirect.gwt.gen.client.ui.explorer.projectList;
 
-import java.util.Collection;
+import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
@@ -37,7 +37,6 @@ import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.
 import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.CreateDirectoryPopup;
 import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.CreateProjectPopup;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
-import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
@@ -399,10 +398,10 @@ public class DirectoryListPresenter {
 		display.getContainer().add(display.getLoadingProjectsWidget());
 		
 		tree.removeItems();
-		projectService.getProjects(new AsyncCallback<Collection<Project>>() {
+		projectService.getProjects(new AsyncCallback<List<Project>>() {
 			
 			@Override
-			public void onSuccess(Collection<Project> projectsFound) {
+			public void onSuccess(List<Project> projectsFound) {
 				display.getContainer().clear();
 				if (projectsFound.size() == 0) {
 					display.getContainer().add(display.getNoProjectWidget());
