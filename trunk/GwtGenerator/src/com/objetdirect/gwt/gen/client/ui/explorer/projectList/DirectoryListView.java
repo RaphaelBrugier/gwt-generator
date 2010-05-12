@@ -24,17 +24,23 @@ import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 
 /**
  * View for the explorer list.
  * Contains the Popup views.
+ * 
+ * Presenter and its associated view are inspired by the mvp pattern.
+ * @see http://code.google.com/intl/fr/webtoolkit/articles/mvp-architecture.html
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
 public class DirectoryListView extends Composite implements DirectoryListPresenter.Display {
@@ -45,12 +51,18 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 	interface Binder extends UiBinder<Widget, DirectoryListView> {}
 	
 	public interface DirectoryListStyle extends CssResource {
+		/* Explorer tree styles */
+		String noProjectWrapper();
+		String noProjectTitle();
+		String noProjectText();
+		String loadingProjectsWrapper();
+		
 		/* Tree items styles */
 		String actionIcon();
 		String itemIcon();
 		String itemText();
 
-		/* Popup styles */
+		/* Common styles for the popups */
 		String createButton();
 		String popupTitle();
 		String popupContent();
@@ -68,7 +80,7 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 	Anchor createProjectButton;
 
 	@UiField
-	SimplePanel treeContainer;
+	SimplePanel mainContainer;
 	
 	public DirectoryListView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -82,7 +94,7 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 
 	@Override
 	public HasWidgets getContainer() {
-		return treeContainer;
+		return mainContainer;
 	}
 
 	@Override
@@ -91,17 +103,38 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 	}
 
 	@Override
-	public Widget getLoadingWidget() {
-		//TODO
-		return new Label("loading");
+	public Widget getLoadingProjectsWidget() {
+		FlowPanel loadingProjectsWrapper = new FlowPanel();
+		loadingProjectsWrapper.addStyleName(css().loadingProjectsWrapper());
+
+		Image ajaxLoadingImage =  new Image(ImageResources.INSTANCE.circleAjaxLoader());
+
+		loadingProjectsWrapper.add(ajaxLoadingImage);
+		return loadingProjectsWrapper;
 	}
 
 	@Override
 	public Widget getNoProjectWidget() {
-		//TODO
-		return new Label("no project to display");
+		FlowPanel noProjectWrapper = new FlowPanel();
+		noProjectWrapper.addStyleName(css().noProjectWrapper());
+		
+		Label noProjectTitle = new Label("There is no project to display.");
+		noProjectTitle.addStyleName(css().noProjectTitle());
+		
+		Label noProjectText = new Label("Create a new project and then create a directory to add new diagrams.");
+		noProjectText.addStyleName(css().noProjectText());
+		
+		noProjectWrapper.add(noProjectTitle);
+		noProjectWrapper.add(noProjectText);
+		return noProjectWrapper;
 	}
 	
+	/**
+	 * @return Helper access to the css String;
+	 */
+	private DirectoryListStyle css() {
+		return ProjectListResources.INSTANCE.css();
+	}
 	
 	/**
 	 * Passive view : A simple popup that displays a textbox and a button to create a new Project.

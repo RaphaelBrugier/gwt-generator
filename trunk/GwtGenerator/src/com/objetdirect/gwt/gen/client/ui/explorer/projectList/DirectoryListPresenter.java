@@ -38,6 +38,7 @@ import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.
 import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.CreateProjectPopup;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
+import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
@@ -46,6 +47,8 @@ import com.objetdirect.gwt.gen.shared.entities.Project;
 
 /**
  * Presenter for the explorer list of projects and directories on the explorer page.
+ * Presenter and its associated view are inspired by the mvp pattern.
+ * @see http://code.google.com/intl/fr/webtoolkit/articles/mvp-architecture.html
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class DirectoryListPresenter {
@@ -64,7 +67,7 @@ public class DirectoryListPresenter {
 		/**
 		 * @return A widget to display when loading project and directories.
 		 */
-		Widget getLoadingWidget();
+		Widget getLoadingProjectsWidget();
 		
 		/**
 		 * @return A widget to display a message when the use has no project
@@ -283,8 +286,7 @@ public class DirectoryListPresenter {
 			public void onSuccess(Long result) {
 				doFectchProjects();
 				createProjectPopup.hide();
-				MessagePopUp messagePopUp = new MessagePopUp("Project " + projectName + " created with success.");
-				messagePopUp.show();
+				MessageToaster.show("Project " + projectName + " created with success.");
 			}
 			
 			@Override
@@ -308,8 +310,7 @@ public class DirectoryListPresenter {
 			@Override
 			public void onSuccess(Void result) {
 				doFectchProjects();
-				MessagePopUp messagePopUp = new MessagePopUp("Project " + projectToDelete.getName() + " deleted with success");
-				messagePopUp.show();
+				MessageToaster.show("Project " + projectToDelete.getName() + " deleted with success");
 			}
 
 			@Override
@@ -336,8 +337,7 @@ public class DirectoryListPresenter {
 			public void onSuccess(Void result) {
 				doFectchProjects();
 				createDirectoryPopup.hide();
-				MessagePopUp messagePopUp = new MessagePopUp("Directory " + directoryName + " created with success.");
-				messagePopUp.show();
+				MessageToaster.show("Directory " + directoryName + " created with success.");
 			}
 			
 			@Override
@@ -363,8 +363,7 @@ public class DirectoryListPresenter {
 			@Override
 			public void onSuccess(Void result) {
 				doFectchProjects();
-				MessagePopUp messagePopUp = new MessagePopUp("Directory " + directory.getName() + " deleted with success.");
-				messagePopUp.show();
+				MessageToaster.show("Directory " + directory.getName() + " deleted with success.");
 			}
 			
 			@Override
@@ -397,21 +396,20 @@ public class DirectoryListPresenter {
 	 */
 	private void doFectchProjects() {
 		display.getContainer().clear();
-		display.getContainer().add(display.getLoadingWidget());
+		display.getContainer().add(display.getLoadingProjectsWidget());
 		
 		tree.removeItems();
 		projectService.getProjects(new AsyncCallback<Collection<Project>>() {
 			
 			@Override
 			public void onSuccess(Collection<Project> projectsFound) {
+				display.getContainer().clear();
 				if (projectsFound.size() == 0) {
-					display.getContainer().clear();
 					display.getContainer().add(display.getNoProjectWidget());
 				} else {
 					for (Project project : projectsFound) {
 						tree.addItem(createProjectItem(project));
 					}
-					display.getContainer().clear();
 					display.getContainer().add(tree);
 				}
 			}

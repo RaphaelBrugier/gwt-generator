@@ -126,53 +126,30 @@
 	background-repeat:no-repeat;
 }  
 
-/* Home Style */
 
-#logo {
-	
-	background-image:url(gwtumllogo_rev-ed.png);
-    background-repeat:no-repeat;
-    background-position:center;
-    width:100%;
-    height:187px;
-}
-
-#load {
-	
-	background-image:url(ajax-loader2.gif);
-    background-repeat:no-repeat;
-    background-position:center;
-    width:100%;
-    height:75px;
-}
-
-#loading-text {
-	font: bold 14px Verdana;
-	text-align: center;
-}
-#rev {
-	position:fixed;
-	bottom:0px;
-	right:0px;
-	padding:5px;
-	font: bold 14px Verdana;
-	background-color:#ddf;
-	border-top: 1px solid #000;
-	border-left: 1px solid #000;
-}
-
-#sponsor {
-        position:fixed;
-        bottom:0px;
-        right:100px;
-        padding:5px;
-        font: bold 14px Verdana;
-}
 
 /* Gwt-Generator styles */
 
 .overflowScroll {
 	overflow:scroll;
+}
+
+.messageToaster {
+	font-family: Arial Unicode MS,Arial,sans-serif;
+	font-size: 14px;
+}
+
+.tundra .dijitToasterMessage .dijitToasterContent {
+	padding:20px;
+	background: #EFFBFB;
+	margin: 10px;
+	border: 5px solid #DCE9F2;
+	-moz-border-radius:12px; 
+	-webkit-border-radius:12px;
+}
+
+.tundra .dijitToasterMessage {
+	color: #000000;
 }
 
 

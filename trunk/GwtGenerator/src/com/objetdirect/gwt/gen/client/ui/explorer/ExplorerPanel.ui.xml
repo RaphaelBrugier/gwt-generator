@@ -62,13 +62,5 @@
 		<g:center>
 			<g:FlowPanel ui:field="content" addStyleNames ="{style.contentPanel}"/>
 		</g:center>
-	   	
-	   	<g:south size="4">
-   			<g:HTMLPanel>
-   				<div class='{style.horizontal-left}'>
-	   				<g:Button ui:field="createDiagramButton">Create a new diagram</g:Button>
-   				</div>
-   			</g:HTMLPanel>
-   		</g:south>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 
