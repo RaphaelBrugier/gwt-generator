@@ -240,9 +240,9 @@ public class Design extends Composite {
 		LoadingPopUp.getInstance().startProcessing("Creating a new diagram and loading the designer, please wait...");
 		
 		diagramService.createDiagram(diagramInformations.getDirectoryKey(), diagramInformations.getType(), diagramInformations.getName(), new 
-			AsyncCallback<Long>() {
+			AsyncCallback<String>() {
 				@Override
-				public void onSuccess(Long key) {
+				public void onSuccess(String key) {
 					currentDiagram = new DiagramDto(key,diagramInformations.getDirectoryKey(), diagramInformations.getName(), diagramInformations.getType());
 					
 					OptionsManager.set("DiagramType", diagramInformations.getType().ordinal());

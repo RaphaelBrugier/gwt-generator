@@ -41,7 +41,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(java.lang.String, com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type, java.lang.String)
 	 */
 	@Override
-	public Long createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException {
+	public String createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException {
 		checkLoggedIn();
 		if (! isNotBlank(name)) {
 			throw new CreateDiagramException("You must specify a name for your diagram.");
@@ -64,19 +64,19 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#deleteDiagram(java.lang.Long)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#deleteDiagram(java.lang.String)
 	 */
 	@Override
-	public void deleteDiagram(Long key) {
+	public void deleteDiagram(String key) {
 		checkLoggedIn();
 		diagramDao.deleteDiagram(key);
 	}
 	
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.Long)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.String)
 	 */
 	@Override
-	public DiagramDto getDiagram(Long key) {
+	public DiagramDto getDiagram(String key) {
 		checkLoggedIn();
 		return diagramDao.getDiagram(key);
 	}

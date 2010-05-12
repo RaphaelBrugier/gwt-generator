@@ -58,13 +58,11 @@ public class TestDiagramService extends TestCase {
 	      .setEnvAuthDomain("google.com");
 		
 		projectService.createProject("projectTest");
-		Project p = projectService.getProjects().iterator().next();
-		projectService.addDirectory(p, "dirTest");
-		directory = projectService.getProjects().iterator().next().getDirectories().get(0);
-		
+		Project p = projectService.getProjects().get(0);
+		directory = p.getDirectories().get(0);
 	}
 	
-	private void assertEquals(Long key, String name, Type type, String directoryKey, DiagramDto diagramDto) {
+	private void assertEquals(String key, String name, Type type, String directoryKey, DiagramDto diagramDto) {
 		assertEquals(key, diagramDto.getKey());
 		assertEquals(name, diagramDto.getName());
 		assertEquals(type, diagramDto.getType());
@@ -72,7 +70,7 @@ public class TestDiagramService extends TestCase {
 	}
 	
 	public void testCreateDiagram() {
-		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
 		assertNotNull(id);
 		id = diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name 2");
 
@@ -81,7 +79,7 @@ public class TestDiagramService extends TestCase {
 	
 	
 	public void testGetDiagramFromId() {
-		Long id = diagramService.createDiagram(directory.getKey(), Type.CLASS, "name");
+		String id = diagramService.createDiagram(directory.getKey(), Type.CLASS, "name");
 
 		DiagramDto dto = diagramService.getDiagram(id);
 		assertEquals(Type.CLASS, dto.getType() );
@@ -90,7 +88,7 @@ public class TestDiagramService extends TestCase {
 	}
 	
 	public void testGetDiagrams() {
-		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
 		diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name2");
 		diagramService.createDiagram("otherKeyDirectory", Type.HYBRYD, "name2"); // We can create a diagram with the same name in an other directory.
 
@@ -102,14 +100,14 @@ public class TestDiagramService extends TestCase {
 	}
 	
 	public void testDelete() throws Exception {
-		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
 		
 		diagramService.deleteDiagram(id);
 		assertEquals(0, ds.prepare(new Query("Diagram")).countEntities());
 	}
 	
 	public void testSaveDiagram() throws Exception {
-		Long id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
 		DiagramDto dto = diagramService.getDiagram(id);
 		dto.setName("newName");
 		

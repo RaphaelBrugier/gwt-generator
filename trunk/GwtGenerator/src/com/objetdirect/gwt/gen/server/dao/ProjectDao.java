@@ -22,8 +22,11 @@ import java.util.List;
 
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
+import javax.jdo.Transaction;
 
 import com.objetdirect.gwt.gen.server.ServerHelper;
+import com.objetdirect.gwt.gen.server.entities.Diagram;
+import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
@@ -33,23 +36,51 @@ import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
  */
 public class ProjectDao {
 	
+	public interface Action {
+		void run(PersistenceManager pm);
+	}
+	
+	public void execute(Action a) {
+		PersistenceManager pm = ServerHelper.getPM();
+		Transaction tx = pm.currentTransaction();
+		try {
+			tx.begin();
+			a.run(pm);
+			tx.commit();
+		} finally  {
+			if (tx.isActive()) {
+                tx.rollback();
+            }
+			pm.close();
+		}
+	}
+	
 	/**
 	 * Create a new project for the logged user.
 	 * @param name
 	 * @return
 	 */
 	public Project createProject(String name) {
-		PersistenceManager pm = ServerHelper.getPM();
+//		PersistenceManager pm = ServerHelper.getPM();
 		String email = ServerHelper.getCurrentUser().getEmail();
 		
-		Project persistedProject = new Project(name, email);
+		final Project persistedProject[] = new Project[1];
+		persistedProject[0] = new Project(name, email);
 
-		try {
-			persistedProject = pm.makePersistent(persistedProject);
-		} finally  {
-			pm.close();
-		}
-		return persistedProject;
+		execute(new Action(){
+
+			@Override
+			public void run(PersistenceManager pm) {
+				persistedProject[0] = pm.makePersistent(persistedProject[0]);
+			}
+		});
+		
+//		try {
+//			persistedProject = pm.makePersistent(persistedProject);
+//		} finally  {
+//			pm.close();
+//		}
+		return persistedProject[0];
 	}
 	
 	public Project getProjectById(Long id){
@@ -116,20 +147,24 @@ public class ProjectDao {
 	 * The project to delete must be owned by the logged user.
  	 * @param project The project to delete
 	 */
-	public void deleteProject(Project project) {
-		
-		PersistenceManager pm = ServerHelper.getPM();
-		try {
-			Project projectFound = pm.getObjectById(Project.class, project.getKey());
-			if (! projectFound.getEmail().equals(getCurrentUser().getEmail())) {
-				throw new GWTGeneratorException("Trying to delete a Project not owned by the user logged.");
-			}
-			if (projectFound == null) 
-				throw new GWTGeneratorException("The Project to delete was not found.");
-			
-			pm.deletePersistent(projectFound);
-		} finally {
-			pm.close();
+	public void deleteProject(final Project project) {
+	execute(new Action() { public void run(PersistenceManager pm) {
+		List<Diagram> queryResult;
+		Project projectFound = pm.getObjectById(Project.class, project.getKey());
+		if (! projectFound.getEmail().equals(getCurrentUser().getEmail())) {
+			throw new GWTGeneratorException("Trying to delete a Project not owned by the user logged.");
 		}
-	}
+		if (projectFound == null) 
+			throw new GWTGeneratorException("The Project to delete was not found.");
+		
+		for (Directory directory : projectFound.getDirectories()) {
+			Query q = pm.newQuery(Diagram.class, "user == u && directoryKey == d");
+		    q.declareParameters("com.google.appengine.api.users.User u, " + "String d");
+		    queryResult = (List<Diagram>) q.execute(getCurrentUser(), directory.getKey());
+	    	pm.deletePersistentAll(queryResult);
+		}
+
+		pm.deletePersistent(projectFound);
+		
+	}});}
 }

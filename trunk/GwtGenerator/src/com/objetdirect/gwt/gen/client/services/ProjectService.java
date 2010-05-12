@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
 
@@ -54,21 +53,4 @@ public interface ProjectService extends RemoteService {
 	 * @param projectToDelete the project to delete. 
 	 */
 	public void deleteProject(Project projectToDelete);
-	
-	/**
-	 * Add a directory to the given project
-	 * @param project the project 
-	 * @param directoryName the name of the directory to add;
-	 */
-	@Deprecated
-	public void addDirectory(Project project, String directoryName);
-	
-	/**
-	 * Delete the directory from the given project
-	 * @param project the project 
-	 * @param directoryName the name of the directory to add;
-	 */
-	@Deprecated
-	public void deleteDirectory(Project project, Directory directory);
-	
 }
