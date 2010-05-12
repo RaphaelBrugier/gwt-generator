@@ -36,7 +36,7 @@ public interface DiagramService extends RemoteService {
 	 * @param name the name of the diagram
 	 * @return the generated key
 	 */
-	public Long createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException;
+	public String createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException;
 	
 	/**
 	 * Get all the diagrams of the logged user on a directory
@@ -50,14 +50,14 @@ public interface DiagramService extends RemoteService {
 	 * Delete a diagram in the base.
 	 * @param key the key of the diagram to delete
 	 */
-	public void deleteDiagram(Long key);
+	public void deleteDiagram(String key);
 	
 	/**
 	 * Get a Diagram from its key
 	 * @param key the key
 	 * @return the diagram found or null.
 	 */
-	public DiagramDto getDiagram(Long key);
+	public DiagramDto getDiagram(String key);
 	
 	/**
 	 * Save the diagram in the base.

@@ -33,6 +33,7 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.server.ServerHelper;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
@@ -48,7 +49,9 @@ public class TestProjectService extends TestCase {
         		new LocalDatastoreServiceTestConfig(), 
         		new LocalUserServiceTestConfig());
 
-	private final ProjectService service = new ProjectServiceImpl();
+	private final ProjectServiceImpl service = new ProjectServiceImpl();
+	
+	private final DiagramServiceImpl diagramService = new DiagramServiceImpl();  
 	
 	private final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 	
@@ -151,48 +154,14 @@ public class TestProjectService extends TestCase {
 		assertEquals(0, ds.prepare(new Query("Directory")).countEntities());
 	}
 	
-
-	public void testAddDirectory() {
-		PersistenceManager pm = ServerHelper.getPM();
-		String email = ServerHelper.getCurrentUser().getEmail();
-		Project persistedProject = new Project("projectName", email);
-		persistedProject = pm.makePersistent(persistedProject);
-		pm.close();
+	public void testDeleteProjectAlsoDeleteDiagrams() {
+		service.createProject("name");
+		Project p = service.getProjects().get(0);
+		String directoryKey = p.getDirectories().get(0).getKey();
+		diagramService.createDiagram(directoryKey, Type.CLASS, "diagramName");
 		
-		service.addDirectory(persistedProject, "newDirectory");
+		service.deleteProject(p);
 		
-		assertEquals(1, ds.prepare(new Query("Directory")).countEntities());
-		
-		pm = ServerHelper.getPM();
-		persistedProject = pm.getObjectById(Project.class, persistedProject.getKey());
-		assertEquals(1, persistedProject.getDirectories().size());
-		Directory directorySaved = persistedProject.getDirectories().get(0);
-		assertNotNull(directorySaved);
-		pm.close();
-
-		
-		List<Project> projects = new ArrayList<Project>(service.getProjects());
-		assertNotNull(projects.get(0).getDirectories().get(0));
-	}
-	
-	public void testDeleteDirectory() {
-		// Create a project;
-		PersistenceManager pm = ServerHelper.getPM();
-		String email = ServerHelper.getCurrentUser().getEmail();
-		Project persistedProject = new Project("projectName", email);
-		persistedProject = pm.makePersistent(persistedProject);
-		pm.close();
-
-		service.addDirectory(persistedProject, "dir");
-		
-		Directory persistedDir = persistedProject.getDirectories().get(0);
-		
-		service.deleteDirectory(persistedProject,persistedDir);
-
-		Project projectFound = service.getProjects().get(0);
-		
-		assertEquals(0, projectFound.getDirectories().size());
-		
-		assertEquals(0, ds.prepare(new Query("Directory")).countEntities());
+		assertEquals(0, ds.prepare(new Query("Diagram")).countEntities());
 	}
 }

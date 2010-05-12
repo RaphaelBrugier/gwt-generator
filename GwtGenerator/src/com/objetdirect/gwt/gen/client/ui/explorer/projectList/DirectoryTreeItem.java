@@ -53,7 +53,6 @@ public class DirectoryTreeItem extends TreeItem {
 		addDiagramIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
 		addDiagramIcon.setTitle("Create a new diagram");
 		
-		
 		panel.add(directoryIcon);
 		panel.add(directoryName);
 		panel.add(addDiagramIcon);

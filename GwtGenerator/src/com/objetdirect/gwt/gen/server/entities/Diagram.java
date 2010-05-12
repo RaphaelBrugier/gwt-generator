@@ -41,7 +41,7 @@ import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 public class Diagram {
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
-    private Long key;
+    private String key;
 	
 	@Persistent
 	private String name;
@@ -57,7 +57,6 @@ public class Diagram {
 
 	@Persistent
 	private String directoryKey; 
-	
 	
 	/**
 	 * Default constructor ONLY for gwt-rpc serialization
@@ -75,14 +74,14 @@ public class Diagram {
 	/**
 	 * @return the key
 	 */
-	public Long getKey() {
+	public String getKey() {
 		return key;
 	}
 
 	/**
 	 * @param key the key to set
 	 */
-	public void setKey(Long key) {
+	public void setKey(String key) {
 		this.key = key;
 	}
 

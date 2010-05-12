@@ -31,7 +31,7 @@ public interface DiagramServiceAsync {
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(java.lang.String, com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type, java.lang.String)
 	 */
-	void createDiagram(String directoryKey, Type type, String name, AsyncCallback<Long> callback);
+	void createDiagram(String directoryKey, Type type, String name, AsyncCallback<String> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams(java.lang.String)
@@ -39,14 +39,14 @@ public interface DiagramServiceAsync {
 	void getDiagrams(String directoryKey, AsyncCallback<ArrayList<DiagramDto>> callback);
 
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#deleteDiagram(java.lang.Long)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#deleteDiagram(java.lang.String)
 	 */
-	void deleteDiagram(Long key, AsyncCallback<Void> callback);
+	void deleteDiagram(String key, AsyncCallback<Void> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.Long)
 	 */
-	void getDiagram(Long key, AsyncCallback<DiagramDto> callback);
+	void getDiagram(String key, AsyncCallback<DiagramDto> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#saveDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations)

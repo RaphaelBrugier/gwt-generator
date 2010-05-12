@@ -54,7 +54,7 @@ public class DiagramDao {
 	 * @param name the diagram name.
 	 * @return the generated id for the diagram.
 	 */
-	public Long createDiagram(String directoryKey, Type type, String name) {
+	public String createDiagram(String directoryKey, Type type, String name) {
 		final Diagram persistedDiagram[] = new Diagram[1];
 		persistedDiagram[0] = new Diagram(directoryKey, type, name, getCurrentUser());
 		execute(new Action() {
@@ -70,7 +70,7 @@ public class DiagramDao {
 	 * @param key
 	 * @return the diagram found or null.
 	 */
-	public DiagramDto getDiagram(Long key) {
+	public DiagramDto getDiagram(String key) {
 		PersistenceManager pm = ServerHelper.getPM();
 		DiagramDto diagramFound = null;
 		try {
@@ -153,7 +153,7 @@ public class DiagramDao {
 	 * Delete a diagram from its key
 	 * @param key the id of the diagram.
 	 */
-	public void deleteDiagram(Long key) {
+	public void deleteDiagram(String key) {
 		PersistenceManager pm = ServerHelper.getPM();
 		try {
 			Diagram diagram = pm.getObjectById(Diagram.class, key);

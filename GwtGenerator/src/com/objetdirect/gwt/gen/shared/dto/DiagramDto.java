@@ -28,7 +28,7 @@ public class DiagramDto implements Serializable {
 		CLASS, OBJECT, HYBRYD, SEQUENCE
 	}
 	
-	private Long key;
+	private String key;
 	
 	private String name;
 	
@@ -62,7 +62,7 @@ public class DiagramDto implements Serializable {
 	 * @param name the name of the diagram
 	 * @param type the type of the diagram : CLASS or OBJECT or HYBRYD or SEQUENCE
 	 */
-	public DiagramDto(Long key, String directoryKey, String name, Type type) {
+	public DiagramDto(String key, String directoryKey, String name, Type type) {
 		this(directoryKey, name, type);
 		this.key = key;
 	}
@@ -71,7 +71,7 @@ public class DiagramDto implements Serializable {
 	/**
 	 * @return the key
 	 */
-	public Long getKey() {
+	public String getKey() {
 		return key;
 	}
 
@@ -79,7 +79,7 @@ public class DiagramDto implements Serializable {
 	/**
 	 * @param key the key to set
 	 */
-	public void setKey(Long key) {
+	public void setKey(String key) {
 		this.key = key;
 	}
 

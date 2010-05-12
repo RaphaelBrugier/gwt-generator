@@ -18,12 +18,14 @@ import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
 import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
 import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isBlank;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
-import com.objetdirect.gwt.gen.server.dao.DirectoryDao;
 import com.objetdirect.gwt.gen.server.dao.ProjectDao;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
@@ -38,7 +40,8 @@ import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
 public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectService {
 
 	private final ProjectDao projectDao = new ProjectDao();
-	private final DirectoryDao directoryDao = new DirectoryDao();
+	
+	private final DiagramService diagramService = new DiagramServiceImpl();
 	
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String)
@@ -87,38 +90,17 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	@Override
 	public void deleteProject(Project projectToDelete) {
 		checkLoggedIn();
+		
 		projectDao.deleteProject(projectToDelete);
 	}
-
-	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#addDirectory(com.objetdirect.gwt.gen.shared.entities.Project, java.lang.String)
-	 */
-	@Override
-	public void addDirectory(Project project, String directoryName) {
-		checkLoggedIn();
+	
+	private void deleteProjectInDirectory(Directory directory) {
+		ArrayList<DiagramDto> diagrams = diagramService.getDiagrams(directory.getKey());
 		
-		if (isBlank(directoryName)) {
-			throw new CreateProjectException("You must specify a name to your directory");
+		for (DiagramDto diagramDto : diagrams) {
+			diagramService.deleteDiagram(diagramDto.getKey());
 		}
-		//TODO check if a directory with the same name already exist
-
-		Directory newDirectory = new Directory(directoryName, getCurrentUser().getEmail(), DirType.DOMAIN);
-		project.addDirectory(newDirectory);
-		projectDao.updateProject(project);
 	}
 
-
-	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#deleteDirectory(com.objetdirect.gwt.gen.shared.entities.Project, com.objetdirect.gwt.gen.shared.entities.Directory)
-	 */
-	@Override
-	public void deleteDirectory(Project project, Directory directory) {
-		checkLoggedIn();
-		
-		Project projectOwner = projectDao.getProjectById(project.getKey());
-		projectOwner.removeDirectory(directory);
-		projectDao.updateProject(projectOwner);
-		directoryDao.deleteDirectory(directory);
-	}
 
 }
