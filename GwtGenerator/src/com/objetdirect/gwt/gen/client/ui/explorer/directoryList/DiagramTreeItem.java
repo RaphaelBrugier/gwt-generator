@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui.explorer.projectList;
+package com.objetdirect.gwt.gen.client.ui.explorer.directoryList;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.ProjectListResources;
+import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView.ProjectListResources;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 
 /**
