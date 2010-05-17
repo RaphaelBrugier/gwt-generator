@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
@@ -127,6 +126,11 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 		noProjectWrapper.add(noProjectTitle);
 		noProjectWrapper.add(noProjectText);
 		return noProjectWrapper;
+	}
+	
+	@Override
+	public DiagramTreeItem createDiagramTreeItem(String diagramName) {
+		return new DiagramTreeItem(diagramName);
 	}
 	
 	/**
@@ -232,16 +236,10 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 		@UiField
 		Button createDiagramButton;
 		
-		@UiField
-		ListBox typeList;
 		
 		public CreateDiagramPopup() {
 			popuPanel = uiBinder.createAndBindUi(this);
 			setWidget(popuPanel);
-			typeList.addItem("Class");
-			typeList.addItem("Object");
-			typeList.addItem("Hybrid");
-			typeList.addItem("Sequence");
 		}
 		
 		public HasClickHandlers getCreateButton() {
@@ -250,10 +248,6 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 				
 		public String getDiagramName() {
 			return diagramNameTb.getValue();
-		}
-		
-		public String getDiagramType() {
-			return typeList.getItemText(typeList.getSelectedIndex());
 		}
 		
 		public void hide() {

@@ -15,12 +15,16 @@
 package com.objetdirect.gwt.gen.shared.entities;
 
 import java.io.Serializable;
+import java.util.List;
 
 import javax.jdo.annotations.Extension;
 import javax.jdo.annotations.IdGeneratorStrategy;
+import javax.jdo.annotations.NotPersistent;
 import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
+
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 
 /**
  * Represent a Directory of a user.
@@ -48,6 +52,9 @@ public class Directory implements Serializable {
 	
 	@Persistent
 	private DirType dirType;
+	
+	@NotPersistent
+	private List<DiagramDto> diagrams;
 	
 	/** Default constructor ONLY for gwt-rpc serialization. */
 	@SuppressWarnings("unused")
@@ -94,9 +101,22 @@ public class Directory implements Serializable {
 		return dirType;
 	}
 	
+	/**
+	 * @return the diagrams
+	 */
+	public List<DiagramDto> getDiagrams() {
+		return diagrams;
+	}
+
+	/**
+	 * @param diagrams the diagrams to set
+	 */
+	public void setDiagrams(List<DiagramDto> diagrams) {
+		this.diagrams = diagrams;
+	}
+
 	@Override
 	public String toString() {
 		return "Directory  key = " + key + "  name = " + name + "  email = " + email;
 	}
-
 }

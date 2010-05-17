@@ -52,12 +52,17 @@ public interface TreeProjectsResources extends Tree.Resources {
 		@Source("images/folder_open.png")
 	    public ImageResource directoryIcon();
 		
+		@Source("images/deleteIcon.png")
+		public ImageResource deleteIcon();
+		
+		@Source("images/diagram.png")
+		public ImageResource diagramIcon();
+		
 		@Source("images/addDiagram.png")
 		public ImageResource createDiagramIcon();
 		
-		
-		@Source("images/deleteIcon.png")
-		public ImageResource deleteIcon();
+		@Source("images/editIcon.png")
+		public ImageResource editDiagramIcon();
 		
 		@Source("images/add.png")
 		public ImageResource addIcon();

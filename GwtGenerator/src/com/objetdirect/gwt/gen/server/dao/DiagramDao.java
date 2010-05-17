@@ -22,12 +22,10 @@ import java.util.List;
 import javax.jdo.PersistenceManager;
 import javax.jdo.Query;
 
-import com.google.appengine.api.datastore.KeyFactory;
 import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
-import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 /**
@@ -47,16 +45,6 @@ public class DiagramDao {
 		} finally  {
 			pm.close();
 		}
-	}
-	
-	private String buildKey(String directoryKey) {
-		String key;
-		
-		KeyFactory.Builder keyBuilder = new KeyFactory.Builder(Directory.class.getSimpleName(), directoryKey);
-		keyBuilder.addChild(Diagram.class.getSimpleName(), "1");
-
-		key = KeyFactory.keyToString(keyBuilder.getKey());
-		return key;
 	}
 	
 	/**

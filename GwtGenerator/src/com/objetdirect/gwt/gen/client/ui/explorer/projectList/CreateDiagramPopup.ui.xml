@@ -16,10 +16,6 @@
 					<span class="{style.label}">Diagram name :</span>
 					<g:TextBox ui:field="diagramNameTb"/>
 				</div>
-				<div class="{style.field}">
-					<span class="{style.label}">Diagram type :</span>
-					<g:ListBox ui:field="typeList"/>
-				</div>
 			</div>		
 			<div>
 				<g:Button styleName="{style.createButton}" ui:field="createDiagramButton">Create</g:Button>

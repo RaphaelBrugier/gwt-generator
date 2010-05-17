@@ -181,20 +181,6 @@ public class Design extends Composite {
 			}
 		});
 		
-//		cleanUrl.setCommand(new Command() {
-//			@Override
-//			public void execute() {
-//				HistoryManager.upgradeDiagramURL("");
-//			}
-//		});
-//		
-//		exportToUrl.setCommand(new Command() {
-//			@Override
-//			public void execute() {
-//				HistoryManager.upgradeDiagramURL(Session.getActiveCanvas().toUrl());
-//			}
-//		});
-		
 		exportToSVG.setCommand(new Command() {
 			@Override
 			public void execute() {

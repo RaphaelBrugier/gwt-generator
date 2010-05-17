@@ -28,7 +28,9 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestConfig;
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
+import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
 
@@ -43,7 +45,7 @@ public class TestProjectService extends TestCase {
         		new LocalDatastoreServiceTestConfig(), 
         		new LocalUserServiceTestConfig());
 
-	private final ProjectServiceImpl service = new ProjectServiceImpl();
+	private final ProjectServiceImpl projectService = new ProjectServiceImpl();
 	
 	private final DiagramServiceImpl diagramService = new DiagramServiceImpl();  
 	
@@ -59,7 +61,6 @@ public class TestProjectService extends TestCase {
 		helper.setEnvIsLoggedIn(true)
 			  .setEnvEmail(EMAIL)
 		      .setEnvAuthDomain("google.com");
-		
 	}
 	
 	/**
@@ -81,7 +82,7 @@ public class TestProjectService extends TestCase {
 	}
 	
 	public void testCreateProject() {
-		final Long id  = service.createProject("name");
+		final Long id  = projectService.createProject("name");
 		
 		// Check if the returned id gets an entity from the datastore
 		Key key = new KeyFactory.Builder("Project", id).getKey();
@@ -93,16 +94,16 @@ public class TestProjectService extends TestCase {
 	}
 	
 	public void testCreatingAProjectAlsoCreateDefaultDirectories() {
-		final Long id  = service.createProject("name");
+		projectService.createProject("name");
 		
 		assertEquals(NumberOfDefaultDirectories, ds.prepare(new Query("Directory")).countEntities());
 	}
 	
 	public void testGetProjects() {
-		Long id  = service.createProject("name");
-		service.createProject("name2");
+		Long id  = projectService.createProject("name");
+		projectService.createProject("name2");
 		
-		List<Project> projects = service.getProjects();
+		List<Project> projects = projectService.getProjects();
 		
 		assertEquals(2, projects.size());
 		
@@ -112,49 +113,68 @@ public class TestProjectService extends TestCase {
 		assertEquals(EMAIL, p.getEmail());
 		assertEquals(NumberOfDefaultDirectories, p.getDirectories().size());
 	}
+	
+	public void testGetProjectsWithADiagram() throws Exception {
+		// Create a new project and create a new diagram in the first directory
+		projectService.createProject("name");
+		Project p = projectService.getProjects().get(0);
+		Directory directory = p.getDirectories().get(0);
+		String directoryKey = directory.getKey();
+		String diagramKey = diagramService.createDiagram(directoryKey, Type.CLASS, "diagram");
+		
+		
+		// Assert that getting the project also gets the diagram in the directory.
+		p = projectService.getProjects().get(0);
+		directory = p.getDirectories().get(0);
+		assertEquals(1, directory.getDiagrams().size());
+		
+		DiagramDto diagramFound = directory.getDiagrams().get(0);
+		
+		assertEquals(diagramKey, diagramFound.getKey());
+	}
 
 	public void testUpdateProject() {		
-		final Long id  = service.createProject("name");
-		Project p = service.getProjects().get(0);
+		final Long id  = projectService.createProject("name");
+		Project p = projectService.getProjects().get(0);
 		
 		assertEquals(id, p.getKey());
 		
 		p.setName("newName");
-		service.updateProject(p);
+		projectService.updateProject(p);
 		
 		String name = (String) getProjectProperty(id, "name");
 		assertEquals("newName", name);
 	}
 	
 	public void testDeleteProject() {
-		Long id  = service.createProject("name");
-		Project p = service.getProjects().get(0);
+		Long id  = projectService.createProject("name");
+		Project p = projectService.getProjects().get(0);
 		
 		assertEquals(id, p.getKey());
 		
-		service.deleteProject(p);
+		projectService.deleteProject(p);
 		
 		assertEquals(0, ds.prepare(new Query("Project")).countEntities());
 	}
 	
 	public void testDeleteProjectAlsoDeleteDirectories() {
-		Long id  = service.createProject("name");
-		Project p = service.getProjects().get(0);
+		Long id  = projectService.createProject("name");
+		Project p = projectService.getProjects().get(0);
 		
 		assertEquals(id, p.getKey());
 		
-		service.deleteProject(p);
+		projectService.deleteProject(p);
 		
 		assertEquals(0, ds.prepare(new Query("Directory")).countEntities());
 	}
 	
 	public void testDeleteProjectAlsoDeleteDiagrams() {
-		service.createProject("name");
-		Project p = service.getProjects().get(0);
+		projectService.createProject("name");
+		Project p = projectService.getProjects().get(0);
 		String directoryKey = p.getDirectories().get(0).getKey();
 		diagramService.createDiagram(directoryKey, Type.CLASS, "diagramName");
 		
-		service.deleteProject(p);
+		projectService.deleteProject(p);
 		
 		assertEquals(0, ds.prepare(new Query("Diagram")).countEntities());
 	}

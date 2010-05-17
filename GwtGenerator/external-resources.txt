@@ -15,3 +15,5 @@ Delete Folder : http://findicons.com/icon/164273/folder_delete
 Delete Icon for tree panel : http://findicons.com/icon/219214/delete?id=219390
 
 add icon for tree panel : http://findicons.com/icon/79599/add?id=79776
+
+diagram.png : http://findicons.com/icon/164222/chart_organisation#

@@ -41,6 +41,7 @@
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
   <source path='shared'/>
+<!--   <source path='server'/>-->
 <!--  <source path='server'/>-->
   <servlet path='/diagram' class='com.objetdirect.gwt.gen.server.services.DiagramServiceImpl'/>
    <servlet path='/project' class='com.objetdirect.gwt.gen.server.services.ProjectServiceImpl'/>
