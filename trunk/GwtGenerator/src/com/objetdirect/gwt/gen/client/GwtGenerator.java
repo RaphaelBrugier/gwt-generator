@@ -17,24 +17,12 @@ package com.objetdirect.gwt.gen.client;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
-import com.google.gwt.user.client.ui.DockPanel;
-import com.google.gwt.user.client.ui.HorizontalPanel;
-import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.objetdirect.gwt.gen.client.services.LoginService;
 import com.objetdirect.gwt.gen.client.services.LoginServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.MainController;
 import com.objetdirect.gwt.gen.shared.dto.LoginInfo;
-import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
-import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
-import com.objetdirect.gwt.umlapi.client.helpers.Session;
 
 /**
  * Main class for gwtuml application. This class does some initialization and calls the start panel.
@@ -44,59 +32,6 @@ import com.objetdirect.gwt.umlapi.client.helpers.Session;
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class GwtGenerator implements EntryPoint {
-	private final static DockPanel	appRootPanel	= new DockPanel();
-	static HorizontalPanel			southBar;
-	
-	/**
-	 * Entry point of the application This class make a StartPanel and manage the history for it
-	 */
-	public void gwt_main() {
-
-		GwtGenerator.southBar = new HorizontalPanel();
-		GwtGenerator.southBar.setVisible(false);
-		GwtGenerator.southBar.setSpacing(5);
-		final Button toUrl = new Button("Export to url");
-		toUrl.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(final ClickEvent event) {
-				HistoryManager.upgradeDiagramURL(Session.getActiveCanvas().toUrl());
-			}
-		});
-		GwtGenerator.southBar.add(toUrl);
-		final Button clearUrl = new Button("Clear diagram in url");
-		clearUrl.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(final ClickEvent event) {
-				HistoryManager.upgradeDiagramURL("");
-			}
-		});
-		GwtGenerator.southBar.add(clearUrl);
-		final Button exportToSvg = new Button("Export to SVG (Experimental)");
-		exportToSvg.addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(final ClickEvent event) {
-				String svg = "<?xml version='1.0' standalone='no'?><!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>";
-				Session.getActiveCanvas().clearArrows();
-				svg += DOM.getInnerHTML((Element) Session.getActiveCanvas().getContainer().getElement().getFirstChildElement());
-				Window.open("data:image/xml+svg," + svg, "SVG export", "top");
-				Session.getActiveCanvas().makeArrows();
-			}
-		});
-		GwtGenerator.southBar.add(exportToSvg);
-		
-		OptionsManager.initialize();
-		HotKeyManager.forceStaticInit();
-		final HistoryManager historyManager = new HistoryManager();
-		historyManager.initApplication(GwtGenerator.appRootPanel);
-		
-		DOM.setInnerHTML(RootPanel.get("loading-screen").getElement(), "");
-		
-
-		GwtGenerator.appRootPanel.setSize("100%", "100%");
-
-		GwtGenerator.appRootPanel.add(GwtGenerator.southBar, DockPanel.SOUTH);
-		RootLayoutPanel.get().add(GwtGenerator.appRootPanel);
-	}
 
 	/** Informations about the logged user or how to log in him. */
 	public static LoginInfo loginInfo;
