@@ -60,8 +60,6 @@ public class ExplorerPanel extends SimplePanel {
 	@UiField
 	FlowPanel content;
 	
-	private DiagramList diagramList;
-	
 	private DirectoryListPresenter directoryListPresenter;
 	
 	public ExplorerPanel(HandlerManager eventBus) {
@@ -74,19 +72,13 @@ public class ExplorerPanel extends SimplePanel {
 
 		nameSpan.setInnerText( GwtGenerator.loginInfo.getNickname());
 		signOut.setHref(GwtGenerator.loginInfo.getLogoutUrl());
-		diagramList = new DiagramList(eventBus);
 	}
 	
 	public void go(HasWidgets container) {
 		container.clear();
 		populateWestPanel();
-		fetchContent();
 		
 		container.add(this);
-	}
-
-	private void fetchContent() {
-		diagramList.go(content);
 	}
 
 	private void populateWestPanel() {
