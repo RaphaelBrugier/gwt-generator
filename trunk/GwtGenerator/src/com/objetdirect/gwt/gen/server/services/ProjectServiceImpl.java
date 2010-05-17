@@ -72,7 +72,17 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	@Override
 	public List<Project> getProjects() {
 		checkLoggedIn();
-		return projectDao.getProjects();
+		
+		List<Project> projects = projectDao.getProjects(); 
+		
+		for (Project project : projects) {
+			for (Directory directory : project.getDirectories()) {
+				ArrayList<DiagramDto> diagrams = diagramService.getDiagrams(directory.getKey());
+				directory.setDiagrams(diagrams);
+			}
+		}
+		
+		return projects;
 	}
 
 	/* (non-Javadoc)

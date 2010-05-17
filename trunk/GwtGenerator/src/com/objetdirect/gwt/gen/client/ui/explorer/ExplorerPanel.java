@@ -25,6 +25,8 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
+import com.objetdirect.gwt.gen.client.services.DiagramService;
+import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListPresenter;
 import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
@@ -42,7 +44,9 @@ public class ExplorerPanel extends SimplePanel {
 	interface ExplorerPanelUiBinder extends UiBinder<Widget, ExplorerPanel> {
 	}
 	
-	final private HandlerManager eventBus;
+	private final HandlerManager eventBus;
+	
+	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 	
 	@UiField
 	SpanElement nameSpan;
@@ -86,7 +90,7 @@ public class ExplorerPanel extends SimplePanel {
 	}
 
 	private void populateWestPanel() {
-		directoryListPresenter = new DirectoryListPresenter(eventBus, new DirectoryListView());
+		directoryListPresenter = new DirectoryListPresenter(eventBus, new DirectoryListView(), diagramService);
 		directoryListPresenter.go(westPanel);
 	}
 }

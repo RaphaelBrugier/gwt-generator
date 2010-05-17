@@ -124,5 +124,4 @@ public class TestDiagramService extends TestCase {
 		
 		assertEquals(id, "newName", Type.CLASS, directory.getKey(), dto);
 	}
-
 }

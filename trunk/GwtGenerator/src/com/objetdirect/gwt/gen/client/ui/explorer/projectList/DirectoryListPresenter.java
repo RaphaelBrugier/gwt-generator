@@ -31,10 +31,11 @@ import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.DisplayDiagramsEvent;
+import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
+import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.CreateDiagramPopup;
-import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.CreateDirectoryPopup;
 import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.CreateProjectPopup;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
@@ -73,6 +74,9 @@ public class DirectoryListPresenter {
 		 */
 		Widget getNoProjectWidget();
 		
+		
+		DiagramTreeItem createDiagramTreeItem(String diagramName);
+		
 		/**
 		 * @return The view as a widget.
 		 */
@@ -88,6 +92,8 @@ public class DirectoryListPresenter {
 	
 	private final Display display;
 	
+	private final DiagramServiceAsync diagramService;
+	
 	/**
 	 * We need to save the previous selected item to get a workaround for this bug :
 	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=3660
@@ -96,10 +102,10 @@ public class DirectoryListPresenter {
 	int comingFromSetState = 0;
 	boolean prevOpenState = true;
 	
-	public DirectoryListPresenter(HandlerManager eventBus, Display display) {
-		
+	public DirectoryListPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService) {
 		this.eventBus = eventBus;
 		this.display = display;
+		this.diagramService = diagramService;
 		
 		this.tree = new Tree(TreeProjectsResources.INSTANCE, true);
 		display.getContainer().add(tree);
@@ -179,17 +185,21 @@ public class DirectoryListPresenter {
 		
 		for (Directory directory : project.getDirectories()) {
 			DirectoryTreeItem directoryTreeItem = new DirectoryTreeItem(directory);
-			projectItem.addItem(directoryTreeItem);
-			bindDirectoryItem(project, directoryTreeItem);
+			bindDirectoryItem(directoryTreeItem);
+			projectItem.addItem(directoryTreeItem);			
+			for (DiagramDto diagram : directory.getDiagrams()) {
+				DiagramTreeItem diagramTreeItem = display.createDiagramTreeItem(diagram.getName());
+				bindDiagramTreeItem(diagram, diagramTreeItem);
+				directoryTreeItem.addItem(diagramTreeItem);
+			}
 		}
 		
 		return projectItem;
 	}
 
+
 	/**
-	 * Bind a projectTreeItem buttons with the actions.
-	 * Actions are :
-	 *  - add a directory
+	 * Bind a projectTreeItem buttons with the action :
 	 *  - delete the project
 	 * @param projectItem The project tree item where the actions are added.
 	 */
@@ -205,13 +215,11 @@ public class DirectoryListPresenter {
 	}
 
 	/**
-	 * Bind the directoryTreeItem buttons with the actions :
-	 *  - display the diagrams of the directory when the a click occurs on the directory icon or the directory name
+	 * Bind the directoryTreeItem buttons with the action :
 	 *  - create a new diagram
-	 *  - delete the directory 
 	 * @param directoryTreeItem The directory tree item where the actions are added.
 	 */
-	private void bindDirectoryItem(final Project project, final DirectoryTreeItem directoryTreeItem) {
+	private void bindDirectoryItem(final DirectoryTreeItem directoryTreeItem) {
 
 		// Bind the directory icon and directory name
 		final ClickHandler diplayDiagramsClickHandlers = new ClickHandler() {
@@ -234,16 +242,70 @@ public class DirectoryListPresenter {
 					@Override
 					public void onClick(ClickEvent event) {
 						String directoryKey = directoryTreeItem.getDirectory().getKey();
-						doCreateDiagram(createDiagramPopup, directoryKey, createDiagramPopup.getDiagramName(), createDiagramPopup.getDiagramType());
+						doCreateDiagram(createDiagramPopup, directoryKey, createDiagramPopup.getDiagramName());
 					}
 				});
 				
 				createDiagramPopup.show();
 			}
 		});
-	}	
+	}
+	
+	/**
+	 * Bind the diagramTreeItem (view) with the actions : 
+	 *  - Edit the diagram.
+	 *  - Delete the diagram.
+	 * @param diagram The diagram on which the actions occurs.
+	 * @param diagramTreeItem The view where the actions are attached.
+	 */
+	private void bindDiagramTreeItem(final DiagramDto diagram, DiagramTreeItem diagramTreeItem) {
+		diagramTreeItem.getEditDiagramButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				doEditDiagram(diagram);
+			}
+		});
+		
+		diagramTreeItem.getDeleteDiagramButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+				doDeleteDiagram(diagram);
+			}
+		});
+	}
 
 
+	/** Fetch the tree with the projects and directories of the user.
+	 * If the user has no project, display a message.
+	 */
+	private void doFectchProjects() {
+		display.getContainer().clear();
+		display.getContainer().add(display.getLoadingProjectsWidget());
+		
+		tree.removeItems();
+		projectService.getProjects(new AsyncCallback<List<Project>>() {
+			
+			@Override
+			public void onSuccess(List<Project> projectsFound) {
+				display.getContainer().clear();
+				if (projectsFound.size() == 0) {
+					display.getContainer().add(display.getNoProjectWidget());
+				} else {
+					for (Project project : projectsFound) {
+						tree.addItem(createProjectItem(project));
+					}
+					display.getContainer().add(tree);
+				}
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.error("Error while fetching the projects : " + caught.getMessage());
+			}
+		});
+	}
+	
 	/**
 	 * Create a project.
 	 * When the action is finish (with success or not), close the popup and display a message.
@@ -300,52 +362,51 @@ public class DirectoryListPresenter {
 	 * Else display an error message.
 	 * @param createDiagramPopup the Popup to hide when the action is finished.
 	 * @param diagramName The diagram name.
-	 * @param diagramType The diagram type.
 	 */
-	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, String diagramName, String diagramType) {
-		Type type = Type.valueOf(diagramType.toUpperCase());
-		DiagramDto diagramInformations = new DiagramDto(directoryKey, diagramName, type);
+	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, String diagramName) {
+		DiagramDto diagramInformations = new DiagramDto(directoryKey, diagramName, Type.CLASS);
 		createDiagramPopup.hide();
 		eventBus.fireEvent(new CreateDiagramEvent(diagramInformations));
 	}
 
-
-	/** Fetch the tree with the projects and directories of the user.
-	 * If the user has no project, display a message.
-	 */
-	private void doFectchProjects() {
-		display.getContainer().clear();
-		display.getContainer().add(display.getLoadingProjectsWidget());
-		
-		tree.removeItems();
-		projectService.getProjects(new AsyncCallback<List<Project>>() {
-			
-			@Override
-			public void onSuccess(List<Project> projectsFound) {
-				display.getContainer().clear();
-				if (projectsFound.size() == 0) {
-					display.getContainer().add(display.getNoProjectWidget());
-				} else {
-					for (Project project : projectsFound) {
-						tree.addItem(createProjectItem(project));
-					}
-					display.getContainer().add(tree);
-				}
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				Log.error("Error while fetching the projects : " + caught.getMessage());
-			}
-		});
-	}
 
 
 	/**
 	 * Request the display of the list of diagrams contains in the selected directory
 	 * @param directory The selected directory
 	 */
-	private void doDisplayDiagrams(Directory directory) {
+	@Deprecated
+	private void doDisplayDiagrams(final Directory directory) {
 		eventBus.fireEvent(new DisplayDiagramsEvent(directory));
+	}
+	
+	/**
+	 * Request the edition of the given diagram
+	 * @param diagram the diagram to edit in the modeler.
+	 */
+	private void doEditDiagram(final DiagramDto diagram) {
+		eventBus.fireEvent(new EditDiagramEvent(diagram));
+	}
+	
+	/**
+	 * Request the deletion of the given diagram.
+	 * @param diagram The diagram to delete.
+	 */
+	private void doDeleteDiagram(final DiagramDto diagram) {
+		diagramService.deleteDiagram(diagram.getKey(), new AsyncCallback<Void>() {
+
+			@Override
+			public void onSuccess(Void result) {
+				doFectchProjects();
+				MessageToaster.show("Diagram " + diagram.getName() + " deleted with success.");
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.error("Failed to delete the diagram " + diagram);
+				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to delete the diagram " + diagram.getName());
+				errorPopUp.show();
+			}
+		});
 	}
 }
