@@ -27,8 +27,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListPresenter;
-import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView;
+import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListPresenter;
+import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 

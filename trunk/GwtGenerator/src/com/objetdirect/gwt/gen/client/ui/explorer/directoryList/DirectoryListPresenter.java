@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui.explorer.projectList;
+package com.objetdirect.gwt.gen.client.ui.explorer.directoryList;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.CreateDiagramPopup;
-import com.objetdirect.gwt.gen.client.ui.explorer.projectList.DirectoryListView.CreateProjectPopup;
+import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView.CreateDiagramPopup;
+import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView.CreateProjectPopup;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
