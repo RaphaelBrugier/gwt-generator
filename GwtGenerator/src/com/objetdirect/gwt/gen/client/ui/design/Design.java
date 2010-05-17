@@ -368,7 +368,7 @@ public class Design extends Composite {
 			ErrorPopUp errorPopup = new ErrorPopUp("Your diagram must hava at least one class to generate a POJO.");
 			errorPopup.show();
 		} else {
-			Log.debug(this.getClass().getName() + "::generatePojo() Starting generation");
+			Log.trace(this.getClass().getName() + "::generatePojo() Starting generation");
 			
 			contentPanel.clear();
 			HotKeyManager.setInputEnabled(false);
