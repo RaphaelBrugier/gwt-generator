@@ -15,8 +15,8 @@
 package com.objetdirect.gwt.gen.client.ui;
 
 import com.google.gwt.event.shared.HandlerManager;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent.BackToHomeEventHandler;
@@ -31,7 +31,8 @@ import com.objetdirect.gwt.gen.client.ui.welcome.WelcomePanel;
  */
 public class MainController  {
 
-	private SimplePanel mainContainer;
+//	private SimplePanel mainContainer;
+	private LayoutPanel mainContainer;
 	
 	private WelcomePanel welcomePanel;
 	private ExplorerPanel explorerPanel;
@@ -41,7 +42,8 @@ public class MainController  {
 	
 	
 	public MainController() {
-		mainContainer = new SimplePanel();
+//		mainContainer = new SimplePanel();
+		mainContainer = new LayoutPanel();
 		mainContainer.addStyleName("overflowScroll");
 		eventBus = new HandlerManager(null);
 		designController = new Design(eventBus);
@@ -51,7 +53,6 @@ public class MainController  {
 
 	/** Add handlers to the event bus. */
 	private void bind() {
-		
 		eventBus.addHandler(BackToHomeEvent.TYPE, new BackToHomeEventHandler() {
 			@Override
 			public void onBackToHomeEvent(BackToHomeEvent event) {
@@ -68,7 +69,6 @@ public class MainController  {
 	private void doGoToHomeScreen() {
 		RootLayoutPanel.get().clear();
 		MessageToaster.intantiateAndAttach();
-			
 		
 		if (GwtGenerator.loginInfo.isLoggedIn()) {
 			if(explorerPanel == null){
