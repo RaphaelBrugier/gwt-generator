@@ -27,6 +27,7 @@ import com.objetdirect.gwt.gen.shared.entities.Directory;
  * Event system based on {@link http://code.google.com/intl/fr/webtoolkit/doc/latest/tutorial/mvp-architecture.html }
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
+@Deprecated
 public class DisplayDiagramsEvent extends GwtEvent<DisplayDiagramsEventHandler>{
 
 	public static Type<DisplayDiagramsEventHandler> TYPE = new Type<DisplayDiagramsEventHandler>();
