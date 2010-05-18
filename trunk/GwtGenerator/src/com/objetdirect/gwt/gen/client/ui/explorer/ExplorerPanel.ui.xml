@@ -60,7 +60,7 @@
 	   	</g:west>
    		
 		<g:center>
-			<g:FlowPanel ui:field="content" addStyleNames ="{style.contentPanel}"/>
+			<g:LayoutPanel ui:field="content" addStyleNames ="{style.contentPanel}"/>
 		</g:center>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 

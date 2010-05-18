@@ -14,6 +14,7 @@
  */
 package com.objetdirect.gwt.gen.client.ui.explorer;
 
+import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.event.shared.HandlerManager;
@@ -22,21 +23,24 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.objetdirect.gwt.gen.client.DrawerPanel;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListPresenter;
 import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 
 
 /**
  * Panel to display the saved diagrams for a loged user and create new diagrams
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
-public class ExplorerPanel extends SimplePanel {
+public class ExplorerPanel extends LayoutPanel {
 
 	private static ExplorerPanelUiBinder uiBinder = GWT
 			.create(ExplorerPanelUiBinder.class);
@@ -58,7 +62,7 @@ public class ExplorerPanel extends SimplePanel {
 	FlowPanel westPanel;
 	
 	@UiField
-	FlowPanel content;
+	LayoutPanel content;
 	
 	private DirectoryListPresenter directoryListPresenter;
 	
@@ -79,10 +83,27 @@ public class ExplorerPanel extends SimplePanel {
 		populateWestPanel();
 		
 		container.add(this);
+		fetchContent();
+	}
+	
+	private void fetchContent() {
+		DrawerPanel drawer = new DrawerPanel(UMLDiagram.Type.getUMLDiagramFromIndex(0)); // Class diagram by default
+		drawer.addWelcomeClass();
+
+		content.add(drawer);
 	}
 
 	private void populateWestPanel() {
 		directoryListPresenter = new DirectoryListPresenter(eventBus, new DirectoryListView(), diagramService);
 		directoryListPresenter.go(westPanel);
 	}
+	
+	@Override
+	protected void onLoad() {
+		super.onLoad();
+		
+		Log.debug("ExplorerPanel::onLoad() content size = " + content.getOffsetHeight() + "  " + content.getOffsetWidth());
+	}
+	
+	
 }

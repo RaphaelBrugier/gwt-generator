@@ -53,18 +53,13 @@ import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
-import com.objetdirect.gwt.umlapi.client.engine.GeometryManager;
-import com.objetdirect.gwt.umlapi.client.gfx.GfxManager;
 import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
-import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.Session;
-import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
-import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager.Theme;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
 
 /**
  * Widget containing the UML Modeler.
@@ -126,12 +121,7 @@ public class Design extends Composite {
 		
 		
 		/////////// Gfx platform initialization //TODO move this in the drawer panel ?
-		OptionsManager.initialize();
-		HotKeyManager.forceStaticInit();
-		HotKeyManager.setInputEnabled(false);
-		ThemeManager.setCurrentTheme((Theme.getThemeFromIndex(OptionsManager.get("Theme"))));
-		GfxManager.setPlatform(OptionsManager.get("GraphicEngine"));
-		GeometryManager.setPlatform(OptionsManager.get("GeometryStyle"));
+		
 		///
 		
 		contentPanel.setHeight("100%");
@@ -231,8 +221,7 @@ public class Design extends Composite {
 				public void onSuccess(String key) {
 					currentDiagram = new DiagramDto(key,diagramInformations.getDirectoryKey(), diagramInformations.getName(), diagramInformations.getType());
 					
-					OptionsManager.set("DiagramType", diagramInformations.getType().ordinal());
-					drawer = new DrawerPanel();
+					drawer = new DrawerPanel(UMLDiagram.Type.getUMLDiagramFromIndex(diagramInformations.getType().ordinal()));
 					contentPanel.clear();
 					contentPanel.add(drawer);
 					diagramName.setText(diagramInformations.getName());
@@ -266,7 +255,6 @@ public class Design extends Composite {
 			@Override
 			public void onSuccess(DiagramDto diagramFound) {
 				currentDiagram = diagramFound;
-				OptionsManager.set("DiagramType", diagramFound.getType().ordinal());
 				int canvasWidth = Window.getClientWidth() - 0;
 				int canvasHeight = Window.getClientHeight() - 30;
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
@@ -330,8 +318,7 @@ public class Design extends Composite {
 	private void doLoadDiagramForAGuest() {
 		LoadingPopUp.getInstance().startProcessing("Loading a class diagram in the designer, please login for a full features access, please wait...");
 		
-		OptionsManager.set("DiagramType", Type.CLASS.getIndex()); // Class diagram by default
-		drawer = new DrawerPanel();
+		drawer = new DrawerPanel(UMLDiagram.Type.getUMLDiagramFromIndex(0)); // Class diagram by default
 		drawer.addWelcomeClass();
 		contentPanel.clear();
 		contentPanel.add(drawer);
@@ -365,7 +352,7 @@ public class Design extends Composite {
 		}
 		
 		if (umlClasses.size() ==0) {
-			ErrorPopUp errorPopup = new ErrorPopUp("Your diagram must hava at least one class to generate a POJO.");
+			ErrorPopUp errorPopup = new ErrorPopUp("Your diagram must have at least one class to generate a POJO.");
 			errorPopup.show();
 		} else {
 			Log.trace(this.getClass().getName() + "::generatePojo() Starting generation");
