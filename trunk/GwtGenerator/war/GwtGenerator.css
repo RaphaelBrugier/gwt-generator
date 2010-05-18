@@ -130,10 +130,6 @@
 
 /* Gwt-Generator styles */
 
-.overflowScroll {
-	overflow:scroll;
-}
-
 .messageToaster {
 	font-family: Arial Unicode MS,Arial,sans-serif;
 	font-size: 14px;
@@ -160,52 +156,3 @@
 	background: url("images/hborder.png") repeat-x scroll 0 -1463px #93C2F1
 }
  
-/*
- * ScrollTable in the explorer page.
- */
-.gwt-ScrollTable {
-  border-color: #aaa;
-  border-style: solid;
-  border-width: 1px 1px 1px 1px;
-}
-
-.gwt-ScrollTable .headerWrapper {
-  background: #8bd url(images/bg_header_gradient.gif) repeat-x bottom left;
-}
-
-.gwt-ScrollTable .dataTable td,
-.gwt-ScrollTable .headerTable td {
-  border-color: #aaa;
-  border-style: solid;
-  border-width: 0px 1px 1px 0px;
-  white-space: nowrap;
-  overflow: hidden;
-}
-
-
-.gwt-ScrollTable .headerTable td,
-.gwt-ScrollTable .footerTable td {
-  color: #fff;
-}
-	
-
-/**
- * Applied to the options at the bottom of the explorer page.
- */
-.gwt-PagingOptions {
-  background: #e8eef7;
-  border: 1px solid #aaa;
-  border-top: none;
-}
-
-.pagingOptionsFirstPage,
-.pagingOptionsLastPage,
-.pagingOptionsNextPage,
-.pagingOptionsPreviousPage {
-  cursor: hand;
-  cursor: pointer;
-}
-
-.actionsContainer {
-	text-align: center;
-}

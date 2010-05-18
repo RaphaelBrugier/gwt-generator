@@ -15,13 +15,11 @@
 package com.objetdirect.gwt.gen.client.ui;
 
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent.BackToHomeEventHandler;
 import com.objetdirect.gwt.gen.client.ui.design.Design;
-import com.objetdirect.gwt.gen.client.ui.explorer.ExplorerPanel;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.welcome.WelcomePanel;
 
@@ -31,20 +29,14 @@ import com.objetdirect.gwt.gen.client.ui.welcome.WelcomePanel;
  */
 public class MainController  {
 
-//	private SimplePanel mainContainer;
-	private LayoutPanel mainContainer;
 	
 	private WelcomePanel welcomePanel;
-	private ExplorerPanel explorerPanel;
+	private AppPresenter appPresenter;
 	private Design designController;
 	
 	private HandlerManager eventBus;
 	
-	
 	public MainController() {
-//		mainContainer = new SimplePanel();
-		mainContainer = new LayoutPanel();
-		mainContainer.addStyleName("overflowScroll");
 		eventBus = new HandlerManager(null);
 		designController = new Design(eventBus);
 		bind();
@@ -61,7 +53,7 @@ public class MainController  {
 		});
 		
 	}
-	
+
 	/** Request to return to the home screen.
 	 *  Home screens means welcome screen if the user is not logged or 
 	 *  explorer screen if the user is already logged
@@ -71,16 +63,15 @@ public class MainController  {
 		MessageToaster.intantiateAndAttach();
 		
 		if (GwtGenerator.loginInfo.isLoggedIn()) {
-			if(explorerPanel == null){
-				explorerPanel = new ExplorerPanel(eventBus);
+			if(appPresenter == null){
+				appPresenter = new AppPresenter(eventBus, new AppView(), GwtGenerator.loginInfo);
 			}
-			explorerPanel.go(mainContainer);
+			appPresenter.go(RootLayoutPanel.get());
 		} else {
 			if (welcomePanel == null) {
 				welcomePanel = new WelcomePanel(eventBus, GwtGenerator.loginInfo.getLoginUrl());
 			}
-			welcomePanel.go(mainContainer);
+			welcomePanel.go(RootLayoutPanel.get());
 		}
-		RootLayoutPanel.get().add(mainContainer);
 	}
 }

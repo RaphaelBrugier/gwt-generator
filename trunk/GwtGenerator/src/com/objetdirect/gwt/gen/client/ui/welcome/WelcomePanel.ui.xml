@@ -3,9 +3,10 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	
 	<ui:with field='images' type='com.objetdirect.gwt.gen.client.ui.resources.ImageResources'/>
-<!--	background-image: url(images/background.png);-->
-<!--background-repeat: repeat;-->
 	<ui:style>
+		.overFlowScroll {
+			overflow: auto;
+		}
 		
 		.wrapper {
 			font: 90% "Trebuchet MS",Verdana,"Lucida Grande",Tahoma,Helvetica,Sans-Serif;
@@ -62,10 +63,10 @@
 		.content p{
 			padding-left: 10px;
 		}
-
 	</ui:style>
 	
-	<g:HTMLPanel>
+	<g:FlowPanel styleName='{style.overFlowScroll}'>
+		<g:HTMLPanel>
    		<div class='{style.wrapper}'>
    			<div class='{style.imageLogo}'>
 				<g:Image  resource='{images.GwtGeneratorLogo}'/>
@@ -100,5 +101,6 @@
 				</div>
 			</div>
    		</div>
-	</g:HTMLPanel>
+		</g:HTMLPanel>
+	</g:FlowPanel>
 </ui:UiBinder> 

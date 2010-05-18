@@ -49,7 +49,7 @@
 	   	<g:north size='7'>
 	     	<g:HTMLPanel>
 	     		<div class='{style.header}'>
-					<div class='{style.horizontal-left}'>Welcome <span ui:field="nameSpan"/>.</div>
+					<div class='{style.horizontal-left}'>Welcome <g:InlineHTML ui:field="nameValue"/>.</div>
 					<div class='{style.horizontal-right}'><g:Anchor ui:field="signOut">Sign out</g:Anchor></div>
 	     		</div>
 			</g:HTMLPanel>
