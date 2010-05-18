@@ -30,8 +30,8 @@ import com.objetdirect.gwt.gen.client.DrawerPanel;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListPresenter;
-import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView;
+import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListPresenter;
+import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 
@@ -64,7 +64,7 @@ public class ExplorerPanel extends LayoutPanel {
 	@UiField
 	LayoutPanel content;
 	
-	private DirectoryListPresenter directoryListPresenter;
+	private DiagramsListPresenter directoryListPresenter;
 	
 	public ExplorerPanel(HandlerManager eventBus) {
 		if (!GwtGenerator.loginInfo.isLoggedIn()) {
@@ -94,7 +94,7 @@ public class ExplorerPanel extends LayoutPanel {
 	}
 
 	private void populateWestPanel() {
-		directoryListPresenter = new DirectoryListPresenter(eventBus, new DirectoryListView(), diagramService);
+		directoryListPresenter = new DiagramsListPresenter(eventBus, new DiagramsListView(), diagramService);
 		directoryListPresenter.go(westPanel);
 	}
 	

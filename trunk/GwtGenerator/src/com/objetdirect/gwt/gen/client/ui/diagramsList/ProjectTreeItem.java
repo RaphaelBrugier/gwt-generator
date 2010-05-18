@@ -12,14 +12,14 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui.explorer.directoryList;
+package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView.ProjectListResources;
+import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.DiagramsListResources;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 
@@ -44,10 +44,10 @@ public class ProjectTreeItem extends TreeItem {
 		Image projectIcon = new Image(TreeProjectsResources.INSTANCE.projectIcon());
 		
 		projectName = new InlineLabel(project.getName());
-		projectName.addStyleName(ProjectListResources.INSTANCE.css().itemText());
+		projectName.addStyleName(DiagramsListResources.INSTANCE.css().itemText());
 		
 		deleteProjectIcon = new Image(TreeProjectsResources.INSTANCE.deleteIcon());
-		deleteProjectIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
+		deleteProjectIcon.addStyleName(DiagramsListResources.INSTANCE.css().actionIcon());
 		deleteProjectIcon.setTitle("Delete this project");
 		
 		panel.add(projectIcon);

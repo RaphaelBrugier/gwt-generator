@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui.explorer.directoryList;
+package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.HasVerticalAlignment;
@@ -20,7 +20,7 @@ import com.google.gwt.user.client.ui.HorizontalPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TreeItem;
-import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView.ProjectListResources;
+import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.DiagramsListResources;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 
 /**
@@ -48,14 +48,14 @@ public class DiagramTreeItem extends TreeItem {
 		
 		
 		this.diagramName = new InlineLabel(diagramName);
-		this.diagramName.addStyleName(ProjectListResources.INSTANCE.css().itemText());
+		this.diagramName.addStyleName(DiagramsListResources.INSTANCE.css().itemText());
 		
 		editDiagramIcon = new Image(TreeProjectsResources.INSTANCE.editDiagramIcon());
-		editDiagramIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
+		editDiagramIcon.addStyleName(DiagramsListResources.INSTANCE.css().actionIcon());
 		editDiagramIcon.setTitle("Edit diagram");
 		
 		deleteDiagramIcon = new Image(TreeProjectsResources.INSTANCE.deleteIcon());
-		deleteDiagramIcon.addStyleName(ProjectListResources.INSTANCE.css().actionIcon());
+		deleteDiagramIcon.addStyleName(DiagramsListResources.INSTANCE.css().actionIcon());
 		deleteDiagramIcon.setTitle("Delete the diagram");
 		
 		panel.add(diagramIcon);

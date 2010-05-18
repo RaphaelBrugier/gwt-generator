@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui.explorer.directoryList;
+package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -42,14 +42,14 @@ import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
  * @see http://code.google.com/intl/fr/webtoolkit/articles/mvp-architecture.html
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com >
  */
-public class DirectoryListView extends Composite implements DirectoryListPresenter.Display {
+public class DiagramsListView extends Composite implements DiagramsListPresenter.Display {
 
 	private static Binder uiBinder = GWT.create(Binder.class);
 
-	@UiTemplate("DirectoryList.ui.xml")
-	interface Binder extends UiBinder<Widget, DirectoryListView> {}
+	@UiTemplate("DiagramsList.ui.xml")
+	interface Binder extends UiBinder<Widget, DiagramsListView> {}
 	
-	public interface DirectoryListStyle extends CssResource {
+	public interface DiagramsListStyle extends CssResource {
 		/* Explorer tree styles */
 		String noProjectWrapper();
 		String noProjectTitle();
@@ -68,11 +68,11 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 		String label();
 	}
 	
-	public interface ProjectListResources extends ClientBundle {
-		public ProjectListResources INSTANCE = GWT.create(ProjectListResources.class);
+	public interface DiagramsListResources extends ClientBundle {
+		public DiagramsListResources INSTANCE = GWT.create(DiagramsListResources.class);
 		
-		@Source("DirectoryListStyle.css")
-		DirectoryListStyle css();
+		@Source("DiagramsListStyle.css")
+		DiagramsListStyle css();
 	}
 	
 	@UiField
@@ -81,9 +81,9 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 	@UiField
 	SimplePanel mainContainer;
 	
-	public DirectoryListView() {
+	public DiagramsListView() {
 		initWidget(uiBinder.createAndBindUi(this));
-		ProjectListResources.INSTANCE.css().ensureInjected();
+		DiagramsListResources.INSTANCE.css().ensureInjected();
 	}
 	
 	@Override
@@ -136,8 +136,8 @@ public class DirectoryListView extends Composite implements DirectoryListPresent
 	/**
 	 * @return Helper access to the css String;
 	 */
-	private DirectoryListStyle css() {
-		return ProjectListResources.INSTANCE.css();
+	private DiagramsListStyle css() {
+		return DiagramsListResources.INSTANCE.css();
 	}
 	
 	/**
