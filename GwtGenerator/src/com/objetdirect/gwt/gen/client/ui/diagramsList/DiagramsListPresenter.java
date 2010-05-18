@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client.ui.explorer.directoryList;
+package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
 import java.util.List;
 
@@ -35,8 +35,8 @@ import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView.CreateDiagramPopup;
-import com.objetdirect.gwt.gen.client.ui.explorer.directoryList.DirectoryListView.CreateProjectPopup;
+import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateDiagramPopup;
+import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateProjectPopup;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
@@ -51,7 +51,7 @@ import com.objetdirect.gwt.gen.shared.entities.Project;
  * @see http://code.google.com/intl/fr/webtoolkit/articles/mvp-architecture.html
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public class DirectoryListPresenter {
+public class DiagramsListPresenter {
 	
 	public interface Display {
 		/**
@@ -102,7 +102,7 @@ public class DirectoryListPresenter {
 	int comingFromSetState = 0;
 	boolean prevOpenState = true;
 	
-	public DirectoryListPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService) {
+	public DiagramsListPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService) {
 		this.eventBus = eventBus;
 		this.display = display;
 		this.diagramService = diagramService;
