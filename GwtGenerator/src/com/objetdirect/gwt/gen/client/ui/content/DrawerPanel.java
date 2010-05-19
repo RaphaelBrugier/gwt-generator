@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with GWTUML. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.client;
+package com.objetdirect.gwt.gen.client.ui.content;
 
 import java.util.HashMap;
 import java.util.Map.Entry;
@@ -33,7 +33,6 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.AbsolutePanel;
 import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.RequiresResize;
-import com.google.gwt.user.client.ui.SimplePanel;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.LifeLineArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ObjectArtifact;
@@ -57,21 +56,14 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
 
 /**
  * This panel is an intermediate panel that contains the graphic canvas <br>
- * And can draw a shadow around it
  * 
  * @author Florian Mounier (mounier-dot-florian.at.gmail'dot'com)
+ * @contributor Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 
-	private SimplePanel	bottomLeftCornerShadow;
-
-	private SimplePanel bottomRightCornerShadow;
-
-	private SimplePanel bottomShadow;
 	private final UMLCanvas uMLCanvas;
 
-	private SimplePanel rightShadow;
-	private SimplePanel topRightCornerShadow;
 	private int height;
 	private int width;
 
@@ -86,8 +78,10 @@ public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 
 	private HashMap<FocusPanel, Direction>	directionPanels;
 
-//	private ResizeHandler					resizeHandler;
-
+	/**
+	 * Construct a DrawerPanel from a diagram type to display on the canvas.
+	 * @param diagramType The type of the diagram to build on the canvas.
+	 */
 	public DrawerPanel(Type diagramType) {
 		this(new UMLCanvas(new UMLDiagram(diagramType), Window.getClientWidth() - 0,  Window.getClientHeight() - 30));
 	}
@@ -96,9 +90,10 @@ public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 		this(new UMLCanvas(new UMLDiagram(diagramType), width,  height));
 	}
 	
+	
 	/**
-	 * Default constructor of a DrawerPanel
-	 * 
+	 * Construct a drawerPanel from a serialized umlCanvas.
+	 * @param uMLCanvas The serialized umlCanvas to display in the drawer.
 	 */
 	public DrawerPanel(final UMLCanvas uMLCanvas) {
 		super();
@@ -111,11 +106,7 @@ public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 		setUpSidePanels();
 
 		Log.info("Canvas added");
-		setupShadow();
 
-		// TODO : under chrome redraw doesn't work if the canvas is at a
-		// different point than (0,0) tatami ? dojo ? chrome ?
-		// example : this.setSpacing(50);
 		Log.info("Setting active canvas");
 		Session.setActiveCanvas(this.uMLCanvas);
 		Log.info("Disabling browser events");
@@ -236,17 +227,6 @@ public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 	}
 
 	
-	private void setupShadow() {
-		final boolean isShadowed = OptionsManager.get("Shadowed") == 1;
-		if (isShadowed) {
-			Log.info("Making shadow");
-			this.makeShadow();
-		} else {
-			this.uMLCanvas.getContainer().setStylePrimaryName("canvas");
-		}
-	}
-
-	
 	/**
 	 * Getter for the uMLCanvas
 	 * 
@@ -254,22 +234,6 @@ public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 	 */
 	public final UMLCanvas getUMLCanvas() {
 		return this.uMLCanvas;
-	}
-	
-
-	/**
-	 * Setter for the width
-	 * 
-	 * @param width
-	 *            the width to set
-	 */
-	public final void setWidth(final int width) {
-		this.width = width;
-	}
-
-	public void addDefaultNode() {
-		final Type type = UMLDiagram.Type.getUMLDiagramFromIndex(OptionsManager.get("DiagramType"));
-		addDefaultNode(type);
 	}
 	
 	public void addDefaultNode(Type type) {
@@ -295,46 +259,6 @@ public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 		defaultclass.addAttribute(new UMLClassAttribute(UMLVisibility.PRIVATE, "String", "  or right click on the canvas."));
 		defaultclass.setLocation(new Point(this.width / 2, this.height / 2));
 		this.uMLCanvas.add(defaultclass);
-	}
-
-	void clearShadow() {
-		this.remove(this.bottomShadow);
-		this.remove(this.rightShadow);
-		this.remove(this.bottomRightCornerShadow);
-		this.remove(this.topRightCornerShadow);
-		this.remove(this.bottomLeftCornerShadow);
-	}
-
-	void makeShadow() {
-		final int shadowSize = 8;
-
-		this.setWidth(this.width + shadowSize + this.getAbsoluteLeft() + "px");
-		this.setHeight(this.height + shadowSize + this.getAbsoluteTop() + "px");
-
-		this.bottomShadow = new SimplePanel();
-		this.bottomShadow.setPixelSize(this.width - shadowSize, shadowSize);
-		this.bottomShadow.setStylePrimaryName("bottomShadow");
-		this.add(this.bottomShadow, shadowSize, this.height);
-
-		this.rightShadow = new SimplePanel();
-		this.rightShadow.setPixelSize(shadowSize, this.height - shadowSize);
-		this.rightShadow.setStylePrimaryName("rightShadow");
-		this.add(this.rightShadow, this.width, shadowSize);
-
-		this.bottomRightCornerShadow = new SimplePanel();
-		this.bottomRightCornerShadow.setPixelSize(shadowSize, shadowSize);
-		this.bottomRightCornerShadow.setStylePrimaryName("bottomRightCornerShadow");
-		this.add(this.bottomRightCornerShadow, this.width, this.height);
-
-		this.topRightCornerShadow = new SimplePanel();
-		this.topRightCornerShadow.setPixelSize(shadowSize, shadowSize);
-		this.topRightCornerShadow.setStylePrimaryName("topRightCornerShadow");
-		this.add(this.topRightCornerShadow, this.width, 0);
-
-		this.bottomLeftCornerShadow = new SimplePanel();
-		this.bottomLeftCornerShadow.setPixelSize(shadowSize, shadowSize);
-		this.bottomLeftCornerShadow.setStylePrimaryName("bottomLeftCornerShadow");
-		this.add(this.bottomLeftCornerShadow, 0, this.height);
 	}
 
 	@Override
@@ -387,8 +311,6 @@ public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 		this.setPixelSize(this.width, this.height);
 		this.uMLCanvas.getContainer().setPixelSize(this.width, this.height);
 		GfxManager.getPlatform().setSize(this.uMLCanvas.getDrawingCanvas(), this.width, this.height);
-		clearShadow();
-		makeShadow();
 		
 		final HashMap<FocusPanel, Point> panelsNewSizes = makeDirectionPanelsSizes(directionPanelSizes);
 		final HashMap<FocusPanel, Point> panelsNewPositions = makeDirectionPanelsPositions(directionPanelSizes);
@@ -401,7 +323,5 @@ public class DrawerPanel extends AbsolutePanel implements RequiresResize {
 		
 		this.uMLCanvas.clearArrows();
 		this.uMLCanvas.makeArrows();
-		
-		Log.debug("DrawerPanel::OnResize() parentHeight = " + parentHeight +"   parentWidth = " +parentWidth);
 	}
 }

@@ -17,7 +17,6 @@ package com.objetdirect.gwt.gen.client.ui.diagramsList;
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.HasClickHandlers;
@@ -33,7 +32,6 @@ import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.DisplayDiagramsEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
-import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateDiagramPopup;
 import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateProjectPopup;
@@ -84,15 +82,16 @@ public class DiagramsListPresenter {
 	}
 
 
-	private final ProjectServiceAsync projectService = GWT.create(ProjectService.class);
 	
 	private final HandlerManager eventBus;
-	
-	private final Tree tree;
-	
+		
 	private final Display display;
 	
 	private final DiagramServiceAsync diagramService;
+	
+	private final ProjectServiceAsync projectService;
+	
+	private final Tree tree;
 	
 	/**
 	 * We need to save the previous selected item to get a workaround for this bug :
@@ -102,11 +101,12 @@ public class DiagramsListPresenter {
 	int comingFromSetState = 0;
 	boolean prevOpenState = true;
 	
-	public DiagramsListPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService) {
+	public DiagramsListPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService, ProjectServiceAsync projectService) {
 		this.eventBus = eventBus;
 		this.display = display;
 		this.diagramService = diagramService;
-		
+		this.projectService = projectService;
+
 		this.tree = new Tree(TreeProjectsResources.INSTANCE, true);
 		display.getContainer().add(tree);
 		bindCreateProjectButton();
@@ -208,7 +208,7 @@ public class DiagramsListPresenter {
 		projectItem.getDeleteProjectButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				// Display a popup to ask to delete or not the project ?
+				//TODO Display a popup to ask to delete or not the project ?
 				doDeleteProject(projectItem.getProject());
 			}
 		});

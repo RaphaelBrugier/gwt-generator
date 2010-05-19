@@ -19,7 +19,6 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent.BackToHomeEventHandler;
-import com.objetdirect.gwt.gen.client.ui.design.Design;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.welcome.WelcomePanel;
 
@@ -32,13 +31,11 @@ public class MainController  {
 	
 	private WelcomePanel welcomePanel;
 	private AppPresenter appPresenter;
-	private Design designController;
 	
 	private HandlerManager eventBus;
 	
 	public MainController() {
 		eventBus = new HandlerManager(null);
-		designController = new Design(eventBus);
 		bind();
 		doGoToHomeScreen();
 	}

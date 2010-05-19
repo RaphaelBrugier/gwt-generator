@@ -91,45 +91,12 @@
 }
 
 
-.rightShadow {
-	color:black;
-	background-color:white;
-	background-image:url(rightShadow.png);
-	background-repeat:repeat-y;
-}
-
-.bottomShadow {
-	color:black;
-	background-color:white;
-	background-image:url(bottomShadow.png);
-	background-repeat:repeat-x;
-}
-
-.bottomRightCornerShadow {
-	color:black;
-	background-color:white;
-	background-image:url(bottomRightCornerShadow.png);
-	background-repeat:no-repeat;
-}
-
-.topRightCornerShadow {
-	color:black;
-	background-color:white;
-	background-image:url(topRightCornerShadow.png);
-	background-repeat:no-repeat;
-}
-
-.bottomLeftCornerShadow {
-	color:black;
-	background-color:white;
-	background-image:url(bottomLeftCornerShadow.png);
-	background-repeat:no-repeat;
-}  
-
 
 
 /* Gwt-Generator styles */
 
+
+/* Style for the generic message toaster. */
 .messageToaster {
 	font-family: Arial Unicode MS,Arial,sans-serif;
 	font-size: 14px;

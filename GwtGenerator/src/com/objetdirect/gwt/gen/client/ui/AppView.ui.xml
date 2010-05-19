@@ -32,21 +32,13 @@
 			padding : 5px;
 		}
 		
-		.contentPanel {
-			border: 5px solid #DCE9F2;
-			-moz-border-radius: 10px; 
-			-webkit-border-radius: 10px;
-			margin : 10px;
-			padding : 5px;
-		}
-		
 		.border {
 			border-style:solid;
 			border-width:1px;
 		}
 	</ui:style>
 	<g:DockLayoutPanel unit='EM' height="100%" width="100%">
-	   	<g:north size='7'>
+	   	<g:north size='6'>
 	     	<g:HTMLPanel>
 	     		<div class='{style.header}'>
 					<div class='{style.horizontal-left}'>Welcome <g:InlineHTML ui:field="nameValue"/>.</div>
@@ -60,7 +52,7 @@
 	   	</g:west>
    		
 		<g:center>
-			<g:LayoutPanel ui:field="content" addStyleNames ="{style.contentPanel}"/>
+			<g:LayoutPanel ui:field="content" />
 		</g:center>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 
