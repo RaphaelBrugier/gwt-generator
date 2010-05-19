@@ -17,7 +17,6 @@ package com.objetdirect.gwt.gen.client.services;
 import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 
 /**

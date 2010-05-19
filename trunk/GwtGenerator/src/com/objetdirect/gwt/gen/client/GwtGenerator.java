@@ -38,6 +38,7 @@ public class GwtGenerator implements EntryPoint {
 	
 	private final LoginServiceAsync loginService = GWT.create(LoginService.class); 
 	
+	@SuppressWarnings("unused")
 	private static MainController mainController;
 	
 	/*
