@@ -43,6 +43,9 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	
 	@UiField
 	Button saveButton;
+	
+	@UiField
+	Button generateButton;
 
 	public ContentView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -62,5 +65,10 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	@Override
 	public HasClickHandlers getSaveButton() {
 		return saveButton;
+	}
+	
+	@Override
+	public HasClickHandlers getGenerateButton() {
+		return generateButton;
 	}
 }

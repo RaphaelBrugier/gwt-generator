@@ -31,7 +31,6 @@ import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager.Theme;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLLink.LinkKind;
 
@@ -57,7 +56,7 @@ public class TestUmlCanvasSerialization extends GWTTestCase {
 		final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 		setUpPlatform();
 		
-		UMLCanvas umlCanvas = new UMLCanvas(new UMLDiagram(Type.CLASS));
+		UMLCanvas umlCanvas = new UMLCanvas(Type.CLASS);
 
 		final ClassArtifact class1 = new ClassArtifact(umlCanvas, "Class1");
 		class1.setLocation(new Point( 2, 2));

@@ -145,7 +145,18 @@ public class Diagram {
 		this.serializedCanvas = serializedCanvas;
 	}
 	
-
+	public void setCanvas(UMLCanvas umlCanvas) {
+		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+		ObjectOutputStream oos;
+		try {
+			oos = new ObjectOutputStream(byteOutput);
+			oos.writeObject(umlCanvas);
+			this.serializedCanvas = new Blob(byteOutput.toByteArray());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	/**
 	 * @return the directoryKey
 	 */

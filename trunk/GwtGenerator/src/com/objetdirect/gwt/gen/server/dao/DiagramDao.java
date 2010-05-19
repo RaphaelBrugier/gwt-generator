@@ -27,6 +27,7 @@ import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
+import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 
 /**
  * DAO for the diagram entities.
@@ -54,9 +55,14 @@ public class DiagramDao {
 	 * @param name the diagram name.
 	 * @return the generated id for the diagram.
 	 */
-	public String createDiagram(String directoryKey, Type type, String name) {
+	public String createDiagram(String directoryKey, Type type, String name, UMLCanvas umlCanvas) {
 		final Diagram persistedDiagram[] = new Diagram[1];
 		persistedDiagram[0] = new Diagram(directoryKey, type, name, getCurrentUser());
+		
+		if (umlCanvas!= null) {
+			persistedDiagram[0].setCanvas(umlCanvas);
+		}
+		
 		execute(new Action() {
 			public void run(PersistenceManager pm) {
 				persistedDiagram[0] = pm.makePersistent(persistedDiagram[0]);

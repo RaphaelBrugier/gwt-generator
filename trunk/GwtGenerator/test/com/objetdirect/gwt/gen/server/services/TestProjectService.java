@@ -120,7 +120,7 @@ public class TestProjectService extends TestCase {
 		Project p = projectService.getProjects().get(0);
 		Directory directory = p.getDirectories().get(0);
 		String directoryKey = directory.getKey();
-		String diagramKey = diagramService.createDiagram(directoryKey, Type.CLASS, "diagram");
+		String diagramKey = diagramService.createDiagram(new DiagramDto(directory.getKey(),"diagram", Type.CLASS));
 		
 		
 		// Assert that getting the project also gets the diagram in the directory.
@@ -172,7 +172,7 @@ public class TestProjectService extends TestCase {
 		projectService.createProject("name");
 		Project p = projectService.getProjects().get(0);
 		String directoryKey = p.getDirectories().get(0).getKey();
-		diagramService.createDiagram(directoryKey, Type.CLASS, "diagramName");
+		diagramService.createDiagram(new DiagramDto(directoryKey,"diagramName", Type.CLASS));
 		
 		projectService.deleteProject(p);
 		

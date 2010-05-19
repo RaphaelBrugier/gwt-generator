@@ -28,7 +28,6 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
-import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
@@ -41,6 +40,10 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
+import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
+import com.objetdirect.gwt.umlapi.client.engine.Point;
+import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 
 /**
  * Presenter for the explorer list of projects and directories on the explorer page.
@@ -71,7 +74,11 @@ public class DiagramsListPresenter {
 		 */
 		Widget getNoProjectWidget();
 		
-		
+		/**
+		 * Create a new diagramTreeItem with the given diagram name
+		 * @param diagramName the name displayed in the tree item
+		 * @return the created TreeItem;
+		 */
 		DiagramTreeItem createDiagramTreeItem(String diagramName);
 		
 		/**
@@ -348,9 +355,31 @@ public class DiagramsListPresenter {
 	 * @param diagramName The diagram name.
 	 */
 	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, String diagramName) {
-		DiagramDto diagramInformations = new DiagramDto(directoryKey, diagramName, Type.CLASS);
 		createDiagramPopup.hide();
-		eventBus.fireEvent(new CreateDiagramEvent(diagramInformations));
+		final DiagramDto diagramDto = new DiagramDto(directoryKey, diagramName, Type.CLASS);
+		
+		// Create a default canvas to save with the new diagram.
+		UMLCanvas defaultCanvas = new UMLCanvas(UMLDiagram.Type.CLASS);
+		final ClassArtifact defaultclass = new ClassArtifact(defaultCanvas, "Class1");
+		defaultclass.setLocation(new Point(200, 200));
+		defaultCanvas.add(defaultclass);
+		diagramDto.setCanvas(defaultCanvas);
+		
+		diagramService.createDiagram(diagramDto, new AsyncCallback<String>() {
+					@Override
+					public void onSuccess(String key) {
+						diagramDto.setKey(key);
+						doEditDiagram(diagramDto);
+						doFectchProjects();
+					}
+						
+					
+					@Override
+					public void onFailure(Throwable caught) {
+						Log.error("Error while creation the diagram " + caught.getMessage());
+						new ErrorPopUp(caught).show();
+					}
+				});
 	}
 
 	/**

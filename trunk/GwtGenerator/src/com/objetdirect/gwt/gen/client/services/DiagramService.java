@@ -19,7 +19,6 @@ import java.util.ArrayList;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 
 /**
@@ -31,12 +30,11 @@ public interface DiagramService extends RemoteService {
 	
 	/**
 	 * Create a new diagram
-	 * @param directoryKey The key of the owner directory
-	 * @param type the type of diagram
-	 * @param name the name of the diagram
+	 * @param diagramDto The dto containing all the informations about the diagram to create.
 	 * @return the generated key
+	 * @throws CreateDiagramException
 	 */
-	public String createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException;
+	public String createDiagram(DiagramDto diagramDto) throws CreateDiagramException;
 	
 	/**
 	 * Get all the diagrams of the logged user on a directory

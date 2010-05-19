@@ -34,10 +34,8 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
-import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.DesignAsAGuestEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
-import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent.CreateDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.event.DesignAsAGuestEvent.DesignAsAGuestEventHandler;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent.EditDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
@@ -133,13 +131,6 @@ public class Design extends Composite {
 	
 	/** Attached handlers to the eventbus. */
 	private void bindHandlersToEventBus() {
-		eventBus.addHandler(CreateDiagramEvent.TYPE, new CreateDiagramEventHandler() {
-			
-			@Override
-			public void onCreateDiagramEvent(CreateDiagramEvent event) {
-				doCreateNewDiagram(event.getDiagramInformations());
-			}
-		});
 		
 		eventBus.addHandler(EditDiagramEvent.TYPE, new EditDiagramEventHandler() {
 			@Override
@@ -208,39 +199,6 @@ public class Design extends Composite {
 	}
 	
 	
-	/**
-	 * Create a new diagram in the base and setup the canvas with it.
-	 * @param diagramInformations
-	 */
-	private void doCreateNewDiagram(final DiagramDto diagramInformations) {
-		LoadingPopUp.getInstance().startProcessing("Creating a new diagram and loading the designer, please wait...");
-		
-		diagramService.createDiagram(diagramInformations.getDirectoryKey(), diagramInformations.getType(), diagramInformations.getName(), new 
-			AsyncCallback<String>() {
-				@Override
-				public void onSuccess(String key) {
-					currentDiagram = new DiagramDto(key,diagramInformations.getDirectoryKey(), diagramInformations.getName(), diagramInformations.getType());
-					
-					drawer = new DrawerPanel(UMLDiagram.Type.getUMLDiagramFromIndex(diagramInformations.getType().ordinal()));
-					contentPanel.clear();
-					contentPanel.add(drawer);
-					diagramName.setText(diagramInformations.getName());
-//					drawer.addDefaultNode();
-					
-					HotKeyManager.setInputEnabled(true);
-					// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
-					RootLayoutPanel.get().clear();
-					RootLayoutPanel.get().add(Design.this);
-					LoadingPopUp.getInstance().stopProcessing();
-				}
-				
-				@Override
-				public void onFailure(Throwable caught) {
-					new ErrorPopUp(caught).show();
-					eventBus.fireEvent(new BackToHomeEvent());
-				}
-			});
-	};
 	
 	
 	/**
