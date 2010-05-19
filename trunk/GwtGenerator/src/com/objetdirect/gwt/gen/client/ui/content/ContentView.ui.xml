@@ -10,8 +10,9 @@
 			border: 5px solid #DCE9F2;
 			-moz-border-radius: 10px; 
 			-webkit-border-radius: 10px;
-			margin : 10px;
-			padding : 5px;
+			margin: 10px;
+			margin-bottom: 0px;
+			padding: 5px;
 		}
 	</ui:style>
 	<g:DockLayoutPanel unit='PX' height="100%" width="100%">

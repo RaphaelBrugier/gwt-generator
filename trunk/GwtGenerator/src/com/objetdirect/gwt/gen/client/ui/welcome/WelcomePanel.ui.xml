@@ -4,10 +4,6 @@
 	
 	<ui:with field='images' type='com.objetdirect.gwt.gen.client.ui.resources.ImageResources'/>
 	<ui:style>
-		.overFlowScroll {
-			overflow: auto;
-		}
-		
 		.wrapper {
 			font: 90% "Trebuchet MS",Verdana,"Lucida Grande",Tahoma,Helvetica,Sans-Serif;
 			margin-left:10%;
@@ -54,7 +50,7 @@
 			margin: 20px; 
 			padding: 10px 10px; 
 			font-size: 0.8em;
-			-moz-border-radius: 15px; 
+			-moz-border-radius: 15px;
 			-webkit-border-radius: 15px;
 			text-align: left;
 			font-size: 1.1em;
@@ -65,7 +61,7 @@
 		}
 	</ui:style>
 	
-	<g:FlowPanel styleName='{style.overFlowScroll}'>
+	<g:ScrollPanel>
 		<g:HTMLPanel>
    		<div class='{style.wrapper}'>
    			<div class='{style.imageLogo}'>
@@ -102,5 +98,5 @@
 			</div>
    		</div>
 		</g:HTMLPanel>
-	</g:FlowPanel>
+	</g:ScrollPanel>
 </ui:UiBinder> 
