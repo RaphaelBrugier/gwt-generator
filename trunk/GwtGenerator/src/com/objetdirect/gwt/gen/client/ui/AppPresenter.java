@@ -22,12 +22,16 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
+import com.objetdirect.gwt.gen.client.services.ProjectService;
+import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
+import com.objetdirect.gwt.gen.client.ui.content.ContentPresenter;
+import com.objetdirect.gwt.gen.client.ui.content.ContentView;
 import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListPresenter;
 import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView;
 import com.objetdirect.gwt.gen.shared.dto.LoginInfo;
 
 /**
- * presenter : Application.
+ * Presenter : Application.
  * Instantiate and give the position to each part of the application.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
@@ -59,8 +63,12 @@ public class AppPresenter {
 	private final Display display;
 	
 	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
+	private final ProjectServiceAsync projectService = GWT.create(ProjectService.class);
+	
 	
 	private DiagramsListPresenter diagramsListPresenter;
+	private ContentPresenter contentPresenter;
+	
 	
 	public AppPresenter(HandlerManager eventBus, Display view, LoginInfo loginInfo) {
 		this.eventBus = eventBus;
@@ -82,11 +90,15 @@ public class AppPresenter {
 	}
 
 
+	/**
+	 * Fill the applications panels with the widgets.
+	 */
 	private void fillPanels() {
-		diagramsListPresenter = new DiagramsListPresenter(eventBus, new DiagramsListView(), diagramService);
+		diagramsListPresenter = new DiagramsListPresenter(eventBus, new DiagramsListView(), diagramService, projectService);
 		diagramsListPresenter.go(display.getDiagramsListContainer());
 		
-		//TODO contentPresenter
+		contentPresenter = new ContentPresenter(eventBus, new ContentView(), diagramService);
+		contentPresenter.go(display.getContentContainer());
 	}
 
 
