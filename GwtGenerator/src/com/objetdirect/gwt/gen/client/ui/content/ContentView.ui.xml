@@ -15,7 +15,7 @@
 		}
 	</ui:style>
 	<g:DockLayoutPanel unit='PX' height="100%" width="100%">
-		<g:north size="25">
+		<g:north size="30">
 			<g:HTMLPanel>
 				<g:Button ui:field="saveButton">Save</g:Button>
 				<g:Button ui:field="generateButton">Generate</g:Button>

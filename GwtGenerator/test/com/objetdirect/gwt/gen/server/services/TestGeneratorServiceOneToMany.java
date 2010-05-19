@@ -125,7 +125,7 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 		relations.add(relation);
 		
 		try {
-			List<GeneratedCode> generatedCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+			service.generateClassesCode(classes, relations, TestUtil.packageName);
 			fail("Exception expected");
 		} catch (UMLComponentException e) {
 		}

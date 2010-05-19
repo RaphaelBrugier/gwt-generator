@@ -33,15 +33,13 @@ import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateDiagramPopup;
 import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateProjectPopup;
-import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
+import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
-import com.objetdirect.gwt.umlapi.client.engine.Point;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 
@@ -111,8 +109,9 @@ public class DiagramsListPresenter {
 		this.diagramService = diagramService;
 		this.projectService = projectService;
 
-		this.tree = new Tree(TreeProjectsResources.INSTANCE, true);
+		this.tree = new Tree(TreeProjectsResources.INSTANCE, true); //TODO tree and treeItem creation should be delegate to the view.
 		display.getContainer().add(tree);
+		
 		bindCreateProjectButton();
 		addTreeHandlers();
 		doFectchProjects();
@@ -294,6 +293,7 @@ public class DiagramsListPresenter {
 			@Override
 			public void onFailure(Throwable caught) {
 				Log.error("Error while fetching the projects : " + caught.getMessage());
+				ErrorToaster.show("Error while fetching the projects, please retry in few moments or contact the administrator.");
 			}
 		});
 	}
@@ -318,8 +318,7 @@ public class DiagramsListPresenter {
 			public void onFailure(Throwable caught) {
 				createProjectPopup.hide();
 				Log.error("Failed to create the project " + projectName);
-				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to create the project " + projectName);
-				errorPopUp.show();
+				ErrorToaster.show("Failed to create the project " + projectName +", please retry in few moments or contact the administrator.");
 			}
 		});
 	}
@@ -341,8 +340,7 @@ public class DiagramsListPresenter {
 			@Override
 			public void onFailure(Throwable caught) {
 				Log.error("Failed to delete the project " + projectToDelete);
-				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to delete the project");
-				errorPopUp.show();
+				ErrorToaster.show("Failed to delete the project " + projectToDelete.getName() +", please retry in few moments or contact the administrator.");
 			}
 		});
 	}
@@ -360,9 +358,9 @@ public class DiagramsListPresenter {
 		
 		// Create a default canvas to save with the new diagram.
 		UMLCanvas defaultCanvas = new UMLCanvas(UMLDiagram.Type.CLASS);
-		final ClassArtifact defaultclass = new ClassArtifact(defaultCanvas, "Class1");
-		defaultclass.setLocation(new Point(200, 200));
-		defaultCanvas.add(defaultclass);
+//		final ClassArtifact defaultclass = new ClassArtifact(defaultCanvas, "Class1");
+//		defaultclass.setLocation(new Point(200, 200));
+//		defaultCanvas.add(defaultclass);
 		diagramDto.setCanvas(defaultCanvas);
 		
 		diagramService.createDiagram(diagramDto, new AsyncCallback<String>() {
@@ -377,7 +375,7 @@ public class DiagramsListPresenter {
 					@Override
 					public void onFailure(Throwable caught) {
 						Log.error("Error while creation the diagram " + caught.getMessage());
-						new ErrorPopUp(caught).show();
+						ErrorToaster.show("Error while creation the diagram, please retry in few moments or contact the administrator.");
 					}
 				});
 	}
@@ -406,8 +404,7 @@ public class DiagramsListPresenter {
 			@Override
 			public void onFailure(Throwable caught) {
 				Log.error("Failed to delete the diagram " + diagram);
-				ErrorPopUp errorPopUp = new ErrorPopUp("Failed to delete the diagram " + diagram.getName());
-				errorPopUp.show();
+				ErrorToaster.show("Failed to delete the diagram " + diagram.getName() +", please retry in few moments or contact the administrator.");
 			}
 		});
 	}

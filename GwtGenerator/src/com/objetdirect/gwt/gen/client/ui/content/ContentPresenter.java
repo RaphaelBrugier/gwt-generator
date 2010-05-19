@@ -28,7 +28,6 @@ import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent.EditDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
-import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
@@ -56,6 +55,12 @@ public class ContentPresenter {
 		HasClickHandlers getSaveButton();
 		
 		HasClickHandlers getGenerateButton();
+		
+		void displayLoadingMessage();
+		
+		/** Remove message from the view, like the loading message. 
+		 */
+		void clearAllMessages();
 	}
 	
 	private final HandlerManager eventBus;
@@ -73,7 +78,7 @@ public class ContentPresenter {
 		this.display = display;
 		this.diagramService = diagramService;
 		
-		bindToBus();
+		bindToEventBus();
 		bind();
 	}
 	
@@ -91,14 +96,13 @@ public class ContentPresenter {
 		});
 		
 		display.getGenerateButton().addClickHandler(new ClickHandler() {
-			
 			@Override
 			public void onClick(ClickEvent event) {
 			}
 		});
 	}
 	
-	private void bindToBus() {
+	private void bindToEventBus() {
 		eventBus.addHandler(EditDiagramEvent.TYPE, new EditDiagramEventHandler() {
 			@Override
 			public void onEditDiagramEvent(EditDiagramEvent event) {
@@ -113,8 +117,7 @@ public class ContentPresenter {
 	 * @param diagramDto the diagram to load.
 	 */
 	private void doLoadDiagram(DiagramDto diagramDto) {
-		LoadingPopUp.getInstance().startProcessing("Loading the diagram "+ diagramDto.getName() +" and the designer, please wait...");
-		
+		display.displayLoadingMessage();
 		diagramService.getDiagram(diagramDto.getKey(), new AsyncCallback<DiagramDto>() {
 			
 			@Override
@@ -129,20 +132,19 @@ public class ContentPresenter {
 				display.getModelerContainer().clear();
 				display.getModelerContainer().add(drawer);
 				
-				LoadingPopUp.getInstance().stopProcessing();
 				forceModelerResize();
 				MessageToaster.show("Diagram loaded");
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
-				LoadingPopUp.getInstance().stopProcessing();
 				ErrorToaster.show("Failed to load the diagram, please retry in few moments or contact the administrator if the problem persist.");
 				Log.error(caught.getMessage());
+				display.clearAllMessages();
 			}
 		});
 	}
-	
+
 	/**
 	 * Save the current diagram and its canvas in the base.
 	 */
@@ -164,7 +166,7 @@ public class ContentPresenter {
 	}
 
 	/**
-	 *  Force the resize of the modeler container and all its children, including the drawerPanel and the canvas. 
+	 *  Force the resize of the modeler container and of all its children, including the drawerPanel and the canvas. 
 	 */
 	private void forceModelerResize() {
 		display.getModelerContainer().onResize();
