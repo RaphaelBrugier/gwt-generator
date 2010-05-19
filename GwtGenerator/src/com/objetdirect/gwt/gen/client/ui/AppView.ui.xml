@@ -3,14 +3,14 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style>
 		.header {
-			margin-top: 18px;
+			margin-top: 8px;
 			background:#d0ffb0; 
 			-moz-border-radius:12px; 
 			-webkit-border-radius:12px;
 			position: absolute;
 			left: 0.8%;
 			right: 0.8%;
-			padding: 20px;
+			padding: 14px;
 		}
 		
 		.horizontal-left {
@@ -28,7 +28,8 @@
 			border: 5px solid #FFE49C;
 			-moz-border-radius: 10px; 
 			-webkit-border-radius: 10px;
-			margin : 10px;
+			margin-left : 10px;
+			margin-right : 10px;
 			padding : 5px;
 		}
 		
@@ -37,8 +38,8 @@
 			border-width:1px;
 		}
 	</ui:style>
-	<g:DockLayoutPanel unit='EM' height="100%" width="100%">
-	   	<g:north size='6'>
+	<g:DockLayoutPanel unit='PX' height="100%" width="100%">
+	   	<g:north size='58'>
 	     	<g:HTMLPanel>
 	     		<div class='{style.header}'>
 					<div class='{style.horizontal-left}'>Welcome <g:InlineHTML ui:field="nameValue"/>.</div>
@@ -47,12 +48,18 @@
 			</g:HTMLPanel>
    		</g:north>
    		
-   		<g:west size='20'>
-			<g:FlowPanel ui:field="westPanel" addStyleNames ="{style.westPanel}"/>
-	   	</g:west>
-   		
 		<g:center>
-			<g:LayoutPanel ui:field="content" />
+			<g:SplitLayoutPanel>
+				<g:west size="200">
+					<g:FlowPanel ui:field="westPanel" addStyleNames ="{style.westPanel}"/>
+				</g:west>
+				<g:center>
+					<g:LayoutPanel ui:field="content" />
+				</g:center>
+			</g:SplitLayoutPanel>
 		</g:center>
+		<g:south size="8">
+			<g:HTMLPanel></g:HTMLPanel>
+		</g:south>
 	</g:DockLayoutPanel>
 </ui:UiBinder> 
