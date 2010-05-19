@@ -78,16 +78,21 @@ public class TestDiagramService extends TestCase {
 	}
 	
 	public void testCreateDiagram() {
-		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", Type.CLASS);
+		
+		String id = diagramService.createDiagram(diagramDto);
 		assertNotNull(id);
-		id = diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name 2");
+		
+		diagramDto = new DiagramDto(directory.getKey(),"name2", Type.HYBRYD);
+		id = diagramService.createDiagram(diagramDto);
 
 		assertEquals(2, ds.prepare(new Query("Diagram")).countEntities());
 	}
 	
 	
 	public void testGetDiagramFromId() {
-		String id = diagramService.createDiagram(directory.getKey(), Type.CLASS, "name");
+		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", Type.CLASS);
+		String id = diagramService.createDiagram(diagramDto);
 
 		DiagramDto dto = diagramService.getDiagram(id);
 		assertEquals(Type.CLASS, dto.getType() );
@@ -96,9 +101,10 @@ public class TestDiagramService extends TestCase {
 	}
 	
 	public void testGetDiagrams() {
-		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
-		diagramService.createDiagram(directory.getKey(), Type.HYBRYD, "name2");
-		diagramService.createDiagram(otherDirectory.getKey() , Type.HYBRYD, "name2"); // We can create a diagram with the same name in an other directory.
+		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", Type.CLASS);
+		String id = diagramService.createDiagram(diagramDto);
+		diagramService.createDiagram(new DiagramDto(directory.getKey(),"name2", Type.HYBRYD));
+		diagramService.createDiagram(new DiagramDto(otherDirectory.getKey(),"name2", Type.HYBRYD)); // We can create a diagram with the same name in an other directory.
 
 		ArrayList<DiagramDto> diagrams =  diagramService.getDiagrams(directory.getKey());
 		assertEquals(2, diagrams.size());
@@ -108,14 +114,14 @@ public class TestDiagramService extends TestCase {
 	}
 	
 	public void testDelete() throws Exception {
-		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		String id = diagramService.createDiagram(new DiagramDto(directory.getKey(),"name", Type.CLASS));
 		
 		diagramService.deleteDiagram(id);
 		assertEquals(0, ds.prepare(new Query("Diagram")).countEntities());
 	}
 	
 	public void testSaveDiagram() throws Exception {
-		String id = diagramService.createDiagram(directory.getKey(),Type.CLASS, "name");
+		String id = diagramService.createDiagram(new DiagramDto(directory.getKey(),"name", Type.CLASS));
 		DiagramDto dto = diagramService.getDiagram(id);
 		dto.setName("newName");
 		

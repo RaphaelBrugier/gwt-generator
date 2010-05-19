@@ -19,6 +19,7 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
 import com.objetdirect.gwt.gen.client.event.BackToHomeEvent.BackToHomeEventHandler;
+import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.welcome.WelcomePanel;
 
@@ -58,6 +59,7 @@ public class MainController  {
 	private void doGoToHomeScreen() {
 		RootLayoutPanel.get().clear();
 		MessageToaster.intantiateAndAttach();
+		ErrorToaster.intantiateAndAttach();
 		
 		if (GwtGenerator.loginInfo.isLoggedIn()) {
 			if(appPresenter == null){
@@ -70,5 +72,6 @@ public class MainController  {
 			}
 			welcomePanel.go(RootLayoutPanel.get());
 		}
+		
 	}
 }

@@ -18,7 +18,6 @@ import java.util.ArrayList;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 
 
 /**
@@ -29,9 +28,9 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 public interface DiagramServiceAsync {
 
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(java.lang.String, com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type, java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramDto)
 	 */
-	void createDiagram(String directoryKey, Type type, String name, AsyncCallback<String> callback);
+	void createDiagram(DiagramDto diagramDto, AsyncCallback<String> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams(java.lang.String)

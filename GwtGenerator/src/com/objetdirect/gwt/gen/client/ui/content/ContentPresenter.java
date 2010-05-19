@@ -24,17 +24,14 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
-import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent.CreateDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent.EditDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
+import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
-import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
+import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 
 
 /**
@@ -57,6 +54,8 @@ public class ContentPresenter {
 		LayoutPanel getModelerContainer();
 		
 		HasClickHandlers getSaveButton();
+		
+		HasClickHandlers getGenerateButton();
 	}
 	
 	private final HandlerManager eventBus;
@@ -84,25 +83,22 @@ public class ContentPresenter {
 	}
 	
 	private void bind() {
-		display.getSaveButton().addClickHandler(new ClickHandler(
-				) {
-			
+		display.getSaveButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				doSaveDiagram();
 			}
 		});
+		
+		display.getGenerateButton().addClickHandler(new ClickHandler() {
+			
+			@Override
+			public void onClick(ClickEvent event) {
+			}
+		});
 	}
 	
 	private void bindToBus() {
-		eventBus.addHandler(CreateDiagramEvent.TYPE, new CreateDiagramEventHandler() {
-			
-			@Override
-			public void onCreateDiagramEvent(CreateDiagramEvent event) {
-				doCreateNewDiagram(event.getDiagramInformations());
-			}
-		});
-		
 		eventBus.addHandler(EditDiagramEvent.TYPE, new EditDiagramEventHandler() {
 			@Override
 			public void onEditDiagramEvent(EditDiagramEvent event) {
@@ -111,38 +107,6 @@ public class ContentPresenter {
 		});
 	}
 	
-	/**
-	 * Create a new diagram in the base and setup the canvas with it.
-	 * @param diagramInformations
-	 */
-	private void doCreateNewDiagram(final DiagramDto diagramInformations) {
-		LoadingPopUp.getInstance().startProcessing("Creating a new diagram and loading the designer, please wait...");
-		
-		diagramService.createDiagram(diagramInformations.getDirectoryKey(), diagramInformations.getType(), diagramInformations.getName(), new 
-			AsyncCallback<String>() {
-				@Override
-				public void onSuccess(String key) {
-					Log.debug("ContentPresenter::doCreateDiagram() diagram.Type = " + diagramInformations.getType());
-					currentDiagram = new DiagramDto(key,diagramInformations.getDirectoryKey(), diagramInformations.getName(), diagramInformations.getType());
-					
-					UMLDiagram.Type diagramType = UMLDiagram.Type.getUMLDiagramFromIndex(diagramInformations.getType().ordinal()); 
-					drawer = new DrawerPanel(diagramType);
-					display.getModelerContainer().clear();
-					display.getModelerContainer().add(drawer);
-					
-					drawer.addDefaultNode(diagramType);
-					
-					LoadingPopUp.getInstance().stopProcessing();
-					forceModelerResize();
-				}
-				
-				@Override
-				public void onFailure(Throwable caught) {
-					Log.error("Error while creation the diagram " + caught.getMessage());
-					new ErrorPopUp(caught).show();
-				}
-			});
-	};
 	
 	/**
 	 * Load a diagram from the base and setup it on the canvas.
@@ -167,11 +131,13 @@ public class ContentPresenter {
 				
 				LoadingPopUp.getInstance().stopProcessing();
 				forceModelerResize();
+				MessageToaster.show("Diagram loaded");
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
 				LoadingPopUp.getInstance().stopProcessing();
+				ErrorToaster.show("Failed to load the diagram, please retry in few moments or contact the administrator if the problem persist.");
 				Log.error(caught.getMessage());
 			}
 		});
@@ -181,23 +147,18 @@ public class ContentPresenter {
 	 * Save the current diagram and its canvas in the base.
 	 */
 	private void doSaveDiagram() {
-		LoadingPopUp.getInstance().startProcessing("Saving the diagram, please wait...");
 		currentDiagram.setCanvas(drawer.getUMLCanvas());
 		diagramService.saveDiagram(currentDiagram, new AsyncCallback<Void>() {
 			
 			@Override
 			public void onSuccess(Void result) {
-				LoadingPopUp.getInstance().stopProcessing();
-				MessagePopUp popUp = new MessagePopUp("Saved with success");
-				popUp.show();
+				MessageToaster.show("Diagram " + currentDiagram.getName() + " saved with success.");
 			}
 			
 			@Override
 			public void onFailure(Throwable caught) {
 				Log.error("Failed to save the diagram " + caught.getMessage());
-				LoadingPopUp.getInstance().stopProcessing();
-				ErrorPopUp errorPopUp = new ErrorPopUp(caught);
-				errorPopUp.show();
+				ErrorToaster.show("Failed to save the diagram, please retry in few moments or contact the administrator if the problem persist.");
 			}
 		});
 	}

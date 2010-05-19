@@ -23,7 +23,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 
 /**
@@ -36,20 +35,20 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	
 	private final DiagramDao diagramDao = new DiagramDao();
 	
-	
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(java.lang.String, com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type, java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramDto)
 	 */
 	@Override
-	public String createDiagram(String directoryKey,Type type, String name) throws CreateDiagramException {
+	public String createDiagram(DiagramDto diagramDto) throws CreateDiagramException {
 		checkLoggedIn();
-		if (! isNotBlank(name)) {
+		if (! isNotBlank(diagramDto.getName())) {
 			throw new CreateDiagramException("You must specify a name for your diagram.");
 		}
-		if (diagramDao.getDiagram(type, name, directoryKey) != null) {
+		if (diagramDao.getDiagram(diagramDto.getType(), diagramDto.getName(), diagramDto.getDirectoryKey()) != null) {
 			throw new CreateDiagramException("A diagram of this type and with this name already exist. Please use an other name.");
 		}
-		return diagramDao.createDiagram(directoryKey, type, name);
+
+		return diagramDao.createDiagram(diagramDto.getDirectoryKey(), diagramDto.getType(), diagramDto.getName(), diagramDto.getCanvas());
 	}
 
 	

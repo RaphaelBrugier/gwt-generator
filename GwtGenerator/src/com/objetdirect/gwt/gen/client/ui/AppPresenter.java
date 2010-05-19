@@ -103,7 +103,6 @@ public class AppPresenter {
 
 
 	public void go(HasWidgets container) {
-		container.clear();
 		container.add(display.asWidget());
 	}
 }

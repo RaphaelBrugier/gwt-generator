@@ -18,14 +18,14 @@ import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.objetdirect.tatami.client.Toaster;
 
 /**
- * Display an informative message at the bottom of the page for few seconds.
+ * Display an error message at the bottom of the page for few seconds.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public class MessageToaster {
+public class ErrorToaster {
 
 	private static Toaster INSTANCE;
 	
-	private MessageToaster() {
+	private ErrorToaster() {
 	}
 	
 	
@@ -35,7 +35,7 @@ public class MessageToaster {
 	 */
 	public static void intantiateAndAttach() {
 		if (INSTANCE == null) {
-			INSTANCE =  new  Toaster("message");
+			INSTANCE =  new  Toaster("error"); 
 		}
 		
 		// If not attached to the root panel.
@@ -52,7 +52,7 @@ public class MessageToaster {
 		INSTANCE.setDuration(2000);
 		
 		StringBuilder html = new StringBuilder();
-		html.append("<div class=\"messageToaster\">");
+		html.append("<div class=\"errorToaster\">");
 		html.append(message);
 		html.append("</div>");
 		

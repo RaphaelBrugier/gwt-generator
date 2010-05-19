@@ -102,6 +102,11 @@
 	font-size: 14px;
 }
 
+.errorToaster {
+	font-family: Arial Unicode MS,Arial,sans-serif;
+	font-size: 16px;
+}
+
 .tundra .dijitToasterMessage .dijitToasterContent {
 	padding:20px;
 	background: #EFFBFB;
