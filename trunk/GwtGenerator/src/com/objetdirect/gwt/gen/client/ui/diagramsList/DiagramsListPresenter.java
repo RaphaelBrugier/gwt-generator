@@ -29,7 +29,6 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.event.CreateDiagramEvent;
-import com.objetdirect.gwt.gen.client.event.DisplayDiagramsEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
@@ -80,8 +79,6 @@ public class DiagramsListPresenter {
 		 */
 		Widget asWidget();
 	}
-
-
 	
 	private final HandlerManager eventBus;
 		
@@ -220,18 +217,6 @@ public class DiagramsListPresenter {
 	 * @param directoryTreeItem The directory tree item where the actions are added.
 	 */
 	private void bindDirectoryItem(final DirectoryTreeItem directoryTreeItem) {
-
-		// Bind the directory icon and directory name
-		final ClickHandler diplayDiagramsClickHandlers = new ClickHandler() {
-			
-			@Override
-			public void onClick(ClickEvent event) {
-				doDisplayDiagrams(directoryTreeItem.getDirectory());
-			}
-		};
-		directoryTreeItem.getDirectoryIcon().addClickHandler(diplayDiagramsClickHandlers);
-		directoryTreeItem.getDirectoryName().addClickHandler(diplayDiagramsClickHandlers);
-		
 		// Bind the add diagram button
 		directoryTreeItem.getAddDiagramButton().addClickHandler(new ClickHandler() {
 			
@@ -359,7 +344,6 @@ public class DiagramsListPresenter {
 	/**
 	 * Create a diagram in the given directory
 	 * When the diagram is created, load the designer with it.
-	 * Else display an error message.
 	 * @param createDiagramPopup the Popup to hide when the action is finished.
 	 * @param diagramName The diagram name.
 	 */
@@ -369,17 +353,6 @@ public class DiagramsListPresenter {
 		eventBus.fireEvent(new CreateDiagramEvent(diagramInformations));
 	}
 
-
-
-	/**
-	 * Request the display of the list of diagrams contains in the selected directory
-	 * @param directory The selected directory
-	 */
-	@Deprecated
-	private void doDisplayDiagrams(final Directory directory) {
-		eventBus.fireEvent(new DisplayDiagramsEvent(directory));
-	}
-	
 	/**
 	 * Request the edition of the given diagram
 	 * @param diagram the diagram to edit in the modeler.
