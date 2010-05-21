@@ -176,49 +176,11 @@ public class DiagramsListView extends Composite implements DiagramsListPresenter
 		
 		public void show() {
 			popuPanel.center();
+			projectNameTb.setFocus(true);
 		}
 	}
 	
 
-	/**
-	 * Passive View : A simple popup that displays a textbox and a button to create a new Directory.
-	 */
-	static class CreateDirectoryPopup extends SimplePanel {
-		private static CreateDiretoryPopupUiBinder uiBinder = GWT.create(CreateDiretoryPopupUiBinder.class);
-		
-		@UiTemplate("CreateDirectoryPopup.ui.xml")
-		interface CreateDiretoryPopupUiBinder extends UiBinder<PopupPanel, CreateDirectoryPopup> {}
-		
-		private final PopupPanel popuPanel;
-		
-		@UiField
-		TextBox directoryNameTb;
-		
-		@UiField
-		Button createDirectory;
-		
-		public CreateDirectoryPopup() {
-			popuPanel = uiBinder.createAndBindUi(this);
-			setWidget(popuPanel);
-		}
-		
-		public HasClickHandlers getCreateButton() {
-			return createDirectory;
-		}
-				
-		public String getDirectoryName() {
-			return directoryNameTb.getValue();
-		}
-		
-		public void hide() {
-			popuPanel.hide();
-		}
-		
-		public void show() {
-			popuPanel.center();
-		}
-	}
-	
 	/**
 	 * Passive View : A simple popup that displays a textbox, a list of diagram type and a button to create a new Diagram.
 	 */
@@ -256,6 +218,7 @@ public class DiagramsListView extends Composite implements DiagramsListPresenter
 		
 		public void show() {
 			popuPanel.center();
+			diagramNameTb.setFocus(true);
 		}
 	}
 }

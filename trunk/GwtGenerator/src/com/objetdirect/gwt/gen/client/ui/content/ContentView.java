@@ -14,8 +14,10 @@
  */
 package com.objetdirect.gwt.gen.client.ui.content;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.dom.client.Style.Unit;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -26,6 +28,9 @@ import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.ResizeComposite;
+import com.google.gwt.user.client.ui.SimplePanel;
+import com.google.gwt.user.client.ui.TabLayoutPanel;
+import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 
@@ -46,6 +51,7 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	public interface ContentStyle extends CssResource {
 		String horizontalAlignCenter();
 		String loadingMessage();
+		String generatedCodeWrapper();
 	}
 	
 	public interface ContentResources extends ClientBundle {
@@ -63,10 +69,13 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	
 	@UiField
 	Button generateButton;
+	
+	private TabLayoutPanel tabPanel;
 
 	public ContentView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		ContentResources.INSTANCE.css().ensureInjected();
+		tabPanel = new TabLayoutPanel(2, Unit.EM);
 	}
 
 
@@ -81,23 +90,23 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	}
 
 	@Override
-	public HasClickHandlers getSaveButton() {
+	public Button getSaveButton() {
 		return saveButton;
 	}
 	
 	@Override
-	public HasClickHandlers getGenerateButton() {
+	public Button getSwitchModeButton() {
 		return generateButton;
 	}
 
 	@Override
-	public void displayLoadingMessage() {
+	public void displayLoadingMessage(String messsage) {
 		FlowPanel panel = new FlowPanel();
 		panel.addStyleName(css().horizontalAlignCenter());
 		
 		Image ajaxLoader = new Image(ImageResources.INSTANCE.ajaxLoader());
 		ajaxLoader.addStyleName(css().loadingMessage());
-		Label loadingMessage = new Label("Loading the diagram");
+		Label loadingMessage = new Label(messsage);
 		
 		panel.add(ajaxLoader);
 		panel.add(loadingMessage);
@@ -108,6 +117,41 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	@Override
 	public void clearAllMessages() {
 		contentPanel.clear();
+	}
+	
+	
+	@Override
+	public void addClassCode(String className, List<String> codeLines) {
+		StringBuilder lines = new StringBuilder();
+		for (String line : codeLines) {
+			lines.append(line).append("\n");
+		}
+		TextArea ta = new TextArea();
+		ta.setText(lines.toString());
+		ta.setReadOnly(false);
+		ta.setHeight("100%");
+		ta.setWidth("100%");
+		
+		// Wrapp the textArea, it allows to display the scrollbar
+		SimplePanel wrapper = new SimplePanel();
+		wrapper.addStyleName(css().generatedCodeWrapper());
+		wrapper.add(ta);
+		
+		tabPanel.add(wrapper, className);
+		//Remove the default css style
+		wrapper.removeStyleName("gwt-TabLayoutPanelContent");
+	}
+	
+	@Override
+	public void cleanAllCode() {
+		tabPanel.clear();
+	}
+
+	@Override
+	public void goToFirstClass() {
+		contentPanel.clear();
+		contentPanel.add(tabPanel);
+		tabPanel.selectTab(0);
 	}
 	
 	/**

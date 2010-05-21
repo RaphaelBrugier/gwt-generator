@@ -195,10 +195,7 @@ public class Design extends Composite {
 				doSaveDiagram(true);
 			}
 		});
-		
 	}
-	
-	
 	
 	
 	/**
@@ -322,7 +319,6 @@ public class Design extends Composite {
 			LoadingPopUp.getInstance().startProcessing("Generating code ...");
 			
 			generatorService.generateClassesCode(umlClasses, umlRelations, "com.od.test", new AsyncCallback<List<GeneratedCode>>() {
-				
 				@Override
 				public void onSuccess(List<GeneratedCode> result) {
 					for (GeneratedCode generatedCode : result) {
