@@ -22,6 +22,8 @@ import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
+import com.objetdirect.gwt.gen.client.services.GeneratorService;
+import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.content.ContentPresenter;
@@ -64,6 +66,7 @@ public class AppPresenter {
 	
 	private final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 	private final ProjectServiceAsync projectService = GWT.create(ProjectService.class);
+	private final GeneratorServiceAsync generatorService = GWT.create(GeneratorService.class);
 	
 	
 	private DiagramsListPresenter diagramsListPresenter;
@@ -97,7 +100,7 @@ public class AppPresenter {
 		diagramsListPresenter = new DiagramsListPresenter(eventBus, new DiagramsListView(), diagramService, projectService);
 		diagramsListPresenter.go(display.getDiagramsListContainer());
 		
-		contentPresenter = new ContentPresenter(eventBus, new ContentView(), diagramService);
+		contentPresenter = new ContentPresenter(eventBus, new ContentView(), diagramService, generatorService);
 		contentPresenter.go(display.getContentContainer());
 	}
 

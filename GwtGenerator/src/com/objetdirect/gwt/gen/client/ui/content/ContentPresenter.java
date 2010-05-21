@@ -14,23 +14,34 @@
  */
 package com.objetdirect.gwt.gen.client.ui.content;
 
+import java.util.LinkedList;
+import java.util.List;
+
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent.EditDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
+import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
+import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
+import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
+import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 
 
 /**
@@ -52,15 +63,36 @@ public class ContentPresenter {
 		 */
 		LayoutPanel getModelerContainer();
 		
-		HasClickHandlers getSaveButton();
+		Button getSaveButton();
 		
-		HasClickHandlers getGenerateButton();
+		/**
+		 * This button allow to switch between the modeler and the generated code.
+		 * @return the button;
+		 */
+		Button getSwitchModeButton();
 		
-		void displayLoadingMessage();
+		/**
+		 * Display a message in the center of the content panel while loading.
+		 * @param message
+		 */
+		void displayLoadingMessage(String message);
 		
 		/** Remove message from the view, like the loading message. 
 		 */
 		void clearAllMessages();
+		
+		/**
+		 * Add  tab to the widget to display the code of the given class.
+		 * @param className the name of the class
+		 * @param codeLines the lines of code of the class
+		 */
+		public void addClassCode(String className, List<String> codeLines);
+		
+		/** Clean all code tab. */
+		public void cleanAllCode();
+		
+		/** Display the first tab. */
+		public void goToFirstClass();
 	}
 	
 	private final HandlerManager eventBus;
@@ -69,17 +101,25 @@ public class ContentPresenter {
 	
 	private final DiagramServiceAsync diagramService;
 	
+	private final GeneratorServiceAsync generatorService;
+	
 	private DiagramDto currentDiagram;
 	
 	private DrawerPanel drawer;
 	
-	public ContentPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService) {
+	private boolean isModelerMode;
+	
+	public ContentPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService, GeneratorServiceAsync generatorService) {
 		this.eventBus = eventBus;
 		this.display = display;
 		this.diagramService = diagramService;
+		this.generatorService = generatorService;
 		
 		bindToEventBus();
 		bind();
+		
+		setButtonsActivation(false);
+		isModelerMode = true;
 	}
 	
 	public void go(HasWidgets container) {
@@ -95,9 +135,16 @@ public class ContentPresenter {
 			}
 		});
 		
-		display.getGenerateButton().addClickHandler(new ClickHandler() {
+		display.getSwitchModeButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				if(isModelerMode) {
+					doGenerateCode();
+					isModelerMode = false;
+				} else {
+					doDisplayDrawer();
+					isModelerMode = true;
+				}
 			}
 		});
 	}
@@ -106,18 +153,23 @@ public class ContentPresenter {
 		eventBus.addHandler(EditDiagramEvent.TYPE, new EditDiagramEventHandler() {
 			@Override
 			public void onEditDiagramEvent(EditDiagramEvent event) {
+				setButtonsActivation(true);
 				doLoadDiagram(event.getDiagramDto());
 			}
 		});
 	}
 	
+	private void setButtonsActivation(boolean activated) {
+		display.getSaveButton().setEnabled(activated);
+		display.getSwitchModeButton().setEnabled(activated);
+	}
 	
 	/**
 	 * Load a diagram from the base and setup it on the canvas.
 	 * @param diagramDto the diagram to load.
 	 */
 	private void doLoadDiagram(DiagramDto diagramDto) {
-		display.displayLoadingMessage();
+		display.displayLoadingMessage("Loading the diagram");
 		diagramService.getDiagram(diagramDto.getKey(), new AsyncCallback<DiagramDto>() {
 			
 			@Override
@@ -161,6 +213,51 @@ public class ContentPresenter {
 			public void onFailure(Throwable caught) {
 				Log.error("Failed to save the diagram " + caught.getMessage());
 				ErrorToaster.show("Failed to save the diagram, please retry in few moments or contact the administrator if the problem persist.");
+			}
+		});
+	}
+	
+	private void doDisplayDrawer() {
+		GWTUMLDrawerHelper.disableBrowserEvents();
+		display.getSwitchModeButton().setText("Generate");
+		display.getModelerContainer().clear();
+		display.getModelerContainer().add(drawer);
+	}
+	
+	private void doGenerateCode() {
+		GWTUMLDrawerHelper.enableBrowserEvents();
+		display.getSwitchModeButton().setText("Back to modeler");
+		display.cleanAllCode();
+		
+		List<UMLClass> umlClasses = new LinkedList<UMLClass>();
+		List<UMLRelation> umlRelations = new LinkedList<UMLRelation>();
+		
+		for (final UMLArtifact umlArtifact : drawer.getUMLCanvas().getArtifactById().values()) {
+			if (umlArtifact instanceof ClassArtifact) {
+				ClassArtifact classArtifact  = (ClassArtifact)umlArtifact;
+				umlClasses.add(classArtifact.toUMLComponent());
+			} else if (umlArtifact instanceof ClassRelationLinkArtifact) {
+				ClassRelationLinkArtifact relationLinkArtifact = (ClassRelationLinkArtifact)umlArtifact;
+				umlRelations.add(relationLinkArtifact.toUMLComponent());
+			}
+		}
+		
+		display.displayLoadingMessage("Generating the code, please wait...");
+		String packageName = "com.od.test";
+		generatorService.generateClassesCode(umlClasses, umlRelations, packageName, new AsyncCallback<List<GeneratedCode>>() {
+			@Override
+			public void onSuccess(List<GeneratedCode> result) {
+				for (GeneratedCode generatedCode : result) {
+					String className = generatedCode.getClassName();
+					display.addClassCode(className, generatedCode.getLinesOfCode());
+				}
+				
+				display.goToFirstClass();
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				ErrorToaster.show(caught.getMessage());
 			}
 		});
 	}

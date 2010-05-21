@@ -207,7 +207,6 @@ public class DiagramsListPresenter {
 	 * @param projectItem The project tree item where the actions are added.
 	 */
 	private void bindProjectTreeItem(final ProjectTreeItem projectItem) {
-		// Bind the delete button
 		projectItem.getDeleteProjectButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
@@ -223,7 +222,6 @@ public class DiagramsListPresenter {
 	 * @param directoryTreeItem The directory tree item where the actions are added.
 	 */
 	private void bindDirectoryItem(final DirectoryTreeItem directoryTreeItem) {
-		// Bind the add diagram button
 		directoryTreeItem.getAddDiagramButton().addClickHandler(new ClickHandler() {
 			
 			@Override
@@ -306,7 +304,6 @@ public class DiagramsListPresenter {
 	 */
 	private void doCreateProject(final CreateProjectPopup createProjectPopup, final String projectName) {
 		projectService.createProject(projectName, new AsyncCallback<Long>() {
-			
 			@Override
 			public void onSuccess(Long result) {
 				doFectchProjects();

@@ -15,7 +15,7 @@
 package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -41,10 +41,9 @@ public class DirectoryTreeItem extends TreeItem {
 		super();
 		this.directory = directory;
 		
-		HorizontalPanel panel = new HorizontalPanel();
+		FlowPanel panel = new FlowPanel();
 		
 		directoryIcon = new Image(TreeProjectsResources.INSTANCE.directoryIcon());
-		
 		
 		directoryName = new InlineLabel(directory.getName());
 		directoryName.addStyleName(DiagramsListResources.INSTANCE.css().itemText());

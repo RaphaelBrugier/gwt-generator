@@ -15,8 +15,7 @@
 package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
 import com.google.gwt.event.dom.client.HasClickHandlers;
-import com.google.gwt.user.client.ui.HasVerticalAlignment;
-import com.google.gwt.user.client.ui.HorizontalPanel;
+import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.InlineLabel;
 import com.google.gwt.user.client.ui.TreeItem;
@@ -41,8 +40,7 @@ public class DiagramTreeItem extends TreeItem {
 	public DiagramTreeItem(String diagramName) {
 		super();
 		
-		HorizontalPanel panel = new HorizontalPanel();
-		panel.setVerticalAlignment(HasVerticalAlignment.ALIGN_BOTTOM);
+		FlowPanel panel = new FlowPanel(); 
 		
 		diagramIcon = new Image(TreeProjectsResources.INSTANCE.diagramIcon());
 		
