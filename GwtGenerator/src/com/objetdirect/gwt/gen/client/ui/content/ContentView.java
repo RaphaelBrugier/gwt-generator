@@ -33,6 +33,7 @@ import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
+import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 
 /**
  * View : Manage the content panel
@@ -135,6 +136,11 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	}
 	
 	@Override
+	public DrawerPanel buildDrawer(UMLCanvas umlCanvas) {
+		return new DrawerPanel(umlCanvas);
+	}
+	
+	@Override
 	public void addClassCode(String className, List<String> codeLines) {
 		StringBuilder lines = new StringBuilder();
 		for (String line : codeLines) {
@@ -177,4 +183,5 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	private ContentStyle css() {
 		return ContentResources.INSTANCE.css();
 	}
+	
 }
