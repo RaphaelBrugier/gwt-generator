@@ -52,6 +52,7 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 		String horizontalAlignCenter();
 		String loadingMessage();
 		String generatedCodeWrapper();
+		String codePanel();
 	}
 	
 	public interface ContentResources extends ClientBundle {
@@ -85,9 +86,16 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	}
 
 	@Override
-	public LayoutPanel getModelerContainer() {
+	public LayoutPanel getMainContainer() {
 		return contentPanel;
 	}
+	
+	@Override
+	public void setInMainContainer(Widget widget) {
+		contentPanel.clear();
+		contentPanel.add(widget);
+	}
+
 
 	@Override
 	public Button getSaveButton() {
@@ -100,25 +108,31 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	}
 
 	@Override
-	public void displayLoadingMessage(String messsage) {
+	public Widget buildLoadingWidget(String message) {
 		FlowPanel panel = new FlowPanel();
 		panel.addStyleName(css().horizontalAlignCenter());
 		
 		Image ajaxLoader = new Image(ImageResources.INSTANCE.ajaxLoader());
 		ajaxLoader.addStyleName(css().loadingMessage());
-		Label loadingMessage = new Label(messsage);
+		
+		Label loadingMessage = new Label(message);
 		
 		panel.add(ajaxLoader);
 		panel.add(loadingMessage);
-		contentPanel.clear();
-		contentPanel.add(panel);
-	}
-
-	@Override
-	public void clearAllMessages() {
-		contentPanel.clear();
+		return panel;
 	}
 	
+	@Override
+	public Widget buildInformationWidget(String message) {
+		FlowPanel panel = new FlowPanel();
+		panel.addStyleName(css().horizontalAlignCenter());
+		
+		Label messageLabel = new Label(message);
+		messageLabel.addStyleName(css().loadingMessage());
+		
+		panel.add(messageLabel);
+		return panel;
+	}
 	
 	@Override
 	public void addClassCode(String className, List<String> codeLines) {
@@ -131,8 +145,9 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 		ta.setReadOnly(false);
 		ta.setHeight("100%");
 		ta.setWidth("100%");
+		ta.addStyleName(css().codePanel());
 		
-		// Wrapp the textArea, it allows to display the scrollbar
+		// Wrap the textArea, it allows to display the scrollbar
 		SimplePanel wrapper = new SimplePanel();
 		wrapper.addStyleName(css().generatedCodeWrapper());
 		wrapper.add(ta);
@@ -149,13 +164,14 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 
 	@Override
 	public void goToFirstClass() {
+		// Not sure if this is a control method and should be moved in the presenter ?
 		contentPanel.clear();
 		contentPanel.add(tabPanel);
 		tabPanel.selectTab(0);
 	}
 	
 	/**
-	 * Helper Method to access to the css ressources
+	 * Helper Method to access to the css resources
 	 * @return
 	 */
 	private ContentStyle css() {

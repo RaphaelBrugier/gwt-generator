@@ -23,7 +23,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.UMLComponentException;
+import com.objetdirect.gwt.umlapi.client.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 
@@ -39,7 +39,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	 */
 	@Override
 	public List<GeneratedCode> generateClassesCode(List<UMLClass> classes,
-			List<UMLRelation> relations, String packageName) throws UMLComponentException {
+			List<UMLRelation> relations, String packageName) throws UMLException {
 
 		Map<UMLClass, EntityDescriptor> entities = new HashMap<UMLClass, EntityDescriptor>();
 		for (UMLClass umlClass : classes) {
@@ -57,7 +57,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 			} else if (relation.isManyToMany()) {
 				GeneratorHelper.createManyToManyRelation(entities, relation);
 			} else {
-				throw new UMLComponentException("Unknown relation. Did you forget a property on the relation : " + relation);
+				throw new UMLException("Unknown relation. Did you forget a property on the relation : " + relation);
 			}
 		}
 

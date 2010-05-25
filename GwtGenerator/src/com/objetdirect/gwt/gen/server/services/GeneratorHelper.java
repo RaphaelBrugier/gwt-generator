@@ -22,7 +22,7 @@ import com.objetdirect.entities.ManyToManyReferenceListDescriptor;
 import com.objetdirect.entities.ManyToOneReferenceDescriptor;
 import com.objetdirect.entities.OneToManyReferenceListDescriptor;
 import com.objetdirect.entities.OneToOneReferenceDescriptor;
-import com.objetdirect.gwt.umlapi.client.UMLComponentException;
+import com.objetdirect.gwt.umlapi.client.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
@@ -91,12 +91,12 @@ public class GeneratorHelper {
 	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
 	 * @param relation the relation OneToOne between two entities
 	 */
-	public static void createOneToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
+	public static void createOneToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLException {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
 		if (relation.isBidirectional()) {
-			throw new UMLComponentException("Bidirectional one-to-many relation is not supported yet.");
+			throw new UMLException("Bidirectional one-to-many relation is not supported yet.");
 		} 
 		// Unidirectional
 		else {
@@ -118,7 +118,7 @@ public class GeneratorHelper {
 	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
 	 * @param relation the relation OneToOne between two entities
 	 */
-	public static void createManyToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLComponentException {
+	public static void createManyToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLException {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
@@ -203,7 +203,7 @@ public class GeneratorHelper {
 		case PRIVATE:
 			break;
 		default:
-			throw new UMLComponentException("Pojo generator only supports private field");
+			throw new UMLException("Pojo generator only supports private field");
 		}
 		
 		switch (UMLType.getUMLTypeFromString(type)) {

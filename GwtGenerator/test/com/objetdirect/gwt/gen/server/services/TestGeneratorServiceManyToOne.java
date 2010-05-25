@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 
 import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.UMLComponentException;
+import com.objetdirect.gwt.umlapi.client.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLLink.LinkKind;
@@ -66,7 +66,7 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 		List<GeneratedCode> generatedClassesCode = null;
 		try {
 			generatedClassesCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
-		} catch (UMLComponentException e) {
+		} catch (UMLException e) {
 			fail();
 		}
 		
@@ -118,7 +118,7 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 		List<GeneratedCode> generatedClassesCode = null;
 		try {
 			generatedClassesCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
-		} catch (UMLComponentException e) {
+		} catch (UMLException e) {
 			fail();
 		}
 		
