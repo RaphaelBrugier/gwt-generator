@@ -96,6 +96,13 @@ public class ContentPresenter {
 		Widget buildInformationWidget(String message);
 		
 		/**
+		 * Build a drawerPanel from the given umlCanvas 
+		 * @param umlcanvas
+		 * @return The build drawerPanel
+		 */
+		DrawerPanel buildDrawer(UMLCanvas umlCanvas);
+		
+		/**
 		 * Add  tab to the widget to display the code of the given class.
 		 * @param className the name of the class
 		 * @param codeLines the lines of code of the class
@@ -145,6 +152,7 @@ public class ContentPresenter {
 		display.getSaveButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				Log.debug("ContentPresenter::Bind() click event received on save button");
 				doSaveDiagram();
 			}
 		});
@@ -195,12 +203,14 @@ public class ContentPresenter {
 			@Override
 			public void onSuccess(DiagramDto diagramFound) {
 				currentDiagram = diagramFound;
-				int canvasWidth = Window.getClientWidth() - 0;
-				int canvasHeight = Window.getClientHeight() - 30;
+//				int canvasWidth = Window.getClientWidth() - 0;
+//				int canvasHeight = Window.getClientHeight() - 30;
+				int canvasWidth = 0;
+				int canvasHeight = 0;
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
 				
-				drawer = new DrawerPanel(umlCanvas);
+				drawer = display.buildDrawer(umlCanvas);
 				display.getMainContainer().clear();
 				display.getMainContainer().add(drawer);
 				
