@@ -35,6 +35,7 @@ import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.umlapi.client.UMLException;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
@@ -59,10 +60,19 @@ public class ContentPresenter {
 		Widget asWidget();
 		
 		/**
-		 * @return The modeler container
+		 * @return The main container panel.
 		 */
-		LayoutPanel getModelerContainer();
+		LayoutPanel getMainContainer();
 		
+		/** Clear the main container panel and set the given widget
+		 * @param w The widget to set in the container.
+		 */
+		void setInMainContainer(Widget widget);
+		
+		/**
+		 * This buttons save the current displayed diagram
+		 * @return The button to save.
+		 */
 		Button getSaveButton();
 		
 		/**
@@ -72,27 +82,31 @@ public class ContentPresenter {
 		Button getSwitchModeButton();
 		
 		/**
-		 * Display a message in the center of the content panel while loading.
-		 * @param message
+		 * Return a widget containing a loading image and a message.
+		 * @param message The message to display in the widget
+		 * @return The built widget
 		 */
-		void displayLoadingMessage(String message);
+		Widget buildLoadingWidget(String message);
 		
-		/** Remove message from the view, like the loading message. 
+		/**
+		 * Return a widget containing a message.
+		 * @param message The message to display in the widget
+		 * @return The built widget
 		 */
-		void clearAllMessages();
+		Widget buildInformationWidget(String message);
 		
 		/**
 		 * Add  tab to the widget to display the code of the given class.
 		 * @param className the name of the class
 		 * @param codeLines the lines of code of the class
 		 */
-		public void addClassCode(String className, List<String> codeLines);
+		void addClassCode(String className, List<String> codeLines);
 		
-		/** Clean all code tab. */
-		public void cleanAllCode();
+		/** Clean all the generated code in the tabs panel. */
+		void cleanAllCode();
 		
 		/** Display the first tab. */
-		public void goToFirstClass();
+		void goToFirstClass();
 	}
 	
 	private final HandlerManager eventBus;
@@ -159,6 +173,11 @@ public class ContentPresenter {
 		});
 	}
 	
+	/**
+	 * Enable or disable the buttons for the content panel. 
+	 * The buttons should been activated only when a diagram is loaded on the content panel.
+	 * @param activated true if the buttons must been activated
+	 */
 	private void setButtonsActivation(boolean activated) {
 		display.getSaveButton().setEnabled(activated);
 		display.getSwitchModeButton().setEnabled(activated);
@@ -169,7 +188,8 @@ public class ContentPresenter {
 	 * @param diagramDto the diagram to load.
 	 */
 	private void doLoadDiagram(DiagramDto diagramDto) {
-		display.displayLoadingMessage("Loading the diagram");
+		Widget loadingWidget = display.buildLoadingWidget("Loading the diagram, please wait ...");
+		display.setInMainContainer(loadingWidget);
 		diagramService.getDiagram(diagramDto.getKey(), new AsyncCallback<DiagramDto>() {
 			
 			@Override
@@ -181,8 +201,8 @@ public class ContentPresenter {
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
 				
 				drawer = new DrawerPanel(umlCanvas);
-				display.getModelerContainer().clear();
-				display.getModelerContainer().add(drawer);
+				display.getMainContainer().clear();
+				display.getMainContainer().add(drawer);
 				
 				forceModelerResize();
 				MessageToaster.show("Diagram loaded");
@@ -192,7 +212,7 @@ public class ContentPresenter {
 			public void onFailure(Throwable caught) {
 				ErrorToaster.show("Failed to load the diagram, please retry in few moments or contact the administrator if the problem persist.");
 				Log.error(caught.getMessage());
-				display.clearAllMessages();
+				display.getMainContainer().clear();
 			}
 		});
 	}
@@ -220,8 +240,8 @@ public class ContentPresenter {
 	private void doDisplayDrawer() {
 		GWTUMLDrawerHelper.disableBrowserEvents();
 		display.getSwitchModeButton().setText("Generate");
-		display.getModelerContainer().clear();
-		display.getModelerContainer().add(drawer);
+		display.getMainContainer().clear();
+		display.getMainContainer().add(drawer);
 	}
 	
 	private void doGenerateCode() {
@@ -241,8 +261,9 @@ public class ContentPresenter {
 				umlRelations.add(relationLinkArtifact.toUMLComponent());
 			}
 		}
-		
-		display.displayLoadingMessage("Generating the code, please wait...");
+
+		Widget loadingWidget = display.buildLoadingWidget("Generating the code, please wait...");
+		display.setInMainContainer(loadingWidget);
 		String packageName = "com.od.test";
 		generatorService.generateClassesCode(umlClasses, umlRelations, packageName, new AsyncCallback<List<GeneratedCode>>() {
 			@Override
@@ -254,10 +275,15 @@ public class ContentPresenter {
 				
 				display.goToFirstClass();
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
-				ErrorToaster.show(caught.getMessage());
+				if (caught instanceof UMLException) {
+					Widget errorWidget = display.buildInformationWidget(caught.getMessage());
+					display.setInMainContainer(errorWidget);
+				} else {
+					ErrorToaster.show(caught.getMessage());
+				}
 			}
 		});
 	}
@@ -266,6 +292,6 @@ public class ContentPresenter {
 	 *  Force the resize of the modeler container and of all its children, including the drawerPanel and the canvas. 
 	 */
 	private void forceModelerResize() {
-		display.getModelerContainer().onResize();
+		display.getMainContainer().onResize();
 	}
 }

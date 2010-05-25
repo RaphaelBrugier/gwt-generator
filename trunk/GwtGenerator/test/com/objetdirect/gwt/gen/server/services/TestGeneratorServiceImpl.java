@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import junit.framework.TestCase;
 
 import com.objetdirect.gwt.gen.TestUtil;
-import com.objetdirect.gwt.umlapi.client.UMLComponentException;
+import com.objetdirect.gwt.umlapi.client.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
@@ -46,7 +46,7 @@ public class TestGeneratorServiceImpl extends TestCase {
 		String[] classCode = null;
 		try {
 			classCode = GeneratorHelper.convertUMLClassToEntityDescriptor(clazz, packageName).getText();
-		} catch (UMLComponentException e) {
+		} catch (UMLException e) {
 			fail();
 		}
 		
@@ -96,7 +96,7 @@ public class TestGeneratorServiceImpl extends TestCase {
 		String[] classCode = null;
 		try {
 			classCode = GeneratorHelper.convertUMLClassToEntityDescriptor(clazz, packageName).getText();
-		} catch (UMLComponentException e) {
+		} catch (UMLException e) {
 			fail();
 		}
 		

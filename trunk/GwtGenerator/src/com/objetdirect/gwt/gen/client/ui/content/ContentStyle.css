@@ -16,3 +16,8 @@
 	border-width: 3px 2px 2px;
 	overflow: hidden;
 }
+
+.codePanel {
+	font-family: 'Droid Sans Mono',arial,serif;
+	font-size: 13px;
+}
