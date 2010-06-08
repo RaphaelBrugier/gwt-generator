@@ -22,7 +22,7 @@ import junit.framework.TestCase;
 
 import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.UMLException;
+import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLLink.LinkKind;

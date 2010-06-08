@@ -23,7 +23,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.UMLException;
+import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 

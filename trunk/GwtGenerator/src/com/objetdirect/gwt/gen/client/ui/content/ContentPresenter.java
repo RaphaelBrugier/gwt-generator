@@ -21,7 +21,6 @@ import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -35,10 +34,10 @@ import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.UMLException;
+import com.objetdirect.gwt.umlapi.client.Drawer;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
 import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
+import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -100,7 +99,8 @@ public class ContentPresenter {
 		 * @param umlcanvas
 		 * @return The build drawerPanel
 		 */
-		DrawerPanel buildDrawer(UMLCanvas umlCanvas);
+		Drawer buildDrawer(UMLCanvas umlCanvas);
+//		DrawerPanel buildDrawer(UMLCanvas umlCanvas);
 		
 		/**
 		 * Add  tab to the widget to display the code of the given class.
@@ -126,7 +126,8 @@ public class ContentPresenter {
 	
 	private DiagramDto currentDiagram;
 	
-	private DrawerPanel drawer;
+	private Drawer drawer;
+//	private DrawerPanel drawer;
 	
 	private boolean isModelerMode;
 	
@@ -152,7 +153,6 @@ public class ContentPresenter {
 		display.getSaveButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Log.debug("ContentPresenter::Bind() click event received on save button");
 				doSaveDiagram();
 			}
 		});
@@ -203,8 +203,6 @@ public class ContentPresenter {
 			@Override
 			public void onSuccess(DiagramDto diagramFound) {
 				currentDiagram = diagramFound;
-//				int canvasWidth = Window.getClientWidth() - 0;
-//				int canvasHeight = Window.getClientHeight() - 30;
 				int canvasWidth = 0;
 				int canvasHeight = 0;
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
@@ -231,7 +229,7 @@ public class ContentPresenter {
 	 * Save the current diagram and its canvas in the base.
 	 */
 	private void doSaveDiagram() {
-		currentDiagram.setCanvas(drawer.getUMLCanvas());
+		currentDiagram.setCanvas(drawer.getUmlCanvas());
 		diagramService.saveDiagram(currentDiagram, new AsyncCallback<Void>() {
 			
 			@Override
@@ -259,18 +257,8 @@ public class ContentPresenter {
 		display.getSwitchModeButton().setText("Back to modeler");
 		display.cleanAllCode();
 		
-		List<UMLClass> umlClasses = new LinkedList<UMLClass>();
-		List<UMLRelation> umlRelations = new LinkedList<UMLRelation>();
-		
-		for (final UMLArtifact umlArtifact : drawer.getUMLCanvas().getArtifactById().values()) {
-			if (umlArtifact instanceof ClassArtifact) {
-				ClassArtifact classArtifact  = (ClassArtifact)umlArtifact;
-				umlClasses.add(classArtifact.toUMLComponent());
-			} else if (umlArtifact instanceof ClassRelationLinkArtifact) {
-				ClassRelationLinkArtifact relationLinkArtifact = (ClassRelationLinkArtifact)umlArtifact;
-				umlRelations.add(relationLinkArtifact.toUMLComponent());
-			}
-		}
+		List<UMLClass> umlClasses = drawer.getUmlClasses();
+		List<UMLRelation> umlRelations = drawer.getUmlRelations();
 
 		Widget loadingWidget = display.buildLoadingWidget("Generating the code, please wait...");
 		display.setInMainContainer(loadingWidget);
