@@ -23,8 +23,6 @@ import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Command;
-import com.google.gwt.user.client.DOM;
-import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
@@ -42,21 +40,15 @@ import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.content.DrawerPanel;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.LoadingPopUp;
 import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.UMLArtifact;
 import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
 import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
-import com.objetdirect.gwt.umlapi.client.helpers.Session;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
 
 /**
@@ -104,8 +96,6 @@ public class Design extends Composite {
 	Label diagramName;
 	
 	final private CodePanel codePanel = new CodePanel();
-	
-	private DrawerPanel drawer;
 	
 	/*********************** Control objects **********************************/
 	final private HandlerManager eventBus;
@@ -156,7 +146,7 @@ public class Design extends Composite {
 			@Override
 			public void execute() {
 				contentPanel.clear();
-				contentPanel.add(drawer);
+//				contentPanel.add(drawer);
 				HotKeyManager.setInputEnabled(true);
 				GWTUMLDrawerHelper.disableBrowserEvents();
 			}
@@ -166,10 +156,10 @@ public class Design extends Composite {
 			@Override
 			public void execute() {
 				String svg = "<?xml version='1.0' standalone='no'?><!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.1//EN' 'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>";
-				Session.getActiveCanvas().clearArrows();
-				svg += DOM.getInnerHTML((Element) Session.getActiveCanvas().getContainer().getElement().getFirstChildElement());
+//				Session.getActiveCanvas().clearArrows();
+//				svg += DOM.getInnerHTML((Element) Session.getActiveCanvas().getContainer().getElement().getFirstChildElement());
 				Window.open("data:image/xml+svg," + svg, "SVG export", "top");
-				Session.getActiveCanvas().makeArrows();
+//				Session.getActiveCanvas().makeArrows();
 			}
 		});
 		
@@ -214,11 +204,11 @@ public class Design extends Composite {
 				int canvasHeight = Window.getClientHeight() - 30;
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
-				umlCanvas.clearArrows();
+//				umlCanvas.clearArrows();
 				
-				drawer = new DrawerPanel(umlCanvas);
+//				drawer = new DrawerPanel(umlCanvas);
 				contentPanel.clear();
-				contentPanel.add(drawer);
+//				contentPanel.add(drawer);
 				diagramName.setText(diagramFound.getName());
 				
 				HotKeyManager.setInputEnabled(true);
@@ -227,8 +217,8 @@ public class Design extends Composite {
 				RootLayoutPanel.get().clear();
 				RootLayoutPanel.get().add(Design.this);
 				LoadingPopUp.getInstance().stopProcessing();
-				umlCanvas.clearArrows();
-				umlCanvas.makeArrows(); // Replace the arrows on the right position.
+//				umlCanvas.clearArrows();
+//				umlCanvas.makeArrows(); // Replace the arrows on the right position.
 			}
 			
 			@Override
@@ -246,7 +236,7 @@ public class Design extends Composite {
 	 */
 	private void doSaveDiagram(final boolean backToHome) {
 		LoadingPopUp.getInstance().startProcessing("Saving the diagram, please wait...");
-		currentDiagram.setCanvas(drawer.getUMLCanvas());
+//		currentDiagram.setCanvas(drawer.getUMLCanvas());
 		diagramService.saveDiagram(currentDiagram, new AsyncCallback<Void>() {
 			
 			@Override
@@ -273,10 +263,10 @@ public class Design extends Composite {
 	private void doLoadDiagramForAGuest() {
 		LoadingPopUp.getInstance().startProcessing("Loading a class diagram in the designer, please login for a full features access, please wait...");
 		
-		drawer = new DrawerPanel(UMLDiagram.Type.getUMLDiagramFromIndex(0)); // Class diagram by default
-		drawer.addWelcomeClass();
+//		drawer = new DrawerPanel(DiagramType.getUMLDiagramFromIndex(0)); // Class diagram by default
+//		drawer.addWelcomeClass();
 		contentPanel.clear();
-		contentPanel.add(drawer);
+//		contentPanel.add(drawer);
 		
 		saveAndBack.setVisible(false);
 		
@@ -295,16 +285,16 @@ public class Design extends Composite {
 		
 		List<UMLClass> umlClasses = new LinkedList<UMLClass>();
 		List<UMLRelation> umlRelations = new LinkedList<UMLRelation>();
-		
-		for (final UMLArtifact umlArtifact : drawer.getUMLCanvas().getArtifactById().values()) {
-			if (umlArtifact instanceof ClassArtifact) {
-				ClassArtifact classArtifact  = (ClassArtifact)umlArtifact;
-				umlClasses.add(classArtifact.toUMLComponent());
-			} else if (umlArtifact instanceof ClassRelationLinkArtifact) {
-				ClassRelationLinkArtifact relationLinkArtifact = (ClassRelationLinkArtifact)umlArtifact;
-				umlRelations.add(relationLinkArtifact.toUMLComponent());
-			}
-		}
+//		
+//		for (final UMLArtifact umlArtifact : drawer.getUMLCanvas().getArtifactById().values()) {
+//			if (umlArtifact instanceof ClassArtifact) {
+//				ClassArtifact classArtifact  = (ClassArtifact)umlArtifact;
+//				umlClasses.add(classArtifact.toUMLComponent());
+//			} else if (umlArtifact instanceof ClassRelationLinkArtifact) {
+//				ClassRelationLinkArtifact relationLinkArtifact = (ClassRelationLinkArtifact)umlArtifact;
+//				umlRelations.add(relationLinkArtifact.toUMLComponent());
+//			}
+//		}
 		
 		if (umlClasses.size() ==0) {
 			ErrorPopUp errorPopup = new ErrorPopUp("Your diagram must have at least one class to generate a POJO.");
@@ -338,7 +328,7 @@ public class Design extends Composite {
 						@Override
 						public void execute() {
 							contentPanel.clear();
-							contentPanel.add(drawer);
+//							contentPanel.add(drawer);
 							HotKeyManager.setInputEnabled(true);
 							GWTUMLDrawerHelper.disableBrowserEvents();
 						}

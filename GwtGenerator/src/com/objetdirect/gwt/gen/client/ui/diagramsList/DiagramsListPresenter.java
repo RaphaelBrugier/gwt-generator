@@ -41,7 +41,7 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * Presenter for the explorer list of projects and directories on the explorer page.
@@ -354,10 +354,7 @@ public class DiagramsListPresenter {
 		final DiagramDto diagramDto = new DiagramDto(directoryKey, diagramName, Type.CLASS);
 		
 		// Create a default canvas to save with the new diagram.
-		UMLCanvas defaultCanvas = new UMLCanvas(UMLDiagram.Type.CLASS);
-//		final ClassArtifact defaultclass = new ClassArtifact(defaultCanvas, "Class1");
-//		defaultclass.setLocation(new Point(200, 200));
-//		defaultCanvas.add(defaultclass);
+		UMLCanvas defaultCanvas = new UMLCanvas(DiagramType.CLASS);
 		diagramDto.setCanvas(defaultCanvas);
 		
 		diagramService.createDiagram(diagramDto, new AsyncCallback<String>() {
@@ -367,11 +364,10 @@ public class DiagramsListPresenter {
 						doEditDiagram(diagramDto);
 						doFectchProjects();
 					}
-						
-					
+
 					@Override
 					public void onFailure(Throwable caught) {
-						Log.error("Error while creation the diagram " + caught.getMessage());
+						Log.error("Error while creating the diagram : " + caught.getMessage());
 						ErrorToaster.show("Error while creation the diagram, please retry in few moments or contact the administrator.");
 					}
 				});

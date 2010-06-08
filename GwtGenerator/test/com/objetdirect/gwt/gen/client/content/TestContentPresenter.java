@@ -17,6 +17,7 @@ package com.objetdirect.gwt.gen.client.content;
 import static org.mockito.Mockito.*;
 import static org.junit.Assert.*;
 import static org.hamcrest.CoreMatchers.is;
+import static com.objetdirect.gwt.mockutil.MockUtil.*;
 
 import org.junit.After;
 import org.junit.Before;
@@ -27,7 +28,6 @@ import org.mockito.MockitoAnnotations;
 import org.mockito.invocation.InvocationOnMock;
 import org.mockito.stubbing.Answer;
 
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.junit.GWTMockUtilities;
@@ -39,6 +39,7 @@ import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.content.ContentPresenter;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
+import com.objetdirect.gwt.mockutil.Clickable;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 
 public class TestContentPresenter {
@@ -67,7 +68,7 @@ public class TestContentPresenter {
 	ContentPresenter contentPresenter;
 	
 	// Click handlers to trigger click event on the buttons.
-	ClickHandler saveButtonClickHandler;
+	Clickable saveButton;
 	
 	EditDiagramEventHandler editDiagramEventHandler;
 	
@@ -98,14 +99,7 @@ public class TestContentPresenter {
 	
 	/** Create and attached convenient handlers to triggered events */
 	private void createHandlers() {
-		when(saveButtonMock.addClickHandler(any(ClickHandler.class))).thenAnswer(new Answer<HandlerRegistration>() {
-			@Override
-			public HandlerRegistration answer(InvocationOnMock invocation) throws Throwable {
-				Object[] args = invocation.getArguments();
-				saveButtonClickHandler = (ClickHandler) args[0];
-				return null;
-			}
-		});
+		saveButton = buildClickable(saveButtonMock);
 		
 		when(eventBusMock.addHandler(eq(EditDiagramEvent.TYPE), any(EditDiagramEventHandler.class))).thenAnswer(new Answer<HandlerRegistration>() {
 			@Override
@@ -145,7 +139,8 @@ public class TestContentPresenter {
 	@Test
 	public void clickOnSaveButtonCallService() throws Exception {
 		fireDiagramEvent();
-		saveButtonClickHandler.onClick(null);
+//		saveButtonClickHandler.onClick(null);
+		saveButton.click();
 		
 		verify(diagramServiceMock).saveDiagram(null, null);
 	}

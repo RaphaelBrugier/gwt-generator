@@ -3,7 +3,7 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="DiagramsListStyle.css">
 		.field {
-			margin : 5px 0px;	
+			margin : 5px 0px;
 		}
 	</ui:style>
 	<g:DialogBox glassEnabled='true' autoHideEnabled='true'>

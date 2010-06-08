@@ -31,7 +31,7 @@ import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager.Theme;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLDiagram.Type;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLLink.LinkKind;
 
 
@@ -56,17 +56,17 @@ public class TestUmlCanvasSerialization extends GWTTestCase {
 		final DiagramServiceAsync diagramService = GWT.create(DiagramService.class);
 		setUpPlatform();
 		
-		UMLCanvas umlCanvas = new UMLCanvas(Type.CLASS);
+		UMLCanvas umlCanvas = new UMLCanvas(DiagramType.CLASS);
 
-		final ClassArtifact class1 = new ClassArtifact(umlCanvas, "Class1");
+		final ClassArtifact class1 = new ClassArtifact(umlCanvas, 1, "Class1");
 		class1.setLocation(new Point( 2, 2));
 		umlCanvas.add(class1);
 		
-		final ClassArtifact class2 = new ClassArtifact(umlCanvas, "Class2");
+		final ClassArtifact class2 = new ClassArtifact(umlCanvas, 2, "Class2");
 		class2.setLocation(new Point( 20, 20));
 		umlCanvas.add(class2);
 		
-		final LinkArtifact classesRelation = new ClassRelationLinkArtifact(umlCanvas, class1, class2, LinkKind.AGGREGATION_RELATION);
+		final LinkArtifact classesRelation = new ClassRelationLinkArtifact(umlCanvas, 3, class1, class2, LinkKind.AGGREGATION_RELATION);
 		
 		umlCanvas.add(classesRelation);
 		
