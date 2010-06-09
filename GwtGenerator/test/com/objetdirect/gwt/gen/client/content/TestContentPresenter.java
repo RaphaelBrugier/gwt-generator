@@ -14,10 +14,12 @@
  */
 package com.objetdirect.gwt.gen.client.content;
 
-import static org.mockito.Mockito.*;
-import static org.junit.Assert.*;
-import static org.hamcrest.CoreMatchers.is;
-import static com.objetdirect.gwt.mockutil.MockUtil.*;
+import static com.objetdirect.gwt.mockutil.MockUtil.buildClickable;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import org.junit.After;
 import org.junit.Before;
@@ -145,11 +147,8 @@ public class TestContentPresenter {
 		verify(diagramServiceMock).saveDiagram(null, null);
 	}
 	
-	
-	
 	@After
 	public void tearDown() throws Exception {
 		GWTMockUtilities.restore();
 	}
-	
 }
