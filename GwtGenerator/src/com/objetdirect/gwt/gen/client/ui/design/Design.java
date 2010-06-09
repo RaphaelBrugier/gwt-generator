@@ -46,7 +46,6 @@ import com.objetdirect.gwt.gen.client.ui.popup.MessagePopUp;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
-import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
@@ -147,7 +146,6 @@ public class Design extends Composite {
 			public void execute() {
 				contentPanel.clear();
 //				contentPanel.add(drawer);
-				HotKeyManager.setInputEnabled(true);
 				GWTUMLDrawerHelper.disableBrowserEvents();
 			}
 		});
@@ -173,7 +171,6 @@ public class Design extends Composite {
 		save.setCommand(new Command() {
 			@Override
 			public void execute() {
-				HotKeyManager.setInputEnabled(false);
 				doSaveDiagram(false);
 			}
 		});
@@ -181,7 +178,6 @@ public class Design extends Composite {
 		saveAndBack.setCommand(new Command() {
 			@Override
 			public void execute() {
-				HotKeyManager.setInputEnabled(false);
 				doSaveDiagram(true);
 			}
 		});
@@ -211,8 +207,6 @@ public class Design extends Composite {
 //				contentPanel.add(drawer);
 				diagramName.setText(diagramFound.getName());
 				
-				HotKeyManager.setInputEnabled(true);
-
 				// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
 				RootLayoutPanel.get().clear();
 				RootLayoutPanel.get().add(Design.this);
@@ -270,7 +264,6 @@ public class Design extends Composite {
 		
 		saveAndBack.setVisible(false);
 		
-		HotKeyManager.setInputEnabled(true);
 		// DesignPanel can not be attached in a container and should be inserted directly into the root of the document
 		RootLayoutPanel.get().clear();
 		RootLayoutPanel.get().add(Design.this);
@@ -303,7 +296,6 @@ public class Design extends Composite {
 			Log.trace(this.getClass().getName() + "::generatePojo() Starting generation");
 			
 			contentPanel.clear();
-			HotKeyManager.setInputEnabled(false);
 			GWTUMLDrawerHelper.enableBrowserEvents();
 			
 			LoadingPopUp.getInstance().startProcessing("Generating code ...");
@@ -329,7 +321,6 @@ public class Design extends Composite {
 						public void execute() {
 							contentPanel.clear();
 //							contentPanel.add(drawer);
-							HotKeyManager.setInputEnabled(true);
 							GWTUMLDrawerHelper.disableBrowserEvents();
 						}
 					});

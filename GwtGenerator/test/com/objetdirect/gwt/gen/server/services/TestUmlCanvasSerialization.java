@@ -26,7 +26,6 @@ import com.objetdirect.gwt.umlapi.client.artifacts.LinkArtifact;
 import com.objetdirect.gwt.umlapi.client.engine.GeometryManager;
 import com.objetdirect.gwt.umlapi.client.engine.Point;
 import com.objetdirect.gwt.umlapi.client.gfx.GfxManager;
-import com.objetdirect.gwt.umlapi.client.helpers.HotKeyManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
@@ -45,7 +44,6 @@ public class TestUmlCanvasSerialization extends GWTTestCase {
 	/** Setup the gfx platform. */
 	private void setUpPlatform() {
 		OptionsManager.initialize();
-		HotKeyManager.forceStaticInit();
 		OptionsManager.set("DiagramType", 0);
 		ThemeManager.setCurrentTheme((Theme.getThemeFromIndex(OptionsManager.get("Theme"))));
 		GfxManager.setPlatform(OptionsManager.get("GraphicEngine"));
