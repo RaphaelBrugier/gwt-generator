@@ -69,7 +69,7 @@
 			</div>
 			<div class='{style.access}'>
 				<p class='{style.text-signIn}'>Please <g:Anchor ui:field="signIn">login</g:Anchor> with your Google account to access with full features.</p>
-				<p class='{style.text-guest}'>Or you can give a try <g:InlineHyperlink ui:field="asAGuest" targetHistoryToken="">as a guest</g:InlineHyperlink>.</p> 
+<!--				<p class='{style.text-guest}'>Or you can give a try <g:InlineHyperlink ui:field="asAGuest" targetHistoryToken="">as a guest</g:InlineHyperlink>.</p> -->
 			</div>
 			<div class='{style.content}'>
 				<div>

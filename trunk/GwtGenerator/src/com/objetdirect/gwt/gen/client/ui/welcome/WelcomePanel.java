@@ -15,18 +15,13 @@
 package com.objetdirect.gwt.gen.client.ui.welcome;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.InlineHyperlink;
-import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.objetdirect.gwt.gen.client.event.DesignAsAGuestEvent;
 
 /**
  * Panel displaying a welcome message and a link to log the user with his google account.
@@ -43,8 +38,8 @@ public class WelcomePanel extends Composite {
 	@UiField
 	Anchor signIn;
 	
-	@UiField
-	InlineHyperlink asAGuest;
+//	@UiField
+//	InlineHyperlink asAGuest;
 	
 	private HandlerManager eventBus;
 	
@@ -59,10 +54,10 @@ public class WelcomePanel extends Composite {
 		signIn.setHref(loginUrl);
 	}
 	
-	@UiHandler(value="asAGuest")
-	void onAsAGuestClick(ClickEvent event) {
-		eventBus.fireEvent(new DesignAsAGuestEvent());
-	}
+//	@UiHandler(value="asAGuest")
+//	void onAsAGuestClick(ClickEvent event) {
+//		eventBus.fireEvent(new DesignAsAGuestEvent());
+//	}
 
 	public void go(HasWidgets container) {
 		container.clear();
