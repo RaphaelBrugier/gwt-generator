@@ -44,6 +44,12 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.mockutil.Clickable;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 
+/**
+ * Not maintained.
+ * This test was written to test the mock framework mockito and its integration with the mvp pattern.
+ * @author Raphael
+ */
+@Deprecated
 public class TestContentPresenter {
 	
 	private final String DIAGRAM_KEY = "0";
@@ -92,8 +98,8 @@ public class TestContentPresenter {
 		
 		createHandlers();
 		
-		when(displayMock.getSaveButton()).thenReturn(saveButtonMock);
-		when(displayMock.getSwitchModeButton()).thenReturn(switchModeButtonMock);
+//		when(displayMock.getSaveButton()).thenReturn(saveButtonMock);
+//		when(displayMock.getSwitchModeButton()).thenReturn(switchModeButtonMock);
 		
 		contentPresenter = new ContentPresenter(eventBusMock, displayMock, diagramServiceMock, generatorServiceMock);
 	}

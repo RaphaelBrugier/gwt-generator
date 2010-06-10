@@ -14,20 +14,24 @@
  */
 package com.objetdirect.gwt.gen.client.ui.content;
 
-import java.util.LinkedList;
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.LayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.objetdirect.gwt.gen.client.event.ChangeDiagramButtonsStateEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
+import com.objetdirect.gwt.gen.client.event.GenerateEvent;
+import com.objetdirect.gwt.gen.client.event.SaveDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent.EditDiagramEventHandler;
+import com.objetdirect.gwt.gen.client.event.GenerateEvent.GenerateEventHandler;
+import com.objetdirect.gwt.gen.client.event.SaveDiagramEvent.SaveDiagramEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.GeneratorServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
@@ -35,8 +39,6 @@ import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.Drawer;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
@@ -63,22 +65,12 @@ public class ContentPresenter {
 		 */
 		LayoutPanel getMainContainer();
 		
+		HasClickHandlers getBackToModelerButton();
+		
 		/** Clear the main container panel and set the given widget
 		 * @param w The widget to set in the container.
 		 */
 		void setInMainContainer(Widget widget);
-		
-		/**
-		 * This buttons save the current displayed diagram
-		 * @return The button to save.
-		 */
-		Button getSaveButton();
-		
-		/**
-		 * This button allow to switch between the modeler and the generated code.
-		 * @return the button;
-		 */
-		Button getSwitchModeButton();
 		
 		/**
 		 * Return a widget containing a loading image and a message.
@@ -100,7 +92,6 @@ public class ContentPresenter {
 		 * @return The build drawerPanel
 		 */
 		Drawer buildDrawer(UMLCanvas umlCanvas);
-//		DrawerPanel buildDrawer(UMLCanvas umlCanvas);
 		
 		/**
 		 * Add  tab to the widget to display the code of the given class.
@@ -127,7 +118,6 @@ public class ContentPresenter {
 	private DiagramDto currentDiagram;
 	
 	private Drawer drawer;
-//	private DrawerPanel drawer;
 	
 	private boolean isModelerMode;
 	
@@ -139,44 +129,44 @@ public class ContentPresenter {
 		
 		bindToEventBus();
 		bind();
-		
-		setButtonsActivation(false);
-		isModelerMode = true;
+		isModelerMode = false;
 	}
 	
+
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(display.asWidget());
-	}
-	
-	private void bind() {
-		display.getSaveButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				doSaveDiagram();
-			}
-		});
-		
-		display.getSwitchModeButton().addClickHandler(new ClickHandler() {
-			@Override
-			public void onClick(ClickEvent event) {
-				if(isModelerMode) {
-					doGenerateCode();
-					isModelerMode = false;
-				} else {
-					doDisplayDrawer();
-					isModelerMode = true;
-				}
-			}
-		});
 	}
 	
 	private void bindToEventBus() {
 		eventBus.addHandler(EditDiagramEvent.TYPE, new EditDiagramEventHandler() {
 			@Override
 			public void onEditDiagramEvent(EditDiagramEvent event) {
-				setButtonsActivation(true);
 				doLoadDiagram(event.getDiagramDto());
+			}
+		});
+		
+		eventBus.addHandler(SaveDiagramEvent.TYPE, new SaveDiagramEventHandler() {
+			@Override
+			public void onSaveDiagramEvent(SaveDiagramEvent event) {
+				doSaveDiagram();
+			}
+		});
+		
+		
+		eventBus.addHandler(GenerateEvent.TYPE, new GenerateEventHandler() {
+			@Override
+			public void onGenerateEvent(GenerateEvent event) {
+				doGenerateCode();
+			}
+		});
+	}
+	
+	private void bind() {
+		display.getBackToModelerButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				doDisplayDrawer();
 			}
 		});
 	}
@@ -186,9 +176,9 @@ public class ContentPresenter {
 	 * The buttons should been activated only when a diagram is loaded on the content panel.
 	 * @param activated true if the buttons must been activated
 	 */
-	private void setButtonsActivation(boolean activated) {
-		display.getSaveButton().setEnabled(activated);
-		display.getSwitchModeButton().setEnabled(activated);
+	private void switchDiagramButtonsState() {
+		isModelerMode = ! isModelerMode;
+		eventBus.fireEvent(new ChangeDiagramButtonsStateEvent(isModelerMode));
 	}
 	
 	/**
@@ -214,6 +204,7 @@ public class ContentPresenter {
 				
 				forceModelerResize();
 				MessageToaster.show("Diagram loaded");
+				switchDiagramButtonsState();
 			}
 			
 			@Override
@@ -247,14 +238,12 @@ public class ContentPresenter {
 	
 	private void doDisplayDrawer() {
 		GWTUMLDrawerHelper.disableBrowserEvents();
-		display.getSwitchModeButton().setText("Generate");
 		display.getMainContainer().clear();
 		display.getMainContainer().add(drawer);
 	}
 	
 	private void doGenerateCode() {
 		GWTUMLDrawerHelper.enableBrowserEvents();
-		display.getSwitchModeButton().setText("Back to modeler");
 		display.cleanAllCode();
 		
 		List<UMLClass> umlClasses = drawer.getUmlClasses();

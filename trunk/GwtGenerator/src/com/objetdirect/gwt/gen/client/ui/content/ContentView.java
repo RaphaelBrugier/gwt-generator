@@ -18,11 +18,10 @@ import java.util.List;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style.Unit;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.FlowPanel;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
@@ -32,6 +31,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TabLayoutPanel;
 import com.google.gwt.user.client.ui.TextArea;
 import com.google.gwt.user.client.ui.Widget;
+import com.objetdirect.gwt.gen.client.ui.resources.BaseCss;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 import com.objetdirect.gwt.umlapi.client.Drawer;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
@@ -50,7 +50,7 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	interface ContentViewUiBinder extends UiBinder<Widget, ContentView> {
 	}
 
-	public interface ContentStyle extends CssResource {
+	public interface ContentStyle extends BaseCss {
 		String horizontalAlignCenter();
 		String loadingMessage();
 		String generatedCodeWrapper();
@@ -60,25 +60,23 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	public interface ContentResources extends ClientBundle {
 		public ContentResources INSTANCE = GWT.create(ContentResources.class);
 		
-		@Source("ContentStyle.css")
+		@Source({"../resources/base.css", "ContentStyle.css"})
 		ContentStyle css();
 	}
 	
 	@UiField
 	LayoutPanel contentPanel;
 	
-	@UiField
-	Button saveButton;
-	
-	@UiField
-	Button generateButton;
-	
 	private TabLayoutPanel tabPanel;
+	
+	private Label backToModeler;
 
 	public ContentView() {
 		initWidget(uiBinder.createAndBindUi(this));
 		ContentResources.INSTANCE.css().ensureInjected();
 		tabPanel = new TabLayoutPanel(2, Unit.EM);
+		
+		backToModeler = new Label("Return to modeler");
 	}
 
 
@@ -93,20 +91,14 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	}
 	
 	@Override
-	public void setInMainContainer(Widget widget) {
-		contentPanel.clear();
-		contentPanel.add(widget);
-	}
-
-
-	@Override
-	public Button getSaveButton() {
-		return saveButton;
+	public HasClickHandlers getBackToModelerButton() {
+		return backToModeler;
 	}
 	
 	@Override
-	public Button getSwitchModeButton() {
-		return generateButton;
+	public void setInMainContainer(Widget widget) {
+		contentPanel.clear();
+		contentPanel.add(widget);
 	}
 
 	@Override
@@ -140,10 +132,6 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	public Drawer buildDrawer(UMLCanvas umlCanvas) {
 		return new Drawer(umlCanvas);
 	}
-//	@Override
-//	public DrawerPanel buildDrawer(UMLCanvas umlCanvas) {
-//		return new DrawerPanel(umlCanvas);
-//	}
 	
 	@Override
 	public void addClassCode(String className, List<String> codeLines) {
@@ -176,6 +164,7 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	@Override
 	public void goToFirstClass() {
 		// Not sure if this is a control method and should be moved in the presenter ?
+		tabPanel.add(new Label(), backToModeler);
 		contentPanel.clear();
 		contentPanel.add(tabPanel);
 		tabPanel.selectTab(0);
@@ -188,5 +177,6 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	private ContentStyle css() {
 		return ContentResources.INSTANCE.css();
 	}
+
 	
 }

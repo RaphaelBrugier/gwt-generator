@@ -3,9 +3,12 @@
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	
 	<ui:with field='images' type='com.objetdirect.gwt.gen.client.ui.resources.ImageResources'/>
-	<ui:style>
+	<ui:style src="../resources/base.css">
+		.page {
+			background-color: color4;
+		}
 		.wrapper {
-			font: 90% "Trebuchet MS",Verdana,"Lucida Grande",Tahoma,Helvetica,Sans-Serif;
+			font: 90% Verdana,"Trebuchet MS","Lucida Grande",Tahoma,Helvetica,Sans-Serif;
 			margin-left:10%;
 			margin-right:10%;
 			height: 100%;
@@ -14,7 +17,7 @@
 		
 		.imageLogo {
 			margin: 20px;
-			background:#d0ffb0; 
+			background: color5; 
 			-moz-border-radius:12px; 
 			-webkit-border-radius:12px; 
 			padding:12px;
@@ -22,7 +25,7 @@
 		}
 		
 		.access {
-			border: 10px solid #FFE49C;
+			background : color5;
 			margin: 20px; 
 			padding: 10px 10px; 
 			-moz-border-radius: 15px; 
@@ -46,7 +49,7 @@
 		}
 		
 		.content {
-			background:#d0ffb0;
+			background: color5;
 			margin: 20px; 
 			padding: 10px 10px; 
 			font-size: 0.8em;
@@ -61,7 +64,7 @@
 		}
 	</ui:style>
 	
-	<g:ScrollPanel>
+	<g:ScrollPanel addStyleNames="{style.page}">
 		<g:HTMLPanel>
    		<div class='{style.wrapper}'>
    			<div class='{style.imageLogo}'>

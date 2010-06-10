@@ -17,11 +17,9 @@ package com.objetdirect.gwt.gen.client.ui.diagramsList;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.resources.client.ClientBundle;
-import com.google.gwt.resources.client.CssResource;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
@@ -32,6 +30,7 @@ import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
+import com.objetdirect.gwt.gen.client.ui.resources.BaseCss;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 
 /**
@@ -49,7 +48,7 @@ public class DiagramsListView extends Composite implements DiagramsListPresenter
 	@UiTemplate("DiagramsList.ui.xml")
 	interface Binder extends UiBinder<Widget, DiagramsListView> {}
 	
-	public interface DiagramsListStyle extends CssResource {
+	public interface DiagramsListStyle extends BaseCss {
 		/* Explorer tree styles */
 		String noProjectWrapper();
 		String noProjectTitle();
@@ -71,12 +70,9 @@ public class DiagramsListView extends Composite implements DiagramsListPresenter
 	public interface DiagramsListResources extends ClientBundle {
 		public DiagramsListResources INSTANCE = GWT.create(DiagramsListResources.class);
 		
-		@Source("DiagramsListStyle.css")
+		@Source({"../resources/base.css", "DiagramsListStyle.css"})
 		DiagramsListStyle css();
 	}
-	
-	@UiField
-	Anchor createProjectButton;
 
 	@UiField
 	SimplePanel mainContainer;
@@ -94,11 +90,6 @@ public class DiagramsListView extends Composite implements DiagramsListPresenter
 	@Override
 	public HasWidgets getContainer() {
 		return mainContainer;
-	}
-
-	@Override
-	public HasClickHandlers getCreateProjectButton() {
-		return createProjectButton;
 	}
 
 	@Override

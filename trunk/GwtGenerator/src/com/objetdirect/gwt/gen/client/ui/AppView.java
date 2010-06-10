@@ -15,15 +15,16 @@
 package com.objetdirect.gwt.gen.client.ui;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Anchor;
 import com.google.gwt.user.client.ui.FlowPanel;
-import com.google.gwt.user.client.ui.HasText;
 import com.google.gwt.user.client.ui.HasWidgets;
-import com.google.gwt.user.client.ui.InlineHTML;
 import com.google.gwt.user.client.ui.LayoutPanel;
+import com.google.gwt.user.client.ui.SplitLayoutPanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.objetdirect.gwt.gen.client.ui.resources.BaseCss;
 
 
 /**
@@ -37,12 +38,20 @@ public class AppView extends LayoutPanel implements AppPresenter.Display  {
 
 	interface AppViewUiBinder extends UiBinder<Widget, AppView> {}
 	
+	@UiField
+	Anchor newProject;
 	
 	@UiField
-	InlineHTML nameValue;
+	Anchor save;
+	
+	@UiField
+	Anchor generate;
 	
 	@UiField
 	Anchor signOut;
+	
+	@UiField
+	SplitLayoutPanel splitPanel;
 	
 	@UiField
 	FlowPanel westPanel;
@@ -50,9 +59,12 @@ public class AppView extends LayoutPanel implements AppPresenter.Display  {
 	@UiField
 	LayoutPanel content;
 	
+	@UiField
+	BaseCss baseStyle;
 	
 	public AppView() {
 		this.add(uiBinder.createAndBindUi(this));
+		setDiagramButtonsEnabled(false);
 	}
 
 	@Override
@@ -60,27 +72,50 @@ public class AppView extends LayoutPanel implements AppPresenter.Display  {
 		return this;
 	}
 
-
 	@Override
 	public HasWidgets getContentContainer() {
 		return content;
 	}
-
 
 	@Override
 	public HasWidgets getDiagramsListContainer() {
 		return westPanel;
 	}
 
-
 	@Override
-	public HasText getNameField() {
-		return nameValue;
+	public HasClickHandlers getNewProjectButton() {
+		return newProject;
+	}
+	
+	@Override
+	public HasClickHandlers getGenerateButton() {
+		return generate;
 	}
 
+	@Override
+	public HasClickHandlers getSaveButton() {
+		return save;
+	}
+	
+	@Override
+	public void setSignOutHref(String href) {
+		signOut.setHref(href);
+	}
 
 	@Override
-	public Anchor getSignOutAnchor() {
-		return signOut;
+	public void setDiagramButtonsEnabled(boolean enabled) {
+		if (enabled) {
+			save.removeStyleName(baseStyle.buttonInactive());
+			save.addStyleName(baseStyle.button());
+			generate.removeStyleName(baseStyle.buttonInactive());
+			generate.addStyleName(baseStyle.button());
+		} else {
+			save.removeStyleName(baseStyle.button());
+			save.addStyleName(baseStyle.buttonInactive());
+			generate.removeStyleName(baseStyle.button());
+			generate.addStyleName(baseStyle.buttonInactive());
+		}
+		save.setEnabled(enabled);
+		generate.setEnabled(enabled);
 	}
 }
