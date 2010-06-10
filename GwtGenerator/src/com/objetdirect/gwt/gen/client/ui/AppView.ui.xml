@@ -1,61 +1,68 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:style>
+	
+	<ui:style field="baseStyle" src="resources/base.css" type="com.objetdirect.gwt.gen.client.ui.resources.BaseCss">
+		.button {
+			margin-right : 15px;
+		}
+		
+		.buttonInactive {
+			margin-right : 15px;
+		}
+	</ui:style>
+	<ui:style src="resources/base.css">
+		.page {
+			background-color: color4;
+		}
+		
 		.header {
 			margin-top: 8px;
-			background:#d0ffb0; 
+			background: color5;
 			-moz-border-radius:12px; 
 			-webkit-border-radius:12px;
 			position: absolute;
 			left: 0.8%;
 			right: 0.8%;
-			padding: 14px;
+			padding: 12px;
 		}
 		
-		.horizontal-left {
-			float: left;
-			padding-left: 15px;
-			font-size : 120%;
-		}
-		
-		.horizontal-right {
-			float: right;
+		.signOut {
 			padding-right: 15px;
 		}
 		
 		.westPanel {
-			border: 5px solid #FFE49C;
+			border: 5px solid color5;
 			-moz-border-radius: 10px; 
 			-webkit-border-radius: 10px;
-			margin-left : 10px;
+			margin-left : 0px;
 			margin-right : 10px;
 			padding : 5px;
 			overflow: auto;
-		}
-		
-		.border {
-			border-style:solid;
-			border-width:1px;
+			background-color: color5;
 		}
 	</ui:style>
+	<g:LayoutPanel addStyleNames="{style.page}">
+	<g:layer>
 	<g:DockLayoutPanel unit='PX' height="100%" width="100%">
 	   	<g:north size='58'>
 	     	<g:HTMLPanel>
 	     		<div class='{style.header}'>
-					<div class='{style.horizontal-left}'>Welcome <g:InlineHTML ui:field="nameValue"/>.</div>
-					<div class='{style.horizontal-right}'><g:Anchor ui:field="signOut">Sign out</g:Anchor></div>
+	     			<g:Anchor ui:field="newProject" addStyleNames='{baseStyle.button}'>New project</g:Anchor>
+	     			<g:Anchor ui:field="save">Save</g:Anchor>
+	     			<g:Anchor ui:field="generate">Generate</g:Anchor>
+					<g:Anchor addStyleNames='{style.signOut} {style.alignRight}' ui:field="signOut">Sign out</g:Anchor>
 	     		</div>
 			</g:HTMLPanel>
    		</g:north>
    		
 		<g:center>
-			<g:SplitLayoutPanel>
+			<g:SplitLayoutPanel ui:field="splitPanel">
 				<g:west size="200">
-					<g:FlowPanel ui:field="westPanel" addStyleNames ="{style.westPanel}"/>
+					<g:FlowPanel ui:field="westPanel"/>
 				</g:west>
 				<g:center>
-					<g:LayoutPanel ui:field="content" />
+					<g:LayoutPanel ui:field="content"/>
 				</g:center>
 			</g:SplitLayoutPanel>
 		</g:center>
@@ -63,4 +70,6 @@
 			<g:HTMLPanel></g:HTMLPanel>
 		</g:south>
 	</g:DockLayoutPanel>
+	</g:layer>
+	</g:LayoutPanel>
 </ui:UiBinder> 

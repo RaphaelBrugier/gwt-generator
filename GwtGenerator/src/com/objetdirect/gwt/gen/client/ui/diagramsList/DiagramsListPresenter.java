@@ -19,7 +19,6 @@ import java.util.List;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.logical.shared.SelectionEvent;
 import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerManager;
@@ -29,6 +28,8 @@ import com.google.gwt.user.client.ui.Tree;
 import com.google.gwt.user.client.ui.TreeItem;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
+import com.objetdirect.gwt.gen.client.event.NewProjectEvent;
+import com.objetdirect.gwt.gen.client.event.NewProjectEvent.NewProjectEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateDiagramPopup;
@@ -52,11 +53,6 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 public class DiagramsListPresenter {
 	
 	public interface Display {
-		/**
-		 * @return a button for creating a new project 
-		 */
-		HasClickHandlers getCreateProjectButton();
-		
 		/**
 		 * @return The main container
 		 */
@@ -112,7 +108,7 @@ public class DiagramsListPresenter {
 		this.tree = new Tree(TreeProjectsResources.INSTANCE, true); //TODO tree and treeItem creation should be delegate to the view.
 		display.getContainer().add(tree);
 		
-		bindCreateProjectButton();
+		addHandlers();
 		addTreeHandlers();
 		doFectchProjects();
 	}
@@ -158,11 +154,11 @@ public class DiagramsListPresenter {
 	}
 	
 	
-	void bindCreateProjectButton() {
-		display.getCreateProjectButton().addClickHandler(new ClickHandler() {
+	void addHandlers() {
+		
+		eventBus.addHandler(NewProjectEvent.TYPE, new NewProjectEventHandler() {
 			@Override
-			public void onClick(ClickEvent event) {
-				
+			public void onNewProjectEvent(NewProjectEvent event) {
 				final CreateProjectPopup createProjectPopUp = new CreateProjectPopup();
 				createProjectPopUp.getCreateButton().addClickHandler(new ClickHandler() {
 					@Override
@@ -171,7 +167,6 @@ public class DiagramsListPresenter {
 					}
 				});
 				createProjectPopUp.show();
-				
 			}
 		});
 	}

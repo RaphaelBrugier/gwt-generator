@@ -36,61 +36,6 @@
 	color: #666;
 }
 
-/** Cursor change styles */
-
-.globalAutoCursor *, .globalAutoCursor .absolutelyPositioned {
-    cursor: auto;
-}
-.globalCrosshairCursor *, .globalCrosshairCursor .absolutelyPositioned {
-    cursor: crosshair;
-}
-.globalDefaultCursor *, .globalDefaultCursor .absolutelyPositioned {
-    cursor: default;
-}
-.globalPointerCursor *, .globalPointerCursor .absolutelyPositioned {
-    cursor: pointer;
-} 
-.globalMoveCursor *, .globalMoveCursor .absolutelyPositioned {
-    cursor: move;
-} 
-.globalE_ResizeCursor *, .globalE_ResizeCursor .absolutelyPositioned {
-    cursor: e-resize;
-}
-.globalNE_ResizeCursor *, .globalNE_ResizeCursor .absolutelyPositioned {
-    cursor: ne-resize;
-}
-.globalNW_ResizeCursor *, .globalNW_ResizeCursor .absolutelyPositioned {
-    cursor: nw-resize;
-}
-.globalN_ResizeCursor *, .globalN_ResizeCursor .absolutelyPositioned {
-    cursor: n-resize;
-}
-.globalSE_ResizeCursor *, .globalSE_ResizeCursor .absolutelyPositioned {
-    cursor: se-resize;
-} 
-.globalSW_ResizeCursor *, .globalSW_ResizeCursor .absolutelyPositioned {
-    cursor: sw-resize;
-} 
-.globalS_ResizeCursor *, .globalS_ResizeCursor .absolutelyPositioned {
-    cursor: s-resize;
-} 
-.globalW_ResizeCursor *, .globalW_ResizeCursor .absolutelyPositioned {
-    cursor: w-resize;
-} 
-.globalTextCursor *, .globalTextCursor .absolutelyPositioned {
-    cursor: text;
-}
-.globalWaitCursor *, .globalWaitCursor .absolutelyPositioned {
-    cursor: wait;
-} 
-.globalHelpCursor *, .globalHelpCursor .absolutelyPositioned {
-    cursor: help;
-}
-.globalNotAllowedCursor *, .globalNotAllowedCursor .absolutelyPositioned {
-    cursor: not-allowed;
-}
-
-
 /* ******************** Gwt-Generator styles ******************** */
 
 
@@ -118,11 +63,16 @@
 	color: #000000;
 }
 
-
 /*
  * Tree panel item in the explorer page.
 */
 .gwt-TreeItem-selected span {
-	background: url("images/hborder.png") repeat-x scroll 0 -1463px #93C2F1
+	background: url("images/hborder.png") repeat-x scroll 0 -1463px #93C2F1 !important;
 }
- 
+
+/*
+ * Splitter between the west and the content panels.
+ */
+.gwt-SplitLayoutPanel-HDragger {
+	background : url("images/splitPanelThumb.png") no-repeat scroll center center #726451 !important;
+}
