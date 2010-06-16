@@ -2,10 +2,6 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
 	<ui:style src="../resources/base.css">
-		.anchor {
-    		margin: 0 8px;
-  		}
-  		
   		.diagramList {
 			border: 5px solid color5;
 			-moz-border-radius: 10px; 
@@ -16,11 +12,10 @@
 			overflow: auto;
 			background-color: color5;
 		}
-		
 	</ui:style>
 	<g:DockLayoutPanel unit='PX' height="100%" width="100%">
-		<g:west size="15">
-			<g:FocusPanel/>
+		<g:west size="12">
+			<g:FocusPanel ui:field="panelButton"/>
 		</g:west>
 		<g:center>
 			<g:SimplePanel ui:field="mainContainer" addStyleNames='{style.diagramList}'/>

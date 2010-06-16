@@ -15,20 +15,17 @@
 package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
-import com.google.gwt.user.client.ui.Button;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.FlowPanel;
+import com.google.gwt.user.client.ui.FocusPanel;
 import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.Image;
 import com.google.gwt.user.client.ui.Label;
-import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
-import com.google.gwt.user.client.ui.TextBox;
 import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.ui.resources.BaseCss;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
@@ -76,6 +73,9 @@ public class DiagramsListView extends Composite implements DiagramsListPresenter
 
 	@UiField
 	SimplePanel mainContainer;
+	
+	@UiField
+	FocusPanel panelButton;
 	
 	public DiagramsListView() {
 		initWidget(uiBinder.createAndBindUi(this));
@@ -129,87 +129,5 @@ public class DiagramsListView extends Composite implements DiagramsListPresenter
 	 */
 	private DiagramsListStyle css() {
 		return DiagramsListResources.INSTANCE.css();
-	}
-	
-	/**
-	 * Passive view : A simple popup that displays a textbox and a button to create a new Project.
-	 */
-	static class CreateProjectPopup extends SimplePanel {
-		private static CreateProjectPopupUiBinder uiBinder = GWT.create(CreateProjectPopupUiBinder.class);
-		
-		@UiTemplate("CreateProjectPopup.ui.xml")
-		interface CreateProjectPopupUiBinder extends UiBinder<PopupPanel, CreateProjectPopup> {}
-		
-		private final PopupPanel popuPanel;
-		
-		@UiField
-		TextBox projectNameTb;
-		
-		@UiField
-		Button createProject;
-		
-		public CreateProjectPopup() {
-			popuPanel = uiBinder.createAndBindUi(this);
-			setWidget(popuPanel);
-		}
-
-		public HasClickHandlers getCreateButton() {
-			return createProject;
-		}
-				
-		public String getProjectName() {
-			return projectNameTb.getValue();
-		}
-		
-		public void hide() {
-			popuPanel.hide();
-		}
-		
-		public void show() {
-			popuPanel.center();
-			projectNameTb.setFocus(true);
-		}
-	}
-	
-
-	/**
-	 * Passive View : A simple popup that displays a textbox, a list of diagram type and a button to create a new Diagram.
-	 */
-	static class CreateDiagramPopup extends SimplePanel {
-		private static CreateDiagramPopupUiBinder uiBinder = GWT.create(CreateDiagramPopupUiBinder.class);
-		
-		@UiTemplate("CreateDiagramPopup.ui.xml")
-		interface CreateDiagramPopupUiBinder extends UiBinder<PopupPanel, CreateDiagramPopup> {}
-		
-		private final PopupPanel popuPanel;
-		
-		@UiField
-		TextBox diagramNameTb;
-		
-		@UiField
-		Button createDiagramButton;
-		
-		
-		public CreateDiagramPopup() {
-			popuPanel = uiBinder.createAndBindUi(this);
-			setWidget(popuPanel);
-		}
-		
-		public HasClickHandlers getCreateButton() {
-			return createDiagramButton;
-		}
-				
-		public String getDiagramName() {
-			return diagramNameTb.getValue();
-		}
-		
-		public void hide() {
-			popuPanel.hide();
-		}
-		
-		public void show() {
-			popuPanel.center();
-			diagramNameTb.setFocus(true);
-		}
 	}
 }

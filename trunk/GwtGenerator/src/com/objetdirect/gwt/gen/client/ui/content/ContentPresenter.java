@@ -40,7 +40,6 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.Drawer;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
-import com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
@@ -119,8 +118,6 @@ public class ContentPresenter {
 	
 	private Drawer drawer;
 	
-	private boolean isModelerMode;
-	
 	public ContentPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService, GeneratorServiceAsync generatorService) {
 		this.eventBus = eventBus;
 		this.display = display;
@@ -129,7 +126,6 @@ public class ContentPresenter {
 		
 		bindToEventBus();
 		bind();
-		isModelerMode = false;
 	}
 	
 
@@ -172,16 +168,6 @@ public class ContentPresenter {
 	}
 	
 	/**
-	 * Enable or disable the buttons for the content panel. 
-	 * The buttons should been activated only when a diagram is loaded on the content panel.
-	 * @param activated true if the buttons must been activated
-	 */
-	private void switchDiagramButtonsState() {
-		isModelerMode = ! isModelerMode;
-		eventBus.fireEvent(new ChangeDiagramButtonsStateEvent(isModelerMode));
-	}
-	
-	/**
 	 * Load a diagram from the base and setup it on the canvas.
 	 * @param diagramDto the diagram to load.
 	 */
@@ -204,7 +190,7 @@ public class ContentPresenter {
 				
 				forceModelerResize();
 				MessageToaster.show("Diagram loaded");
-				switchDiagramButtonsState();
+				eventBus.fireEvent(new ChangeDiagramButtonsStateEvent(true));
 			}
 			
 			@Override
@@ -237,13 +223,11 @@ public class ContentPresenter {
 	}
 	
 	private void doDisplayDrawer() {
-		GWTUMLDrawerHelper.disableBrowserEvents();
 		display.getMainContainer().clear();
 		display.getMainContainer().add(drawer);
 	}
 	
 	private void doGenerateCode() {
-		GWTUMLDrawerHelper.enableBrowserEvents();
 		display.cleanAllCode();
 		
 		List<UMLClass> umlClasses = drawer.getUmlClasses();

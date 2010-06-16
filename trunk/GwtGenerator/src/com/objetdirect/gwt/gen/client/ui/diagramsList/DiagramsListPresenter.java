@@ -32,8 +32,6 @@ import com.objetdirect.gwt.gen.client.event.NewProjectEvent;
 import com.objetdirect.gwt.gen.client.event.NewProjectEvent.NewProjectEventHandler;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
-import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateDiagramPopup;
-import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListView.CreateProjectPopup;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
