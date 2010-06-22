@@ -29,19 +29,20 @@ import com.objetdirect.gwt.gen.client.ui.welcome.WelcomePanel;
  */
 public class MainController  {
 
-	
 	private WelcomePanel welcomePanel;
 	private AppPresenter appPresenter;
-	
-	private HandlerManager eventBus;
-	
+
+	private final HandlerManager eventBus;
+
 	public MainController() {
 		eventBus = new HandlerManager(null);
 		bind();
 		doGoToHomeScreen();
 	}
 
-	/** Add handlers to the event bus. */
+	/**
+	 * Add handlers to the event bus.
+	 */
 	private void bind() {
 		eventBus.addHandler(BackToHomeEvent.TYPE, new BackToHomeEventHandler() {
 			@Override
@@ -49,18 +50,18 @@ public class MainController  {
 				doGoToHomeScreen();
 			}
 		});
-		
+
 	}
 
 	/** Request to return to the home screen.
-	 *  Home screens means welcome screen if the user is not logged or 
+	 *  Home screens means welcome screen if the user is not logged or
 	 *  explorer screen if the user is already logged
 	 */
 	private void doGoToHomeScreen() {
 		RootLayoutPanel.get().clear();
 		MessageToaster.intantiateAndAttach();
 		ErrorToaster.intantiateAndAttach();
-		
+
 		if (GwtGenerator.loginInfo.isLoggedIn()) {
 			if(appPresenter == null){
 				appPresenter = new AppPresenter(eventBus, new AppView(), GwtGenerator.loginInfo);
@@ -72,6 +73,5 @@ public class MainController  {
 			}
 			welcomePanel.go(RootLayoutPanel.get());
 		}
-		
 	}
 }

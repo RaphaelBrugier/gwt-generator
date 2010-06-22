@@ -40,30 +40,42 @@ import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
 public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectService {
 
 	private final ProjectDao projectDao = new ProjectDao();
-	
+
 	private final DiagramService diagramService = new DiagramServiceImpl();
-	
+
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String)
 	 */
 	@Override
 	public Long createProject(String name) {
 		checkLoggedIn();
-		
+
 		if (isBlank(name)) {
 			throw new CreateProjectException("You must specify a name to your project");
 		}
 		//TODO check if a project with the same name already exist
 
 		Project persistedProject = projectDao.createProject(name);
-		
-		for (DirType dirType : DirType.values()) {
-			Directory newDirectory = new Directory(dirType.toString().toLowerCase(), getCurrentUser().getEmail(), dirType);
-			persistedProject.addDirectory(newDirectory);
-		}
+
+		createDirectory(DirType.DOMAIN, "Domain", persistedProject);
+		createDirectory(DirType.HCI, "Interface", persistedProject);
+		// createDirectory(DirType.SERVICE, "Services", persistedProject);
+
 		projectDao.updateProject(persistedProject);
-		
+
 		return persistedProject.getKey();
+	}
+
+	/**
+	 * Create a directory in the given project
+	 * 
+	 * @param directoryType
+	 * @param directoryName
+	 * @param project
+	 */
+	private void createDirectory(DirType directoryType, String directoryName, Project project) {
+		Directory newDirectory = new Directory(directoryName, getCurrentUser().getEmail(), directoryType);
+		project.addDirectory(newDirectory);
 	}
 
 	/* (non-Javadoc)
@@ -72,16 +84,16 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	@Override
 	public List<Project> getProjects() {
 		checkLoggedIn();
-		
-		List<Project> projects = projectDao.getProjects(); 
-		
+
+		List<Project> projects = projectDao.getProjects();
+
 		for (Project project : projects) {
 			for (Directory directory : project.getDirectories()) {
 				ArrayList<DiagramDto> diagrams = diagramService.getDiagrams(directory.getKey());
 				directory.setDiagrams(diagrams);
 			}
 		}
-		
+
 		return projects;
 	}
 
@@ -100,8 +112,6 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	@Override
 	public void deleteProject(Project projectToDelete) {
 		checkLoggedIn();
-		
 		projectDao.deleteProject(projectToDelete);
 	}
-
 }
