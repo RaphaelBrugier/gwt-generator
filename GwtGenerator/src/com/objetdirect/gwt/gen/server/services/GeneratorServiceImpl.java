@@ -57,7 +57,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 			} else if (relation.isManyToMany()) {
 				GeneratorHelper.createManyToManyRelation(entities, relation);
 			} else {
-				throw new UMLException("Unknown relation. Did you forget a property on the relation : " + relation);
+				throw new UMLException("Unknown relation. Did you forget a property on the relation : " + relation + " ?");
 			}
 		}
 

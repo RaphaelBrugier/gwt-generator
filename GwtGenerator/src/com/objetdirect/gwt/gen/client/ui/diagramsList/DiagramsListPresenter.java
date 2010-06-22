@@ -49,46 +49,46 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class DiagramsListPresenter {
-	
+
 	public interface Display {
 		/**
 		 * @return The main container
 		 */
 		HasWidgets getContainer();
-		
+
 		/**
 		 * @return A widget to display when loading project and directories.
 		 */
 		Widget getLoadingProjectsWidget();
-		
+
 		/**
 		 * @return A widget to display a message when the use has no project
 		 */
 		Widget getNoProjectWidget();
-		
+
 		/**
 		 * Create a new diagramTreeItem with the given diagram name
 		 * @param diagramName the name displayed in the tree item
 		 * @return the created TreeItem;
 		 */
 		DiagramTreeItem createDiagramTreeItem(String diagramName);
-		
+
 		/**
 		 * @return The view as a widget.
 		 */
 		Widget asWidget();
 	}
-	
+
 	private final HandlerManager eventBus;
-		
+
 	private final Display display;
-	
+
 	private final DiagramServiceAsync diagramService;
-	
+
 	private final ProjectServiceAsync projectService;
-	
+
 	private final Tree tree;
-	
+
 	/**
 	 * We need to save the previous selected item to get a workaround for this bug :
 	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=3660
@@ -96,36 +96,36 @@ public class DiagramsListPresenter {
 	private TreeItem previousSelectedItem;
 	int comingFromSetState = 0;
 	boolean prevOpenState = true;
-	
+
 	public DiagramsListPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService, ProjectServiceAsync projectService) {
 		this.eventBus = eventBus;
 		this.display = display;
 		this.diagramService = diagramService;
 		this.projectService = projectService;
 
-		this.tree = new Tree(TreeProjectsResources.INSTANCE, true); //TODO tree and treeItem creation should be delegate to the view.
+		tree = new Tree(TreeProjectsResources.INSTANCE, true); //TODO tree and treeItem creation should be delegate to the view.
 		display.getContainer().add(tree);
-		
+
 		addHandlers();
 		addTreeHandlers();
 		doFectchProjects();
 	}
-	
+
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(display.asWidget());
 	}
 
-	
+
 	/** Add the handler on the items of the tree.*/
 	private void addTreeHandlers() {
-		
+
 		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
-			
+
 			@Override
 			public void onSelection(SelectionEvent<TreeItem> event) {
-				
-				// Dirty workaround for this bug 
+
+				// Dirty workaround for this bug
 				//http://code.google.com/p/google-web-toolkit/issues/detail?id=3660
 				//TODO find a better workaround
 				TreeItem item = event.getSelectedItem();
@@ -150,10 +150,10 @@ public class DiagramsListPresenter {
 			}
 		});
 	}
-	
-	
+
+
 	void addHandlers() {
-		
+
 		eventBus.addHandler(NewProjectEvent.TYPE, new NewProjectEventHandler() {
 			@Override
 			public void onNewProjectEvent(NewProjectEvent event) {
@@ -178,18 +178,18 @@ public class DiagramsListPresenter {
 	private TreeItem createProjectItem(final Project project) {
 		ProjectTreeItem projectItem = new ProjectTreeItem(project);
 		bindProjectTreeItem(projectItem);
-		
+
 		for (Directory directory : project.getDirectories()) {
 			DirectoryTreeItem directoryTreeItem = new DirectoryTreeItem(directory);
 			bindDirectoryItem(directoryTreeItem);
-			projectItem.addItem(directoryTreeItem);			
+			projectItem.addItem(directoryTreeItem);
 			for (DiagramDto diagram : directory.getDiagrams()) {
 				DiagramTreeItem diagramTreeItem = display.createDiagramTreeItem(diagram.getName());
 				bindDiagramTreeItem(diagram, diagramTreeItem);
 				directoryTreeItem.addItem(diagramTreeItem);
 			}
 		}
-		
+
 		return projectItem;
 	}
 
@@ -216,7 +216,7 @@ public class DiagramsListPresenter {
 	 */
 	private void bindDirectoryItem(final DirectoryTreeItem directoryTreeItem) {
 		directoryTreeItem.getAddDiagramButton().addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				final CreateDiagramPopup createDiagramPopup = new CreateDiagramPopup();
@@ -227,14 +227,14 @@ public class DiagramsListPresenter {
 						doCreateDiagram(createDiagramPopup, directoryKey, createDiagramPopup.getDiagramName());
 					}
 				});
-				
+
 				createDiagramPopup.show();
 			}
 		});
 	}
-	
+
 	/**
-	 * Bind the diagramTreeItem (view) with the actions : 
+	 * Bind the diagramTreeItem (view) with the actions :
 	 *  - Edit the diagram.
 	 *  - Delete the diagram.
 	 * @param diagram The diagram on which the actions occurs.
@@ -247,9 +247,9 @@ public class DiagramsListPresenter {
 				doEditDiagram(diagram);
 			}
 		});
-		
+
 		diagramTreeItem.getDeleteDiagramButton().addClickHandler(new ClickHandler() {
-			
+
 			@Override
 			public void onClick(ClickEvent event) {
 				doDeleteDiagram(diagram);
@@ -264,10 +264,10 @@ public class DiagramsListPresenter {
 	private void doFectchProjects() {
 		display.getContainer().clear();
 		display.getContainer().add(display.getLoadingProjectsWidget());
-		
+
 		tree.removeItems();
 		projectService.getProjects(new AsyncCallback<List<Project>>() {
-			
+
 			@Override
 			public void onSuccess(List<Project> projectsFound) {
 				display.getContainer().clear();
@@ -280,7 +280,7 @@ public class DiagramsListPresenter {
 					display.getContainer().add(tree);
 				}
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				Log.error("Error while fetching the projects : " + caught.getMessage());
@@ -288,7 +288,7 @@ public class DiagramsListPresenter {
 			}
 		});
 	}
-	
+
 	/**
 	 * Create a project.
 	 * When the action is finish (with success or not), close the popup and display a message.
@@ -303,7 +303,7 @@ public class DiagramsListPresenter {
 				createProjectPopup.hide();
 				MessageToaster.show("Project " + projectName + " created with success.");
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				createProjectPopup.hide();
@@ -312,7 +312,7 @@ public class DiagramsListPresenter {
 			}
 		});
 	}
-	
+
 	/**
 	 * Delete a project.
 	 * When the project is deleted with success, display a message and reload the tree of projects.
@@ -334,8 +334,8 @@ public class DiagramsListPresenter {
 			}
 		});
 	}
-	
-	
+
+
 	/**
 	 * Create a diagram in the given directory
 	 * When the diagram is created, load the designer with it.
@@ -345,25 +345,26 @@ public class DiagramsListPresenter {
 	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, String diagramName) {
 		createDiagramPopup.hide();
 		final DiagramDto diagramDto = new DiagramDto(directoryKey, diagramName, Type.CLASS);
-		
+
 		// Create a default canvas to save with the new diagram.
 		UMLCanvas defaultCanvas = new UMLCanvas(DiagramType.CLASS);
 		diagramDto.setCanvas(defaultCanvas);
-		
-		diagramService.createDiagram(diagramDto, new AsyncCallback<String>() {
-					@Override
-					public void onSuccess(String key) {
-						diagramDto.setKey(key);
-						doEditDiagram(diagramDto);
-						doFectchProjects();
-					}
 
-					@Override
-					public void onFailure(Throwable caught) {
-						Log.error("Error while creating the diagram : " + caught.getMessage());
-						ErrorToaster.show("Error while creation the diagram, please retry in few moments or contact the administrator.");
-					}
-				});
+		diagramService.createDiagram(diagramDto, new AsyncCallback<String>() {
+			@Override
+			public void onSuccess(String key) {
+				diagramDto.setKey(key);
+				doEditDiagram(diagramDto);
+				doFectchProjects();
+				MessageToaster.show("Diagram " + diagramDto.getName() + " created with success.");
+			}
+
+			@Override
+			public void onFailure(Throwable caught) {
+				Log.error("Error while creating the diagram : " + caught.getMessage());
+				ErrorToaster.show("Error while creation the diagram, please retry in few moments or contact the administrator.");
+			}
+		});
 	}
 
 	/**
@@ -373,7 +374,7 @@ public class DiagramsListPresenter {
 	private void doEditDiagram(final DiagramDto diagram) {
 		eventBus.fireEvent(new EditDiagramEvent(diagram));
 	}
-	
+
 	/**
 	 * Request the deletion of the given diagram.
 	 * @param diagram The diagram to delete.
@@ -386,7 +387,7 @@ public class DiagramsListPresenter {
 				doFectchProjects();
 				MessageToaster.show("Diagram " + diagram.getName() + " deleted with success.");
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				Log.error("Failed to delete the diagram " + diagram);
