@@ -19,8 +19,6 @@ import java.util.List;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.logical.shared.SelectionEvent;
-import com.google.gwt.event.logical.shared.SelectionHandler;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -89,66 +87,23 @@ public class DiagramsListPresenter {
 
 	private final Tree tree;
 
-	/**
-	 * We need to save the previous selected item to get a workaround for this bug :
-	 * http://code.google.com/p/google-web-toolkit/issues/detail?id=3660
-	 */
-	private TreeItem previousSelectedItem;
-	int comingFromSetState = 0;
-	boolean prevOpenState = true;
-
 	public DiagramsListPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService, ProjectServiceAsync projectService) {
 		this.eventBus = eventBus;
 		this.display = display;
 		this.diagramService = diagramService;
 		this.projectService = projectService;
 
-		tree = new Tree(TreeProjectsResources.INSTANCE, true); //TODO tree and treeItem creation should be delegate to the view.
+		// TODO tree and treeItems creation should be delegate to the view.
+		tree = new Tree(TreeProjectsResources.INSTANCE, true);
 		display.getContainer().add(tree);
 
 		addHandlers();
-		addTreeHandlers();
 		doFectchProjects();
 	}
 
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(display.asWidget());
-	}
-
-
-	/** Add the handler on the items of the tree.*/
-	private void addTreeHandlers() {
-
-		tree.addSelectionHandler(new SelectionHandler<TreeItem>() {
-
-			@Override
-			public void onSelection(SelectionEvent<TreeItem> event) {
-
-				// Dirty workaround for this bug
-				//http://code.google.com/p/google-web-toolkit/issues/detail?id=3660
-				//TODO find a better workaround
-				TreeItem item = event.getSelectedItem();
-
-				if (! item.equals(previousSelectedItem )) {
-					item.setState(!item.getState());
-					previousSelectedItem = item;
-					prevOpenState = !item.getState();
-				} else {
-					if (comingFromSetState == 1 && prevOpenState) {
-						comingFromSetState++;
-					}
-					if (comingFromSetState != 2) {
-						comingFromSetState++;
-						item.setState(!item.getState());
-						prevOpenState = !item.getState();
-					} else {
-						comingFromSetState = 0;
-						prevOpenState = true;
-					}
-				}
-			}
-		});
 	}
 
 
@@ -193,11 +148,11 @@ public class DiagramsListPresenter {
 		return projectItem;
 	}
 
-
 	/**
-	 * Bind a projectTreeItem buttons with the action :
-	 *  - delete the project
-	 * @param projectItem The project tree item where the actions are added.
+	 * Bind a projectTreeItem buttons with the action : - delete the project
+	 * 
+	 * @param projectItem
+	 *            The project tree item where the actions are attached.
 	 */
 	private void bindProjectTreeItem(final ProjectTreeItem projectItem) {
 		projectItem.getDeleteProjectButton().addClickHandler(new ClickHandler() {
@@ -210,9 +165,10 @@ public class DiagramsListPresenter {
 	}
 
 	/**
-	 * Bind the directoryTreeItem buttons with the action :
-	 *  - create a new diagram
-	 * @param directoryTreeItem The directory tree item where the actions are added.
+	 * Bind the directoryTreeItem buttons with the action : - create a new diagram
+	 * 
+	 * @param directoryTreeItem
+	 *            The directory tree item where the actions are attached.
 	 */
 	private void bindDirectoryItem(final DirectoryTreeItem directoryTreeItem) {
 		directoryTreeItem.getAddDiagramButton().addClickHandler(new ClickHandler() {
@@ -244,6 +200,7 @@ public class DiagramsListPresenter {
 		diagramTreeItem.getEditDiagramButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
+				Log.debug("DiagramListPresenter::editDiagramButton::onClick() fired");
 				doEditDiagram(diagram);
 			}
 		});
@@ -257,9 +214,8 @@ public class DiagramsListPresenter {
 		});
 	}
 
-
-	/** Fetch the tree with the projects and directories of the user.
-	 * If the user has no project, display a message.
+	/**
+	 * Fill the tree with the user's projects and directories. If the user has no project, display a message.
 	 */
 	private void doFectchProjects() {
 		display.getContainer().clear();
