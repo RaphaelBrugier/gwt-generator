@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE web-app
+    PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
+    "http://java.sun.com/dtd/web-app_2_3.dtd">
+
+<web-app>
+
+<!-- Services serlet -->
+	<servlet>
+ 		<servlet-name>generatorServlet</servlet-name>
+    	<servlet-class>com.objetdirect.gwt.gen.server.services.GeneratorServiceImpl</servlet-class> 
+  	</servlet>
+  	<servlet-mapping>
+    	<servlet-name>generatorServlet</servlet-name>
+    	<url-pattern>/gwtgenerator/generator</url-pattern>
+ 	</servlet-mapping>
+
+
+	<servlet>
+    	<servlet-name>loginService</servlet-name>
+    	<servlet-class>com.objetdirect.gwt.gen.server.services.LoginServiceImpl</servlet-class>
+  	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>loginService</servlet-name>
+    	<url-pattern>/gwtgenerator/login</url-pattern>
+  	</servlet-mapping>
+  	
+  	<servlet>
+    	<servlet-name>diagramService</servlet-name>
+    	<servlet-class>com.objetdirect.gwt.gen.server.services.DiagramServiceImpl</servlet-class>
+  	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>diagramService</servlet-name>
+    	<url-pattern>/gwtgenerator/diagram</url-pattern>
+  	</servlet-mapping>
+  	
+	<servlet>
+    	<servlet-name>projectService</servlet-name>
+    	<servlet-class>com.objetdirect.gwt.gen.server.services.ProjectServiceImpl</servlet-class>
+  	</servlet>
+
+  	<servlet-mapping>
+    	<servlet-name>projectService</servlet-name>
+    	<url-pattern>/gwtgenerator/project</url-pattern>
+  	</servlet-mapping>
+
+<!-- Logging servlet -->
+	<servlet>
+  		<servlet-name>remoteLoggingServiceImpl</servlet-name>
+  		<servlet-class>com.google.gwt.libideas.logging.server.RemoteLoggingServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+  		<servlet-name>remoteLoggingServiceImpl</servlet-name>
+  		<url-pattern>/gwtgenerator/logging</url-pattern>
+	</servlet-mapping>
+  
+  	<servlet>
+  		<servlet-name>remoteLoggerServiceImpl</servlet-name>
+  		<servlet-class>com.allen_sauer.gwt.log.server.RemoteLoggerServiceImpl</servlet-class>
+	</servlet>
+	<servlet-mapping>
+  		<servlet-name>remoteLoggerServiceImpl</servlet-name>
+		<url-pattern>/gwtgenerator/gwt-log</url-pattern>
+	</servlet-mapping>
+  
+  
+
+  
+  
+  <!-- Default page to serve -->
+  <welcome-file-list>
+    <welcome-file>GwtGenerator.html</welcome-file>
+  </welcome-file-list>
+
+</web-app>

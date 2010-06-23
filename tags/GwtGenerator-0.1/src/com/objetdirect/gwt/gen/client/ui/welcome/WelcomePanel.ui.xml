@@ -1,0 +1,105 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	
+	<ui:with field='images' type='com.objetdirect.gwt.gen.client.ui.resources.ImageResources'/>
+	<ui:style src="../resources/base.css">
+		.page {
+			background-color: color4;
+		}
+		.wrapper {
+			font: 90% Verdana,"Trebuchet MS","Lucida Grande",Tahoma,Helvetica,Sans-Serif;
+			margin-left:10%;
+			margin-right:10%;
+			height: 100%;
+			text-align: center;
+		}
+		
+		.imageLogo {
+			margin: 20px;
+			background: color5; 
+			-moz-border-radius:12px; 
+			-webkit-border-radius:12px; 
+			padding:12px;
+			min-width: 701px;
+		}
+		
+		.access {
+			background : color5;
+			margin: 20px; 
+			padding: 10px 10px; 
+			-moz-border-radius: 15px; 
+			-webkit-border-radius: 15px;
+			text-align: center;
+		}
+		
+		.text-signIn {
+			font-size: 1.3em;
+		}
+		.text-signIn a {
+			font-size: 1.4em;
+		}
+		
+		.text-guest {
+			font-size: 1.1em;
+		}
+		
+		.text-guest a {
+			font-size: 1.2em;
+		}
+		
+		.content {
+			background: color5;
+			margin: 20px; 
+			padding: 10px 10px; 
+			font-size: 0.8em;
+			-moz-border-radius: 15px;
+			-webkit-border-radius: 15px;
+			text-align: left;
+			font-size: 1.1em;
+		}
+		
+		.content p{
+			padding-left: 10px;
+		}
+	</ui:style>
+	
+	<g:ScrollPanel addStyleNames="{style.page}">
+		<g:HTMLPanel>
+   		<div class='{style.wrapper}'>
+   			<div class='{style.imageLogo}'>
+				<g:Image  resource='{images.GwtGeneratorLogo}'/>
+			</div>
+			<div class='{style.access}'>
+				<p class='{style.text-signIn}'>Please <g:Anchor ui:field="signIn">login</g:Anchor> with your Google account to access with full features.</p>
+<!--				<p class='{style.text-guest}'>Or you can give a try <g:InlineHyperlink ui:field="asAGuest" targetHistoryToken="">as a guest</g:InlineHyperlink>.</p> -->
+			</div>
+			<div class='{style.content}'>
+				<div>
+					<h3>What is the gwt-generator project ?</h3>
+					<p>The gwt-generator project in an online UML diagram editor with generation features. This application is still in active development but you can already
+						test it. Please note that this application only runs on modern browers.</p>
+					<h3>Features :</h3>
+						<ul>
+							<li>Create Uml diagrams : Class, Object and Sequence.</li>
+							<li>Save and restore your diagrams when you are logged.</li>
+							<li>Generate the code for your <a href="http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/">hibernate POJOS, annoted with JPA.</a></li>
+						</ul>
+						See <a href="http://code.google.com/p/gwt-generator/wiki/RelationsDescriptions">this page</a> 
+						for the full list of supported class relations and the java generated code.
+					<h3>What's planned ?</h3>
+						<p>We've planned to generate the code for the <a href="http://seamframework.org/">seam framework</a> from the diagrams.
+						Generating XML schemas from class diagrams is also on our roadmap.</p>
+					<h3>Where can I report an issue or suggest a feature ?</h3>
+						<p>Gwt-generator is an open source project <a href="http://code.google.com/p/gwt-generator/">hosted on google code</a>.</p>
+						<p>Please <a href="http://code.google.com/p/gwt-generator/issues/entry">use the bug tracker</a> to report an issue or add a suggestion!</p>
+						<p>Any contribution would be highly appreciated !</p>
+					<h3>About</h3>
+					<p>Gwt-generator is based on the <a href="http://code.google.com/p/gwtuml/">gwt-uml project</a> and runs on Google App Engine.</p>
+					<p>This project is an <a href="http://www.objetdirect.com/">ObjetDirect</a> project from ODLabs departement. ObjetDirect is a french company supporting open source projects.</p>
+				</div>
+			</div>
+   		</div>
+		</g:HTMLPanel>
+	</g:ScrollPanel>
+</ui:UiBinder> 

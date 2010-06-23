@@ -1,0 +1,67 @@
+/* 
+ * Explorer tree styles 
+ */
+.noProjectWrapper {
+	margin : 20px 0px;
+}
+
+.noProjectTitle {
+	text-align : center;
+	font-size : 120%;
+}
+
+.noProjectText {
+	margin : 20px;
+}
+
+.loadingProjectsWrapper {
+	text-align : center;
+	height: 100%;
+	padding-top: 50%;
+}
+
+/*
+ *  Tree items styles 
+ */
+ .actionIcon {
+ 	opacity: 0.4;
+ 	margin-left: 10px;
+ }
+ 
+ .actionIcon:hover {
+ 	opacity: 1;
+ }
+ 
+ .itemIcon {
+ 	margin-right: 5px;
+ }
+
+ .itemText {
+ 	margin : 0px 2px;
+ 	padding : 2px 10px;
+ }
+ 
+ 
+ /*
+  * Common styles for the popups
+  */
+ .createButton {
+ 	float: right;
+ 	margin: 15px;
+ }
+ 
+ .popupTitle {
+ 	text-align: center;
+	margin: 5px;
+ }
+ 
+ .popupContent {
+ 	margin: 15 15 0 15;
+ }
+ 
+.label {
+	display:block;
+	width:100px;
+	float:left;
+}
+ 

@@ -1,0 +1,21 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:style src="../resources/base.css">
+		.important {
+			font-weight: bold;
+		}
+		
+		.contentPanel {
+			border: 8px solid #DCE9F2;
+			-moz-border-radius: 10px; 
+			-webkit-border-radius: 10px;
+			margin: 10px;
+			margin-bottom: 0px;
+			margin-top: 0px;
+			padding: 5px;
+			background-color: whiteColor;
+		}
+	</ui:style>
+		<g:LayoutPanel ui:field="contentPanel" addStyleNames ="{style.contentPanel}"/>
+</ui:UiBinder> 

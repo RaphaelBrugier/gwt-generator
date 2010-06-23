@@ -1,0 +1,78 @@
+/** Add css rules here for your application. */
+
+/** Drawer Style */
+.drawer-button {
+	border: 1px solid #666;
+	background: #eee;
+	width: 100%;
+}
+.direction-buttons {
+	border: 0px solid;
+	background: #fff;
+}
+
+.editor-small-field {
+	font: bold 10px Courrier;
+	border: 1px solid #0f0;
+}
+.editor-small-field-multiline {
+	font: bold 10px Courrier;
+	border: 1px solid #f00;
+}
+.editor-field {
+	font: bold 12px Courrier;
+	border: 1px solid #0f0;
+}
+.editor-field-multiline {
+	font: bold 12px Courrier;
+	border: 1px solid #f00;
+}
+.canvas {
+	border: 1px solid black;
+}
+.contextual-help {
+	font: 12px;
+	font-style: italic;
+	color: #666;
+}
+
+/* ******************** Gwt-Generator styles ******************** */
+
+
+/* Style for the generic message toaster. */
+.messageToaster {
+	font-family: Arial Unicode MS,Arial,sans-serif;
+	font-size: 14px;
+}
+
+.errorToaster {
+	font-family: Arial Unicode MS,Arial,sans-serif;
+	font-size: 16px;
+}
+
+.tundra .dijitToasterMessage .dijitToasterContent {
+	padding:20px;
+	background: #EFFBFB;
+	margin: 10px;
+	border: 5px solid #DCE9F2;
+	-moz-border-radius:12px; 
+	-webkit-border-radius:12px;
+}
+
+.tundra .dijitToasterMessage {
+	color: #000000;
+}
+
+/*
+ * Tree panel item in the explorer page.
+*/
+.gwt-TreeItem-selected span {
+	background: url("images/hborder.png") repeat-x scroll 0 -1463px #93C2F1 !important;
+}
+
+/*
+ * Splitter between the west and the content panels.
+ */
+.gwt-SplitLayoutPanel-HDragger {
+	background : url("images/splitPanelThumb.png") no-repeat scroll center center #726451 !important;
+}
