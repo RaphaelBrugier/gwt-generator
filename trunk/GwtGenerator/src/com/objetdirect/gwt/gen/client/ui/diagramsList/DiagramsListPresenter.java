@@ -200,7 +200,6 @@ public class DiagramsListPresenter {
 		diagramTreeItem.getEditDiagramButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
-				Log.debug("DiagramListPresenter::editDiagramButton::onClick() fired");
 				doEditDiagram(diagram);
 			}
 		});
