@@ -136,9 +136,10 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	@Override
 	public void addClassCode(String className, List<String> codeLines) {
 		StringBuilder lines = new StringBuilder();
-		lines.append("<pre>");
+		lines.append("<pre class=\"brush: java;\">");
 		for (String line : codeLines) {
-			lines.append(line).append("<br/>");
+			// lines.append(line).append("<br/>");
+			lines.append(line).append("\n");
 		}
 		lines.append("</pre>");
 
@@ -168,6 +169,7 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 		contentPanel.clear();
 		contentPanel.add(tabPanel);
 		tabPanel.selectTab(0);
+		highlight();
 	}
 
 	/**
@@ -178,5 +180,8 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 		return ContentResources.INSTANCE.css();
 	}
 
+	private native void highlight()/*-{
+		$wnd.SyntaxHighlighter.highlight();
+	}-*/;
 
 }

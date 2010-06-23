@@ -58,82 +58,82 @@ public class ContentPresenter {
 		 * @return The view as a widget.
 		 */
 		Widget asWidget();
-		
+
 		/**
 		 * @return The main container panel.
 		 */
 		LayoutPanel getMainContainer();
-		
+
 		HasClickHandlers getBackToModelerButton();
-		
+
 		/** Clear the main container panel and set the given widget
 		 * @param w The widget to set in the container.
 		 */
 		void setInMainContainer(Widget widget);
-		
+
 		/**
 		 * Return a widget containing a loading image and a message.
 		 * @param message The message to display in the widget
 		 * @return The built widget
 		 */
 		Widget buildLoadingWidget(String message);
-		
+
 		/**
 		 * Return a widget containing a message.
 		 * @param message The message to display in the widget
 		 * @return The built widget
 		 */
 		Widget buildInformationWidget(String message);
-		
+
 		/**
-		 * Build a drawerPanel from the given umlCanvas 
+		 * Build a drawerPanel from the given umlCanvas
 		 * @param umlcanvas
 		 * @return The build drawerPanel
 		 */
 		Drawer buildDrawer(UMLCanvas umlCanvas);
-		
+
 		/**
 		 * Add  tab to the widget to display the code of the given class.
 		 * @param className the name of the class
 		 * @param codeLines the lines of code of the class
 		 */
 		void addClassCode(String className, List<String> codeLines);
-		
+
 		/** Clean all the generated code in the tabs panel. */
 		void cleanAllCode();
-		
+
 		/** Display the first tab. */
 		void goToFirstClass();
 	}
-	
+
 	private final HandlerManager eventBus;
-	
+
 	private final Display display;
-	
+
 	private final DiagramServiceAsync diagramService;
-	
+
 	private final GeneratorServiceAsync generatorService;
-	
+
 	private DiagramDto currentDiagram;
-	
+
 	private Drawer drawer;
-	
+
 	public ContentPresenter(HandlerManager eventBus, Display display, DiagramServiceAsync diagramService, GeneratorServiceAsync generatorService) {
 		this.eventBus = eventBus;
 		this.display = display;
 		this.diagramService = diagramService;
 		this.generatorService = generatorService;
-		
+
 		bindToEventBus();
 		bind();
 	}
-	
+
 
 	public void go(HasWidgets container) {
 		container.clear();
 		container.add(display.asWidget());
 	}
-	
+
 	private void bindToEventBus() {
 		eventBus.addHandler(EditDiagramEvent.TYPE, new EditDiagramEventHandler() {
 			@Override
@@ -141,15 +141,15 @@ public class ContentPresenter {
 				doLoadDiagram(event.getDiagramDto());
 			}
 		});
-		
+
 		eventBus.addHandler(SaveDiagramEvent.TYPE, new SaveDiagramEventHandler() {
 			@Override
 			public void onSaveDiagramEvent(SaveDiagramEvent event) {
 				doSaveDiagram();
 			}
 		});
-		
-		
+
+
 		eventBus.addHandler(GenerateEvent.TYPE, new GenerateEventHandler() {
 			@Override
 			public void onGenerateEvent(GenerateEvent event) {
@@ -157,7 +157,7 @@ public class ContentPresenter {
 			}
 		});
 	}
-	
+
 	private void bind() {
 		display.getBackToModelerButton().addClickHandler(new ClickHandler() {
 			@Override
@@ -166,7 +166,7 @@ public class ContentPresenter {
 			}
 		});
 	}
-	
+
 	/**
 	 * Load a diagram from the base and setup it on the canvas.
 	 * @param diagramDto the diagram to load.
@@ -175,7 +175,7 @@ public class ContentPresenter {
 		Widget loadingWidget = display.buildLoadingWidget("Loading the diagram, please wait ...");
 		display.setInMainContainer(loadingWidget);
 		diagramService.getDiagram(diagramDto.getKey(), new AsyncCallback<DiagramDto>() {
-			
+
 			@Override
 			public void onSuccess(DiagramDto diagramFound) {
 				currentDiagram = diagramFound;
@@ -183,16 +183,16 @@ public class ContentPresenter {
 				int canvasHeight = 0;
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
-				
+
 				drawer = display.buildDrawer(umlCanvas);
 				display.getMainContainer().clear();
 				display.getMainContainer().add(drawer);
-				
+
 				forceModelerResize();
 				MessageToaster.show("Diagram loaded");
 				eventBus.fireEvent(new ChangeDiagramButtonsStateEvent(true));
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				ErrorToaster.show("Failed to load the diagram, please retry in few moments or contact the administrator if the problem persist.");
@@ -208,12 +208,12 @@ public class ContentPresenter {
 	private void doSaveDiagram() {
 		currentDiagram.setCanvas(drawer.getUmlCanvas());
 		diagramService.saveDiagram(currentDiagram, new AsyncCallback<Void>() {
-			
+
 			@Override
 			public void onSuccess(Void result) {
 				MessageToaster.show("Diagram " + currentDiagram.getName() + " saved with success.");
 			}
-			
+
 			@Override
 			public void onFailure(Throwable caught) {
 				Log.error("Failed to save the diagram " + caught.getMessage());
@@ -221,15 +221,15 @@ public class ContentPresenter {
 			}
 		});
 	}
-	
+
 	private void doDisplayDrawer() {
 		display.getMainContainer().clear();
 		display.getMainContainer().add(drawer);
 	}
-	
+
 	private void doGenerateCode() {
 		display.cleanAllCode();
-		
+
 		List<UMLClass> umlClasses = drawer.getUmlClasses();
 		List<UMLRelation> umlRelations = drawer.getUmlRelations();
 
@@ -243,7 +243,7 @@ public class ContentPresenter {
 					String className = generatedCode.getClassName();
 					display.addClassCode(className, generatedCode.getLinesOfCode());
 				}
-				
+
 				display.goToFirstClass();
 			}
 
@@ -260,7 +260,7 @@ public class ContentPresenter {
 	}
 
 	/**
-	 *  Force the resize of the modeler container and of all its children, including the drawerPanel and the canvas. 
+	 *  Force the resize of the modeler container and of all its children, including the drawerPanel and the canvas.
 	 */
 	private void forceModelerResize() {
 		display.getMainContainer().onResize();
