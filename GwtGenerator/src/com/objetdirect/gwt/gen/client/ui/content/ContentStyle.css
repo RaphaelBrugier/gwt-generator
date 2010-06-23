@@ -14,7 +14,7 @@
 	border-color: #92c1f0;
 	border-style: solid;
 	border-width: 3px 2px 2px;
-	overflow: hidden;
+	overflow: auto;
 }
 
 .codePanel {
