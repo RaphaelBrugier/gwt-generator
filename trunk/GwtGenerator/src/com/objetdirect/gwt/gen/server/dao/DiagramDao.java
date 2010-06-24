@@ -25,9 +25,9 @@ import javax.jdo.Query;
 import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * DAO for the diagram entities.
@@ -55,7 +55,7 @@ public class DiagramDao {
 	 * @param name the diagram name.
 	 * @return the generated id for the diagram.
 	 */
-	public String createDiagram(String directoryKey, Type type, String name, UMLCanvas umlCanvas) {
+	public String createDiagram(String directoryKey, DiagramType type, String name, UMLCanvas umlCanvas) {
 		final Diagram persistedDiagram[] = new Diagram[1];
 		persistedDiagram[0] = new Diagram(directoryKey, type, name, getCurrentUser());
 		
@@ -103,7 +103,7 @@ public class DiagramDao {
 	 * @return the diagram found or null if not diagram was found
 	 */
 	@SuppressWarnings("unchecked")
-	public DiagramDto getDiagram(Type type, String name, String directoryKey) {
+	public DiagramDto getDiagram(DiagramType type, String name, String directoryKey) {
 		PersistenceManager pm = ServerHelper.getPM();
 		DiagramDto diagramFound = null;
 		List<Diagram> queryResult;

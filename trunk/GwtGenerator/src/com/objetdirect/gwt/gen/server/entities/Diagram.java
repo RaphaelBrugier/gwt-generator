@@ -29,8 +29,8 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.User;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * A diagram stored in the app egine.
@@ -53,7 +53,7 @@ public class Diagram {
 	private String name;
 	
 	@Persistent
-	private Type type;
+	private DiagramType type;
 	
 	@Persistent
 	private Blob serializedCanvas;
@@ -68,7 +68,7 @@ public class Diagram {
 	protected Diagram() {
 	}
 	
-	public Diagram(String directoryKey, Type type, String name, User user) {
+	public Diagram(String directoryKey, DiagramType type, String name, User user) {
 		this.type = type;
 		this.name = name;
 		this.user = user;
@@ -106,14 +106,14 @@ public class Diagram {
 	/**
 	 * @return the type
 	 */
-	public Type getType() {
+	public DiagramType getType() {
 		return type;
 	}
 
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(Type type) {
+	public void setType(DiagramType type) {
 		this.type = type;
 	}
 

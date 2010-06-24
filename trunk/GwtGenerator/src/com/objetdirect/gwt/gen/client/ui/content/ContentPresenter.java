@@ -231,7 +231,7 @@ public class ContentPresenter {
 		display.cleanAllCode();
 
 		List<UMLClass> umlClasses = drawer.getUmlClasses();
-		List<UMLRelation> umlRelations = drawer.getUmlRelations();
+		List<UMLRelation> umlRelations = drawer.getClassRelations();
 
 		Widget loadingWidget = display.buildLoadingWidget("Generating the code, please wait...");
 		display.setInMainContainer(loadingWidget);

@@ -14,6 +14,9 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.CLASS;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
+
 import java.util.ArrayList;
 
 import junit.framework.TestCase;
@@ -26,12 +29,10 @@ import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
-import com.objetdirect.gwt.gen.server.services.DiagramServiceImpl;
-import com.objetdirect.gwt.gen.server.services.ProjectServiceImpl;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * Tests for the diagram dao.
@@ -70,7 +71,7 @@ public class TestDiagramService extends TestCase {
 	/**
 	 * Helper method to check if all the fields of the given diagramDto are equals to the others parameters.
 	 */
-	private void assertEquals(String key, String name, Type type, String directoryKey, DiagramDto diagramDto) {
+	private void assertEquals(String key, String name, DiagramType type, String directoryKey, DiagramDto diagramDto) {
 		assertEquals(key, diagramDto.getKey());
 		assertEquals(name, diagramDto.getName());
 		assertEquals(type, diagramDto.getType());
@@ -78,12 +79,12 @@ public class TestDiagramService extends TestCase {
 	}
 	
 	public void testCreateDiagram() {
-		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", Type.CLASS);
+		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", CLASS);
 		
 		String id = diagramService.createDiagram(diagramDto);
 		assertNotNull(id);
 		
-		diagramDto = new DiagramDto(directory.getKey(),"name2", Type.HYBRYD);
+		diagramDto = new DiagramDto(directory.getKey(),"name2", OBJECT);
 		id = diagramService.createDiagram(diagramDto);
 
 		assertEquals(2, ds.prepare(new Query("Diagram")).countEntities());
@@ -91,43 +92,43 @@ public class TestDiagramService extends TestCase {
 	
 	
 	public void testGetDiagramFromId() {
-		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", Type.CLASS);
+		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", CLASS);
 		String id = diagramService.createDiagram(diagramDto);
 
 		DiagramDto dto = diagramService.getDiagram(id);
-		assertEquals(Type.CLASS, dto.getType() );
+		assertEquals(CLASS, dto.getType() );
 		assertEquals("name", dto.getName());
 		assertEquals(directory.getKey(), dto.getDirectoryKey());
 	}
 	
 	public void testGetDiagrams() {
-		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", Type.CLASS);
+		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", CLASS);
 		String id = diagramService.createDiagram(diagramDto);
-		diagramService.createDiagram(new DiagramDto(directory.getKey(),"name2", Type.HYBRYD));
-		diagramService.createDiagram(new DiagramDto(otherDirectory.getKey(),"name2", Type.HYBRYD)); // We can create a diagram with the same name in an other directory.
+		diagramService.createDiagram(new DiagramDto(directory.getKey(),"name2", OBJECT));
+		diagramService.createDiagram(new DiagramDto(otherDirectory.getKey(),"name2", OBJECT)); // We can create a diagram with the same name in an other directory.
 
 		ArrayList<DiagramDto> diagrams =  diagramService.getDiagrams(directory.getKey());
 		assertEquals(2, diagrams.size());
 
 		DiagramDto dto = diagrams.get(0);
-		assertEquals(id, "name", Type.CLASS, directory.getKey(), dto);
+		assertEquals(id, "name", CLASS, directory.getKey(), dto);
 	}
 	
 	public void testDelete() throws Exception {
-		String id = diagramService.createDiagram(new DiagramDto(directory.getKey(),"name", Type.CLASS));
+		String id = diagramService.createDiagram(new DiagramDto(directory.getKey(),"name", CLASS));
 		
 		diagramService.deleteDiagram(id);
 		assertEquals(0, ds.prepare(new Query("Diagram")).countEntities());
 	}
 	
 	public void testSaveDiagram() throws Exception {
-		String id = diagramService.createDiagram(new DiagramDto(directory.getKey(),"name", Type.CLASS));
+		String id = diagramService.createDiagram(new DiagramDto(directory.getKey(),"name", CLASS));
 		DiagramDto dto = diagramService.getDiagram(id);
 		dto.setName("newName");
 		
 		diagramService.saveDiagram(dto);
 		dto = diagramService.getDiagram(id);
 		
-		assertEquals(id, "newName", Type.CLASS, directory.getKey(), dto);
+		assertEquals(id, "newName", CLASS, directory.getKey(), dto);
 	}
 }
