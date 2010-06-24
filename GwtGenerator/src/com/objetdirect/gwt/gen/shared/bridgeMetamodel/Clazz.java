@@ -43,12 +43,13 @@ public class Clazz {
 	 * @param type
 	 *            the type of the attribute
 	 */
-	void addAttribute(String name, UMLType type) {
+	public Clazz addAttribute(String name, UMLType type) {
 		if (getAttribute(name) != null) {
 			throw new RuntimeException("An attribute with this name already exist in the class");
 		}
 		Attribute attribute = new Attribute(name, type);
 		attributes.add(attribute);
+		return this;
 	}
 
 	/**

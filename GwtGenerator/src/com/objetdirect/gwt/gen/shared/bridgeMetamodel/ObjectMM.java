@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class Object {
+public class ObjectMM {
 
 	private final Clazz instanceOf;
 
@@ -28,36 +28,42 @@ public class Object {
 
 	private final List<ValueOfAttribute> valuesOfAttributes;
 
-	public Object(Clazz instanceOf) {
+	public ObjectMM(Clazz instanceOf) {
 		this(instanceOf, "");
 	}
 
-	public Object(Clazz instanceOf, String name) {
+	public ObjectMM(Clazz instanceOf, String name) {
 		this.instanceOf = instanceOf;
 		this.name = name;
 		valuesOfAttributes = new ArrayList<ValueOfAttribute>();
 	}
 
-	void addValueOfAttribute(String attributeName, String value) {
+	public ObjectMM addValueOfAttribute(String attributeName, String value) {
 		Attribute attribute = getAttribute(attributeName);
 		ValueOfAttribute<String> valueOfAttribute = new ValueOfAttribute<String>(attribute, value);
 
 		valuesOfAttributes.add(valueOfAttribute);
+
+		return this;
 	}
 
 
-	void addValueOfAttribute(String attributeName, int value) {
+	public ObjectMM addValueOfAttribute(String attributeName, int value) {
 		Attribute attribute = getAttribute(attributeName);
 		ValueOfAttribute<Integer> valueOfAttribute = new ValueOfAttribute<Integer>(attribute, value);
 
 		valuesOfAttributes.add(valueOfAttribute);
+
+		return this;
 	}
 
-	void addValueOfAttribute(String attributeName, boolean value) {
+	public ObjectMM addValueOfAttribute(String attributeName, boolean value) {
 		Attribute attribute = getAttribute(attributeName);
 		ValueOfAttribute<Boolean> valueOfAttribute = new ValueOfAttribute<Boolean>(attribute, value);
 
 		valuesOfAttributes.add(valueOfAttribute);
+
+		return this;
 	}
 
 	/**
@@ -111,6 +117,6 @@ public class Object {
 		if (valueOfAtt != null) {
 			return valueOfAtt.getValue();
 		}
-		throw new RuntimeException("No String attribute found for " + attributeName + " on this object.");
+		throw new RuntimeException("No String value found for the attribute " + attributeName + " on this object.");
 	}
 }

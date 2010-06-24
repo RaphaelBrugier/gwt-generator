@@ -21,8 +21,8 @@ package com.objetdirect.gwt.gen.shared.bridgeMetamodel;
  */
 public class ObjectReference {
 
-	private final Object owner;
-	private final Object target;
+	private final ObjectMM owner;
+	private final ObjectMM target;
 
 	private final String targetName;
 
@@ -36,7 +36,7 @@ public class ObjectReference {
 	 * @param targetName
 	 *            the name of the refence.
 	 */
-	public ObjectReference(Object owner, Object target, String targetName) {
+	public ObjectReference(ObjectMM owner, ObjectMM target, String targetName) {
 		super();
 		this.owner = owner;
 		this.target = target;
@@ -46,14 +46,14 @@ public class ObjectReference {
 	/**
 	 * @return the owner
 	 */
-	public Object getOwner() {
+	public ObjectMM getOwner() {
 		return owner;
 	}
 
 	/**
 	 * @return the target
 	 */
-	public Object getTarget() {
+	public ObjectMM getTarget() {
 		return target;
 	}
 

@@ -22,32 +22,34 @@ import java.util.List;
  */
 public class ObjectDiagram {
 
-	private final List<Object> objects;
+	private final List<ObjectMM> objects;
 	private final List<ObjectReference> objectReferences;
 
 	public ObjectDiagram(ClassDiagram classDiagram) {
-		objects = new ArrayList<Object>();
+		objects = new ArrayList<ObjectMM>();
 		objectReferences = new ArrayList<ObjectReference>();
 	}
 
 	/**
 	 * @param objectReference
 	 */
-	public void addObjectReference(ObjectReference objectReference) {
+	public ObjectDiagram addObjectReference(ObjectReference objectReference) {
 		objectReferences.add(objectReference);
+		return this;
 	}
 
 	/**
 	 * @param object
 	 */
-	public void addObject(Object object) {
+	public ObjectDiagram addObject(ObjectMM object) {
 		objects.add(object);
+		return this;
 	}
 
 	/**
 	 * @return the objects
 	 */
-	public List<Object> getObjects() {
+	public List<ObjectMM> getObjects() {
 		return objects;
 	}
 
