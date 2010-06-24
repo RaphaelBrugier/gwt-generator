@@ -17,6 +17,7 @@ package com.objetdirect.gwt.gen.shared.dto;
 import java.io.Serializable;
 
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * Data Transfert Object for the diagram entity.
@@ -24,15 +25,11 @@ import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
  */
 @SuppressWarnings("serial")
 public class DiagramDto implements Serializable {
-	public enum Type {
-		CLASS, OBJECT, HYBRYD, SEQUENCE
-	}
-	
 	private String key;
 	
 	private String name;
 	
-	private Type type;
+	private DiagramType type;
 	
 	private String directoryKey;
 	
@@ -47,9 +44,9 @@ public class DiagramDto implements Serializable {
 	 * Use this constructor to create a new diagram.
 	 * @param directoryKey The key of the owner directory
 	 * @param name the name of the diagram
-	 * @param type the type of the diagram : CLASS or OBJECT or HYBRYD or SEQUENCE
+	 * @param type the type of the diagram : CLASS or OBJECT or SEQUENCE
 	 */
-	public DiagramDto(String directoryKey, String name, Type type) {
+	public DiagramDto(String directoryKey, String name, DiagramType type) {
 		this.name = name;
 		this.type = type;
 		this.directoryKey = directoryKey;
@@ -62,7 +59,7 @@ public class DiagramDto implements Serializable {
 	 * @param name the name of the diagram
 	 * @param type the type of the diagram : CLASS or OBJECT or HYBRYD or SEQUENCE
 	 */
-	public DiagramDto(String key, String directoryKey, String name, Type type) {
+	public DiagramDto(String key, String directoryKey, String name, DiagramType type) {
 		this(directoryKey, name, type);
 		this.key = key;
 	}
@@ -74,7 +71,7 @@ public class DiagramDto implements Serializable {
 	 * @param name the name of the diagram
 	 * @param type the type of the diagram : CLASS or OBJECT or HYBRYD or SEQUENCE
 	 */
-	public DiagramDto(String key, String directoryKey, String name, Type type, UMLCanvas umlCanvas) {
+	public DiagramDto(String key, String directoryKey, String name, DiagramType type, UMLCanvas umlCanvas) {
 		this(key, directoryKey, name, type);
 		this.canvas = umlCanvas;
 	}
@@ -114,7 +111,7 @@ public class DiagramDto implements Serializable {
 	/**
 	 * @return the type
 	 */
-	public Type getType() {
+	public DiagramType getType() {
 		return type;
 	}
 
@@ -122,7 +119,7 @@ public class DiagramDto implements Serializable {
 	/**
 	 * @param type the type to set
 	 */
-	public void setType(Type type) {
+	public void setType(DiagramType type) {
 		this.type = type;
 	}
 

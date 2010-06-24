@@ -43,6 +43,7 @@ import com.objetdirect.gwt.gen.client.ui.content.ContentPresenter;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.mockutil.Clickable;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * Not maintained.
@@ -55,7 +56,7 @@ public class TestContentPresenter {
 	private final String DIAGRAM_KEY = "0";
 	private final String DIRECTORY_KEY = "1";
 	private final String DIAGRAM_NAME = "theDiagram";
-	private final DiagramDto.Type DIAGRAM_TYPE = DiagramDto.Type.CLASS;
+	private final DiagramType DIAGRAM_TYPE = DiagramType.CLASS;
 	private final DiagramDto DIAGRAM_FOUND = new DiagramDto(DIAGRAM_KEY, DIRECTORY_KEY, DIAGRAM_NAME, DIAGRAM_TYPE, mock(UMLCanvas.class));
 	
 	@Mock(answer = Answers.RETURNS_DEEP_STUBS) 
@@ -120,7 +121,7 @@ public class TestContentPresenter {
 	
 	
 	private void fireDiagramEvent() {
-		DiagramDto diagramDto = new DiagramDto(DIAGRAM_KEY, "1", "Diagram",DiagramDto.Type.CLASS);
+		DiagramDto diagramDto = new DiagramDto(DIAGRAM_KEY, "1", "Diagram", DiagramType.CLASS);
 		EditDiagramEvent editDiagramEvent = new EditDiagramEvent(diagramDto);
 		editDiagramEventHandler.onEditDiagramEvent(editDiagramEvent);
 	}

@@ -29,10 +29,10 @@ import com.google.appengine.tools.development.testing.LocalDatastoreServiceTestC
 import com.google.appengine.tools.development.testing.LocalServiceTestHelper;
 import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * Tests for the project services.
@@ -120,7 +120,7 @@ public class TestProjectService extends TestCase {
 		Project p = projectService.getProjects().get(0);
 		Directory directory = p.getDirectories().get(0);
 		String directoryKey = directory.getKey();
-		String diagramKey = diagramService.createDiagram(new DiagramDto(directoryKey,"diagram", Type.CLASS));
+		String diagramKey = diagramService.createDiagram(new DiagramDto(directoryKey,"diagram", DiagramType.CLASS));
 		
 		
 		// Assert that getting the project also gets the diagram in the directory.
@@ -172,7 +172,7 @@ public class TestProjectService extends TestCase {
 		projectService.createProject("name");
 		Project p = projectService.getProjects().get(0);
 		String directoryKey = p.getDirectories().get(0).getKey();
-		diagramService.createDiagram(new DiagramDto(directoryKey,"diagramName", Type.CLASS));
+		diagramService.createDiagram(new DiagramDto(directoryKey,"diagramName", DiagramType.CLASS));
 		
 		projectService.deleteProject(p);
 		

@@ -14,6 +14,9 @@
  */
 package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.CLASS;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
+
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -34,9 +37,9 @@ import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto.Type;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
+import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
 import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
@@ -180,7 +183,8 @@ public class DiagramsListPresenter {
 					@Override
 					public void onClick(ClickEvent event) {
 						String directoryKey = directoryTreeItem.getDirectory().getKey();
-						doCreateDiagram(createDiagramPopup, directoryKey, createDiagramPopup.getDiagramName());
+						DirType directoryType = directoryTreeItem.getDirectory().getDirType();
+						doCreateDiagram(createDiagramPopup, directoryKey, directoryType, createDiagramPopup.getDiagramName());
 					}
 				});
 
@@ -294,15 +298,20 @@ public class DiagramsListPresenter {
 	/**
 	 * Create a diagram in the given directory
 	 * When the diagram is created, load the designer with it.
-	 * @param createDiagramPopup the Popup to hide when the action is finished.
-	 * @param diagramName The diagram name.
+	 * @param createDiagramPopup The Popup to hide when the action is finished.
+	 * @param directoryKey The directory key
+	 * @param directoryType The type of directory to create
+	 * @param diagramName diagramName The diagram name.
 	 */
-	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, String diagramName) {
+	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, DirType directoryType, String diagramName) {
 		createDiagramPopup.hide();
-		final DiagramDto diagramDto = new DiagramDto(directoryKey, diagramName, Type.CLASS);
+		
+		DiagramType diagramType = getDiagramTypeFromDirectoryType(directoryType);
+		
+		final DiagramDto diagramDto = new DiagramDto(directoryKey, diagramName, diagramType);
 
 		// Create a default canvas to save with the new diagram.
-		UMLCanvas defaultCanvas = new UMLCanvas(DiagramType.CLASS);
+		UMLCanvas defaultCanvas = new UMLCanvas(CLASS);
 		diagramDto.setCanvas(defaultCanvas);
 
 		diagramService.createDiagram(diagramDto, new AsyncCallback<String>() {
@@ -320,6 +329,19 @@ public class DiagramsListPresenter {
 				ErrorToaster.show("Error while creation the diagram, please retry in few moments or contact the administrator.");
 			}
 		});
+	}
+
+	/**
+	 * @param directoryType
+	 * @return a type of diagram from a type of directory.
+	 */
+	private DiagramType getDiagramTypeFromDirectoryType(DirType directoryType) {
+		switch (directoryType) {
+			case DOMAIN : return CLASS;
+			case HCI : return OBJECT;
+			case SERVICE : return CLASS;
+		}
+		return CLASS;
 	}
 
 	/**
