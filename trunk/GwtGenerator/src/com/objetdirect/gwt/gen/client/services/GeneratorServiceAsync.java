@@ -19,7 +19,7 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
  * Asynchronous counterpart of the GeneratorService

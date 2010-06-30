@@ -25,7 +25,7 @@ import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)

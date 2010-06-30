@@ -40,9 +40,10 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.Drawer;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
-import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 
 /**
@@ -88,9 +89,10 @@ public class ContentPresenter {
 		/**
 		 * Build a drawerPanel from the given umlCanvas
 		 * @param umlcanvas
+		 * @param diagramType type of the diagram
 		 * @return The build drawerPanel
 		 */
-		Drawer buildDrawer(UMLCanvas umlCanvas);
+		Drawer buildDrawer(UMLCanvas umlCanvas, DiagramType diagramType);
 
 		/**
 		 * Add  tab to the widget to display the code of the given class.
@@ -184,7 +186,7 @@ public class ContentPresenter {
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
 
-				drawer = display.buildDrawer(umlCanvas);
+				drawer = display.buildDrawer(umlCanvas, diagramFound.getType());
 				display.getMainContainer().clear();
 				display.getMainContainer().add(drawer);
 

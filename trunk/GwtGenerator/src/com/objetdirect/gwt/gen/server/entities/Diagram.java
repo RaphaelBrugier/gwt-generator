@@ -29,7 +29,7 @@ import javax.jdo.annotations.PrimaryKey;
 import com.google.appengine.api.datastore.Blob;
 import com.google.appengine.api.users.User;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**

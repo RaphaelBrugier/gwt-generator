@@ -15,6 +15,7 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.TestUtil.assertExist;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,9 +25,9 @@ import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLRelation;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLLink.LinkKind;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLLink.LinkKind;
 
 /**
  * Test the generation of the many to many relations

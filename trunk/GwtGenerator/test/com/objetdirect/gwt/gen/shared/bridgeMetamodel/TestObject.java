@@ -32,18 +32,18 @@ public class TestObject {
 	private static final String STRING_ATTRIBUTE_NAME = "string";
 	private static final String BOOL_ATTRIBUTE_NAME = "bool";
 
-	private Object object;
+	private ObjectMM object;
 
 	@Before
 	public void setUp() throws Exception {
 		Clazz clazz = new Clazz("ClassName");
 		clazz.addAttribute(BOOL_ATTRIBUTE_NAME, BOOLEAN);
 		clazz.addAttribute(STRING_ATTRIBUTE_NAME, STRING);
-		object = new Object(clazz);
+		object = new ObjectMM(clazz);
 	}
 
 	/**
-	 * Test method for {@link com.objetdirect.gwt.gen.shared.bridgeMetamodel.Object#addValueOfAttribute(java.lang.String, java.lang.String)}.
+	 * Test method for {@link com.objetdirect.gwt.gen.shared.bridgeMetamodel.ObjectMM#addValueOfAttribute(java.lang.String, java.lang.String)}.
 	 */
 	@Test
 	public void testAddValueOfAttributeStringString() {
@@ -54,7 +54,7 @@ public class TestObject {
 	}
 
 	/**
-	 * Test method for {@link com.objetdirect.gwt.gen.shared.bridgeMetamodel.Object#getValuesOfAttributes()}.
+	 * Test method for {@link com.objetdirect.gwt.gen.shared.bridgeMetamodel.ObjectMM#getValuesOfAttributes()}.
 	 */
 	@Test
 	public void testGetValuesOfAttributes() {
