@@ -34,7 +34,8 @@ import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.ui.resources.BaseCss;
 import com.objetdirect.gwt.gen.client.ui.resources.ImageResources;
 import com.objetdirect.gwt.umlapi.client.Drawer;
-import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * View : Manage the content panel
@@ -129,8 +130,8 @@ public class ContentView extends ResizeComposite implements ContentPresenter.Dis
 	}
 
 	@Override
-	public Drawer buildDrawer(UMLCanvas umlCanvas) {
-		return new Drawer(umlCanvas);
+	public Drawer buildDrawer(UMLCanvas umlCanvas, DiagramType diagramType) {
+		return new Drawer(umlCanvas, diagramType);
 	}
 
 	@Override

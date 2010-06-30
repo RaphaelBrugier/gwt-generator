@@ -22,7 +22,6 @@
 	<inherits name="com.google.gwt.widgetideas.GlassPanel" />
 	<inherits name='com.objetdirect.tatami.Tatami' />
 	<inherits name='com.objetdirect.gwt.umlapi.GWTUMLAPI' />
-	<inherits name='gwt.canvas.gwt-canvas' />
 
 	<!-- Add gwt-log support -->
 	<inherits name="com.allen_sauer.gwt.log.gwt-log-DEBUG" />

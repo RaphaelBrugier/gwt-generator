@@ -16,7 +16,7 @@ package com.objetdirect.gwt.gen.shared.dto;
 
 import java.io.Serializable;
 
-import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**

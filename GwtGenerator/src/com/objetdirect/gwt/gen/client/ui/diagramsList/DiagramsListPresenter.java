@@ -40,7 +40,7 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
-import com.objetdirect.gwt.umlapi.client.helpers.UMLCanvas;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
@@ -101,7 +101,7 @@ public class DiagramsListPresenter {
 		display.getContainer().add(tree);
 
 		addHandlers();
-		doFectchProjects();
+		doFetchProjects();
 	}
 
 	public void go(HasWidgets container) {
@@ -220,7 +220,7 @@ public class DiagramsListPresenter {
 	/**
 	 * Fill the tree with the user's projects and directories. If the user has no project, display a message.
 	 */
-	private void doFectchProjects() {
+	private void doFetchProjects() {
 		display.getContainer().clear();
 		display.getContainer().add(display.getLoadingProjectsWidget());
 
@@ -258,7 +258,7 @@ public class DiagramsListPresenter {
 		projectService.createProject(projectName, new AsyncCallback<Long>() {
 			@Override
 			public void onSuccess(Long result) {
-				doFectchProjects();
+				doFetchProjects();
 				createProjectPopup.hide();
 				MessageToaster.show("Project " + projectName + " created with success.");
 			}
@@ -282,7 +282,7 @@ public class DiagramsListPresenter {
 
 			@Override
 			public void onSuccess(Void result) {
-				doFectchProjects();
+				doFetchProjects();
 				MessageToaster.show("Project " + projectToDelete.getName() + " deleted with success");
 			}
 
@@ -311,7 +311,7 @@ public class DiagramsListPresenter {
 		final DiagramDto diagramDto = new DiagramDto(directoryKey, diagramName, diagramType);
 
 		// Create a default canvas to save with the new diagram.
-		UMLCanvas defaultCanvas = new UMLCanvas(CLASS);
+		UMLCanvas defaultCanvas = UMLCanvas.createUmlCanvas(diagramType);
 		diagramDto.setCanvas(defaultCanvas);
 
 		diagramService.createDiagram(diagramDto, new AsyncCallback<String>() {
@@ -319,7 +319,7 @@ public class DiagramsListPresenter {
 			public void onSuccess(String key) {
 				diagramDto.setKey(key);
 				doEditDiagram(diagramDto);
-				doFectchProjects();
+				doFetchProjects();
 				MessageToaster.show("Diagram " + diagramDto.getName() + " created with success.");
 			}
 
@@ -361,7 +361,7 @@ public class DiagramsListPresenter {
 
 			@Override
 			public void onSuccess(Void result) {
-				doFectchProjects();
+				doFetchProjects();
 				MessageToaster.show("Diagram " + diagram.getName() + " deleted with success.");
 			}
 

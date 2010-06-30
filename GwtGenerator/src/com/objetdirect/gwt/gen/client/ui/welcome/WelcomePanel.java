@@ -30,19 +30,20 @@ import com.google.gwt.user.client.ui.Widget;
 public class WelcomePanel extends Composite {
 
 	private static WelcomePanelUiBinder uiBinder = GWT
-			.create(WelcomePanelUiBinder.class);
+	.create(WelcomePanelUiBinder.class);
 
 	interface WelcomePanelUiBinder extends UiBinder<Widget, WelcomePanel> {
 	}
-	
+
 	@UiField
 	Anchor signIn;
-	
-//	@UiField
-//	InlineHyperlink asAGuest;
-	
-	private HandlerManager eventBus;
-	
+
+	//	@UiField
+	//	InlineHyperlink asAGuest;
+
+	@SuppressWarnings("unused")
+	private final HandlerManager eventBus;
+
 	/**
 	 * @param parent The parent controller of the panel.
 	 * @param loginUrl the url to log the user with his google account.
@@ -50,14 +51,14 @@ public class WelcomePanel extends Composite {
 	public WelcomePanel(HandlerManager eventBus, String loginUrl) {
 		initWidget(uiBinder.createAndBindUi(this));
 		this.eventBus = eventBus;
-		
+
 		signIn.setHref(loginUrl);
 	}
-	
-//	@UiHandler(value="asAGuest")
-//	void onAsAGuestClick(ClickEvent event) {
-//		eventBus.fireEvent(new DesignAsAGuestEvent());
-//	}
+
+	//	@UiHandler(value="asAGuest")
+	//	void onAsAGuestClick(ClickEvent event) {
+	//		eventBus.fireEvent(new DesignAsAGuestEvent());
+	//	}
 
 	public void go(HasWidgets container) {
 		container.clear();
