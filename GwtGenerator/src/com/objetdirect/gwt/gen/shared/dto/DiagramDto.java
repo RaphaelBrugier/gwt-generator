@@ -161,6 +161,7 @@ public class DiagramDto implements Serializable {
 				"\t key = " + key + "\n" +
 				"\t name = " + name + "\n" +
 				"\t type = " + type +"\n" +
-				"\t directoryKey = " + directoryKey;
+				"\t directoryKey = " + directoryKey +"\n" +
+				"\t umlCanvas = " + canvas;
 	}
 }

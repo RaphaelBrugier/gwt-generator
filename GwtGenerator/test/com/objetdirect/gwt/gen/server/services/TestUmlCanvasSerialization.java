@@ -14,26 +14,12 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.CLASS;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLLink.LinkKind.AGGREGATION_RELATION;
-
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
-import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.objetdirect.gwt.gen.client.services.DiagramService;
-import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
-import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.ClassRelationLinkArtifact;
-import com.objetdirect.gwt.umlapi.client.artifacts.LinkArtifact;
 import com.objetdirect.gwt.umlapi.client.engine.GeometryManager;
-import com.objetdirect.gwt.umlapi.client.engine.Point;
 import com.objetdirect.gwt.umlapi.client.gfx.GfxManager;
 import com.objetdirect.gwt.umlapi.client.helpers.OptionsManager;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager;
 import com.objetdirect.gwt.umlapi.client.helpers.ThemeManager.Theme;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvasClassDiagram;
 
 
 public class TestUmlCanvasSerialization extends GWTTestCase {
