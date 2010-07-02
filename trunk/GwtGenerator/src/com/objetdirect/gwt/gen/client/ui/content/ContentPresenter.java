@@ -255,7 +255,7 @@ public class ContentPresenter {
 		List<UMLClass> umlClasses = classDiagram.getUmlClasses();
 		List<UMLRelation> umlRelations = classDiagram.getClassRelations();
 
-		generatorService.generateClassesCode(umlClasses, umlRelations, PACKAGE_NAME, new AsyncCallback<List<GeneratedCode>>() {
+		generatorService.generateHibernateCode(umlClasses, umlRelations, PACKAGE_NAME, new AsyncCallback<List<GeneratedCode>>() {
 			@Override
 			public void onSuccess(List<GeneratedCode> result) {
 				doDisplayGeneratedCode(result);
@@ -273,7 +273,20 @@ public class ContentPresenter {
 		
 		List<UMLObject> umlObjects = objectDiagram.getObjects();
 		List<InstantiationRelation> instantiationsLinks = objectDiagram.getInstantiationRelations();
-		List<ObjectRelation> objectRelatiosn = objectDiagram.getObjectRelations();
+		List<ObjectRelation> objectRelations = objectDiagram.getObjectRelations();
+		
+		generatorService.generateSeamCode(umlObjects, instantiationsLinks, objectRelations, PACKAGE_NAME, new AsyncCallback<List<GeneratedCode>>() { 
+			
+			@Override
+			public void onSuccess(List<GeneratedCode> result) {
+				doDisplayGeneratedCode(result);
+			}
+			
+			@Override
+			public void onFailure(Throwable caught) {
+				doFailWhileGeneratingCode(caught);
+			}
+		});
 	}
 	
 	private void doDisplayGeneratedCode(List<GeneratedCode> generatedClasses)  {
