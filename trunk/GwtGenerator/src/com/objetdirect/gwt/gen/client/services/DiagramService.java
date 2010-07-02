@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 /**
  * Service to operate on the stored diagrams.
@@ -61,6 +62,6 @@ public interface DiagramService extends RemoteService {
 	 * Save the diagram in the base.
 	 * @param diagram the diagram to save
 	 */
-	public void saveDiagram(DiagramDto diagram);
+	public void saveDiagram(DiagramDto diagram) throws GWTGeneratorException;
 	
 }

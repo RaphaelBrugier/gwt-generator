@@ -40,9 +40,14 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.Drawer;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.ObjectDiagram;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 
@@ -53,6 +58,11 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class ContentPresenter {
+
+	/**
+	 * 
+	 */
+	private static final String PACKAGE_NAME = "com.od.test";
 
 	public interface Display {
 		/**
@@ -218,7 +228,7 @@ public class ContentPresenter {
 
 			@Override
 			public void onFailure(Throwable caught) {
-				Log.error("Failed to save the diagram " + caught.getMessage());
+				Log.error("ContentPresenter::doSaveDiagram() Failed to save the diagram " + caught.getMessage());
 				ErrorToaster.show("Failed to save the diagram, please retry in few moments or contact the administrator if the problem persist.");
 			}
 		});
@@ -231,34 +241,57 @@ public class ContentPresenter {
 
 	private void doGenerateCode() {
 		display.cleanAllCode();
-
-		List<UMLClass> umlClasses = drawer.getUmlClasses();
-		List<UMLRelation> umlRelations = drawer.getClassRelations();
-
 		Widget loadingWidget = display.buildLoadingWidget("Generating the code, please wait...");
 		display.setInMainContainer(loadingWidget);
-		String packageName = "com.od.test";
-		generatorService.generateClassesCode(umlClasses, umlRelations, packageName, new AsyncCallback<List<GeneratedCode>>() {
+		
+		switch(currentDiagram.getType()) {
+			case CLASS : doGenerateHibernateCode(); break;
+			case OBJECT : doGenerateSeamCode();
+		}
+	}
+	
+	private void doGenerateHibernateCode() {
+		ClassDiagram classDiagram = (ClassDiagram)drawer.getUmlCanvas();
+		List<UMLClass> umlClasses = classDiagram.getUmlClasses();
+		List<UMLRelation> umlRelations = classDiagram.getClassRelations();
+
+		generatorService.generateClassesCode(umlClasses, umlRelations, PACKAGE_NAME, new AsyncCallback<List<GeneratedCode>>() {
 			@Override
 			public void onSuccess(List<GeneratedCode> result) {
-				for (GeneratedCode generatedCode : result) {
-					String className = generatedCode.getClassName();
-					display.addClassCode(className, generatedCode.getLinesOfCode());
-				}
-
-				display.goToFirstClass();
+				doDisplayGeneratedCode(result);
 			}
 
 			@Override
 			public void onFailure(Throwable caught) {
-				if (caught instanceof UMLException) {
-					Widget errorWidget = display.buildInformationWidget(caught.getMessage());
-					display.setInMainContainer(errorWidget);
-				} else {
-					ErrorToaster.show(caught.getMessage());
-				}
+				doFailWhileGeneratingCode(caught);
 			}
 		});
+	}
+	
+	private void doGenerateSeamCode() {
+		ObjectDiagram objectDiagram = (ObjectDiagram) drawer.getUmlCanvas();
+		
+		List<UMLObject> umlObjects = objectDiagram.getObjects();
+		List<InstantiationRelation> instantiationsLinks = objectDiagram.getInstantiationRelations();
+		List<ObjectRelation> objectRelatiosn = objectDiagram.getObjectRelations();
+	}
+	
+	private void doDisplayGeneratedCode(List<GeneratedCode> generatedClasses)  {
+		for (GeneratedCode generatedCode : generatedClasses) {
+			String className = generatedCode.getClassName();
+			display.addClassCode(className, generatedCode.getLinesOfCode());
+		}
+
+		display.goToFirstClass();
+	}
+	
+	private void doFailWhileGeneratingCode(Throwable caught){
+		if (caught instanceof UMLException) {
+			Widget errorWidget = display.buildInformationWidget(caught.getMessage());
+			display.setInMainContainer(errorWidget);
+		} else {
+			ErrorToaster.show(caught.getMessage());
+		}
 	}
 
 	/**
