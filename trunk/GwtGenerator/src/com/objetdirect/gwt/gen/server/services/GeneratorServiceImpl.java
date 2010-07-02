@@ -22,6 +22,7 @@ import java.util.Map;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
+import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -67,13 +68,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
 		
 		for (Map.Entry<UMLClass, EntityDescriptor> entry : entities.entrySet()) {
-			List<String> linesOfCode = new LinkedList<String>();
-			
-			for(String line : entry.getValue().getText()) {
-				linesOfCode.add(line);	
-			}
-			
-			GeneratedCode generatedCode = new GeneratedCode(entry.getKey().getName(), linesOfCode);
+			GeneratedCode generatedCode = new GeneratedCode(entry.getKey().getName(), entry.getValue().getText());
 			result.add(generatedCode);
 		}
 		
@@ -86,6 +81,10 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	@Override
 	public List<GeneratedCode> generateSeamCode(List<UMLObject> umlObjects, List<InstantiationRelation> instantiationsLinks,
 			List<ObjectRelation> objectRelations, String packageName) throws UMLException {
+		
+		SeamGenerator seamGenerator = new SeamGenerator(umlObjects, instantiationsLinks, objectRelations);
+		
+		return seamGenerator.getGenerateCode();
 		
 //		System.out.println("GeneratorServiceImpl::generateSeamCode => \n");
 //		
@@ -105,6 +104,6 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 //			System.out.println("\t"+ objectRelation);
 //		}
 		
-		return new LinkedList<GeneratedCode>();
+		
 	}
 }
