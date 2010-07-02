@@ -15,7 +15,7 @@
 package com.objetdirect.gwt.gen.shared.dto;
 
 import java.io.Serializable;
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -31,11 +31,13 @@ public class GeneratedCode implements Serializable {
 	/** Generated code of the encapsulated class. */
 	private List<String> linesOfCode;
 	
+	
 	/**
-	 * Default constructor ONLY for gwt-rpc serialization. 
+	 * ONLY FOR GWT-RPC Serialization !
+	 * DO NOT USE
 	 */
-	public GeneratedCode() {
-		linesOfCode = new LinkedList<String>();
+	@SuppressWarnings("unused")
+	private GeneratedCode() {
 	}
 	
 	/**
@@ -44,10 +46,20 @@ public class GeneratedCode implements Serializable {
 	 * @param linesOfCode The generated lines of code.
 	 */
 	public GeneratedCode(String className, List<String> linesOfCode) {
-		this();
 		this.className = className;
 		this.linesOfCode = linesOfCode;
 	}
+	
+	/**
+	 * Constructor
+	 * @param className The name of the encapsulated class
+	 * @param linesOfCode The generated lines of code.
+	 */
+	public GeneratedCode(String className, String[] linesOfCode) {
+		this.className = className;
+		this.linesOfCode = Arrays.asList(linesOfCode);; 
+	}
+	
 
 	/**
 	 * Get the name of the class
@@ -58,14 +70,6 @@ public class GeneratedCode implements Serializable {
 	}
 
 	/**
-	 * Set the name of the class.
-	 * @param className the className to set
-	 */
-	public void setClassName(String className) {
-		this.className = className;
-	}
-
-	/**
 	 * Get the lines of code of the generated class.
 	 * @return the linesOfCode
 	 */
@@ -73,11 +77,4 @@ public class GeneratedCode implements Serializable {
 		return linesOfCode;
 	}
 
-	/**
-	 * Set the generated lines of code for the class. 
-	 * @param linesOfCode the linesOfCode to set
-	 */
-	public void setLinesOfCode(List<String> linesOfCode) {
-		this.linesOfCode = linesOfCode;
-	}
 }
