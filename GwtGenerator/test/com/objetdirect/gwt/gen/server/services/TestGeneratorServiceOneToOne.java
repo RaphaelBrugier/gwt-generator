@@ -64,7 +64,7 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		
 		List<GeneratedCode> generatedCode = null;
 		try {
-			generatedCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+			generatedCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		} catch (UMLException e) {
 			fail();
 		}
@@ -119,7 +119,7 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		
 		List<GeneratedCode> generatedCode = null;
 		try {
-			generatedCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+			generatedCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		} catch (UMLException e) {
 			fail();
 		}
@@ -175,7 +175,7 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		
 		List<GeneratedCode> generatedClassesCode = null;
 		try {
-			generatedClassesCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		} catch (UMLException e) {
 			fail();
 		}

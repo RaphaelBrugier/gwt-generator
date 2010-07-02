@@ -65,7 +65,7 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 		
 		List<GeneratedCode> generatedClassesCode = null;
 		try {
-			generatedClassesCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		} catch (UMLException e) {
 			fail();
 		}
@@ -117,7 +117,7 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 		
 		List<GeneratedCode> generatedClassesCode = null;
 		try {
-			generatedClassesCode = service.generateClassesCode(classes, relations, TestUtil.packageName);
+			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		} catch (UMLException e) {
 			fail();
 		}
