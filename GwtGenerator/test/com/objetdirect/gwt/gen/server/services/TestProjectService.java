@@ -53,7 +53,7 @@ public class TestProjectService extends TestCase {
 	
 	private final static String EMAIL = "MyEmail@gmail.com";
 	
-	private final static int NumberOfDefaultDirectories = DirType.values().length;
+	private final static int NumberOfDefaultDirectories = 2;
 	
 	protected void setUp() throws Exception {
 		super.setUp();
