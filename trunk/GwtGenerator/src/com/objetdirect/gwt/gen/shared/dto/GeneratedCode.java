@@ -25,13 +25,19 @@ import java.util.List;
 @SuppressWarnings("serial")
 public class GeneratedCode implements Serializable {
 
+	public enum CodeType {
+		JAVA, FACELET;
+	}
+	
 	/** Name of the encapsulated class. */
 	private String className;
 	
 	/** Generated code of the encapsulated class. */
 	private List<String> linesOfCode;
 	
+	private CodeType codeType;
 	
+
 	/**
 	 * ONLY FOR GWT-RPC Serialization !
 	 * DO NOT USE
@@ -44,20 +50,12 @@ public class GeneratedCode implements Serializable {
 	 * Constructor
 	 * @param className The name of the encapsulated class
 	 * @param linesOfCode The generated lines of code.
+	 * @param codeType type of code, ie : java or facelet.
 	 */
-	public GeneratedCode(String className, List<String> linesOfCode) {
+	public GeneratedCode(String className, String[] linesOfCode, CodeType codeType) {
 		this.className = className;
-		this.linesOfCode = linesOfCode;
-	}
-	
-	/**
-	 * Constructor
-	 * @param className The name of the encapsulated class
-	 * @param linesOfCode The generated lines of code.
-	 */
-	public GeneratedCode(String className, String[] linesOfCode) {
-		this.className = className;
-		this.linesOfCode = Arrays.asList(linesOfCode);; 
+		this.linesOfCode = Arrays.asList(linesOfCode);
+		this.codeType = codeType;
 	}
 	
 
@@ -76,5 +74,11 @@ public class GeneratedCode implements Serializable {
 	public List<String> getLinesOfCode() {
 		return linesOfCode;
 	}
-
+	
+	/**
+	 * @return the codeType
+	 */
+	public CodeType getCodeType() {
+		return codeType;
+	}
 }

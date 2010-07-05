@@ -14,6 +14,8 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -70,30 +72,28 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 			fail();
 		}
 		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
-			"import javax.persistence.OneToMany;");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
-			"@OneToMany",
-			"List<Tiger> trainedTigers;");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
+		In(generatedClassesCode).
+			theCodeOfClass(leftEntity.getName()).
+			contains(
+				"import javax.persistence.OneToMany;").
+			contains(
+				"@OneToMany",
+				"List<Tiger> trainedTigers;").
+			contains(
 				"public Trainer(boolean dummy) {",
-				"	this.trainedTigers = new ArrayList<Tiger>();");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
+				"	this.trainedTigers = new ArrayList<Tiger>();").
+			contains(
 				"public static Trainer createTrainer() {",
 				"	Trainer trainer = new Trainer();",
 				"	trainer.trainedTigers = new ArrayList<Tiger>();",
-				"	return trainer;");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
+				"	return trainer;").
+			contains(
 				"public List<Tiger> getTrainedTigers() {",
-				"	return Collections.unmodifiableList(trainedTigers);");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
+				"	return Collections.unmodifiableList(trainedTigers);").
+			contains(
 				"public List<Tiger> getTrainedTigers() {",
-				"	return Collections.unmodifiableList(trainedTigers);");
+				"	return Collections.unmodifiableList(trainedTigers);").
+			verify();
 	}
 	
 	public void testBidirectional() {

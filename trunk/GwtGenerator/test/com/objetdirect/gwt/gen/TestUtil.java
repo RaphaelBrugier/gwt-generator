@@ -13,12 +13,13 @@ package com.objetdirect.gwt.gen;
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-import java.util.LinkedList;
+import java.util.Arrays;
 import java.util.List;
 
 import junit.framework.Assert;
 
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 
 /**
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
@@ -27,45 +28,45 @@ public class TestUtil {
 
 	public static String packageName = "com.objetdirect";
 	
-	public static void assertText(String className, List<GeneratedCode> generatedClassesCode, String ... model) {
-		List<String> code = new LinkedList<String>();
+	
+	public static List<String> findLinesOfCode(String className, List<GeneratedCode> generatedClassesCode, CodeType codeType) {
 		for(GeneratedCode genCode : generatedClassesCode) {
-			if (genCode.getClassName().equalsIgnoreCase(className)) {
-				code = genCode.getLinesOfCode();
+			if (genCode.getClassName().equalsIgnoreCase(className) && genCode.getCodeType() == codeType) {
+				return genCode.getLinesOfCode();
 			}
 		}
-
-		int length = model.length < code.size() ? model.length : code.size();
-		for (int i=0; i<length; i++)
-			Assert.assertEquals("Line not found ("+i+") :", model[i], code.get(i));
+		return null;
 	}
 	
-	public static void assertExist(String className, List<GeneratedCode> generatedClassesCode, String ... model) {
-		List<String> linesOfCode = new LinkedList<String>();
-		for(GeneratedCode genCode : generatedClassesCode) {
-			if (genCode.getClassName().equalsIgnoreCase(className)) {
-				linesOfCode = genCode.getLinesOfCode();
-			}
-		}
-		
-		String[] lines = new String[linesOfCode.size()];
-		System.arraycopy(linesOfCode.toArray(), 0, lines, 0, linesOfCode.size());
-		assertExists(lines, model);
+	public static void assertText(String className, List<GeneratedCode> generatedClassesCode, CodeType codeType, String ... model) {
+		List<String> linesOfCode = findLinesOfCode(className, generatedClassesCode, codeType);
+
+		assertText(linesOfCode, model);
 	}
 	
-	public static void assertText(String[] result, String ... model) {
-		int length = model.length < result.length ? model.length : result.length;
-		for (int i=0; i<length; i++)
-			Assert.assertEquals("Line not found ("+i+") :", model[i], result[i]);
-	}
+	public static void assertExist(String className, List<GeneratedCode> generatedClassesCode, CodeType codeType, String ... model) {
+		List<String> linesOfCode = findLinesOfCode(className, generatedClassesCode, codeType);
 
+		assertExists(linesOfCode, model);
+	}
+	
+	public static void assertText(List<String> linesOfCode, String ...model) {
+		int length = model.length < linesOfCode.size() ? model.length : linesOfCode.size();
+		for (int i=0; i<length; i++)
+			Assert.assertEquals("Line not found ("+i+") :", model[i], linesOfCode.get(i));
+	}
+	
 	public static void assertExists(String[] result, String ... model) {
+		assertExists(Arrays.asList(result), model);
+	}
+
+	public static void assertExists(List<String> result, String ... model) {
 		
 		int lineIndex = 0;
-		for (int i=0; i<result.length-model.length+1; i++) {
-			if (result[i].trim().equals(model[0].trim())) {
-				int n = result[i].indexOf(result[i].trim());
-				String indent = result[i].substring(0, n);
+		for (int i=0; i<result.size()-model.length+1; i++) {
+			if (result.get(i).trim().equals(model[0].trim())) {
+				int n = result.get(i).indexOf(result.get(i).trim());
+				String indent = result.get(i).substring(0, n);
 				int j = verifySubText(result, model, indent, i);
 				if (j==-1)
 					return;
@@ -83,9 +84,9 @@ public class TestUtil {
 				Assert.fail("Pattern '"+model+"' found in : "+s);
 	}
 	
-	static int verifySubText(String[] result, String[] model, String indent, int i) {
+	static int verifySubText(List<String> result, String[] model, String indent, int i) {
 		for (int j=0; j<model.length; j++)
-			if (!result[i+j].equals(indent+model[j])){
+			if (!result.get(i+j).equals(indent+model[j])){
 				return j;
 			}
 		return -1;

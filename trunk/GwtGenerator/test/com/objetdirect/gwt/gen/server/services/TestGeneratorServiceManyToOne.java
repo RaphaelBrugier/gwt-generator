@@ -14,6 +14,8 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -69,22 +71,22 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 		} catch (UMLException e) {
 			fail();
 		}
+		In(generatedClassesCode).
+			theCodeOfClass(flightEntity.getName()).
+			contains("" +
+				"import javax.persistence.ManyToOne;").
+			contains(
+				"@ManyToOne",
+				"Company company;").
+			contains(
+				"public Flight(boolean dummy) {",
+				"	this.company = null;").
+			contains(
+				"public static Flight createFlight() {",
+				"	Flight flight = new Flight();",
+				"	return flight;").
+			verify();
 		
-		TestUtil.assertExist(flightEntity.getName(), generatedClassesCode,
-			"import javax.persistence.ManyToOne;");
-		
-		TestUtil.assertExist(flightEntity.getName(), generatedClassesCode,
-			"@ManyToOne",
-			"Company company;");
-		
-		TestUtil.assertExist(flightEntity.getName(), generatedClassesCode,
-			"public Flight(boolean dummy) {",
-			"	this.company = null;");
-		
-		TestUtil.assertExist(flightEntity.getName(), generatedClassesCode,
-			"public static Flight createFlight() {",
-			"	Flight flight = new Flight();",
-			"	return flight;");
 	}
 	
 	public void testBidirectional() {
@@ -122,37 +124,38 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 			fail();
 		}
 		
-		TestUtil.assertExist(soldierEntity.getName(), generatedClassesCode,
-			"import javax.persistence.ManyToOne;");
+		
+		In(generatedClassesCode).
+			theCodeOfClass(soldierEntity.getName()).
+			contains(
+				"import javax.persistence.ManyToOne;").
+			contains(
+				"@ManyToOne",
+				"Troop troop;",
+				"@Transient",
+		    	"boolean inDeletion = false;").
+	    	verify();
 
-		TestUtil.assertExist(soldierEntity.getName(), generatedClassesCode,
-			"@ManyToOne",
-			"Troop troop;",
-			"@Transient",
-	    	"boolean inDeletion = false;");
-		
-		
-		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
-			"import javax.persistence.OneToMany;");
-		
-		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
-			"@OneToMany(mappedBy=\"troop\")",
-			"List<Soldier> soldiers;",
-			"@Transient",
-			"boolean inDeletion = false;");
-
-		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
-			"public Troop(boolean dummy) {",
-	        "	this.soldiers = new ArrayList<Soldier>();");
-		
-		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
-			"public static Troop createTroop() {",
-	        "	Troop troop = new Troop();",
-	        "	troop.soldiers = new ArrayList<Soldier>();",
-	        "	return troop;");
-		
-		TestUtil.assertExist(troopEntity.getName(), generatedClassesCode,
-			"public List<Soldier> getSoldiers() {",
-        	"	return Collections.unmodifiableList(soldiers);");
+		In(generatedClassesCode).
+			theCodeOfClass(troopEntity.getName()).
+			contains(
+				"import javax.persistence.OneToMany;").
+			contains(
+				"@OneToMany(mappedBy=\"troop\")",
+				"List<Soldier> soldiers;",
+				"@Transient",
+				"boolean inDeletion = false;").
+			contains(
+				"public Troop(boolean dummy) {",
+	        	"	this.soldiers = new ArrayList<Soldier>();").
+	        contains(
+        		"public static Troop createTroop() {",
+		        "	Troop troop = new Troop();",
+		        "	troop.soldiers = new ArrayList<Soldier>();",
+		        "	return troop;").
+	        contains(
+        		"public List<Soldier> getSoldiers() {",
+	        	"	return Collections.unmodifiableList(soldiers);").
+        	verify();
 	}
 }
