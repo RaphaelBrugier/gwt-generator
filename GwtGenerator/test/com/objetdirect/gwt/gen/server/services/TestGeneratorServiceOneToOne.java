@@ -14,6 +14,9 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
+import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
+
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -69,25 +72,24 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 			fail();
 		}
 		
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
-				"import javax.persistence.OneToOne;");
-
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
+		In(generatedCode).
+			theCodeOfClass(leftEntity.getName()).
+			contains(
+				"import javax.persistence.OneToOne;").
+			contains(
 				"public LeftEntity(boolean dummy) {",
 				"	this.link = null;",
-				"}");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
+				"}").
+			contains(
 				"@OneToOne",
-				"RightEntity link;");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
+				"RightEntity link;").
+			contains(
 				"public RightEntity getLink() {",
-				"	return link;");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
+				"	return link;").
+			contains(
 				"public void setLink(RightEntity link) {",
-				"	this.link = link;");
+				"	this.link = link;").
+			verify();
 	}
 	
 	
@@ -124,25 +126,24 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 			fail();
 		}
 		
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
-		"import javax.persistence.OneToOne;");
-
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
+		In(generatedCode).
+			theCodeOfClass(leftEntity.getName()).
+			contains(
+				"import javax.persistence.OneToOne;").
+			contains(
 				"public LeftEntity(boolean dummy) {",
 				"	this.link = null;",
-				"}");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
+				"}").
+			contains(
 				"@OneToOne(cascade={CascadeType.REMOVE})",
-				"RightEntity link;");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
+				"RightEntity link;").
+			contains(
 				"public RightEntity getLink() {",
-				"	return link;");
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedCode,
+				"	return link;").
+			contains(
 				"public void setLink(RightEntity link) {",
-				"	this.link = link;");
+				"	this.link = link;").
+			verify();
 	}
 	
 	
@@ -180,32 +181,37 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 			fail();
 		}
 	
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
-				"import javax.persistence.OneToOne;"
-			);
-		
-		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
-			    "@OneToOne",
+		In(generatedClassesCode).
+			theCodeOfClass(leftEntity.getName()).
+			contains(
+				"import javax.persistence.OneToOne;").
+			contains(
+				"@OneToOne",
 			    "RightEntity link;",
 			    "@Transient",
-			    "boolean inDeletion = false;"
-		    );
+			    "boolean inDeletion = false;").
+		    contains(
+	    		"public void setLink(RightEntity link) {",
+		        "	if (this.link == link)",
+		        "		return;",
+		        "	if (link != null && link.rlink != null)",
+		        "		link.rlink.link = null;",
+		        "	if (this.link != null)",
+		        "		this.link.rlink = null;",
+		    	"	this.link = link;",
+		        "	if (link != null)",
+		    	"		link.rlink = this;").
+	        contains(
+        		"@PreRemove",
+			    "void preRemove() {",
+		        "	if (!inDeletion) {",
+	            "		inDeletion = true;",
+	            "		if (this.link != null && !this.link.inDeletion)",
+	            "			this.link.rlink = null;").
+            verify();
 		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
-			"public void setLink(RightEntity link) {",
-	        "	if (this.link == link)",
-            "		return;",
-	        "	if (link != null && link.rlink != null)",
-            "		link.rlink.link = null;",
-	        "	if (this.link != null)",
-            "		this.link.rlink = null;",
-        	"	this.link = link;",
-	        "	if (link != null)",
-        	"		link.rlink = this;"
-	        );
 		
-		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode,
+		TestUtil.assertExist(leftEntity.getName(), generatedClassesCode, JAVA,
 		    "@PreRemove",
 		    "void preRemove() {",
 	        "	if (!inDeletion) {",

@@ -14,7 +14,7 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import static com.objetdirect.gwt.gen.TestUtil.assertExist;
+import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -72,22 +72,22 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 			fail();
 		}
 		
-		TestUtil.assertExist(storeEntity.getName(), generatedClassesCode,
-			"import javax.persistence.ManyToMany;");
-		
-		TestUtil.assertExist(storeEntity.getName(), generatedClassesCode,
-			"@ManyToMany",
-			"List<City> localizations;");
-		
-		TestUtil.assertExist(storeEntity.getName(), generatedClassesCode,
-			"public Store(boolean dummy) {",
-        	"	this.localizations = new ArrayList<City>();");
-		
-		TestUtil.assertExist(storeEntity.getName(), generatedClassesCode,
-			"public static Store createStore() {",
-			"	Store store = new Store();",
-			"	store.localizations = new ArrayList<City>();",
-			"	return store;");
+		In(generatedClassesCode).
+			theCodeOfClass(storeEntity.getName()).
+			contains(
+				"import javax.persistence.ManyToMany;").
+			contains(
+				"@ManyToMany",
+				"List<City> localizations;").
+			contains(
+				"public Store(boolean dummy) {",
+	        	"	this.localizations = new ArrayList<City>();").
+	        contains(
+        		"public static Store createStore() {",
+    			"	Store store = new Store();",
+    			"	store.localizations = new ArrayList<City>();",
+    			"	return store;").	
+			verify();
 	}
 	
 	public void testBidirectional() {
@@ -125,46 +125,40 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 			fail();
 		}
 		
-		assertExist(storeEntity.getName(), generatedClassesCode,
-			"import javax.persistence.ManyToMany;");
-		
-		assertExist(storeEntity.getName(), generatedClassesCode,
-			"@ManyToMany",
-			"List<Customer> customers;",
-			"@Transient",
-			"boolean inDeletion = false;");
-		
-		assertExist(storeEntity.getName(), generatedClassesCode,
-			"public Store(boolean dummy) {",
-			"	this.customers = new ArrayList<Customer>();");
-		
-		assertExist(storeEntity.getName(), generatedClassesCode,
-			"import javax.persistence.ManyToMany;");
-		
-		assertExist(storeEntity.getName(), generatedClassesCode,
-			"public static Store createStore() {",
-			"	Store store = new Store();",
-			"	store.customers = new ArrayList<Customer>();",
-			"	return store;");
-		
-		
-		assertExist(customerEntity.getName(), generatedClassesCode,
-			"import javax.persistence.ManyToMany;");
-		
-		assertExist(customerEntity.getName(), generatedClassesCode,
-			"@ManyToMany(mappedBy=\"customers\")",
-			"List<Store> stores;",
-			"@Transient",
-			"boolean inDeletion = false;");
-		
-		assertExist(customerEntity.getName(), generatedClassesCode,
-			"public Customer(boolean dummy) {",
-	        "	this.stores = new ArrayList<Store>();");
-		
-		assertExist(customerEntity.getName(), generatedClassesCode,
-			"public static Customer createCustomer() {",
-	        "	Customer customer = new Customer();",
-	        "	customer.stores = new ArrayList<Store>();",
-	        "	return customer;");
+		In(generatedClassesCode).
+			theCodeOfClass(storeEntity.getName()).
+			contains(
+				"import javax.persistence.ManyToMany;").
+			contains(
+				"@ManyToMany",
+				"List<Customer> customers;",
+				"@Transient",
+				"boolean inDeletion = false;").
+			contains(
+				"public Store(boolean dummy) {",
+				"	this.customers = new ArrayList<Customer>();").
+			contains(
+				"import javax.persistence.ManyToMany;").
+			contains(
+				"public static Store createStore() {",
+				"	Store store = new Store();",
+				"	store.customers = new ArrayList<Customer>();",
+				"	return store;").
+			contains(
+				"import javax.persistence.ManyToMany;").
+			contains(
+				"@ManyToMany(mappedBy=\"customers\")",
+				"List<Store> stores;",
+				"@Transient",
+				"boolean inDeletion = false;").
+			contains(
+				"public Customer(boolean dummy) {",
+		        "	this.stores = new ArrayList<Store>();").
+	        contains(
+        		"public static Customer createCustomer() {",
+        		"	Customer customer = new Customer();",
+        		"	customer.stores = new ArrayList<Store>();",
+	        	"	return customer;").
+			verify();
 	}
 }
