@@ -37,7 +37,9 @@
 			font-size: 1.3em;
 		}
 		.text-signIn a {
+			font-weight: bolder;
 			font-size: 1.4em;
+			color : linkColor;
 		}
 		
 		.text-guest {
@@ -58,7 +60,12 @@
 			text-align: left;
 			font-size: 1.1em;
 		}
-		
+
+		.content a {
+			font-weight: bolder;
+			color : linkColor;
+		}
+
 		.content p{
 			padding-left: 10px;
 		}
@@ -78,25 +85,26 @@
 				<div>
 					<h3>What is the gwt-generator project ?</h3>
 					<p>The gwt-generator project in an online UML diagram editor with generation features. This application is still in active development but you can already
-						test it. Please note that this application only runs on modern browers.</p>
+						test it. Please note that this application only runs on modern browers : Firefox 3.6, Chrome 5+, Opera, Safari.</p>
 					<h3>Features :</h3>
 						<ul>
-							<li>Create Uml diagrams : Class, Object and Sequence.</li>
-							<li>Save and restore your diagrams when you are logged.</li>
+							<li>Create Uml diagrams : Class and Object.</li>
+							<li>Save and restore your diagrams.</li>
 							<li>Generate the code for your <a href="http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/">hibernate POJOS, annoted with JPA.</a></li>
 						</ul>
 						See <a href="http://code.google.com/p/gwt-generator/wiki/RelationsDescriptions">this page</a> 
 						for the full list of supported class relations and the java generated code.
 					<h3>What's planned ?</h3>
-						<p>We've planned to generate the code for the <a href="http://seamframework.org/">seam framework</a> from the diagrams.
-						Generating XML schemas from class diagrams is also on our roadmap.</p>
+						<p>
+							We've planned to generate the code for the <a href="http://seamframework.org/">seam framework</a> from an object diagram.
+						</p>
 					<h3>Where can I report an issue or suggest a feature ?</h3>
-						<p>Gwt-generator is an open source project <a href="http://code.google.com/p/gwt-generator/">hosted on google code</a>.</p>
+						<p>Gwt-generator is an open source project <a href="http://code.google.com/p/gwt-generator/">hosted on Google code</a>.</p>
 						<p>Please <a href="http://code.google.com/p/gwt-generator/issues/entry">use the bug tracker</a> to report an issue or add a suggestion!</p>
 						<p>Any contribution would be highly appreciated !</p>
 					<h3>About</h3>
-					<p>Gwt-generator is based on the <a href="http://code.google.com/p/gwtuml/">gwt-uml project</a> and runs on Google App Engine.</p>
-					<p>This project is an <a href="http://www.objetdirect.com/">ObjetDirect</a> project from ODLabs departement. ObjetDirect is a french company supporting open source projects.</p>
+						<p>Gwt-generator is based on the <a href="http://code.google.com/p/gwtuml/">gwt-uml project</a> and runs on Google App Engine.</p>
+						<p>This project is an <a href="http://www.objetdirect.com/">ObjetDirect</a> project from ODLabs department. ObjetDirect is a French company supporting open source projects.</p>
 				</div>
 			</div>
    		</div>

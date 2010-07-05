@@ -51,14 +51,14 @@
 	     			<g:Anchor ui:field="newProject" addStyleNames='{baseStyle.button}'>New project</g:Anchor>
 	     			<g:Anchor ui:field="save">Save</g:Anchor>
 	     			<g:Anchor ui:field="generate">Generate</g:Anchor>
-					<g:Anchor addStyleNames='{style.signOut} {style.alignRight}' ui:field="signOut">Sign out</g:Anchor>
+					<g:Anchor ui:field="signOut" addStyleNames='{baseStyle.button} {style.alignRight}'>Log out</g:Anchor>
 	     		</div>
 			</g:HTMLPanel>
    		</g:north>
    		
 		<g:center>
 			<g:SplitLayoutPanel ui:field="splitPanel">
-				<g:west size="200">
+				<g:west size="300">
 					<g:FlowPanel ui:field="westPanel"/>
 				</g:west>
 				<g:center>

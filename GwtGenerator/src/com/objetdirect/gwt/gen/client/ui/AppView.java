@@ -100,6 +100,9 @@ public class AppView extends LayoutPanel implements AppPresenter.Display  {
 	@Override
 	public void setSignOutHref(String href) {
 		signOut.setHref(href);
+		signOut.getElement().getStyle().setColor("white");
+		//Force the color attribute as a workaround for a bug with uibinder
+		//@see http://code.google.com/p/google-web-toolkit/issues/detail?id=5094
 	}
 
 	@Override
