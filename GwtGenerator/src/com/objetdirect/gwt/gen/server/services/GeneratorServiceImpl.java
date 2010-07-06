@@ -14,6 +14,8 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
+
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,7 +70,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
 		
 		for (Map.Entry<UMLClass, EntityDescriptor> entry : entities.entrySet()) {
-			GeneratedCode generatedCode = new GeneratedCode(entry.getKey().getName(), entry.getValue().getText());
+			GeneratedCode generatedCode = new GeneratedCode(entry.getKey().getName(), entry.getValue().getText(), JAVA);
 			result.add(generatedCode);
 		}
 		
@@ -85,25 +87,5 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 		SeamGenerator seamGenerator = new SeamGenerator(umlObjects, instantiationsLinks, objectRelations);
 		
 		return seamGenerator.getGenerateCode();
-		
-//		System.out.println("GeneratorServiceImpl::generateSeamCode => \n");
-//		
-//		for (UMLObject object : umlObjects) {
-//			System.out.println("\tobject = " + object);
-//		}
-//		
-//		System.out.println("\n\n");
-//		
-//		for (InstantiationRelation instantiation : instantiationsLinks) {
-//			System.out.println("\t"+ instantiation);
-//		}
-//		
-//		System.out.println("\n\n");
-//		
-//		for (ObjectRelation objectRelation : objectRelations) {
-//			System.out.println("\t"+ objectRelation);
-//		}
-		
-		
 	}
 }

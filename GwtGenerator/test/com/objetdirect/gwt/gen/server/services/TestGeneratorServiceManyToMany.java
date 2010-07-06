@@ -144,6 +144,10 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 				"	Store store = new Store();",
 				"	store.customers = new ArrayList<Customer>();",
 				"	return store;").
+			verify();
+		
+		In(generatedClassesCode).
+		theCodeOfClass(customerEntity.getName()).
 			contains(
 				"import javax.persistence.ManyToMany;").
 			contains(

@@ -40,12 +40,17 @@
 		<link>
 			<name>GwtUmlAPI-src</name>
 			<type>2</type>
-			<location>E://workspace/GWTUMLAPI/src</location>
+			<location>E:/workspace/GWTUMLAPI/src</location>
 		</link>
 		<link>
 			<name>generatorAPI-src</name>
 			<type>2</type>
-			<location>E://workspace/GeneratorApi/src</location>
+			<location>E:/workspace/GeneratorApi/src</location>
+		</link>
+		<link>
+			<name>generatorAPI-tst</name>
+			<type>2</type>
+			<location>E:/workspace/GeneratorApi/tst</location>
 		</link>
 	</linkedResources>
 </projectDescription>

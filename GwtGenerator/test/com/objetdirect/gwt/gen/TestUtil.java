@@ -13,6 +13,8 @@ package com.objetdirect.gwt.gen;
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
+import static junit.framework.Assert.fail;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,6 +37,7 @@ public class TestUtil {
 				return genCode.getLinesOfCode();
 			}
 		}
+		fail("No lines of code found for the class " + className + " of type " + codeType) ;
 		return null;
 	}
 	

@@ -14,18 +14,20 @@
  */
 package com.objetdirect.gwt.gen.server.gen;
 
+import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
+
 import java.util.LinkedList;
 import java.util.List;
 
 import com.objetdirect.gwt.gen.server.gen.seam.PageDescriptorProcessor;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
- *
  */
 public class SeamGenerator {
 
@@ -36,10 +38,8 @@ public class SeamGenerator {
 	private final List<ObjectRelation> objectRelations;
 
 	PageDescriptorProcessor pageDescriptorProcessor = new PageDescriptorProcessor();
-
 	
-	
-/**
+	/**
 	 * @param objects
 	 * @param instantiationsLinks
 	 * @param objectRelations
@@ -48,18 +48,16 @@ public class SeamGenerator {
 		this.objects = objects;
 		this.instantiationsLinks = instantiationsLinks;
 		this.objectRelations = objectRelations;
-		
-		seamParse();
 	}
 
 	void seamParse() {
-		parseObject();
+		parseObjects();
 	}
 
 	/**
 	 * 
 	 */
-	void parseObject() {
+	void parseObjects() {
 		for (UMLObject object : objects) {
 			if (object.getClassName().equals("PageDescriptor")) {
 				pageDescriptorProcessor.process(object);
@@ -69,9 +67,11 @@ public class SeamGenerator {
 	
 
 	public List<GeneratedCode> getGenerateCode() {
+		seamParse();
 		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
 		
-		result.add(new GeneratedCode("PageDescriptor.java", pageDescriptorProcessor.getPageDescriptor().getJavaText()));
+		result.add(new GeneratedCode("PageDescriptor.java", pageDescriptorProcessor.getPageDescriptor().getJavaText(), JAVA));
+		result.add(new GeneratedCode("PageDescriptor.xhtml", pageDescriptorProcessor.getPageDescriptor().getFaceletText(), CodeType.FACELET));
 		
 		return result;
 	}

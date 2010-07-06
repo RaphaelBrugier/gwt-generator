@@ -16,6 +16,7 @@ package com.objetdirect.gwt.gen;
 
 import static com.objetdirect.gwt.gen.TestUtil.findLinesOfCode;
 import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
+import static junit.framework.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -80,6 +81,8 @@ public class AssertGeneratedCode {
 		assert className != null : "you should give a class name";
 		
 		List<String> linesOfCode = findLinesOfCode(className, generatedClassesCode, codeType);
+		
+		assertNotNull("Found no lines of Code", linesOfCode);
 		TestUtil.assertText(linesOfCode, model);
 	}
 	
