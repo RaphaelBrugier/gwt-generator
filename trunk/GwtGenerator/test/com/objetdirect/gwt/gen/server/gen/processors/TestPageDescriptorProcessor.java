@@ -12,31 +12,11 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen;
-
-import static com.objetdirect.seam.TestPageDescriptor.testSimplePageFaceletText;
-import static com.objetdirect.seam.TestPageDescriptor.testSimplePageJavaText;
-
-import org.junit.Test;
-
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+package com.objetdirect.gwt.gen.server.gen.processors;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestPageDescriptor extends TestSeamGenerator {
+public class TestPageDescriptorProcessor {
 
-	
-	@Test
-	public void testGenerateSimplePageCode() throws Exception {
-		UMLObject pageDescriptorObject =  new UMLObject("pageDescriptorInstance", "PageDescriptor").
-			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
-			addAttributeValuePair("className", "EditAgencies").
-			addAttributeValuePair("viewPackageName", "views").
-			addAttributeValuePair("viewName", "edit-agencies");
-		
-		objects.add(pageDescriptorObject);
-		
-		assertGenerated(testSimplePageJavaText, testSimplePageFaceletText);
-	}
 }

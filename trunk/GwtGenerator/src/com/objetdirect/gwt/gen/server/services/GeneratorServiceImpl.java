@@ -84,7 +84,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	public List<GeneratedCode> generateSeamCode(List<UMLObject> umlObjects, List<InstantiationRelation> instantiationsLinks,
 			List<ObjectRelation> objectRelations, String packageName) throws UMLException {
 		
-		SeamGenerator seamGenerator = new SeamGenerator(umlObjects, instantiationsLinks, objectRelations);
+		SeamGenerator seamGenerator = new SeamGenerator(null, umlObjects, instantiationsLinks, objectRelations); //TODO change the service and replace the null value
 		
 		return seamGenerator.getGenerateCode();
 	}
