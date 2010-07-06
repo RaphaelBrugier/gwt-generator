@@ -12,31 +12,33 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen;
+package com.objetdirect.gwt.gen.server.gen.processors;
 
-import static com.objetdirect.seam.TestPageDescriptor.testSimplePageFaceletText;
-import static com.objetdirect.seam.TestPageDescriptor.testSimplePageJavaText;
-
-import org.junit.Test;
-
+import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.PageDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestPageDescriptor extends TestSeamGenerator {
+public class PageDescriptorProcessor extends Processor {
 
+	private PageDescriptor pageDescriptor;
+
+	private SeamGenerator seamGenerator;
 	
-	@Test
-	public void testGenerateSimplePageCode() throws Exception {
-		UMLObject pageDescriptorObject =  new UMLObject("pageDescriptorInstance", "PageDescriptor").
-			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
-			addAttributeValuePair("className", "EditAgencies").
-			addAttributeValuePair("viewPackageName", "views").
-			addAttributeValuePair("viewName", "edit-agencies");
-		
-		objects.add(pageDescriptorObject);
-		
-		assertGenerated(testSimplePageJavaText, testSimplePageFaceletText);
+	public PageDescriptorProcessor(SeamGenerator seamGenerator) {
+		this.seamGenerator = seamGenerator;
+	}
+	
+	@Override
+	public void process(UMLObject object) {
+		String classPackageName = object.getValueOfAttribute("classPackageName");
+		String className = object.getValueOfAttribute("className");
+		String viewPackageName = object.getValueOfAttribute("viewPackageName");
+		String viewName = object.getValueOfAttribute("viewName");
+
+		pageDescriptor = new PageDescriptor(classPackageName, className, viewPackageName, viewName);
+		seamGenerator.setDocumentDescriptor(pageDescriptor);
 	}
 }

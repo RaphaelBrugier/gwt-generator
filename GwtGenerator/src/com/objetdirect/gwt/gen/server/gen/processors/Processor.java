@@ -12,34 +12,16 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.seam;
+package com.objetdirect.gwt.gen.server.gen.processors;
 
-import com.objetdirect.gwt.gen.server.gen.Processor;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.seam.PageDescriptor;
 
 /**
+ * Construct the document from an object instance.
+ * 
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PageDescriptorProcessor extends Processor {
+public abstract class Processor {
 
-	private PageDescriptor pageDescriptor;
-
-	@Override
-	public void process(UMLObject object) {
-		String classPackageName = object.getValueOfAttribute("classPackageName");
-		String className = object.getValueOfAttribute("className");
-		String viewPackageName = object.getValueOfAttribute("viewPackageName");
-		String viewName = object.getValueOfAttribute("viewName");
-
-		pageDescriptor = new PageDescriptor(classPackageName, className, viewPackageName, viewName);
-	}
-
-	/**
-	 * @return the pageDescriptor
-	 */
-	public PageDescriptor getPageDescriptor() {
-		pageDescriptor.build();
-		return pageDescriptor;
-	}
+	public abstract void process(UMLObject object);
 }

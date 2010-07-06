@@ -27,7 +27,6 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLType;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
 
 /**
  * Helper methods to generate the source code from UML Components.
@@ -197,14 +196,14 @@ public class GeneratorHelper {
 	private static void addAttribute(EntityDescriptor entity, UMLClassAttribute attribute) {
 		String name = attribute.getName();
 		String type = attribute.getType();
-		UMLVisibility visibility = attribute.getVisibility();
+//		UMLVisibility visibility = attribute.getVisibility();
 		
-		switch (visibility) {
-		case PRIVATE:
-			break;
-		default:
-			throw new UMLException("Pojo generator only supports private field");
-		}
+//		switch (visibility) {
+//		case PRIVATE:
+//			break;
+//		default:
+//			throw new UMLException("Pojo generator only supports private field");
+//		}
 		
 		switch (UMLType.getUMLTypeFromString(type)) {
 		case STRING :

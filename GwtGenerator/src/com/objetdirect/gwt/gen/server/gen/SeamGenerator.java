@@ -16,51 +16,91 @@ package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
-import com.objetdirect.gwt.gen.server.gen.seam.PageDescriptorProcessor;
+import com.objetdirect.entities.EntityDescriptor;
+import com.objetdirect.gwt.gen.server.gen.processors.PageDescriptorProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.Processor;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
+import com.objetdirect.seam.DocumentDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class SeamGenerator {
 
-	private final List<UMLObject> objects;
-	
-	private final List<InstantiationRelation> instantiationsLinks;
-	
-	private final List<ObjectRelation> objectRelations;
+	private static final String PACKAGE_NAME = "com.objetdirect.domain";
 
-	PageDescriptorProcessor pageDescriptorProcessor = new PageDescriptorProcessor();
+	final List<UMLClass> classes;
+	
+	final List<UMLObject> objects;
+	
+	final List<InstantiationRelation> instantiationsLinks;
+	
+	final List<ObjectRelation> objectRelations;
+	
+	Map<UMLClass, EntityDescriptor> classToEntity;
+	
+	private DocumentDescriptor documentDescriptor;
+	
+	private Map<String, Processor> processors;
+	
 	
 	/**
 	 * @param objects
 	 * @param instantiationsLinks
 	 * @param objectRelations
 	 */
-	public SeamGenerator(List<UMLObject> objects, List<InstantiationRelation> instantiationsLinks, List<ObjectRelation> objectRelations) {
+	public SeamGenerator(List<UMLClass> classes, List<UMLObject> objects, List<InstantiationRelation> instantiationsLinks, List<ObjectRelation> objectRelations) {
+		this.classes = classes;
 		this.objects = objects;
 		this.instantiationsLinks = instantiationsLinks;
 		this.objectRelations = objectRelations;
+		this.processors = new HashMap<String, Processor>();
+		addProcessors();
+	}
+	
+	private void addProcessors() {
+		processors.put("PageDescriptor", new PageDescriptorProcessor(this));
+		processors.put("PrintDescriptor", new PrintDescriptorProcessor(this));
 	}
 
 	void seamParse() {
+//		parseDocument();
 		parseObjects();
 	}
 
-	/**
-	 * 
-	 */
-	void parseObjects() {
+//	void parseClasses() {
+//		classToEntity = new HashMap<UMLClass, EntityDescriptor>();
+//		for (UMLClass umlClass : classes) {
+//			EntityDescriptor entity = GeneratorHelper.convertUMLClassToEntityDescriptor(umlClass, PACKAGE_NAME);
+//			classToEntity.put(umlClass, entity);
+//		}
+//	}
+	
+	void parseDocument() {
 		for (UMLObject object : objects) {
 			if (object.getClassName().equals("PageDescriptor")) {
-				pageDescriptorProcessor.process(object);
+				new PageDescriptorProcessor(this).process(object);
+			} else if (object.getClassName().equals("PrintDescriptor")) {
+				new PrintDescriptorProcessor(this).process(object);
+			}
+		}
+	}
+
+	void parseObjects() {
+		for (UMLObject object : objects) {
+			if (processors.containsKey(object.getClassName())) {
+				processors.get(object.getClassName()).process(object);
 			}
 		}
 	}
@@ -68,11 +108,19 @@ public class SeamGenerator {
 
 	public List<GeneratedCode> getGenerateCode() {
 		seamParse();
+		documentDescriptor.build();
 		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
 		
-		result.add(new GeneratedCode("PageDescriptor.java", pageDescriptorProcessor.getPageDescriptor().getJavaText(), JAVA));
-		result.add(new GeneratedCode("PageDescriptor.xhtml", pageDescriptorProcessor.getPageDescriptor().getFaceletText(), CodeType.FACELET));
+		result.add(new GeneratedCode("Page.java", documentDescriptor.getJavaText(), JAVA));
+		result.add(new GeneratedCode("Page.xhtml", documentDescriptor.getFaceletText(), CodeType.FACELET));
 		
 		return result;
+	}
+
+	/**
+	 * @param documentDescriptor the documentDescriptor to set
+	 */
+	public void setDocumentDescriptor(DocumentDescriptor documentDescriptor) {
+		this.documentDescriptor = documentDescriptor;
 	}
 }

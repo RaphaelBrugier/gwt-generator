@@ -14,11 +14,16 @@
  */
 package com.objetdirect.gwt.gen.server.gen;
 
+import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
@@ -33,6 +38,7 @@ public class TestSeamGenerator {
 	List<UMLObject> objects;
 	List<InstantiationRelation> instantiationsLinks;
 	List<ObjectRelation> objectRelations;
+	List<UMLClass> classes;
 	
 
 	@Before
@@ -40,7 +46,32 @@ public class TestSeamGenerator {
 		objects = new ArrayList<UMLObject>();
 		instantiationsLinks = new ArrayList<InstantiationRelation>();
 		objectRelations = new ArrayList<ObjectRelation>();
+		classes = new ArrayList<UMLClass>();
 		
-		generator = new SeamGenerator(objects, instantiationsLinks, objectRelations);
+		generator = new SeamGenerator(classes, objects, instantiationsLinks, objectRelations);
+	}
+	
+	void createStringFieldInstance(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {
+		UMLObject field = new UMLObject("", "StringField").
+							addAttributeValuePair("fieldName", fieldNameValue).
+							addAttributeValuePair("fieldTitle", fieldTitleValue).
+							addAttributeValuePair("length", lengthValue);
+		objects.add(field);
+		
+		ObjectRelation relation = new ObjectRelation(form, field).setRightRole("");
+		objectRelations.add(relation);
+	}
+	
+	void assertGenerated(String[] javaText, String[] faceletText) {
+		List<GeneratedCode> generatedClassesCode = generator.getGenerateCode();
+		
+		In(generatedClassesCode).
+			theCodeOfClass("Page.java").
+			equals(javaText);
+		
+		In(generatedClassesCode).
+			theCodeOfClass("Page.xhtml").
+			ofType(CodeType.FACELET).
+			equals(faceletText);
 	}
 }
