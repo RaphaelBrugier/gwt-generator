@@ -23,7 +23,7 @@ public class StringField {
 	
 	public final String fieldName;
 	public final String fieldTitle;
-	public final String length;
+	private final String length;
 	/**
 	 * @param fieldName
 	 * @param fieldTitle
@@ -70,6 +70,10 @@ public class StringField {
 		} else if (!length.equals(other.length))
 			return false;
 		return true;
+	}
+	
+	public int getLength() {
+		return Integer.parseInt(length);
 	}
 	
 	@Override
