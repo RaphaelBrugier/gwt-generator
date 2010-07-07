@@ -25,8 +25,12 @@ import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.server.gen.processors.PageDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
 import com.objetdirect.gwt.gen.server.gen.processors.StringFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessor;
+import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessorsManager;
+import com.objetdirect.gwt.gen.server.services.GeneratorHelper;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -43,18 +47,16 @@ public class SeamGenerator {
 	private static final String PACKAGE_NAME = "com.objetdirect.domain";
 
 	final List<UMLClass> classes;
-	
 	final List<UMLObject> objects;
-	
 	final List<InstantiationRelation> instantiationsLinks;
-	
 	final List<ObjectRelation> objectRelations;
-	
-	Map<UMLClass, EntityDescriptor> classToEntity;
 	
 	private DocumentDescriptor documentDescriptor;
 	
+	Map<String, EntityDescriptor> classToEntity;
+	
 	private Map<String, Processor> processors;
+	private RelationProcessorsManager relationProcessorsManager;
 	
 	// This map maintains the bridge between the object from the uml world and the objects instantiated in the generator world.
 	private Map<UMLObject, Object> umlObjectToGenObjects;
@@ -72,42 +74,49 @@ public class SeamGenerator {
 		this.objectRelations = objectRelations;
 		processors = new HashMap<String, Processor>();
 		umlObjectToGenObjects = new HashMap<UMLObject, Object>();
+		relationProcessorsManager = new RelationProcessorsManager(this);
 		addProcessors();
 	}
 	
 	private void addProcessors() {
 		processors.put("PageDescriptor", new PageDescriptorProcessor(this));
 		processors.put("PrintDescriptor", new PrintDescriptorProcessor(this));
+		processors.put("PrintForm", new PrintFormProcessor(this));
 		processors.put("PrintEntity", new PrintEntityProcessor(this));
 		processors.put("StringField", new StringFieldProcessor(this));
 	}
 
 	void seamParse() {
-//		parseClasses();
+		parseClasses();
 		parseObjects();
-		parseRelations();
+		parseObjectRelations();
 	}
 
-//	void parseClasses() {
-//		classToEntity = new HashMap<UMLClass, EntityDescriptor>();
-//		for (UMLClass umlClass : classes) {
-//			EntityDescriptor entity = GeneratorHelper.convertUMLClassToEntityDescriptor(umlClass, PACKAGE_NAME);
-//			classToEntity.put(umlClass, entity);
-//		}
-//	}
+	void parseClasses() {
+		classToEntity = new HashMap<String, EntityDescriptor>();
+		for (UMLClass umlClass : classes) {
+			EntityDescriptor entity = GeneratorHelper.convertUMLClassToEntityDescriptor(umlClass, PACKAGE_NAME);
+			classToEntity.put(umlClass.getName(), entity);
+		}
+	}
 
 
 	void parseObjects() {
 		for (UMLObject object : objects) {
 			if (processors.containsKey(object.getClassName())) {
 				processors.get(object.getClassName()).process(object);
+			} else if (classToEntity.containsKey(object.getClassName())) {
+				addBridgeObject(object, classToEntity.get(object.getClassName()));
 			}
 		}
 	}
 	
-	void parseRelations() {
+	void parseObjectRelations() {
 		for (ObjectRelation relation : objectRelations) {
-			
+			System.out.println("SeamGenerator::parseObjectRelations() relation : " + relation);
+			RelationProcessor rp = relationProcessorsManager.getRelationProcessor(relation);
+			if (rp != null)
+				rp.process(relation);
 		}
 	}
 
@@ -134,10 +143,11 @@ public class SeamGenerator {
 	 * @param genObject
 	 */
 	public void addBridgeObject(UMLObject umlObject, Object genObject) {
+		System.out.println("SeamGenerator::addBridgeObject umlObject = " + umlObject + "  genObject = " + genObject);
 		umlObjectToGenObjects.put(umlObject, genObject);
 	}
 	
-	public Object getObjectGenCounterPartOf(UMLObject umlObject) {
+	public Object getGenObjectCounterPartOf(UMLObject umlObject) {
 		return umlObjectToGenObjects.get(umlObject);
 	}
 }

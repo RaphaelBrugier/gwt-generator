@@ -21,6 +21,7 @@ import org.junit.Test;
 
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.seam.PageDescriptor;
+import com.objetdirect.seam.print.PrintDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
@@ -39,5 +40,6 @@ public class TestPageDescriptorProcessor extends TestProcessor {
 		pdp.process(object);
 		
 		verify(seamGenerator).setDocumentDescriptor(isA(PageDescriptor.class));
+		verify(seamGenerator).addBridgeObject(eq(object), isA(PageDescriptor.class));
 	}
 }

@@ -36,10 +36,9 @@ public class PrintEntityToPrintForm implements RelationProcessor{
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		System.out.println("objectRelation.getRightRole() = " + objectRelation.getRightRole());
 		if(objectRelation.getRightRole().equals("element")) {
-			PrintEntityDescriptor printEntityDescriptor  = (PrintEntityDescriptor)  seamGenerator.getObjectGenCounterPartOf(objectRelation.getLeftObject());
-			PrintFormDescriptor printFormDescriptor = (PrintFormDescriptor) seamGenerator.getObjectGenCounterPartOf(objectRelation.getRightObject());
+			PrintEntityDescriptor printEntityDescriptor  = (PrintEntityDescriptor)  seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
+			PrintFormDescriptor printFormDescriptor = (PrintFormDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
 
 			printEntityDescriptor.addElement(printFormDescriptor);
 		}

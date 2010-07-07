@@ -37,8 +37,8 @@ public class PrintDescriptorToPrintEntity implements RelationProcessor{
 	@Override
 	public void process(ObjectRelation objectRelation) {
 		if(objectRelation.getRightRole().equals("feature")) {
-			PrintDescriptor printDescriptor = (PrintDescriptor) seamGenerator.getObjectGenCounterPartOf(objectRelation.getLeftObject());
-			PrintEntityDescriptor printEntityDescriptor  = (PrintEntityDescriptor)  seamGenerator.getObjectGenCounterPartOf(objectRelation.getRightObject());
+			PrintDescriptor printDescriptor = (PrintDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
+			PrintEntityDescriptor printEntityDescriptor  = (PrintEntityDescriptor)  seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
 			
 			printDescriptor.setFeature(printEntityDescriptor);
 		}

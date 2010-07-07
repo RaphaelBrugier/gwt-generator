@@ -39,5 +39,7 @@ public class PrintDescriptorProcessor extends Processor {
 
 		PrintDescriptor printDescriptor = new PrintDescriptor(classPackageName, className, viewPackageName, viewName);
 		seamGenerator.setDocumentDescriptor(printDescriptor);
+		
+		seamGenerator.addBridgeObject(object, printDescriptor);
 	}
 }
