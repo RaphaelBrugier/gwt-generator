@@ -14,9 +14,30 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
+import static org.mockito.Matchers.*;
+import static org.mockito.Mockito.*;
+
+import org.junit.Test;
+
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.PageDescriptor;
+
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestPageDescriptorProcessor {
-
+public class TestPageDescriptorProcessor extends TestProcessor {
+	@Test
+	public void process() {
+		PageDescriptorProcessor pdp = new PageDescriptorProcessor(seamGenerator);
+		
+		UMLObject object = new UMLObject("", "PageDescriptor").
+			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
+			addAttributeValuePair("className", "EditAgencies").
+			addAttributeValuePair("viewPackageName", "views").
+			addAttributeValuePair("viewName", "edit-agencies");
+		
+		pdp.process(object);
+		
+		verify(seamGenerator).setDocumentDescriptor(isA(PageDescriptor.class));
+	}
 }

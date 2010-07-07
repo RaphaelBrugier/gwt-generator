@@ -14,30 +14,30 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
-import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.verify;
+
+import org.junit.Test;
+
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.seam.print.PrintDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintDescriptorProcessor extends Processor {
-
-
-	private SeamGenerator seamGenerator;
-	
-	public PrintDescriptorProcessor(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
-	}
-	
-	@Override
-	public void process(UMLObject object) {
-		String classPackageName = object.getValueOfAttribute("classPackageName");
-		String className = object.getValueOfAttribute("className");
-		String viewPackageName = object.getValueOfAttribute("viewPackageName");
-		String viewName = object.getValueOfAttribute("viewName");
-
-		PrintDescriptor printDescriptor = new PrintDescriptor(classPackageName, className, viewPackageName, viewName);
-		seamGenerator.setDocumentDescriptor(printDescriptor);
+public class TestPrintDescriptorProcessor extends TestProcessor {
+	@Test
+	public void process() {
+		PrintDescriptorProcessor pdp = new PrintDescriptorProcessor(seamGenerator);
+		
+		UMLObject object = new UMLObject("", "PrintDescriptor").
+			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
+			addAttributeValuePair("className", "EditAgencies").
+			addAttributeValuePair("viewPackageName", "views").
+			addAttributeValuePair("viewName", "edit-agencies");
+		
+		pdp.process(object);
+		
+		verify(seamGenerator).setDocumentDescriptor(isA(PrintDescriptor.class));
 	}
 }

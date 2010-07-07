@@ -14,30 +14,31 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+
+import org.junit.After;
+import org.junit.Before;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.seam.print.PrintDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
+ *
  */
-public class PrintDescriptorProcessor extends Processor {
+public abstract class TestProcessor {
 
+	@Mock
+	SeamGenerator seamGenerator;
 
-	private SeamGenerator seamGenerator;
-	
-	public PrintDescriptorProcessor(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+	@Before
+	public void before() {
+		 MockitoAnnotations.initMocks(this);
 	}
 	
-	@Override
-	public void process(UMLObject object) {
-		String classPackageName = object.getValueOfAttribute("classPackageName");
-		String className = object.getValueOfAttribute("className");
-		String viewPackageName = object.getValueOfAttribute("viewPackageName");
-		String viewName = object.getValueOfAttribute("viewName");
-
-		PrintDescriptor printDescriptor = new PrintDescriptor(classPackageName, className, viewPackageName, viewName);
-		seamGenerator.setDocumentDescriptor(printDescriptor);
+	@After
+	public void after() {
+		verifyNoMoreInteractions(seamGenerator);
 	}
 }

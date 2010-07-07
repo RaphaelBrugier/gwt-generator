@@ -15,29 +15,28 @@
 package com.objetdirect.gwt.gen.server.gen.processors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.seam.print.PrintDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintDescriptorProcessor extends Processor {
-
+public class StringFieldProcessor extends Processor {
 
 	private SeamGenerator seamGenerator;
 	
-	public PrintDescriptorProcessor(SeamGenerator seamGenerator) {
+	public StringFieldProcessor(SeamGenerator seamGenerator) {
 		this.seamGenerator = seamGenerator;
 	}
 	
 	@Override
 	public void process(UMLObject object) {
-		String classPackageName = object.getValueOfAttribute("classPackageName");
-		String className = object.getValueOfAttribute("className");
-		String viewPackageName = object.getValueOfAttribute("viewPackageName");
-		String viewName = object.getValueOfAttribute("viewName");
-
-		PrintDescriptor printDescriptor = new PrintDescriptor(classPackageName, className, viewPackageName, viewName);
-		seamGenerator.setDocumentDescriptor(printDescriptor);
+		String fieldName = object.getValueOfAttribute("fieldName");
+		String fieldTitle = object.getValueOfAttribute("fieldTitle");
+		String length = object.getValueOfAttribute("length");
+		
+		StringField sf = new StringField(fieldName, fieldTitle, length);
+		
+		seamGenerator.addBridgeObject(object, sf);
 	}
 }
