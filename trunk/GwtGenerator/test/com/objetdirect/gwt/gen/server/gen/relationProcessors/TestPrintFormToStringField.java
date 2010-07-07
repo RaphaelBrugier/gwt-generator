@@ -47,8 +47,8 @@ public class TestPrintFormToStringField extends TestRelationProcessor{
 
 		processor.process(objectRelation);
 		
-		verify(seamGenerator).getObjectGenCounterPartOf(umlObjectOwner);
-		verify(seamGenerator).getObjectGenCounterPartOf(umlObjectTarget);
+		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
+		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
 		verify(printForm).showField(FIELD_NAME, FIELD_TITLE, 20);
 	}
 }

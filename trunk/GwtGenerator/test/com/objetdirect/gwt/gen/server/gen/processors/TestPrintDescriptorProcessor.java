@@ -14,6 +14,7 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
+import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 
@@ -21,6 +22,7 @@ import org.junit.Test;
 
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.seam.print.PrintDescriptor;
+import com.objetdirect.seam.print.PrintEntityDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
@@ -39,5 +41,6 @@ public class TestPrintDescriptorProcessor extends TestProcessor {
 		pdp.process(object);
 		
 		verify(seamGenerator).setDocumentDescriptor(isA(PrintDescriptor.class));
+		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintDescriptor.class));
 	}
 }

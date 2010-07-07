@@ -37,5 +37,7 @@ public class PageDescriptorProcessor extends Processor {
 
 		PageDescriptor pageDescriptor = new PageDescriptor(classPackageName, className, viewPackageName, viewName);
 		seamGenerator.setDocumentDescriptor(pageDescriptor);
+		
+		seamGenerator.addBridgeObject(object, pageDescriptor);
 	}
 }

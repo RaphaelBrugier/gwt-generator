@@ -43,8 +43,8 @@ public class TestPrintDescriptorToPrintEntity extends TestRelationProcessor{
 
 		processor.process(objectRelation);
 		
-		verify(seamGenerator).getObjectGenCounterPartOf(umlObjectOwner);
-		verify(seamGenerator).getObjectGenCounterPartOf(umlObjectTarget);
+		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
+		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
 		verify(printDescriptor).setFeature(printEntityDescriptor);
 	}
 }

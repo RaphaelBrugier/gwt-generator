@@ -37,9 +37,9 @@ public class PrintFormToStringField implements RelationProcessor{
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		PrintFormDescriptor printFormDescriptor = (PrintFormDescriptor) seamGenerator.getObjectGenCounterPartOf(objectRelation.getLeftObject());
+		PrintFormDescriptor printFormDescriptor = (PrintFormDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
 
-		StringField stringField  = (StringField)  seamGenerator.getObjectGenCounterPartOf(objectRelation.getRightObject());
+		StringField stringField  = (StringField)  seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
 
 		printFormDescriptor.showField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
 

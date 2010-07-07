@@ -47,7 +47,7 @@ public abstract class TestRelationProcessor {
 	@Mock
 	UMLObject umlObjectTarget;
 	
-	@Before
+	@Before	
 	public void before() {
 		MockitoAnnotations.initMocks(this);
 		when(objectRelation.getLeftObject()).thenReturn(umlObjectOwner);
@@ -65,8 +65,8 @@ public abstract class TestRelationProcessor {
 	 * @param targetRole
 	 */
 	public void setReturnedGenObject(Object owner, Object target, String targetRole) {
-		when(seamGenerator.getObjectGenCounterPartOf(umlObjectOwner)).thenReturn(owner);
-		when(seamGenerator.getObjectGenCounterPartOf(umlObjectTarget)).thenReturn(target);
+		when(seamGenerator.getGenObjectCounterPartOf(umlObjectOwner)).thenReturn(owner);
+		when(seamGenerator.getGenObjectCounterPartOf(umlObjectTarget)).thenReturn(target);
 		when(objectRelation.getRightRole()).thenReturn(targetRole);
 	}
 	
