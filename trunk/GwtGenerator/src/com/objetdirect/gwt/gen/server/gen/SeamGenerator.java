@@ -26,6 +26,7 @@ import com.objetdirect.gwt.gen.server.gen.processors.PageDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
+import com.objetdirect.gwt.gen.server.gen.processors.StringFieldProcessor;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -78,11 +79,13 @@ public class SeamGenerator {
 		processors.put("PageDescriptor", new PageDescriptorProcessor(this));
 		processors.put("PrintDescriptor", new PrintDescriptorProcessor(this));
 		processors.put("PrintEntity", new PrintEntityProcessor(this));
+		processors.put("StringField", new StringFieldProcessor(this));
 	}
 
 	void seamParse() {
-//		parseDocument();
+//		parseClasses();
 		parseObjects();
+		parseRelations();
 	}
 
 //	void parseClasses() {
@@ -92,16 +95,7 @@ public class SeamGenerator {
 //			classToEntity.put(umlClass, entity);
 //		}
 //	}
-	
-	void parseDocument() {
-		for (UMLObject object : objects) {
-			if (object.getClassName().equals("PageDescriptor")) {
-				new PageDescriptorProcessor(this).process(object);
-			} else if (object.getClassName().equals("PrintDescriptor")) {
-				new PrintDescriptorProcessor(this).process(object);
-			}
-		}
-	}
+
 
 	void parseObjects() {
 		for (UMLObject object : objects) {
@@ -111,6 +105,11 @@ public class SeamGenerator {
 		}
 	}
 	
+	void parseRelations() {
+		for (ObjectRelation relation : objectRelations) {
+			
+		}
+	}
 
 	public List<GeneratedCode> getGenerateCode() {
 		seamParse();
@@ -136,5 +135,9 @@ public class SeamGenerator {
 	 */
 	public void addBridgeObject(UMLObject umlObject, Object genObject) {
 		umlObjectToGenObjects.put(umlObject, genObject);
+	}
+	
+	public Object getObjectGenCounterPartOf(UMLObject umlObject) {
+		return umlObjectToGenObjects.get(umlObject);
 	}
 }
