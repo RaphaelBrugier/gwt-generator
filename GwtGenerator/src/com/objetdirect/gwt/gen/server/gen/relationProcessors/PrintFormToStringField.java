@@ -15,6 +15,7 @@
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.print.PrintEntityDescriptor;
 import com.objetdirect.seam.print.PrintFormDescriptor;
@@ -36,11 +37,11 @@ public class PrintFormToStringField implements RelationProcessor{
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		if(objectRelation.getRightRole().equals("element")) {
-			PrintEntityDescriptor printEntityDescriptor  = (PrintEntityDescriptor)  seamGenerator.getObjectGenCounterPartOf(objectRelation.getLeftObject());
-			PrintFormDescriptor printFormDescriptor = (PrintFormDescriptor) seamGenerator.getObjectGenCounterPartOf(objectRelation.getRightObject());
+		PrintFormDescriptor printFormDescriptor = (PrintFormDescriptor) seamGenerator.getObjectGenCounterPartOf(objectRelation.getLeftObject());
 
-			printEntityDescriptor.addElement(printFormDescriptor);
-		}
+		StringField stringField  = (StringField)  seamGenerator.getObjectGenCounterPartOf(objectRelation.getRightObject());
+
+		printFormDescriptor.showField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
+
 	}
 }
