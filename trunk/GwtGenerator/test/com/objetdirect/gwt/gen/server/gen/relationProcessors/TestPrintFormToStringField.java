@@ -41,7 +41,7 @@ public class TestPrintFormToStringField extends TestRelationProcessor{
 	
 	@Test
 	public void process() {
-		PrintEntityToPrintForm processor = new PrintEntityToPrintForm(seamGenerator);
+		PrintFormToStringField processor = new PrintFormToStringField(seamGenerator);
 		stringField  = new StringField(FIELD_NAME, FIELD_TITLE, LENGTH);
 		setReturnedGenObject(printForm, stringField, null);
 
