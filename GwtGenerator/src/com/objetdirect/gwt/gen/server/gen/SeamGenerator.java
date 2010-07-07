@@ -24,6 +24,7 @@ import java.util.Map;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.server.gen.processors.PageDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
@@ -54,6 +55,9 @@ public class SeamGenerator {
 	
 	private Map<String, Processor> processors;
 	
+	// This map maintains the bridge between the object from the uml world and the objects instantiated in the generator world.
+	private Map<UMLObject, Object> umlObjectToGenObjects;
+	
 	
 	/**
 	 * @param objects
@@ -65,13 +69,15 @@ public class SeamGenerator {
 		this.objects = objects;
 		this.instantiationsLinks = instantiationsLinks;
 		this.objectRelations = objectRelations;
-		this.processors = new HashMap<String, Processor>();
+		processors = new HashMap<String, Processor>();
+		umlObjectToGenObjects = new HashMap<UMLObject, Object>();
 		addProcessors();
 	}
 	
 	private void addProcessors() {
 		processors.put("PageDescriptor", new PageDescriptorProcessor(this));
 		processors.put("PrintDescriptor", new PrintDescriptorProcessor(this));
+		processors.put("PrintEntity", new PrintEntityProcessor(this));
 	}
 
 	void seamParse() {
@@ -122,5 +128,13 @@ public class SeamGenerator {
 	 */
 	public void setDocumentDescriptor(DocumentDescriptor documentDescriptor) {
 		this.documentDescriptor = documentDescriptor;
+	}
+
+	/**
+	 * @param umlObject
+	 * @param genObject
+	 */
+	public void addBridgeObject(UMLObject umlObject, Object genObject) {
+		umlObjectToGenObjects.put(umlObject, genObject);
 	}
 }

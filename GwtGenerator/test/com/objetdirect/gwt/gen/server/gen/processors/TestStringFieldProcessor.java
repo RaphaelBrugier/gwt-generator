@@ -14,30 +14,35 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
-import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Mockito.verify;
+
+import org.junit.Test;
+
+import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.seam.print.PrintDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintDescriptorProcessor extends Processor {
+public class TestStringFieldProcessor extends TestProcessor {
+	private static final String LENGTH_VALUE = "20";
+	private static final String FIELD_TITLE_VALUE = "Name";
+	private static final String FIELD_NAME_VALUE = "name";
 
-
-	private SeamGenerator seamGenerator;
-	
-	public PrintDescriptorProcessor(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
-	}
-	
-	@Override
-	public void process(UMLObject object) {
-		String classPackageName = object.getValueOfAttribute("classPackageName");
-		String className = object.getValueOfAttribute("className");
-		String viewPackageName = object.getValueOfAttribute("viewPackageName");
-		String viewName = object.getValueOfAttribute("viewName");
-
-		PrintDescriptor printDescriptor = new PrintDescriptor(classPackageName, className, viewPackageName, viewName);
-		seamGenerator.setDocumentDescriptor(printDescriptor);
+	@Test
+	public void process() {
+		StringFieldProcessor pdp = new StringFieldProcessor(seamGenerator);
+		
+		UMLObject objectArgument = new UMLObject("", "StringField").
+			addAttributeValuePair("fieldName", FIELD_NAME_VALUE).
+			addAttributeValuePair("fieldTitle", FIELD_TITLE_VALUE).
+			addAttributeValuePair("length", LENGTH_VALUE);
+		
+		StringField sfExepected = new StringField(FIELD_NAME_VALUE, FIELD_TITLE_VALUE, LENGTH_VALUE);
+		
+		pdp.process(objectArgument);
+		
+		verify(seamGenerator).addBridgeObject(eq(objectArgument), eq(sfExepected));
 	}
 }

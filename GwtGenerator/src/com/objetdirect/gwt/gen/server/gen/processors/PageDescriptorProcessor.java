@@ -22,9 +22,6 @@ import com.objetdirect.seam.PageDescriptor;
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class PageDescriptorProcessor extends Processor {
-
-	private PageDescriptor pageDescriptor;
-
 	private SeamGenerator seamGenerator;
 	
 	public PageDescriptorProcessor(SeamGenerator seamGenerator) {
@@ -38,7 +35,7 @@ public class PageDescriptorProcessor extends Processor {
 		String viewPackageName = object.getValueOfAttribute("viewPackageName");
 		String viewName = object.getValueOfAttribute("viewName");
 
-		pageDescriptor = new PageDescriptor(classPackageName, className, viewPackageName, viewName);
+		PageDescriptor pageDescriptor = new PageDescriptor(classPackageName, className, viewPackageName, viewName);
 		seamGenerator.setDocumentDescriptor(pageDescriptor);
 	}
 }
