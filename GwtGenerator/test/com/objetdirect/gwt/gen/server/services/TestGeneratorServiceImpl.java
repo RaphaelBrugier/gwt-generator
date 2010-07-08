@@ -14,15 +14,13 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import java.util.ArrayList;
-
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
 import junit.framework.TestCase;
 
 import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility;
 
 
 /**
@@ -40,7 +38,7 @@ public class TestGeneratorServiceImpl extends TestCase {
 	
 	public void testGenerateClassCode(){
 		UMLClass clazz = new UMLClass("MyClass");
-		UMLClassAttribute attribute = new UMLClassAttribute(UMLVisibility.PRIVATE, "String", "myStringField");
+		UMLClassAttribute attribute = new UMLClassAttribute(PRIVATE, "String", "myStringField");
 		clazz.getAttributes().add(attribute);
 		
 		String[] classCode = null;
@@ -73,25 +71,24 @@ public class TestGeneratorServiceImpl extends TestCase {
 	public void testGenerateClassCodeWithSimpleFields() {
 		
 		UMLClass clazz = new UMLClass("MyClass");
-		ArrayList<UMLClassAttribute> attributes = clazz.getAttributes();
 		
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "String", "myStringField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "int", "myIntField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Integer", "myWIntField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "long", "myLongField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Long", "myWLongField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "byte", "myByteField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Byte", "myWByteField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "short", "myShortField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Short", "myWShortField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "boolean", "myBooleanField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Boolean", "myWBooleanField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "char", "myCharField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Character", "myWCharField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "float", "myFloatField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Float", "myWFloatField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "double", "myDoubleField"));
-		attributes.add(new UMLClassAttribute(UMLVisibility.PRIVATE, "Double", "myWDoubleField"));
+		clazz.addAttribute(PRIVATE, "String", "myStringField");
+		clazz.addAttribute(PRIVATE, "int", "myIntField");
+		clazz.addAttribute(PRIVATE, "Integer", "myWIntField");
+		clazz.addAttribute(PRIVATE, "long", "myLongField");
+		clazz.addAttribute(PRIVATE, "Long", "myWLongField");
+		clazz.addAttribute(PRIVATE, "byte", "myByteField");
+		clazz.addAttribute(PRIVATE, "Byte", "myWByteField");
+		clazz.addAttribute(PRIVATE, "short", "myShortField");
+		clazz.addAttribute(PRIVATE, "Short", "myWShortField");
+		clazz.addAttribute(PRIVATE, "boolean", "myBooleanField");
+		clazz.addAttribute(PRIVATE, "Boolean", "myWBooleanField");
+		clazz.addAttribute(PRIVATE, "char", "myCharField");
+		clazz.addAttribute(PRIVATE, "Character", "myWCharField");
+		clazz.addAttribute(PRIVATE, "float", "myFloatField");
+		clazz.addAttribute(PRIVATE, "Float", "myWFloatField");
+		clazz.addAttribute(PRIVATE, "double", "myDoubleField");
+		clazz.addAttribute(PRIVATE, "Double", "myWDoubleField");
 		
 		String[] classCode = null;
 		try {
@@ -119,17 +116,5 @@ public class TestGeneratorServiceImpl extends TestCase {
 			"double myDoubleField;",
 			"Double myWDoubleField;"
 		);
-	}
-	
-	public void testGenerateClassCodeWithUnsupportedVisibilityFields() {
-		UMLClass clazz = new UMLClass("MyClass");
-		UMLClassAttribute attribute = new UMLClassAttribute(UMLVisibility.PUBLIC, "String", "myStringField");
-		clazz.getAttributes().add(attribute);
-		
-		try {
-			GeneratorHelper.convertUMLClassToEntityDescriptor(clazz, packageName);
-			fail("InvalidParameterException expected");
-		} catch (Exception e) {
-		}  
 	}
 }

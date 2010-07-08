@@ -14,27 +14,34 @@
  */
 package com.objetdirect.gwt.gen.server.gen;
 
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
 import static com.objetdirect.seam.TestPrintEntity.testSimpleEntityFaceletText;
 import static com.objetdirect.seam.TestPrintEntity.testSimpleEntityJavaText;
 
 import org.junit.Test;
 
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
- *
  */
 public class TestPrintEntity extends TestSeamGenerator {
 
 	@Test
 	public void testSimpleEntity() {
+		UMLClass agencyClass = new UMLClass("Agency").
+			addAttribute(PRIVATE, "String", "name").
+			addAttribute(PRIVATE, "String", "phone").
+			addAttribute(PRIVATE, "String", "email");
+		classes.add(agencyClass);
+		
 		UMLObject printDescriptorInstance =  new UMLObject("", "PrintDescriptor").
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
-			addAttributeValuePair("className", "PrintAgencies").
+			addAttributeValuePair("className", "PrintAgency").
 			addAttributeValuePair("viewPackageName", "views").
-			addAttributeValuePair("viewName", "print-agencies");
+			addAttributeValuePair("viewName", "print-agency");
 		objects.add(printDescriptorInstance);
 		
 		UMLObject printEntityInstance = new UMLObject("", "PrintEntity");
@@ -44,19 +51,20 @@ public class TestPrintEntity extends TestSeamGenerator {
 		objectRelations.add(featureRelation);
 		
 		UMLObject entityInstance = new UMLObject("", "Agency");
+		objects.add(entityInstance);
+		
 		ObjectRelation entityRelation = new ObjectRelation(printEntityInstance, entityInstance).setRightRole("entity");
 		objectRelations.add(entityRelation);
 		
 		UMLObject printFormInstance = new UMLObject("", "PrintForm");
+		objects.add(printFormInstance);
 		
 		ObjectRelation elementRelation = new ObjectRelation(printEntityInstance, printFormInstance).setRightRole("element");
 		objectRelations.add(elementRelation);
 		
 		createStringFieldInstance(printFormInstance, "name", "Name", "20");
-		
 		createStringFieldInstance(printFormInstance, "phone", "Phone", "10");
-		
-		createStringFieldInstance(printFormInstance, "email", "Email", "20");
+		createStringFieldInstance(printFormInstance, "email", "E-mail", "20");
 		
 		assertGenerated(testSimpleEntityJavaText, testSimpleEntityFaceletText);
 	}

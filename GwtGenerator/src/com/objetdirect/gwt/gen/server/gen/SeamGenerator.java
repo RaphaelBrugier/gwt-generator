@@ -113,7 +113,6 @@ public class SeamGenerator {
 	
 	void parseObjectRelations() {
 		for (ObjectRelation relation : objectRelations) {
-			System.out.println("SeamGenerator::parseObjectRelations() relation : " + relation);
 			RelationProcessor rp = relationProcessorsManager.getRelationProcessor(relation);
 			if (rp != null)
 				rp.process(relation);
@@ -143,7 +142,6 @@ public class SeamGenerator {
 	 * @param genObject
 	 */
 	public void addBridgeObject(UMLObject umlObject, Object genObject) {
-		System.out.println("SeamGenerator::addBridgeObject umlObject = " + umlObject + "  genObject = " + genObject);
 		umlObjectToGenObjects.put(umlObject, genObject);
 	}
 	

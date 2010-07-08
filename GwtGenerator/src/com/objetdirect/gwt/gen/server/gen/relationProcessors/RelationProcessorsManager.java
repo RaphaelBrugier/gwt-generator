@@ -42,6 +42,7 @@ public class RelationProcessorsManager {
 	private void buildProcessors() {
 		addProcessor("PrintDescriptor", "PrintEntity", new PrintDescriptorToPrintEntity(seamGenerator));
 		addProcessor("PrintEntity", "PrintForm", new PrintEntityToPrintForm(seamGenerator));
+		addProcessor("PrintEntity", "DomainInstance", new PrintEntityToDomainInstance(seamGenerator));
 		addProcessor("PrintForm", "StringField", new PrintFormToStringField(seamGenerator));
 	}
 
@@ -61,6 +62,10 @@ public class RelationProcessorsManager {
 			return null;
 		}
 		else {
+			// Special case where  the instance is a domain instance
+			if (!p.containsKey(relation.getRightObject().getClassName()) && relation.getRightRole().equals("entity")) {
+				return p.get("DomainInstance");
+			}
 			return p.get(relation.getRightObject().getClassName());
 		}
 	}
