@@ -14,6 +14,9 @@
  */
 package com.objetdirect.gwt.gen.client.ui.content;
 
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -38,6 +41,7 @@ import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.ObjectDiagramDto;
 import com.objetdirect.gwt.umlapi.client.Drawer;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
@@ -46,7 +50,6 @@ import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
@@ -271,12 +274,20 @@ public class ContentPresenter {
 	private void doGenerateSeamCode() {
 		ObjectDiagram objectDiagram = (ObjectDiagram) drawer.getUmlCanvas();
 		
+		// Hard coded values just for testing purpose.
+		List<UMLClass> classes =  new ArrayList<UMLClass>();
+		UMLClass agencyClass = new UMLClass("Agency").
+			addAttribute(PRIVATE, "String", "name").
+			addAttribute(PRIVATE, "String", "phone").
+			addAttribute(PRIVATE, "String", "email");
+		classes.add(agencyClass);
+		
 		List<UMLObject> umlObjects = objectDiagram.getObjects();
-		List<InstantiationRelation> instantiationsLinks = objectDiagram.getInstantiationRelations();
 		List<ObjectRelation> objectRelations = objectDiagram.getObjectRelations();
 		
-		generatorService.generateSeamCode(umlObjects, instantiationsLinks, objectRelations, PACKAGE_NAME, new AsyncCallback<List<GeneratedCode>>() { 
-			
+		ObjectDiagramDto objectDiagramDto = new ObjectDiagramDto(classes, umlObjects, objectRelations);
+		
+		generatorService.generateSeamCode(objectDiagramDto, new AsyncCallback<List<GeneratedCode>>() { 
 			@Override
 			public void onSuccess(List<GeneratedCode> result) {
 				doDisplayGeneratedCode(result);

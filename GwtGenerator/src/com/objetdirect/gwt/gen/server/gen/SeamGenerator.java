@@ -35,7 +35,6 @@ import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.DocumentDescriptor;
 
@@ -48,7 +47,6 @@ public class SeamGenerator {
 
 	final List<UMLClass> classes;
 	final List<UMLObject> objects;
-	final List<InstantiationRelation> instantiationsLinks;
 	final List<ObjectRelation> objectRelations;
 	
 	private DocumentDescriptor documentDescriptor;
@@ -67,18 +65,17 @@ public class SeamGenerator {
 	 * @param instantiationsLinks
 	 * @param objectRelations
 	 */
-	public SeamGenerator(List<UMLClass> classes, List<UMLObject> objects, List<InstantiationRelation> instantiationsLinks, List<ObjectRelation> objectRelations) {
+	public SeamGenerator(List<UMLClass> classes, List<UMLObject> objects, List<ObjectRelation> objectRelations) {
 		this.classes = classes;
 		this.objects = objects;
-		this.instantiationsLinks = instantiationsLinks;
 		this.objectRelations = objectRelations;
 		processors = new HashMap<String, Processor>();
 		umlObjectToGenObjects = new HashMap<UMLObject, Object>();
 		relationProcessorsManager = new RelationProcessorsManager(this);
-		addProcessors();
+		addObjectProcessors();
 	}
 	
-	private void addProcessors() {
+	private void addObjectProcessors() {
 		processors.put("PageDescriptor", new PageDescriptorProcessor(this));
 		processors.put("PrintDescriptor", new PrintDescriptorProcessor(this));
 		processors.put("PrintForm", new PrintFormProcessor(this));
