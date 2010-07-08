@@ -60,8 +60,13 @@ public class Diagram {
 	
 	@Persistent
 	private User user;
-
 	
+	/**
+	 * In the case where the diagram is an object diagram, this is the key to the Class diagram that it instantiates. 
+	 */
+	@Persistent
+	private String classDiagramKey;
+
 	/**
 	 * Default constructor ONLY for gwt-rpc serialization
 	 */
@@ -139,6 +144,20 @@ public class Diagram {
 	}
 
 	/**
+	 * @return the classDiagramKey
+	 */
+	public String getClassDiagramKey() {
+		return classDiagramKey;
+	}
+
+	/**
+	 * @param classDiagramKey the classDiagramKey to set
+	 */
+	public void setClassDiagramKey(String classDiagramKey) {
+		this.classDiagramKey = classDiagramKey;
+	}
+
+	/**
 	 * @param serializedCanvas the serializedCanvas to set
 	 */
 	public void setSerializedCanvas(Blob serializedCanvas) {
@@ -172,6 +191,7 @@ public class Diagram {
 	public void copyFromDiagramDto(DiagramDto diagramToCopy) {
 		this.type = diagramToCopy.getType();
 		this.name = diagramToCopy.getName();
+		this.classDiagramKey = diagramToCopy.classDiagramKey;
 		
 		// copy serializedCanvas field
 		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
@@ -195,6 +215,7 @@ public class Diagram {
 		diagramToCopy.setType(this.type);
 		diagramToCopy.setName(this.name);
 		diagramToCopy.setDirectoryKey(this.directoryKey);
+		diagramToCopy.classDiagramKey = this.classDiagramKey;
 		
 		UMLCanvas canvas = null;
 		

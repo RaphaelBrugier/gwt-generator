@@ -16,6 +16,7 @@ package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.CLASS;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
+import static org.mockito.Mockito.mock;
 
 import java.util.ArrayList;
 
@@ -32,6 +33,8 @@ import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvasClassDiagram;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvasObjectDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
@@ -130,5 +133,22 @@ public class TestDiagramService extends TestCase {
 		dto = diagramService.getDiagram(id);
 		
 		assertEquals(id, "newName", CLASS, directory.getKey(), dto);
+	}
+	
+	public void test_getObjectDiagramAlsoSetupClassesFromClassDiagram() {
+		UMLCanvasClassDiagram classDiagram = mock(UMLCanvasClassDiagram.class);
+		DiagramDto classDiagramDto = new DiagramDto(directory.getKey(),"name", CLASS);
+		classDiagramDto.setCanvas(classDiagram);
+
+		String classDiagramKey = diagramService.createDiagram(classDiagramDto);
+		
+		DiagramDto objectDiagramDto = new DiagramDto(directory.getKey(),"objectDiagram", OBJECT);
+		objectDiagramDto.classDiagramKey = classDiagramKey;
+		UMLCanvasObjectDiagram objectDiagram = mock(UMLCanvasObjectDiagram.class);
+		objectDiagramDto.setCanvas(objectDiagram);
+		
+		String objectDiagramKey = diagramService.createDiagram(objectDiagramDto);
+		
+		DiagramDto diagramFound = diagramService.getDiagram(objectDiagramKey);
 	}
 }

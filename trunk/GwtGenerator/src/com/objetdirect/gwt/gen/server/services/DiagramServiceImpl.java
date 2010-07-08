@@ -16,6 +16,7 @@ package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
 import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isNotBlank;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,8 @@ import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.ObjectDiagram;
 
 /**
  * Real implementation of DiagramService.
@@ -33,8 +36,15 @@ import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 @SuppressWarnings("serial")
 public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramService {
 	
-	private final DiagramDao diagramDao = new DiagramDao();
+	private DiagramDao diagramDao = new DiagramDao();
 	
+	/**
+	 * @param diagramDao the diagramDao to set
+	 */
+	public void setDiagramDao(DiagramDao diagramDao) {
+		this.diagramDao = diagramDao;
+	}
+
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#createDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramDto)
 	 */
@@ -48,7 +58,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 			throw new CreateDiagramException("A diagram of this type and with this name already exist. Please use an other name.");
 		}
 
-		return diagramDao.createDiagram(diagramDto.getDirectoryKey(), diagramDto.getType(), diagramDto.getName(), diagramDto.getCanvas());
+		return diagramDao.createDiagram(diagramDto.getDirectoryKey(), diagramDto.getType(), diagramDto.getName(), diagramDto.getCanvas(), diagramDto.classDiagramKey);
 	}
 
 	
@@ -77,9 +87,32 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	@Override
 	public DiagramDto getDiagram(String key) {
 		checkLoggedIn();
-		return diagramDao.getDiagram(key);
+		DiagramDto diagramFound = diagramDao.getDiagram(key);
+		addClassDiagramToObjectDiagram(diagramFound);
+		return diagramFound;
 	}
 	
+	/**
+	 * Special setup for the object diagrams.
+	 * When an object diagram is loaded, we need to reload the classes that can be instantiated on it.
+	 * To find this classes, we load the class diagram that the object diagram depends on.
+	 * 
+	 * @param objectDiagramDto the object diagram where the setup apply.
+	 */
+	void addClassDiagramToObjectDiagram(DiagramDto objectDiagramDto) {
+		// This special setup only apply to object diagrams
+		if ( ! (objectDiagramDto.getType()==OBJECT))
+			return;
+		
+		ObjectDiagram objectDiagram = (ObjectDiagram)objectDiagramDto.getCanvas();
+		
+		DiagramDto classDiagramDto = diagramDao.getDiagram(objectDiagramDto.classDiagramKey);
+		ClassDiagram classDiagram = (ClassDiagram ) classDiagramDto.getCanvas();
+		
+		objectDiagram.setClasses(classDiagram.getUmlClasses());
+	}
+
+
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#saveDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations)
 	 */

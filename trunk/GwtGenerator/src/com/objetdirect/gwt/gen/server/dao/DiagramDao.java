@@ -53,15 +53,18 @@ public class DiagramDao {
 	 * @param directoryKey the key of the owner directory.
 	 * @param type the type of the diagram.
 	 * @param name the diagram name.
+	 * @param classDiagramKey If the diagram is an object diagram, this is the key to the class diagram instantiated.
 	 * @return the generated id for the diagram.
 	 */
-	public String createDiagram(String directoryKey, DiagramType type, String name, UMLCanvas umlCanvas) {
+	public String createDiagram(String directoryKey, DiagramType type, String name, UMLCanvas umlCanvas, String classDiagramKey) {
 		final Diagram persistedDiagram[] = new Diagram[1];
 		persistedDiagram[0] = new Diagram(directoryKey, type, name, getCurrentUser());
 		
 		if (umlCanvas!= null) {
 			persistedDiagram[0].setCanvas(umlCanvas);
 		}
+		
+		persistedDiagram[0].setClassDiagramKey(classDiagramKey);
 		
 		execute(new Action() {
 			public void run(PersistenceManager pm) {
