@@ -35,6 +35,11 @@ public class DiagramDto implements Serializable {
 	
 	private UMLCanvas canvas;
 	
+	/**
+	 * In the case where the diagram is an object diagram, this is the key to the Class diagram that it instantiates. 
+	 */
+	public String classDiagramKey;
+	
 	
 	/** Default constructor. */
 	public DiagramDto() {}
@@ -162,6 +167,7 @@ public class DiagramDto implements Serializable {
 				"\t name = " + name + "\n" +
 				"\t type = " + type +"\n" +
 				"\t directoryKey = " + directoryKey +"\n" +
-				"\t umlCanvas = " + canvas;
+				"\t umlCanvas = " + canvas + 
+				"\t classDiagramKey";
 	}
 }
