@@ -26,11 +26,9 @@ import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.ObjectDiagramDto;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
@@ -78,13 +76,12 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	}
 
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateSeamCode(java.util.List, java.util.List, java.util.List, java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateSeamCode(com.objetdirect.gwt.gen.shared.dto.ObjectDiagramDto)
 	 */
 	@Override
-	public List<GeneratedCode> generateSeamCode(List<UMLObject> umlObjects, List<InstantiationRelation> instantiationsLinks,
-			List<ObjectRelation> objectRelations, String packageName) throws UMLException {
+	public List<GeneratedCode> generateSeamCode(ObjectDiagramDto objectDiagram) throws UMLException {
 		
-		SeamGenerator seamGenerator = new SeamGenerator(null, umlObjects, instantiationsLinks, objectRelations); //TODO change the service and replace the null value
+		SeamGenerator seamGenerator = new SeamGenerator(objectDiagram.classes, objectDiagram.objects, objectDiagram.objectRelations);
 		
 		return seamGenerator.getGenerateCode();
 	}

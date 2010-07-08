@@ -19,11 +19,10 @@ import java.util.List;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.ObjectDiagramDto;
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
@@ -41,20 +40,16 @@ public interface GeneratorService extends RemoteService {
 	 * @return A list of GeneratedCode object which contains the generated lines of code and the classes name.
 	 * @throws UMLException 
 	 */
-	public List<GeneratedCode> generateHibernateCode(List<UMLClass> classes, List<UMLRelation> relations, String packageName) throws UMLException;
+	public List<GeneratedCode> generateHibernateCode(List<UMLClass> classes, List<UMLRelation> relations, String packageName) throws UMLException, GWTGeneratorException;
 	
 	
 	/**
-	 * Generate the seam code from the given classes and relations.
+	 *  Generate the seam code from the given classes and relations.
 	 * 
-	 * @param classes the classes as UMLComponent
-	 * @param relations the relations between the classes
-	 * @param packageName the name of the package
-	 * @return A list of GeneratedCode object which contains the generated lines of code and the classes name.
-	 * @throws UMLException 
+	 * @param objectDiagram
+	 * @return
+	 * @throws UMLException
+	 * @throws GWTGeneratorException
 	 */
-	public List<GeneratedCode> generateSeamCode(List<UMLObject> umlObjects, 
-			List<InstantiationRelation> instantiationsLinks, 
-			List<ObjectRelation> objectRelations, 
-			String packageName) throws UMLException;
+	public List<GeneratedCode> generateSeamCode(ObjectDiagramDto objectDiagram) throws UMLException, GWTGeneratorException;
 }

@@ -14,24 +14,32 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
+import static junit.framework.Assert.fail;
 import static org.mockito.Matchers.eq;
 import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 
+import org.junit.Before;
 import org.junit.Test;
 
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.seam.print.PrintDescriptor;
-import com.objetdirect.seam.print.PrintEntityDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class TestPrintDescriptorProcessor extends TestProcessor {
+	
+	PrintDescriptorProcessor pdp;
+
+	@Before
+	public void setUpObjectUnderTest() {
+		pdp = new PrintDescriptorProcessor(seamGenerator);
+	}
+	
 	@Test
-	public void process() {
-		PrintDescriptorProcessor pdp = new PrintDescriptorProcessor(seamGenerator);
-		
+	public void process_withGoodParameters_success() {
 		UMLObject object = new UMLObject("", "PrintDescriptor").
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
 			addAttributeValuePair("className", "EditAgencies").
@@ -42,5 +50,21 @@ public class TestPrintDescriptorProcessor extends TestProcessor {
 		
 		verify(seamGenerator).setDocumentDescriptor(isA(PrintDescriptor.class));
 		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintDescriptor.class));
+	}
+	
+	
+	@Test
+	public void process_withNullParametersInObject_returnException() {
+		UMLObject object = new UMLObject("", "PrintDescriptor").
+			addAttributeValuePair("className", "EditAgencies").
+			addAttributeValuePair("viewPackageName", "views").
+			addAttributeValuePair("viewName", "edit-agencies");
+		
+		try {
+			pdp.process(object);
+			fail("The process method was expected to throw a GwtGeneratorException");
+		} catch(GWTGeneratorException e) {
+			
+		}
 	}
 }

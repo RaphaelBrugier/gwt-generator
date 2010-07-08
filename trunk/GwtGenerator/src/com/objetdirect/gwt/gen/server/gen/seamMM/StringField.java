@@ -35,6 +35,10 @@ public class StringField {
 		this.length = length;
 	}
 	
+	public int getLength() {
+		return Integer.parseInt(length);
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -70,10 +74,6 @@ public class StringField {
 		} else if (!length.equals(other.length))
 			return false;
 		return true;
-	}
-	
-	public int getLength() {
-		return Integer.parseInt(length);
 	}
 	
 	@Override

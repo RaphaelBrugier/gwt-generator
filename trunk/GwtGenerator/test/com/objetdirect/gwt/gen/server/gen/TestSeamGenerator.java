@@ -25,7 +25,6 @@ import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 
 /**
@@ -36,7 +35,6 @@ public class TestSeamGenerator {
 	SeamGenerator generator;
 
 	List<UMLObject> objects;
-	List<InstantiationRelation> instantiationsLinks;
 	List<ObjectRelation> objectRelations;
 	List<UMLClass> classes;
 	
@@ -44,11 +42,10 @@ public class TestSeamGenerator {
 	@Before
 	public void setUp() throws Exception {
 		objects = new ArrayList<UMLObject>();
-		instantiationsLinks = new ArrayList<InstantiationRelation>();
 		objectRelations = new ArrayList<ObjectRelation>();
 		classes = new ArrayList<UMLClass>();
 		
-		generator = new SeamGenerator(classes, objects, instantiationsLinks, objectRelations);
+		generator = new SeamGenerator(classes, objects, objectRelations);
 	}
 	
 	void createStringFieldInstance(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {

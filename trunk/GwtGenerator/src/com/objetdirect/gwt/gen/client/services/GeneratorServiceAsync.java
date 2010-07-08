@@ -18,10 +18,8 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.ObjectDiagramDto;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.InstantiationRelation;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
@@ -39,6 +37,9 @@ public interface GeneratorServiceAsync {
 	public void generateHibernateCode(List<UMLClass> classes, List<UMLRelation> relations,
 			String packageName, AsyncCallback<List<GeneratedCode>> callback);
 
-	void generateSeamCode(List<UMLObject> umlObjects, List<InstantiationRelation> instantiationsLinks, List<ObjectRelation> objectRelations,
-			String packageName, AsyncCallback<List<GeneratedCode>> callback);
+	
+	/* (non-Javadoc)
+	 * @see com.objetdirect.gwt.gen.client.services.GeneratorService#generateSeamCode(com.objetdirect.gwt.gen.shared.dto.ObjectDiagramDto)
+	 */
+	public void generateSeamCode(ObjectDiagramDto objectDiagram, AsyncCallback<List<GeneratedCode>> callback);
 }
