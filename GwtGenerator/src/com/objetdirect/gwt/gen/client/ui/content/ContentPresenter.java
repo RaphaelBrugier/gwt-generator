@@ -14,6 +14,7 @@
  */
 package com.objetdirect.gwt.gen.client.ui.content;
 
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
 
 import java.util.ArrayList;
@@ -42,6 +43,7 @@ import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.ObjectDiagramDto;
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.Drawer;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
@@ -62,9 +64,6 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  */
 public class ContentPresenter {
 
-	/**
-	 * 
-	 */
 	private static final String PACKAGE_NAME = "com.od.test";
 
 	public interface Display {
@@ -199,6 +198,8 @@ public class ContentPresenter {
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
 
+				setupObjectDiagram(umlCanvas, diagramFound.getType());
+				
 				drawer = display.buildDrawer(umlCanvas, diagramFound.getType());
 				display.getMainContainer().clear();
 				display.getMainContainer().add(drawer);
@@ -215,6 +216,28 @@ public class ContentPresenter {
 				display.getMainContainer().clear();
 			}
 		});
+	}
+	
+	
+	/**
+	 * If the umlCanvas is a canvas for an object diagram, set up it.
+	 * 
+	 * @param umlCanvas
+	 */
+	private void setupObjectDiagram(UMLCanvas umlCanvas, DiagramType diagramType) {
+		if (!(diagramType == OBJECT))
+			return;
+		
+		ObjectDiagram od = (ObjectDiagram) umlCanvas;
+		
+		// Hard coded values just for testing purpose.
+		List<UMLClass> classes =  new ArrayList<UMLClass>();
+		UMLClass agencyClass = new UMLClass("Agency").
+			addAttribute(PRIVATE, "String", "name").
+			addAttribute(PRIVATE, "String", "phone").
+			addAttribute(PRIVATE, "String", "email");
+		classes.add(agencyClass);
+		od.setClasses(classes);
 	}
 
 	/**
@@ -274,16 +297,10 @@ public class ContentPresenter {
 	private void doGenerateSeamCode() {
 		ObjectDiagram objectDiagram = (ObjectDiagram) drawer.getUmlCanvas();
 		
-		// Hard coded values just for testing purpose.
-		List<UMLClass> classes =  new ArrayList<UMLClass>();
-		UMLClass agencyClass = new UMLClass("Agency").
-			addAttribute(PRIVATE, "String", "name").
-			addAttribute(PRIVATE, "String", "phone").
-			addAttribute(PRIVATE, "String", "email");
-		classes.add(agencyClass);
 		
 		List<UMLObject> umlObjects = objectDiagram.getObjects();
 		List<ObjectRelation> objectRelations = objectDiagram.getObjectRelations();
+		List<UMLClass> classes = objectDiagram.getClasses();
 		
 		ObjectDiagramDto objectDiagramDto = new ObjectDiagramDto(classes, umlObjects, objectRelations);
 		
@@ -309,8 +326,8 @@ public class ContentPresenter {
 		display.goToFirstClass();
 	}
 	
-	private void doFailWhileGeneratingCode(Throwable caught){
-		if (caught instanceof UMLException) {
+	private void doFailWhileGeneratingCode(Throwable caught) {
+		if (caught instanceof UMLException || caught instanceof  GWTGeneratorException) {
 			Widget errorWidget = display.buildInformationWidget(caught.getMessage());
 			display.setInMainContainer(errorWidget);
 		} else {
