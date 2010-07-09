@@ -24,7 +24,8 @@
 			position: absolute;
 			left: 0.8%;
 			right: 0.8%;
-			padding: 12px;
+			padding: 8px;
+			padding-right: 0px;
 		}
 		
 		.signOut {
@@ -48,9 +49,9 @@
 	   	<g:north size='58'>
 	     	<g:HTMLPanel>
 	     		<div class='{style.header}'>
-	     			<g:Anchor ui:field="newProject" addStyleNames='{baseStyle.button}'>New project</g:Anchor>
-	     			<g:Anchor ui:field="save">Save</g:Anchor>
-	     			<g:Anchor ui:field="generate">Generate</g:Anchor>
+	     			<g:Anchor ui:field="newProject" addStyleNames='{baseStyle.button} {style.alignLeft}'>New project</g:Anchor>
+	     			<g:Anchor addStyleNames='{style.alignLeft}' ui:field="save">Save</g:Anchor>
+	     			<g:Anchor addStyleNames='{style.alignLeft}' ui:field="generate">Generate</g:Anchor>
 					<g:Anchor ui:field="signOut" addStyleNames='{baseStyle.button} {style.alignRight}'>Log out</g:Anchor>
 	     		</div>
 			</g:HTMLPanel>
