@@ -22,6 +22,7 @@ import java.util.List;
 import com.allen_sauer.gwt.log.client.Log;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
@@ -51,6 +52,13 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
  */
 public class DiagramsListPresenter {
 
+	public interface DisplayPopupDiagram {
+		public void show();
+		public void hide();
+		public HasClickHandlers getCreateButton();
+		public String getDiagramName();
+	}
+	
 	public interface Display {
 		/**
 		 * @return The main container
@@ -139,7 +147,7 @@ public class DiagramsListPresenter {
 
 		for (Directory directory : project.getDirectories()) {
 			DirectoryTreeItem directoryTreeItem = new DirectoryTreeItem(directory);
-			bindDirectoryItem(directoryTreeItem);
+			bindDirectoryItem(project, directoryTreeItem);
 			projectItem.addItem(directoryTreeItem);
 			for (DiagramDto diagram : directory.getDiagrams()) {
 				DiagramTreeItem diagramTreeItem = display.createDiagramTreeItem(diagram.getName());
@@ -169,29 +177,67 @@ public class DiagramsListPresenter {
 
 	/**
 	 * Bind the directoryTreeItem buttons with the action : - create a new diagram
-	 * 
+	 * @param project TODO
 	 * @param directoryTreeItem
 	 *            The directory tree item where the actions are attached.
 	 */
-	private void bindDirectoryItem(final DirectoryTreeItem directoryTreeItem) {
+	private void bindDirectoryItem(final Project project, final DirectoryTreeItem directoryTreeItem) {
 		directoryTreeItem.getAddDiagramButton().addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
-				final CreateDiagramPopup createDiagramPopup = new CreateDiagramPopup();
-				createDiagramPopup.getCreateButton().addClickHandler(new ClickHandler() {
-					@Override
-					public void onClick(ClickEvent event) {
-						String directoryKey = directoryTreeItem.getDirectory().getKey();
-						DirType directoryType = directoryTreeItem.getDirectory().getDirType();
-						doCreateDiagram(createDiagramPopup, directoryKey, directoryType, createDiagramPopup.getDiagramName());
-					}
-				});
-
-				createDiagramPopup.show();
+				// Depending of the type of the directory we use a different popup.
+				if (directoryTreeItem.getDirectory().getDirType() == DirType.HCI) {
+					bindCreateObjectDiagram(project, directoryTreeItem);
+				} else {
+					bindCreateDiagram(directoryTreeItem);
+				}
 			}
 		});
 	}
+	
+	void bindCreateObjectDiagram(final Project project, final DirectoryTreeItem directoryTreeItem) {
+		Directory classDirectory  = getClassDiagramDirectoryFromProject(project);
+		
+		final CreateObjectDiagramPopup popup =  new CreateObjectDiagramPopup(classDirectory.getDiagrams());
+		
+		popup.getCreateButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Directory directory = directoryTreeItem.getDirectory();
+				String classDiagramKey = popup.getClassDiagramKeySelected();
+				doCreateDiagram(popup, directory, popup.getDiagramName(), classDiagramKey);
+			}
+		});
+
+		popup.show();
+	}
+	
+	/**
+	 * @param project
+	 * @return
+	 */
+	private Directory getClassDiagramDirectoryFromProject(Project project) {
+		for(Directory dir : project.getDirectories()) {
+			if (dir.getDirType() == DirType.DOMAIN)
+				return dir;
+		}
+		return null;
+	}
+
+	void bindCreateDiagram(final DirectoryTreeItem directoryTreeItem) {
+		final DisplayPopupDiagram popup =  new CreateDiagramPopup();
+		
+		popup.getCreateButton().addClickHandler(new ClickHandler() {
+			@Override
+			public void onClick(ClickEvent event) {
+				Directory directory = directoryTreeItem.getDirectory();
+				doCreateDiagram(popup, directory, popup.getDiagramName(), null);
+			}
+		});
+		
+		popup.show();
+	}
+	
 
 	/**
 	 * Bind the diagramTreeItem (view) with the actions :
@@ -294,21 +340,22 @@ public class DiagramsListPresenter {
 		});
 	}
 
-
 	/**
 	 * Create a diagram in the given directory
 	 * When the diagram is created, load the designer with it.
+	 * 
 	 * @param createDiagramPopup The Popup to hide when the action is finished.
-	 * @param directoryKey The directory key
-	 * @param directoryType The type of directory to create
-	 * @param diagramName diagramName The diagram name.
+	 * @param directory The directory where is created  the diagrma.
+	 * @param diagramName The diagram's name.
+	 * @param classDiagramKey If the diagram to create is an object diagram, this is the key to the class diagram instantiated.
 	 */
-	private void doCreateDiagram(CreateDiagramPopup createDiagramPopup, String directoryKey, DirType directoryType, String diagramName) {
+	private void doCreateDiagram(DisplayPopupDiagram createDiagramPopup, Directory directory, String diagramName, String classDiagramKey) {
 		createDiagramPopup.hide();
-		
-		DiagramType diagramType = getDiagramTypeFromDirectoryType(directoryType);
+		String directoryKey = directory.getKey();
+		DiagramType diagramType = getDiagramTypeFromDirectoryType(directory.getDirType());
 		
 		final DiagramDto diagramDto = new DiagramDto(directoryKey, diagramName, diagramType);
+		diagramDto.classDiagramKey = classDiagramKey;
 
 		// Create a default canvas to save with the new diagram.
 		UMLCanvas defaultCanvas = UMLCanvas.createUmlCanvas(diagramType);

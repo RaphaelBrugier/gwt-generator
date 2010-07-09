@@ -14,25 +14,31 @@
  */
 package com.objetdirect.gwt.gen.client.ui.diagramsList;
 
+import java.util.List;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiTemplate;
 import com.google.gwt.user.client.ui.Button;
+import com.google.gwt.user.client.ui.Label;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PopupPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.TextBox;
 import com.objetdirect.gwt.gen.client.ui.diagramsList.DiagramsListPresenter.DisplayPopupDiagram;
+import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 
 /**
- * Passive View : A simple popup that displays a textbox, a list of diagram type and a button to create a new Diagram.
+ * Passive View : A simple popup to create a new object diagram.
+ *
  */
-class CreateDiagramPopup extends SimplePanel implements DisplayPopupDiagram {
+class CreateObjectDiagramPopup extends SimplePanel implements DisplayPopupDiagram {
 	private static CreateDiagramPopupUiBinder uiBinder = GWT.create(CreateDiagramPopupUiBinder.class);
 	
-	@UiTemplate("CreateDiagramPopup.ui.xml")
-	interface CreateDiagramPopupUiBinder extends UiBinder<PopupPanel, CreateDiagramPopup> {}
+	@UiTemplate("CreateObjectDiagramPopup.ui.xml")
+	interface CreateDiagramPopupUiBinder extends UiBinder<PopupPanel, CreateObjectDiagramPopup> {}
 	
 	private final PopupPanel popuPanel;
 	
@@ -42,17 +48,39 @@ class CreateDiagramPopup extends SimplePanel implements DisplayPopupDiagram {
 	@UiField
 	Button createDiagramButton;
 	
+	@UiField
+	ListBox classDiagramsList;
 	
-	public CreateDiagramPopup() {
+	@UiField
+	Label message;
+	
+	
+	public CreateObjectDiagramPopup(List<DiagramDto> classDiagramsDto) {
 		popuPanel = uiBinder.createAndBindUi(this);
+		
+		addDiagramInList(classDiagramsDto);
 		setWidget(popuPanel);
 	}
 	
+	// Seems like logic written in the display ...
+	private void addDiagramInList(List<DiagramDto> classDiagramsDto) {
+		if (classDiagramsDto.size() == 0) {
+			createDiagramButton.setEnabled(false);
+			classDiagramsList.setEnabled(false);
+			message.setText("You must create a class diagram before to create an object diagram.");
+		} else {
+			for(DiagramDto classDiagram : classDiagramsDto) {
+				classDiagramsList.addItem(classDiagram.getName(), classDiagram.getKey());
+			}
+		}
+		
+	}
+
 	@Override
 	public HasClickHandlers getCreateButton() {
 		return createDiagramButton;
 	}
-			
+	
 	@Override
 	public String getDiagramName() {
 		return diagramNameTb.getValue();
@@ -67,5 +95,12 @@ class CreateDiagramPopup extends SimplePanel implements DisplayPopupDiagram {
 	public void show() {
 		popuPanel.center();
 		diagramNameTb.setFocus(true);
+	}
+
+	/**
+	 * @return the Class Diagram Key Selected
+	 */
+	public String getClassDiagramKeySelected() {
+		return classDiagramsList.getValue(classDiagramsList.getSelectedIndex());
 	}
 }
