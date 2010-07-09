@@ -14,10 +14,7 @@
  */
 package com.objetdirect.gwt.gen.client.ui.content;
 
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -198,8 +195,6 @@ public class ContentPresenter {
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
 
-				setupObjectDiagram(umlCanvas, diagramFound.getType());
-				
 				drawer = display.buildDrawer(umlCanvas, diagramFound.getType());
 				display.getMainContainer().clear();
 				display.getMainContainer().add(drawer);
@@ -219,27 +214,6 @@ public class ContentPresenter {
 	}
 	
 	
-	/**
-	 * If the umlCanvas is a canvas for an object diagram, set up it.
-	 * 
-	 * @param umlCanvas
-	 */
-	private void setupObjectDiagram(UMLCanvas umlCanvas, DiagramType diagramType) {
-		if (!(diagramType == OBJECT))
-			return;
-		
-		ObjectDiagram od = (ObjectDiagram) umlCanvas;
-		
-		// Hard coded values just for testing purpose.
-		List<UMLClass> classes =  new ArrayList<UMLClass>();
-		UMLClass agencyClass = new UMLClass("Agency").
-			addAttribute(PRIVATE, "String", "name").
-			addAttribute(PRIVATE, "String", "phone").
-			addAttribute(PRIVATE, "String", "email");
-		classes.add(agencyClass);
-		od.setClasses(classes);
-	}
-
 	/**
 	 * Save the current diagram and its canvas in the base.
 	 */
