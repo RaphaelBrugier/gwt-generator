@@ -100,7 +100,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	 * @param objectDiagramDto the object diagram where the setup apply.
 	 */
 	void addClassDiagramToObjectDiagram(DiagramDto objectDiagramDto) {
-		// This special setup only apply to object diagrams
+		// This special setup only applies to object diagrams
 		if ( ! (objectDiagramDto.getType()==OBJECT))
 			return;
 		
