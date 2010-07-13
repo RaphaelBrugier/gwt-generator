@@ -17,8 +17,11 @@ package com.objetdirect.gwt.gen.server.services;
 import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
 import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isNotBlank;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation.createAssociation;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
@@ -27,6 +30,8 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ObjectDiagram;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
  * Real implementation of DiagramService.
@@ -109,7 +114,57 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		DiagramDto classDiagramDto = diagramDao.getDiagram(objectDiagramDto.classDiagramKey);
 		ClassDiagram classDiagram = (ClassDiagram ) classDiagramDto.getCanvas();
 		
-		objectDiagram.setClasses(classDiagram.getUmlClasses());
+		List<UMLClass> domainClasses = classDiagram.getUmlClasses();
+		List<UMLRelation> classRelations = classDiagram.getClassRelations();
+		addSeamClasses(domainClasses, classRelations);
+		objectDiagram.setClasses(domainClasses);
+		objectDiagram.setClassRelations(classRelations);
+	}
+	
+	/**
+	 * Hard coded method to add the seam classes to the list of instantiable classes.
+	 */
+	private void addSeamClasses(final List<UMLClass> domainClasses, final List<UMLRelation> classRelations) {
+		UMLClass printDescriptorClass =  new UMLClass("PrintDescriptor").
+			addAttribute(PRIVATE, "String", "classPackageName").
+			addAttribute(PRIVATE, "String", "className").
+			addAttribute(PRIVATE, "String", "viewPackageName").
+			addAttribute(PRIVATE, "String", "viewName");
+		
+		UMLClass printEntityClass =  new UMLClass("PrintEntity");
+		
+		UMLRelation featureRelation = createAssociation(printDescriptorClass, printEntityClass, "feature");
+		classRelations.add(featureRelation);
+		
+		UMLClass printFormClass =  new UMLClass("PrintForm");
+		
+		UMLRelation elementRelation = createAssociation(printEntityClass, printFormClass, "element");
+		classRelations.add(elementRelation);
+		
+		UMLClass stringFieldClass =  new UMLClass("StringField").
+			addAttribute(PRIVATE, "String", "fieldName").
+			addAttribute(PRIVATE, "String", "fieldTitle").
+			addAttribute(PRIVATE, "String", "length");
+		
+		UMLRelation printFormToStringFieldRelation = createAssociation(printFormClass, stringFieldClass, "");
+		classRelations.add(printFormToStringFieldRelation);
+		
+		createAllDomainRelation(printEntityClass, domainClasses, classRelations);
+		
+		domainClasses.add(printDescriptorClass);
+		domainClasses.add(printEntityClass);
+		domainClasses.add(printFormClass);
+		domainClasses.add(stringFieldClass);
+	}
+
+	/**
+	 * Iterate over all the domain classes to add an association "entity" between each and the printEntityClass
+	 */
+	private void createAllDomainRelation(final UMLClass printEntityClass, final List<UMLClass> domainClasses, final List<UMLRelation> classRelations) {
+		for (UMLClass entityClass : domainClasses) {
+			UMLRelation entityRelation = createAssociation(printEntityClass, entityClass, "entity");
+			classRelations.add(entityRelation);
+		}
 	}
 
 
