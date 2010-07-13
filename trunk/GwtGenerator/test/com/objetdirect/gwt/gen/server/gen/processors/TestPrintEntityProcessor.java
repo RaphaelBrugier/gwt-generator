@@ -32,7 +32,7 @@ public class TestPrintEntityProcessor extends TestProcessor {
 	public void process() {
 		PrintEntityProcessor pdp = new PrintEntityProcessor(seamGenerator);
 		
-		UMLObject object = new UMLObject("", "PrintEntity");
+		UMLObject object = new UMLObject();
 		
 		pdp.process(object);
 		

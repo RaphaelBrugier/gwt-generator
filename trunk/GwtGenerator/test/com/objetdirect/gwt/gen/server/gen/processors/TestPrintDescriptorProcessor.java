@@ -40,7 +40,7 @@ public class TestPrintDescriptorProcessor extends TestProcessor {
 	
 	@Test
 	public void process_withGoodParameters_success() {
-		UMLObject object = new UMLObject("", "PrintDescriptor").
+		UMLObject object = new UMLObject().
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
 			addAttributeValuePair("className", "EditAgencies").
 			addAttributeValuePair("viewPackageName", "views").
@@ -55,7 +55,7 @@ public class TestPrintDescriptorProcessor extends TestProcessor {
 	
 	@Test
 	public void process_withNullParametersInObject_returnException() {
-		UMLObject object = new UMLObject("", "PrintDescriptor").
+		UMLObject object = new UMLObject().
 			addAttributeValuePair("className", "EditAgencies").
 			addAttributeValuePair("viewPackageName", "views").
 			addAttributeValuePair("viewName", "edit-agencies");

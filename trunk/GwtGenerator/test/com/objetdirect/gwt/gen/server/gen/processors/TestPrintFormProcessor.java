@@ -32,7 +32,7 @@ public class TestPrintFormProcessor extends TestProcessor {
 	public void process() {
 		PrintFormProcessor pdp = new PrintFormProcessor(seamGenerator);
 		
-		UMLObject object = new UMLObject("", "PrintForm");
+		UMLObject object = new UMLObject();
 		
 		pdp.process(object);
 		

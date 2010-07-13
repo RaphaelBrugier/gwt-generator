@@ -13,8 +13,8 @@
 	<classpathentry kind="lib" path="lib/tatami-1.4-rip.jar"/>
 	<classpathentry kind="lib" path="lib/mockito-all-1.8.5.jar" sourcepath="C:/Documents and Settings/Raphael/.m2/repository/org/mockito/mockito-all/1.8.5/mockito-all-1.8.5-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.3_1.3.3.v201004211208/appengine-java-sdk-1.3.3/lib/impl/appengine-api-stubs.jar"/>
-	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.3_1.3.3.v201004211208/appengine-java-sdk-1.3.3/lib/impl/appengine-api-labs.jar"/>
-	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.3_1.3.3.v201004211208/appengine-java-sdk-1.3.3/lib/testing/appengine-testing.jar"/>
+	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/impl/appengine-api-stubs.jar"/>
+	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/impl/appengine-api-labs.jar"/>
+	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/testing/appengine-testing.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

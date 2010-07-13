@@ -37,26 +37,26 @@ public class TestPrintEntity extends TestSeamGenerator {
 			addAttribute(PRIVATE, "String", "email");
 		classes.add(agencyClass);
 		
-		UMLObject printDescriptorInstance =  new UMLObject("", "PrintDescriptor").
+		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass("PrintDescriptor")).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
 			addAttributeValuePair("className", "PrintAgency").
 			addAttributeValuePair("viewPackageName", "views").
 			addAttributeValuePair("viewName", "print-agency");
 		objects.add(printDescriptorInstance);
 		
-		UMLObject printEntityInstance = new UMLObject("", "PrintEntity");
+		UMLObject printEntityInstance = new UMLObject("", new UMLClass("PrintEntity"));
 		objects.add(printEntityInstance);
 		
 		ObjectRelation featureRelation = new ObjectRelation(printDescriptorInstance, printEntityInstance).setRightRole("feature");
 		objectRelations.add(featureRelation);
 		
-		UMLObject entityInstance = new UMLObject("", "Agency");
+		UMLObject entityInstance = new UMLObject("", agencyClass);
 		objects.add(entityInstance);
 		
 		ObjectRelation entityRelation = new ObjectRelation(printEntityInstance, entityInstance).setRightRole("entity");
 		objectRelations.add(entityRelation);
 		
-		UMLObject printFormInstance = new UMLObject("", "PrintForm");
+		UMLObject printFormInstance = new UMLObject("", new UMLClass("PrintForm"));
 		objects.add(printFormInstance);
 		
 		ObjectRelation elementRelation = new ObjectRelation(printEntityInstance, printFormInstance).setRightRole("element");

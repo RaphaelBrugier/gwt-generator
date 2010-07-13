@@ -49,7 +49,7 @@ public class TestSeamGenerator {
 	}
 	
 	void createStringFieldInstance(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {
-		UMLObject field = new UMLObject("", "StringField").
+		UMLObject field = new UMLObject("", new UMLClass("StringField")).
 							addAttributeValuePair("fieldName", fieldNameValue).
 							addAttributeValuePair("fieldTitle", fieldTitleValue).
 							addAttributeValuePair("length", lengthValue);
