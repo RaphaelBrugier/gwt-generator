@@ -25,7 +25,7 @@ import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 
 /**
- * A simple DSL to simplfied the test of the generated code.
+ * A simple DSL to simplified the test of the generated code.
  * 
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */

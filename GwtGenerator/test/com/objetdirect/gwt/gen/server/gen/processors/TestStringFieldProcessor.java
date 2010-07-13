@@ -34,7 +34,7 @@ public class TestStringFieldProcessor extends TestProcessor {
 	public void process() {
 		StringFieldProcessor pdp = new StringFieldProcessor(seamGenerator);
 		
-		UMLObject objectArgument = new UMLObject("", "StringField").
+		UMLObject objectArgument = new UMLObject().
 			addAttributeValuePair("fieldName", FIELD_NAME_VALUE).
 			addAttributeValuePair("fieldTitle", FIELD_TITLE_VALUE).
 			addAttributeValuePair("length", LENGTH_VALUE);

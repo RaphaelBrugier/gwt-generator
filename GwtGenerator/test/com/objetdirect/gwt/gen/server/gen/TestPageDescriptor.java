@@ -19,6 +19,7 @@ import static com.objetdirect.seam.TestPageDescriptor.testSimplePageJavaText;
 
 import org.junit.Test;
 
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 
 /**
@@ -26,10 +27,11 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
  */
 public class TestPageDescriptor extends TestSeamGenerator {
 
-	
 	@Test
 	public void testGenerateSimplePageCode() throws Exception {
-		UMLObject pageDescriptorObject =  new UMLObject("pageDescriptorInstance", "PageDescriptor").
+		UMLClass clazz = new UMLClass("PageDescriptor");
+		
+		UMLObject pageDescriptorObject =  new UMLObject("", clazz).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
 			addAttributeValuePair("className", "EditAgencies").
 			addAttributeValuePair("viewPackageName", "views").
