@@ -37,6 +37,7 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.DocumentDescriptor;
+import com.objetdirect.seam.Seam;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
@@ -117,6 +118,7 @@ public class SeamGenerator {
 	}
 
 	public List<GeneratedCode> getGenerateCode() {
+		Seam.clear();
 		seamParse();
 		documentDescriptor.build();
 		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
