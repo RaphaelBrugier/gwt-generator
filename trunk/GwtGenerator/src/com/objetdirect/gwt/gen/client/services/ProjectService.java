@@ -20,6 +20,7 @@ import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 
 /**
  * Service to operate on the stored projects.
@@ -31,10 +32,11 @@ public interface ProjectService extends RemoteService {
 	/**
 	 * Create a new project for the logged user.
 	 * @param name name of the project.
+	 * @param seamDiagram The class diagram representing the seam classes supported by the generator.
 	 * @return the id of the created project.
 	 * @throws CreateProjectException if the name is already existing or blank.
 	 */
-	public Long createProject(String name);
+	public Long createProject(String name, UMLCanvas seamDiagram);
 
 	/**
 	 * Get all the project of the logged user.

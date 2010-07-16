@@ -14,9 +14,13 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
+import static com.objetdirect.gwt.gen.client.helpers.SeamDiagramBuilder.SEAM_DIAGRAM_NAME;
 import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
 import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
+import static com.objetdirect.gwt.gen.shared.entities.Directory.DirectoryType.DOMAIN;
+import static com.objetdirect.gwt.gen.shared.entities.Directory.DirectoryType.SEAM;
 import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isBlank;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.CLASS;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,12 +28,13 @@ import java.util.List;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
+import com.objetdirect.gwt.gen.server.dao.DiagramDao;
 import com.objetdirect.gwt.gen.server.dao.ProjectDao;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
-import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 
 /**
  * Real implementation of ProjectService
@@ -42,40 +47,55 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 	private final ProjectDao projectDao = new ProjectDao();
 
 	private final DiagramService diagramService = new DiagramServiceImpl();
-
+	
+	private final DiagramDao diagramDao = new DiagramDao();
+	
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String, com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas)
 	 */
 	@Override
-	public Long createProject(String name) {
+	public Long createProject(String name, UMLCanvas seamDiagram) {
 		checkLoggedIn();
 
 		if (isBlank(name)) {
 			throw new CreateProjectException("You must specify a name to your project");
 		}
-		//TODO check if a project with the same name already exist
 
 		Project persistedProject = projectDao.createProject(name);
 
-		createDirectory(DirType.DOMAIN, "Domain", persistedProject);
-		createDirectory(DirType.HCI, "Interface", persistedProject);
-		// createDirectory(DirType.SERVICE, "Services", persistedProject);
+		createDomainDirectory(persistedProject);
+		createInterfaceDirectory(persistedProject);
 
 		projectDao.updateProject(persistedProject);
+		
+		addSeamDiagram(persistedProject, seamDiagram);
 
 		return persistedProject.getKey();
 	}
 
 	/**
 	 * Create a directory in the given project
-	 * 
-	 * @param directoryType
-	 * @param directoryName
 	 * @param project
 	 */
-	private void createDirectory(DirType directoryType, String directoryName, Project project) {
-		Directory newDirectory = new Directory(directoryName, getCurrentUser().getEmail(), directoryType);
+	private void createDomainDirectory(Project project) {
+		Directory newDirectory = new Directory("Domain", getCurrentUser().getEmail(), DOMAIN);
 		project.addDirectory(newDirectory);
+	}
+	
+	/**
+	 * Create a directory in the given project
+	 * @param project
+	 */
+	private void createInterfaceDirectory(Project project) {
+		Directory seamDirectory = new Directory("Seam", getCurrentUser().getEmail(), SEAM);
+		project.addDirectory(seamDirectory);
+	}
+	
+	/**
+	 * @param persistedProject
+	 */
+	private void addSeamDiagram(Project persistedProject, UMLCanvas seamDiagram) {
+		diagramDao.createDiagram(persistedProject.getDirectory(SEAM).getKey(), CLASS, SEAM_DIAGRAM_NAME, seamDiagram, null);
 	}
 
 	/* (non-Javadoc)

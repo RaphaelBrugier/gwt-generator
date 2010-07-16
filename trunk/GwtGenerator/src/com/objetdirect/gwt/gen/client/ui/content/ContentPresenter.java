@@ -15,6 +15,8 @@
 package com.objetdirect.gwt.gen.client.ui.content;
 
 
+import static com.objetdirect.gwt.gen.client.helpers.SeamDiagramBuilder.SEAM_DIAGRAM_NAME;
+
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -182,7 +184,7 @@ public class ContentPresenter {
 	 * Load a diagram from the base and setup it on the canvas.
 	 * @param diagramDto the diagram to load.
 	 */
-	private void doLoadDiagram(DiagramDto diagramDto) {
+	private void doLoadDiagram(final DiagramDto diagramDto) {
 		Widget loadingWidget = display.buildLoadingWidget("Loading the diagram, please wait ...");
 		display.setInMainContainer(loadingWidget);
 		diagramService.getDiagram(diagramDto.getKey(), new AsyncCallback<DiagramDto>() {
@@ -195,9 +197,16 @@ public class ContentPresenter {
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
 
+
 				drawer = display.buildDrawer(umlCanvas, diagramFound.getType());
 				display.getMainContainer().clear();
 				display.getMainContainer().add(drawer);
+				
+				// In the case where we are displaying the seam class diagram, we disable the edition
+				if (diagramDto.getName().equalsIgnoreCase(SEAM_DIAGRAM_NAME)) {
+					umlCanvas.setMouseEnabled(false);
+					drawer.setHotKeysEnabled(false);
+				}
 
 				forceModelerResize();
 				MessageToaster.show("Diagram loaded");

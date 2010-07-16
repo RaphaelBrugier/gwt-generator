@@ -25,6 +25,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.jdo.annotations.PrimaryKey;
 
+import com.objetdirect.gwt.gen.shared.entities.Directory.DirectoryType;
+
 /**
  * Represent a Project of a user.
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
@@ -85,13 +87,14 @@ public class Project implements Serializable {
 	public String getEmail() {
 		return email;
 	}
-
+	
 	/**
 	 * @return the directories
 	 */
 	public List<Directory> getDirectories() {
 		return directories;
 	}
+	
 
 	public void addDirectory(Directory directory) {
 		directories.add(directory);
@@ -99,6 +102,14 @@ public class Project implements Serializable {
 
 	public void removeDirectory(Directory directory) {
 		directories.remove(directory);
+	}
+	
+	public Directory getDirectory(DirectoryType type) {
+		for (Directory directory : directories) {
+			if (directory.getDirType() == type)
+				return directory;
+		}
+		return null;
 	}
 
 	@Override
