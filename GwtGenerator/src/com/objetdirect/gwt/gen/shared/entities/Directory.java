@@ -35,8 +35,8 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 @PersistenceCapable(detachable="true")
 public class Directory implements Serializable {
 	
-	public enum DirType {
-		DOMAIN, HCI, SERVICE
+	public enum DirectoryType {
+		DOMAIN, SEAM
 	}
 	
 	@PrimaryKey
@@ -51,7 +51,7 @@ public class Directory implements Serializable {
 	private String email;
 	
 	@Persistent
-	private DirType dirType;
+	private DirectoryType dirType;
 	
 	@NotPersistent
 	private List<DiagramDto> diagrams;
@@ -60,7 +60,7 @@ public class Directory implements Serializable {
 	@SuppressWarnings("unused")
 	private Directory() {}
 	
-	public Directory(String name, String email, DirType dirType) {
+	public Directory(String name, String email, DirectoryType dirType) {
 		this.name = name;
 		this.email = email;
 		this.dirType= dirType;
@@ -97,7 +97,7 @@ public class Directory implements Serializable {
 	/**
 	 * @return the dirType
 	 */
-	public DirType getDirType() {
+	public DirectoryType getDirType() {
 		return dirType;
 	}
 	

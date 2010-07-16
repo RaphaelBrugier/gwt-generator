@@ -31,7 +31,7 @@ import com.google.appengine.tools.development.testing.LocalUserServiceTestConfig
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
-import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
@@ -42,12 +42,14 @@ public class TestProjectService extends TestCase {
 
 	private final LocalServiceTestHelper helper =
         new LocalServiceTestHelper(
-        		new LocalDatastoreServiceTestConfig(), 
-        		new LocalUserServiceTestConfig());
+		new LocalDatastoreServiceTestConfig(), 
+		new LocalUserServiceTestConfig());
 
 	private final ProjectServiceImpl projectService = new ProjectServiceImpl();
 	
-	private final DiagramServiceImpl diagramService = new DiagramServiceImpl();  
+	private final DiagramServiceImpl diagramService = new DiagramServiceImpl();
+	
+	private final UMLCanvas seamClassDiagram = null;
 	
 	private final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 	
@@ -82,7 +84,7 @@ public class TestProjectService extends TestCase {
 	}
 	
 	public void testCreateProject() {
-		final Long id  = projectService.createProject("name");
+		final Long id  = projectService.createProject("name", seamClassDiagram);
 		
 		// Check if the returned id gets an entity from the datastore
 		Key key = new KeyFactory.Builder("Project", id).getKey();
@@ -94,14 +96,14 @@ public class TestProjectService extends TestCase {
 	}
 	
 	public void testCreatingAProjectAlsoCreateDefaultDirectories() {
-		projectService.createProject("name");
+		projectService.createProject("name", seamClassDiagram);
 		
 		assertEquals(NumberOfDefaultDirectories, ds.prepare(new Query("Directory")).countEntities());
 	}
 	
 	public void testGetProjects() {
-		Long id  = projectService.createProject("name");
-		projectService.createProject("name2");
+		Long id  = projectService.createProject("name", seamClassDiagram);
+		projectService.createProject("name2", seamClassDiagram);
 		
 		List<Project> projects = projectService.getProjects();
 		
@@ -116,7 +118,7 @@ public class TestProjectService extends TestCase {
 	
 	public void testGetProjectsWithADiagram() throws Exception {
 		// Create a new project and create a new diagram in the first directory
-		projectService.createProject("name");
+		projectService.createProject("name", seamClassDiagram);
 		Project p = projectService.getProjects().get(0);
 		Directory directory = p.getDirectories().get(0);
 		String directoryKey = directory.getKey();
@@ -134,7 +136,7 @@ public class TestProjectService extends TestCase {
 	}
 
 	public void testUpdateProject() {		
-		final Long id  = projectService.createProject("name");
+		final Long id  = projectService.createProject("name", seamClassDiagram);
 		Project p = projectService.getProjects().get(0);
 		
 		assertEquals(id, p.getKey());
@@ -147,7 +149,7 @@ public class TestProjectService extends TestCase {
 	}
 	
 	public void testDeleteProject() {
-		Long id  = projectService.createProject("name");
+		Long id  = projectService.createProject("name", seamClassDiagram);
 		Project p = projectService.getProjects().get(0);
 		
 		assertEquals(id, p.getKey());
@@ -158,7 +160,7 @@ public class TestProjectService extends TestCase {
 	}
 	
 	public void testDeleteProjectAlsoDeleteDirectories() {
-		Long id  = projectService.createProject("name");
+		Long id  = projectService.createProject("name", seamClassDiagram);
 		Project p = projectService.getProjects().get(0);
 		
 		assertEquals(id, p.getKey());
@@ -169,7 +171,7 @@ public class TestProjectService extends TestCase {
 	}
 	
 	public void testDeleteProjectAlsoDeleteDiagrams() {
-		projectService.createProject("name");
+		projectService.createProject("name", seamClassDiagram);
 		Project p = projectService.getProjects().get(0);
 		String directoryKey = p.getDirectories().get(0).getKey();
 		diagramService.createDiagram(new DiagramDto(directoryKey,"diagramName", DiagramType.CLASS));

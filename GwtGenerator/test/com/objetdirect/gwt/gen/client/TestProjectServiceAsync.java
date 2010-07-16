@@ -8,9 +8,12 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.shared.entities.Project;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 
 public class TestProjectServiceAsync extends GWTTestCase {
 
+	private UMLCanvas seamDiagram = null;
+	
 	@Override
 	public String getModuleName() {
 		return "com.objetdirect.gwt.gen.GwtGeneratorTestSuite";
@@ -21,7 +24,7 @@ public class TestProjectServiceAsync extends GWTTestCase {
 		
 		delayTestFinish(1500);
 		
-		projectService.createProject("name", new AsyncCallback<Long>() {
+		projectService.createProject("name", seamDiagram, new AsyncCallback<Long>() {
 			
 			@Override
 			public void onSuccess(Long result) {
@@ -41,7 +44,7 @@ public class TestProjectServiceAsync extends GWTTestCase {
 		
 		delayTestFinish(1500);
 		
-		projectService.createProject("name", new AsyncCallback<Long>() {
+		projectService.createProject("name", seamDiagram, new AsyncCallback<Long>() {
 			
 			@Override
 			public void onSuccess(final Long key) {
@@ -72,7 +75,7 @@ public class TestProjectServiceAsync extends GWTTestCase {
 		
 		delayTestFinish(1500);
 		
-		projectService.createProject("name", new AsyncCallback<Long>() {
+		projectService.createProject("name", seamDiagram, new AsyncCallback<Long>() {
 			
 			@Override
 			public void onSuccess(final Long key) {

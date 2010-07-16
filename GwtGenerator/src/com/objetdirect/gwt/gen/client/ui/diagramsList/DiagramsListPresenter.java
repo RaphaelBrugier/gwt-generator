@@ -32,6 +32,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.NewProjectEvent;
 import com.objetdirect.gwt.gen.client.event.NewProjectEvent.NewProjectEventHandler;
+import com.objetdirect.gwt.gen.client.helpers.SeamDiagramBuilder;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
@@ -40,7 +41,7 @@ import com.objetdirect.gwt.gen.client.ui.resources.TreeProjectsResources;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
-import com.objetdirect.gwt.gen.shared.entities.Directory.DirType;
+import com.objetdirect.gwt.gen.shared.entities.Directory.DirectoryType;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
@@ -186,7 +187,7 @@ public class DiagramsListPresenter {
 			@Override
 			public void onClick(ClickEvent event) {
 				// Depending of the type of the directory we use a different popup.
-				if (directoryTreeItem.getDirectory().getDirType() == DirType.HCI) {
+				if (directoryTreeItem.getDirectory().getDirType() == DirectoryType.SEAM) {
 					bindCreateObjectDiagram(project, directoryTreeItem);
 				} else {
 					bindCreateDiagram(directoryTreeItem);
@@ -218,7 +219,7 @@ public class DiagramsListPresenter {
 	 */
 	private Directory getClassDiagramDirectoryFromProject(Project project) {
 		for(Directory dir : project.getDirectories()) {
-			if (dir.getDirType() == DirType.DOMAIN)
+			if (dir.getDirType() == DirectoryType.DOMAIN)
 				return dir;
 		}
 		return null;
@@ -296,12 +297,15 @@ public class DiagramsListPresenter {
 
 	/**
 	 * Create a project.
+	 * Automatically add the seam diagram to the project.
 	 * When the action is finish (with success or not), close the popup and display a message.
 	 * @param createProjectPopup The popup to hide when the action of creation is finished.
 	 * @param projectName The name of the project to create.
 	 */
 	private void doCreateProject(final CreateProjectPopup createProjectPopup, final String projectName) {
-		projectService.createProject(projectName, new AsyncCallback<Long>() {
+		UMLCanvas seamDiagram = SeamDiagramBuilder.getSeamDiagram();
+		
+		projectService.createProject(projectName, seamDiagram, new AsyncCallback<Long>() {
 			@Override
 			public void onSuccess(Long result) {
 				doFetchProjects();
@@ -382,11 +386,10 @@ public class DiagramsListPresenter {
 	 * @param directoryType
 	 * @return a type of diagram from a type of directory.
 	 */
-	private DiagramType getDiagramTypeFromDirectoryType(DirType directoryType) {
+	private DiagramType getDiagramTypeFromDirectoryType(DirectoryType directoryType) {
 		switch (directoryType) {
 			case DOMAIN : return CLASS;
-			case HCI : return OBJECT;
-			case SERVICE : return CLASS;
+			case SEAM : return OBJECT;
 		}
 		return CLASS;
 	}
