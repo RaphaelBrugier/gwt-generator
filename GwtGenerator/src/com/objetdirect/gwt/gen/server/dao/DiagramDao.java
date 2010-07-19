@@ -85,9 +85,6 @@ public class DiagramDao {
 		try {
 			Diagram diagram = pm.getObjectById(Diagram.class, key);
 			if(diagram!=null) {
-				if (! diagram.getUser().equals(getCurrentUser())) {
-					throw new GWTGeneratorException("Get a diagram not owned by the user logged.");
-				}
 				diagramFound = diagram.copyToDiagramDto();
 			}
 		} finally {
@@ -142,10 +139,9 @@ public class DiagramDao {
 		List<Diagram> queryResult;
 		ArrayList<DiagramDto> results = new ArrayList<DiagramDto>();
 		try {
-			Query q = pm.newQuery(Diagram.class, "user == u && directoryKey == d");
-		    q.declareParameters("com.google.appengine.api.users.User u, " +
-		    		"String d");
-		    queryResult = (List<Diagram>) q.execute(getCurrentUser(), directoryKey);
+			Query q = pm.newQuery(Diagram.class, "directoryKey == d");
+		    q.declareParameters("String d");
+		    queryResult = (List<Diagram>) q.execute(directoryKey);
 		      
 		    for (Diagram diagram : queryResult) {
 		    	DiagramDto diagramInformation = new DiagramDto(diagram.getKey(), diagram.getDirectoryKey(), diagram.getName(), diagram.getType());
@@ -166,9 +162,6 @@ public class DiagramDao {
 		PersistenceManager pm = ServerHelper.getPM();
 		try {
 			Diagram diagram = pm.getObjectById(Diagram.class, key);
-			if (! diagram.getUser().equals(getCurrentUser())) {
-				throw new GWTGeneratorException("Trying to delete a diagram not owned by the user logged.");
-			}
 			if (diagram == null) 
 				throw new GWTGeneratorException("The diagram to delete was not found.");
 			
@@ -189,9 +182,6 @@ public class DiagramDao {
 			Diagram diagram = pm.getObjectById(Diagram.class, diagramToSave.getKey());
 			if (diagram == null) 
 				throw new GWTGeneratorException("The diagram to save was not found.");
-			if (! diagram.getUser().equals(getCurrentUser())) {
-				throw new GWTGeneratorException("Trying to save a diagram not owned by the user logged.");
-			}
 			
 			diagram.copyFromDiagramDto(diagramToSave);
 			

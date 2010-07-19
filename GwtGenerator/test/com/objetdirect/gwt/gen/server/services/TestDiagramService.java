@@ -33,7 +33,6 @@ import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvasClassDiagram;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvasObjectDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
@@ -53,8 +52,6 @@ public class TestDiagramService extends TestCase {
 	
 	private final DatastoreService ds = DatastoreServiceFactory.getDatastoreService();
 	
-	private final UMLCanvas seamClassDiagram = null;
-	
 	private Directory directory;
 	
 	private Directory otherDirectory;
@@ -66,7 +63,7 @@ public class TestDiagramService extends TestCase {
 		  .setEnvEmail("MyEmail@gmail.com")
 	      .setEnvAuthDomain("google.com");
 		
-		projectService.createProject("projectTest", seamClassDiagram);
+		projectService.createProject("projectTest");
 		Project p = projectService.getProjects().get(0);
 		directory = p.getDirectories().get(0);
 		

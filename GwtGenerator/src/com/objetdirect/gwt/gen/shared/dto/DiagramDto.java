@@ -36,6 +36,11 @@ public class DiagramDto implements Serializable {
 	private UMLCanvas canvas;
 	
 	/**
+	 * Wether the diagram is editable by the user or not.
+	 */
+	public boolean editable; 
+	
+	/**
 	 * In the case where the diagram is an object diagram, this is the key to the Class diagram that it instantiates. 
 	 */
 	public String classDiagramKey;

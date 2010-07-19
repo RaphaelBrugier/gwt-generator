@@ -18,7 +18,6 @@ import java.util.List;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.shared.entities.Project;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 
 /**
  * Async counter part of ProjectService
@@ -28,25 +27,21 @@ import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 public interface ProjectServiceAsync {
 
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String, com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String)
 	 */
-	void createProject(String name, UMLCanvas seamDiagram, AsyncCallback<Long> callback);
+	void createProject(String name, AsyncCallback<Long> callback);
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#getProjects()
 	 */
 	void getProjects(AsyncCallback<List<Project>> callback);
 
-	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#updateProject(com.objetdirect.gwt.gen.shared.entities.Project)
-	 */
-	void updateProject(Project project, AsyncCallback<Void> callback);
-
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#deleteProject(com.objetdirect.gwt.gen.shared.entities.Project)
 	 */
 	void deleteProject(Project projectToDelete, AsyncCallback<Void> callback);
+
 
 	
 }

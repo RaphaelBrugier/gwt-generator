@@ -93,6 +93,7 @@ public class ProjectDao {
 
 	/**
 	 * Get all the projects of the logged user
+	 * 
 	 * @return a list of project.
 	 */
 	@SuppressWarnings("unchecked")
@@ -118,6 +119,35 @@ public class ProjectDao {
 
 		return new ArrayList<Project>(projectsFound);
 	}
+	
+	/**
+	 * Get a project by its name. Use carefully because the name identifier should be unique across all projects.
+	 * Typically, the name "adminProject" will be a reserved project name.
+	 * 
+	 * @param name
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public Project getProjectByName(String name) {
+		PersistenceManager pm = ServerHelper.getPM();
+		pm.getFetchPlan().addGroup("directory");
+		List<Project> projectsFound = null;
+		Project p = null;
+		try {
+			Query q = pm.newQuery(Project.class, "name == n");
+		    q.declareParameters("String n");
+		    projectsFound = (List<Project>) q.execute(name);
+		    if (projectsFound == null || projectsFound.size() != 1) {
+		    	p = null;
+		    }
+		    else {
+		    	p = (Project) pm.detachCopy(projectsFound.get(0));
+		    }
+		} finally {
+			pm.close();
+		}
+		return p;
+	}
 
 	/**
 	 * Update a project in the base;
@@ -135,6 +165,9 @@ public class ProjectDao {
 		
 		return persistedProject;
 	}
+	
+	
+	
 	
 	/**
 	 * Delete the given project.
