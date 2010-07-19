@@ -165,6 +165,8 @@ public class Diagram {
 	}
 	
 	public void setCanvas(UMLCanvas umlCanvas) {
+		if (umlCanvas == null)
+			return;
 		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 		ObjectOutputStream oos;
 		try {
@@ -194,14 +196,16 @@ public class Diagram {
 		this.classDiagramKey = diagramToCopy.classDiagramKey;
 		
 		// copy serializedCanvas field
-		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-		ObjectOutputStream oos;
-		try {
-			oos = new ObjectOutputStream(byteOutput);
-			oos.writeObject(diagramToCopy.getCanvas());
-			this.serializedCanvas = new Blob(byteOutput.toByteArray());
-		} catch (IOException e) {
-			e.printStackTrace();
+		if (diagramToCopy.getCanvas() != null) {
+			ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+			ObjectOutputStream oos;
+			try {
+				oos = new ObjectOutputStream(byteOutput);
+				oos.writeObject(diagramToCopy.getCanvas());
+				this.serializedCanvas = new Blob(byteOutput.toByteArray());
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 	

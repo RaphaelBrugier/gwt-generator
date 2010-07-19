@@ -15,8 +15,6 @@
 package com.objetdirect.gwt.gen.client.ui.content;
 
 
-import static com.objetdirect.gwt.gen.client.helpers.SeamDiagramBuilder.SEAM_DIAGRAM_NAME;
-
 import java.util.List;
 
 import com.allen_sauer.gwt.log.client.Log;
@@ -195,6 +193,11 @@ public class ContentPresenter {
 				int canvasWidth = 0;
 				int canvasHeight = 0;
 				UMLCanvas umlCanvas = diagramFound.getCanvas();
+				if (umlCanvas == null) {
+					umlCanvas = UMLCanvas.createUmlCanvas(diagramFound.getType());
+					diagramFound.setCanvas(umlCanvas);
+				}
+				
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
 
 
@@ -202,8 +205,8 @@ public class ContentPresenter {
 				display.getMainContainer().clear();
 				display.getMainContainer().add(drawer);
 				
-				// In the case where we are displaying the seam class diagram, we disable the edition
-				if (diagramDto.getName().equalsIgnoreCase(SEAM_DIAGRAM_NAME)) {
+				 // In the case where we are displaying the seam class diagram, we disable the edition
+				if (!diagramDto.editable) {
 					umlCanvas.setMouseEnabled(false);
 					drawer.setHotKeysEnabled(false);
 				}

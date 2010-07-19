@@ -14,7 +14,6 @@
  */
 package com.objetdirect.gwt.gen.server.services;
 
-import static com.objetdirect.gwt.gen.client.helpers.SeamDiagramBuilder.SEAM_DIAGRAM_NAME;
 import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
 import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
 import static com.objetdirect.gwt.gen.shared.entities.Directory.DirectoryType.DOMAIN;
@@ -25,6 +24,7 @@ import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.CLASS;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
@@ -34,7 +34,6 @@ import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
 import com.objetdirect.gwt.gen.shared.entities.Project;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateProjectException;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 
 /**
  * Real implementation of ProjectService
@@ -44,17 +43,24 @@ import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 @SuppressWarnings("serial")
 public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectService {
 
+	/**
+	 * Reserved name for the admin project
+	 */
+	private static final String ADMIN_PROJECT_NAME = "adminProject";
+	
+	private static final String SEAM_DIAGRAM_NAME = "seamClasses";
+
 	private final ProjectDao projectDao = new ProjectDao();
 
 	private final DiagramService diagramService = new DiagramServiceImpl();
 	
 	private final DiagramDao diagramDao = new DiagramDao();
-	
+
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String, com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas)
+	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#createProject(java.lang.String)
 	 */
 	@Override
-	public Long createProject(String name, UMLCanvas seamDiagram) {
+	public Long createProject(String name) {
 		checkLoggedIn();
 
 		if (isBlank(name)) {
@@ -68,8 +74,6 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 
 		projectDao.updateProject(persistedProject);
 		
-		addSeamDiagram(persistedProject, seamDiagram);
-
 		return persistedProject.getKey();
 	}
 
@@ -90,13 +94,7 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 		Directory seamDirectory = new Directory("Seam", getCurrentUser().getEmail(), SEAM);
 		project.addDirectory(seamDirectory);
 	}
-	
-	/**
-	 * @param persistedProject
-	 */
-	private void addSeamDiagram(Project persistedProject, UMLCanvas seamDiagram) {
-		diagramDao.createDiagram(persistedProject.getDirectory(SEAM).getKey(), CLASS, SEAM_DIAGRAM_NAME, seamDiagram, null);
-	}
+
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#getProjects()
@@ -107,9 +105,20 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 
 		List<Project> projects = projectDao.getProjects();
 
+		if (UserServiceFactory.getUserService().isUserAdmin()) {
+			projects.add(getOrCreateAdminProject());
+		}
+
 		for (Project project : projects) {
 			for (Directory directory : project.getDirectories()) {
 				ArrayList<DiagramDto> diagrams = diagramService.getDiagrams(directory.getKey());
+				
+				// For the seam directory, we add the class diagram of the classes supported by the code generator.
+				if (directory.getDirType() == SEAM) {
+					DiagramDto seamDiagram = getSeamDiagram();
+					if (seamDiagram != null)
+						diagrams.add(seamDiagram);
+				}
 				directory.setDiagrams(diagrams);
 			}
 		}
@@ -117,13 +126,48 @@ public class ProjectServiceImpl extends RemoteServiceServlet implements ProjectS
 		return projects;
 	}
 
-	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.ProjectService#updateProject(com.objetdirect.gwt.gen.shared.entities.Project)
+	
+	/**
+	 * @return the seam class diagram of the classes supported by the code generator.
 	 */
-	@Override
-	public void updateProject(Project project) {
-		checkLoggedIn();
-		projectDao.updateProject(project);
+	private DiagramDto getSeamDiagram() {
+		Project adminProject = projectDao.getProjectByName(ADMIN_PROJECT_NAME);
+		// If the seam class diagram has not been created or if it's owned by the logged user we do not need to add it again.
+		if (adminProject == null || UserServiceFactory.getUserService().getCurrentUser().getEmail() == adminProject.getEmail())
+			return null;
+		
+		Directory seamDir = adminProject.getDirectory(SEAM);
+		List<DiagramDto> diagrams = diagramDao.getDiagrams(seamDir.getKey());
+		
+		DiagramDto seamDiagram = diagrams.get(0);
+		seamDiagram.editable = false;
+		return seamDiagram;
+	}
+
+	/**
+	 *	Return the special project where an user logged as an administrator can configure the seam class diagram.
+	 *	If the project does not already exist, this method will create it and also create the diagram.
+	 *
+	 * @return The special admin project
+	 */
+	private Project getOrCreateAdminProject() {
+		Project adminProject = projectDao.getProjectByName(ADMIN_PROJECT_NAME);
+		if (adminProject == null) {
+			adminProject = projectDao.createProject(ADMIN_PROJECT_NAME);
+			
+			Directory seamDirectory = new Directory("Seam", getCurrentUser().getEmail(), SEAM);
+			adminProject.addDirectory(seamDirectory);
+			projectDao.updateProject(adminProject);
+			diagramDao.createDiagram(adminProject.getDirectory(SEAM).getKey(), CLASS, SEAM_DIAGRAM_NAME, null, null);
+		} 
+		// If the admin project was already existing, we check if is owned by the current logged admin.
+		// In this case, we do not need to return it again because it was already added with the getProjects method.
+		if (UserServiceFactory.getUserService().getCurrentUser().getEmail() == adminProject.getEmail()){
+			return null;
+			
+		}
+		
+		return adminProject;
 	}
 
 	/* (non-Javadoc)

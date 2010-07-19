@@ -32,7 +32,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.objetdirect.gwt.gen.client.event.EditDiagramEvent;
 import com.objetdirect.gwt.gen.client.event.NewProjectEvent;
 import com.objetdirect.gwt.gen.client.event.NewProjectEvent.NewProjectEventHandler;
-import com.objetdirect.gwt.gen.client.helpers.SeamDiagramBuilder;
 import com.objetdirect.gwt.gen.client.services.DiagramServiceAsync;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
@@ -303,9 +302,7 @@ public class DiagramsListPresenter {
 	 * @param projectName The name of the project to create.
 	 */
 	private void doCreateProject(final CreateProjectPopup createProjectPopup, final String projectName) {
-		UMLCanvas seamDiagram = SeamDiagramBuilder.getSeamDiagram();
-		
-		projectService.createProject(projectName, seamDiagram, new AsyncCallback<Long>() {
+		projectService.createProject(projectName, new AsyncCallback<Long>() {
 			@Override
 			public void onSuccess(Long result) {
 				doFetchProjects();

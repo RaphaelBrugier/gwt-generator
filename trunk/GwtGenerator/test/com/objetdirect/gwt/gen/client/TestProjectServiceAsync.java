@@ -12,8 +12,6 @@ import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 
 public class TestProjectServiceAsync extends GWTTestCase {
 
-	private UMLCanvas seamDiagram = null;
-	
 	@Override
 	public String getModuleName() {
 		return "com.objetdirect.gwt.gen.GwtGeneratorTestSuite";
@@ -24,7 +22,7 @@ public class TestProjectServiceAsync extends GWTTestCase {
 		
 		delayTestFinish(1500);
 		
-		projectService.createProject("name", seamDiagram, new AsyncCallback<Long>() {
+		projectService.createProject("name", new AsyncCallback<Long>() {
 			
 			@Override
 			public void onSuccess(Long result) {
@@ -44,7 +42,7 @@ public class TestProjectServiceAsync extends GWTTestCase {
 		
 		delayTestFinish(1500);
 		
-		projectService.createProject("name", seamDiagram, new AsyncCallback<Long>() {
+		projectService.createProject("name", new AsyncCallback<Long>() {
 			
 			@Override
 			public void onSuccess(final Long key) {
@@ -54,50 +52,6 @@ public class TestProjectServiceAsync extends GWTTestCase {
 					public void onSuccess(List<Project> projectsFound) {
 						assertEquals(key, projectsFound.get(0));
 						finishTest();
-					}
-					
-					@Override
-					public void onFailure(Throwable caught) {
-						fail();
-					}
-				});
-			}
-			
-			@Override
-			public void onFailure(Throwable caught) {
-				fail();
-			}
-		});
-	}
-	
-	public void testUpdateProject() throws Exception {
-		final ProjectServiceAsync projectService = GWT.create(ProjectService.class);
-		
-		delayTestFinish(1500);
-		
-		projectService.createProject("name", seamDiagram, new AsyncCallback<Long>() {
-			
-			@Override
-			public void onSuccess(final Long key) {
-				projectService.getProjects(new AsyncCallback<List<Project>>() {
-					
-					@Override
-					public void onSuccess(List<Project> projectsFound) {
-						Project updatedProject = projectsFound.get(0);
-						updatedProject.setName("newName");
-						
-						projectService.updateProject(updatedProject, new AsyncCallback<Void>() {
-
-							@Override
-							public void onSuccess(Void result) {
-								finishTest();
-							}
-							
-							@Override
-							public void onFailure(Throwable caught) {
-								fail();
-							}
-						});
 					}
 					
 					@Override
