@@ -12,14 +12,10 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server;
+package com.objetdirect.gwt.gen.server.dao;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
-
-import com.objetdirect.gwt.gen.server.dao.AllDaoTests;
-import com.objetdirect.gwt.gen.server.gen.AllGenTests;
-import com.objetdirect.gwt.gen.server.services.AllServiceTests;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
@@ -27,10 +23,9 @@ import com.objetdirect.gwt.gen.server.services.AllServiceTests;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses( {
-	AllServiceTests.class,
-	AllGenTests.class,
-	AllDaoTests.class
+	SeamDiagramDaoTest.class
 })
-public class AllServerTests {
+public class AllDaoTests {
+
 
 }
