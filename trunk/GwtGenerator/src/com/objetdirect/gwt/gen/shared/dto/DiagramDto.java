@@ -36,9 +36,9 @@ public class DiagramDto implements Serializable {
 	private UMLCanvas canvas;
 	
 	/**
-	 * Wether the diagram is editable by the user or not.
+	 * Whether the diagram is the special seam diagram;
 	 */
-	public boolean editable; 
+	public boolean seamSpecialDiagram; 
 	
 	/**
 	 * In the case where the diagram is an object diagram, this is the key to the Class diagram that it instantiates. 
@@ -60,6 +60,7 @@ public class DiagramDto implements Serializable {
 		this.name = name;
 		this.type = type;
 		this.directoryKey = directoryKey;
+		seamSpecialDiagram = false;
 	}
 	
 	/**

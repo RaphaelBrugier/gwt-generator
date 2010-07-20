@@ -39,7 +39,7 @@ public class Project implements Serializable {
 	@PrimaryKey
     @Persistent(valueStrategy = IdGeneratorStrategy.IDENTITY)
     private Long key;
-	
+
 	@Persistent
 	private String name;
 
@@ -65,6 +65,13 @@ public class Project implements Serializable {
 	 */
 	public Long getKey() {
 		return key;
+	}
+	
+	/**
+	 * @param key the key to set
+	 */
+	public void setKey(Long key) {
+		this.key = key;
 	}
 
 	/**
