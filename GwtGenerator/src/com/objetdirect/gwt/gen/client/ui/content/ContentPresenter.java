@@ -206,7 +206,7 @@ public class ContentPresenter {
 				display.getMainContainer().add(drawer);
 				
 				 // In the case where we are displaying the seam class diagram, we disable the edition
-				if (!diagramDto.editable) {
+				if (diagramDto.seamSpecialDiagram) {
 					umlCanvas.setMouseEnabled(false);
 					drawer.setHotKeysEnabled(false);
 				}
@@ -241,7 +241,7 @@ public class ContentPresenter {
 			@Override
 			public void onFailure(Throwable caught) {
 				Log.error("ContentPresenter::doSaveDiagram() Failed to save the diagram " + caught.getMessage());
-				ErrorToaster.show("Failed to save the diagram, please retry in few moments or contact the administrator if the problem persist.");
+				ErrorToaster.show("Failed to save the diagram, please retry in few moments or contact the administrator if the problem persist." + caught.getMessage());
 			}
 		});
 	}

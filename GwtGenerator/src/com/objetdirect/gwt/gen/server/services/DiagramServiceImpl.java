@@ -15,23 +15,23 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
+import static com.objetdirect.gwt.gen.server.services.ProjectServiceImpl.SEAM_CLASSES_SUPPORTED;
 import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isNotBlank;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation.createAssociation;
 
 import java.util.ArrayList;
-import java.util.List;
 
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
+import com.objetdirect.gwt.gen.server.dao.SeamDiagramDao;
+import com.objetdirect.gwt.gen.server.entities.SeamDiagram;
+import com.objetdirect.gwt.gen.server.helpers.ObjectDiagramBuilder;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.ObjectDiagram;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * Real implementation of DiagramService.
@@ -42,6 +42,8 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramService {
 	
 	private DiagramDao diagramDao = new DiagramDao();
+	
+	private SeamDiagramDao seamDiagramDao = new SeamDiagramDao();
 	
 	/**
 	 * @param diagramDao the diagramDao to set
@@ -83,90 +85,50 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	@Override
 	public void deleteDiagram(String key) {
 		checkLoggedIn();
-		diagramDao.deleteDiagram(key);
+		if (key != null) {
+			diagramDao.deleteDiagram(key);
+		} else {
+			seamDiagramDao.deleteSeamDiagram();
+		}
 	}
-	
+
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.String)
 	 */
 	@Override
 	public DiagramDto getDiagram(String key) {
 		checkLoggedIn();
+		
+		// Special case for the seam diagram
+		if (key == null) {
+				return getSeamDiagram();
+		}
+		
 		DiagramDto diagramFound = diagramDao.getDiagram(key);
-		addClassDiagramToObjectDiagram(diagramFound);
+		
+		if (diagramFound.getType()==OBJECT) {
+			ObjectDiagramBuilder objectDiagramBuilder = new ObjectDiagramBuilder(diagramFound, diagramDao);
+			diagramFound = objectDiagramBuilder.getObjectDiagramTransformed();
+		}
+		
 		return diagramFound;
 	}
 	
 	/**
-	 * Special setup for the object diagrams.
-	 * When an object diagram is loaded, we need to reload the classes that can be instantiated on it.
-	 * To find this classes, we load the class diagram that the object diagram depends on.
-	 * 
-	 * @param objectDiagramDto the object diagram where the setup apply.
+	 * @return the seam class diagram of the classes supported by the code generator.
 	 */
-	void addClassDiagramToObjectDiagram(DiagramDto objectDiagramDto) {
-		// This special setup only applies to object diagrams
-		if ( ! (objectDiagramDto.getType()==OBJECT))
-			return;
+	private DiagramDto getSeamDiagram() {
+		SeamDiagram	seamDiagram = seamDiagramDao.getSeamDiagram();
 		
-		ObjectDiagram objectDiagram = (ObjectDiagram)objectDiagramDto.getCanvas();
-		
-		DiagramDto classDiagramDto = diagramDao.getDiagram(objectDiagramDto.classDiagramKey);
-		ClassDiagram classDiagram = (ClassDiagram ) classDiagramDto.getCanvas();
-		
-		List<UMLClass> domainClasses = classDiagram.getUmlClasses();
-		List<UMLRelation> classRelations = classDiagram.getClassRelations();
-		addSeamClasses(domainClasses, classRelations);
-		objectDiagram.setClasses(domainClasses);
-		objectDiagram.setClassRelations(classRelations);
+		DiagramDto seamDiagramDto = new DiagramDto();
+		seamDiagramDto.setName(SEAM_CLASSES_SUPPORTED);
+		seamDiagramDto.setCanvas(seamDiagram.getCanvas());
+		seamDiagramDto.seamSpecialDiagram = true;
+		seamDiagramDto.setKey(null);
+		seamDiagramDto.setType(DiagramType.CLASS);
+		return seamDiagramDto;
 	}
 	
-	/**
-	 * Hard coded method to add the seam classes to the list of instantiable classes.
-	 */
-	private void addSeamClasses(final List<UMLClass> domainClasses, final List<UMLRelation> classRelations) {
-		UMLClass printDescriptorClass =  new UMLClass("PrintDescriptor").
-			addAttribute(PRIVATE, "String", "classPackageName").
-			addAttribute(PRIVATE, "String", "className").
-			addAttribute(PRIVATE, "String", "viewPackageName").
-			addAttribute(PRIVATE, "String", "viewName");
-		
-		UMLClass printEntityClass =  new UMLClass("PrintEntity");
-		
-		UMLRelation featureRelation = createAssociation(printDescriptorClass, printEntityClass, "feature");
-		classRelations.add(featureRelation);
-		
-		UMLClass printFormClass =  new UMLClass("PrintForm");
-		
-		UMLRelation elementRelation = createAssociation(printEntityClass, printFormClass, "element");
-		classRelations.add(elementRelation);
-		
-		UMLClass stringFieldClass =  new UMLClass("StringField").
-			addAttribute(PRIVATE, "String", "fieldName").
-			addAttribute(PRIVATE, "String", "fieldTitle").
-			addAttribute(PRIVATE, "String", "length");
-		
-		UMLRelation printFormToStringFieldRelation = createAssociation(printFormClass, stringFieldClass, "");
-		classRelations.add(printFormToStringFieldRelation);
-		
-		createAllDomainRelation(printEntityClass, domainClasses, classRelations);
-		
-		domainClasses.add(printDescriptorClass);
-		domainClasses.add(printEntityClass);
-		domainClasses.add(printFormClass);
-		domainClasses.add(stringFieldClass);
-	}
-
-	/**
-	 * Iterate over all the domain classes to add an association "entity" between each and the printEntityClass
-	 */
-	private void createAllDomainRelation(final UMLClass printEntityClass, final List<UMLClass> domainClasses, final List<UMLRelation> classRelations) {
-		for (UMLClass entityClass : domainClasses) {
-			UMLRelation entityRelation = createAssociation(printEntityClass, entityClass, "entity");
-			classRelations.add(entityRelation);
-		}
-	}
-
 
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#saveDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations)
@@ -174,6 +136,20 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	@Override
 	public void saveDiagram(DiagramDto diagramToSave) {
 		checkLoggedIn();
-		diagramDao.saveDiagram(diagramToSave);
+		if (diagramToSave.seamSpecialDiagram) {
+			updateSeamDiagram(diagramToSave);
+		} else {
+			diagramDao.saveDiagram(diagramToSave);
+		}
+	}
+
+	private void updateSeamDiagram(DiagramDto diagramToSave) {
+		if (! UserServiceFactory.getUserService().isUserAdmin()) {
+			throw new GWTGeneratorException("You are not allowed to edit the seam diagram.");
+		}
+
+		if (seamDiagramDao.getSeamDiagram() == null)
+			seamDiagramDao.createSeamDiagram();
+		seamDiagramDao.updateCanvasInSeamDiagram(diagramToSave.getCanvas());
 	}
 }

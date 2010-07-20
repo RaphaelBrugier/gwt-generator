@@ -43,20 +43,20 @@ public interface DiagramService extends RemoteService {
 	 * @param directory Directory where the diagrams are stored.
 	 * @return A list of the diagrams.
 	 */
-	public ArrayList<DiagramDto> getDiagrams(String directory);
+	public ArrayList<DiagramDto> getDiagrams(String directory) throws GWTGeneratorException;
 	
 	/**
 	 * Delete a diagram in the base.
 	 * @param key the key of the diagram to delete
 	 */
-	public void deleteDiagram(String key);
+	public void deleteDiagram(String key) throws GWTGeneratorException;
 	
 	/**
 	 * Get a Diagram from its key
 	 * @param key the key
 	 * @return the diagram found or null.
 	 */
-	public DiagramDto getDiagram(String key);
+	public DiagramDto getDiagram(String key) throws GWTGeneratorException;
 	
 	/**
 	 * Save the diagram in the base.
