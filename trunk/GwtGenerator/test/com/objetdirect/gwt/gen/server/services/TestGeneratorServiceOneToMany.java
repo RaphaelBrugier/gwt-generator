@@ -15,6 +15,9 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.NONE;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.WIRE_ARROW;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkKind.ASSOCIATION_RELATION;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,7 +30,6 @@ import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLLink.LinkKind;
 
 /**
  * Test the generation of the one to many relations
@@ -41,17 +43,17 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 		UMLClass leftEntity = new UMLClass("Trainer");
 		UMLClass rightEntity = new UMLClass("Tiger");
 		
-		UMLRelation relation = new UMLRelation(LinkKind.ASSOCIATION_RELATION);
+		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
 		relation.setName("");
 		
-		relation.setLeftAdornment(LinkAdornment.NONE);
+		relation.setLeftAdornment(NONE);
 		relation.setLeftCardinality("1");
 		relation.setLeftConstraint("");
 		relation.setLeftRole("");
 		relation.setLeftStereotype("");
 		relation.setLeftTarget(leftEntity);
 		
-		relation.setRightAdornment(LinkAdornment.WIRE_ARROW);
+		relation.setRightAdornment(WIRE_ARROW);
 		relation.setRightCardinality("*");
 		relation.setRightConstraint("");
 		relation.setRightRole("trainedTigers");
@@ -100,7 +102,7 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 		UMLClass leftEntity = new UMLClass("Troop");
 		UMLClass rightEntity = new UMLClass("Soldier");
 		
-		UMLRelation relation = new UMLRelation(LinkKind.ASSOCIATION_RELATION);
+		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
 		relation.setName("");
 		
 		relation.setLeftAdornment(LinkAdornment.NONE);

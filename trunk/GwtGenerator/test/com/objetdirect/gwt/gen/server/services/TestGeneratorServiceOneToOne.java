@@ -16,6 +16,11 @@ package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
 import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.INVERTED_SOLID_DIAMOND;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.NONE;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.WIRE_ARROW;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkKind.ASSOCIATION_RELATION;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkKind.COMPOSITION_RELATION;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -29,7 +34,6 @@ import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLLink.LinkKind;
 
 /**
  * Test the generation of the one to one relations
@@ -43,16 +47,16 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		UMLClass leftEntity = new UMLClass("LeftEntity");
 		UMLClass rightEntity = new UMLClass("RightEntity");
 		
-		UMLRelation relation = new UMLRelation(LinkKind.ASSOCIATION_RELATION);
+		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
 		relation.setName("");
 		
-		relation.setLeftAdornment(LinkAdornment.NONE);
+		relation.setLeftAdornment(NONE);
 		relation.setLeftCardinality("");
 		relation.setLeftConstraint("");
 		relation.setLeftRole("");
 		relation.setLeftTarget(leftEntity);
 		
-		relation.setRightAdornment(LinkAdornment.WIRE_ARROW);
+		relation.setRightAdornment(WIRE_ARROW);
 		relation.setRightCardinality("1");
 		relation.setRightConstraint("");
 		relation.setRightRole("link");
@@ -97,16 +101,16 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		UMLClass leftEntity = new UMLClass("LeftEntity");
 		UMLClass rightEntity = new UMLClass("RightEntity");
 		
-		UMLRelation relation = new UMLRelation(LinkKind.COMPOSITION_RELATION);
+		UMLRelation relation = new UMLRelation(COMPOSITION_RELATION);
 		relation.setName("");
 		
-		relation.setLeftAdornment(LinkAdornment.INVERTED_SOLID_DIAMOND);
+		relation.setLeftAdornment(INVERTED_SOLID_DIAMOND);
 		relation.setLeftCardinality("");
 		relation.setLeftConstraint("");
 		relation.setLeftRole("");
 		relation.setLeftTarget(leftEntity);
 		
-		relation.setRightAdornment(LinkAdornment.WIRE_ARROW);
+		relation.setRightAdornment(WIRE_ARROW);
 		relation.setRightCardinality("1");
 		relation.setRightConstraint("");
 		relation.setRightRole("link");
@@ -152,7 +156,7 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		UMLClass leftEntity = new UMLClass("LeftEntity");
 		UMLClass rightEntity = new UMLClass("RightEntity");
 		
-		UMLRelation relation = new UMLRelation(LinkKind.ASSOCIATION_RELATION);
+		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
 		relation.setName("");
 		
 		relation.setLeftAdornment(LinkAdornment.NONE);
