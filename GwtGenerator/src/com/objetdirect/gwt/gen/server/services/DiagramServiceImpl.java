@@ -107,7 +107,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		DiagramDto diagramFound = diagramDao.getDiagram(key);
 		
 		if (diagramFound.getType()==OBJECT) {
-			ObjectDiagramBuilder objectDiagramBuilder = new ObjectDiagramBuilder(diagramFound, diagramDao);
+			ObjectDiagramBuilder objectDiagramBuilder = new ObjectDiagramBuilder(diagramFound, diagramDao, seamDiagramDao);
 			diagramFound = objectDiagramBuilder.getObjectDiagramTransformed();
 		}
 		
