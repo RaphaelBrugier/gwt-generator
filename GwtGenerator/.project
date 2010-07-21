@@ -38,11 +38,6 @@
 	</natures>
 	<linkedResources>
 		<link>
-			<name>GwtUmlAPI-src</name>
-			<type>2</type>
-			<location>E:/workspace/GWTUMLAPI/src</location>
-		</link>
-		<link>
 			<name>generatorAPI-src</name>
 			<type>2</type>
 			<location>E:/workspace/GeneratorApi/src</location>
@@ -51,6 +46,11 @@
 			<name>generatorAPI-tst</name>
 			<type>2</type>
 			<location>E:/workspace/GeneratorApi/tst</location>
+		</link>
+		<link>
+			<name>gwtuml-src</name>
+			<type>2</type>
+			<location>E:/workspace/GWTUMLAPI/src</location>
 		</link>
 	</linkedResources>
 </projectDescription>
