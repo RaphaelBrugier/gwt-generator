@@ -14,6 +14,7 @@
  */
 package com.objetdirect.gwt.gen.server.gen;
 
+import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.FACELET;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
 import static com.objetdirect.seam.TestPrintList.testSimpleListFaceletText;
 import static com.objetdirect.seam.TestPrintList.testSimpleListJavaText;
@@ -29,7 +30,7 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 public class TestPrintList extends TestSeamGenerator {
 
 	@Test
-	public void testSimpleEntity() {
+	public void testSimpleList() {
 		UMLClass agencyClass = new UMLClass("Agency").
 			addAttribute(PRIVATE, "String", "name").
 			addAttribute(PRIVATE, "String", "phone").
@@ -43,20 +44,21 @@ public class TestPrintList extends TestSeamGenerator {
 			addAttributeValuePair("viewName", "print-agencies");
 		objects.add(printDescriptorInstance);
 		
-		UMLObject printListInstance = new UMLObject("", new UMLClass("PrintListDescriptor"));
-		objects.add(printListInstance);
+		UMLObject printListDescriptorInstance = new UMLObject("", new UMLClass("PrintListDescriptor"));
+		objects.add(printListDescriptorInstance);
 		
-		createRelation(printDescriptorInstance, printListInstance, "feature");
+		createRelation(printDescriptorInstance, printListDescriptorInstance, "feature");
 		
 		UMLObject entityInstance = new UMLObject("", agencyClass);
 		objects.add(entityInstance);
 		
-		createRelation(printListInstance, entityInstance, "entity");
+		createRelation(printListDescriptorInstance, entityInstance, "entity");
 		
-		addStringField(printDescriptorInstance, "name", "Name", "20");
-		addStringField(printDescriptorInstance, "phone", "Phone", "10");
-		addStringField(printDescriptorInstance, "email", "E-mail", "20");
+		addStringField(printListDescriptorInstance, "name", "Name", "20");
+		addStringField(printListDescriptorInstance, "phone", "Phone", "10");
+		addStringField(printListDescriptorInstance, "email", "E-mail", "20");
 		
+		printGeneratedCode(FACELET);
 		assertGenerated(testSimpleListJavaText, testSimpleListFaceletText);
 	}
 }
