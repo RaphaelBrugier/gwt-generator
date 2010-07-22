@@ -31,7 +31,7 @@ import com.objetdirect.seam.print.PrintDescriptor;
  */
 public class TestPrintDescriptorProcessor extends TestProcessor {
 	
-	PrintDescriptorProcessor pdp;
+	Processor pdp;
 
 	@Before
 	public void setUpObjectUnderTest() {

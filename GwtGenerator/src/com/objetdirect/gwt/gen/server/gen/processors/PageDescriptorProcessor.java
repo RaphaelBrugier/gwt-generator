@@ -22,10 +22,8 @@ import com.objetdirect.seam.PageDescriptor;
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class PageDescriptorProcessor extends Processor {
-	private SeamGenerator seamGenerator;
-	
 	public PageDescriptorProcessor(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+		super(seamGenerator);
 	}
 	
 	@Override
@@ -39,5 +37,10 @@ public class PageDescriptorProcessor extends Processor {
 		seamGenerator.setDocumentDescriptor(pageDescriptor);
 		
 		seamGenerator.addBridgeObject(object, pageDescriptor);
+	}
+
+	@Override
+	public String getProcessedClassName() {
+		return "PageDescriptor";
 	}
 }

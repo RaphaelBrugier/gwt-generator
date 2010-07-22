@@ -26,6 +26,7 @@ import com.objetdirect.gwt.gen.server.gen.processors.PageDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
 import com.objetdirect.gwt.gen.server.gen.processors.StringFieldProcessor;
 import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessor;
@@ -77,11 +78,17 @@ public class SeamGenerator {
 	}
 	
 	private void addObjectProcessors() {
-		processors.put("PageDescriptor", new PageDescriptorProcessor(this));
-		processors.put("PrintDescriptor", new PrintDescriptorProcessor(this));
-		processors.put("PrintForm", new PrintFormProcessor(this));
-		processors.put("PrintEntity", new PrintEntityProcessor(this));
-		processors.put("StringField", new StringFieldProcessor(this));
+		addProcessor(new PageDescriptorProcessor(this));
+		addProcessor(new PrintDescriptorProcessor(this));
+		addProcessor(new PrintListDescriptorProcessor(this));
+		addProcessor(new PrintFormProcessor(this));
+		addProcessor(new PrintEntityProcessor(this));
+		addProcessor(new StringFieldProcessor(this));
+	}
+
+	private void addProcessor(Processor processor) {
+		String className = processor.getProcessedClassName();
+		processors.put(className, processor);
 	}
 
 	void seamParse() {

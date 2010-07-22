@@ -29,7 +29,8 @@ import com.objetdirect.gwt.gen.server.gen.relationProcessors.AllRelationProcesso
 	AllProcessorsTests.class,
 	AllRelationProcessorsTests.class,
 	TestPageDescriptor.class,
-	TestPrintEntity.class
+	TestPrintEntity.class,
+	TestPrintList.class
 })
 public class AllGenTests {
 

@@ -148,7 +148,5 @@ public class TestDiagramService extends TestCase {
 		objectDiagramDto.setCanvas(objectDiagram);
 		
 		String objectDiagramKey = diagramService.createDiagram(objectDiagramDto);
-		
-		DiagramDto diagramFound = diagramService.getDiagram(objectDiagramKey);
 	}
 }

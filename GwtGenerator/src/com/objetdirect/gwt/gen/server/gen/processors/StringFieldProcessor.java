@@ -23,10 +23,8 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
  */
 public class StringFieldProcessor extends Processor {
 
-	private SeamGenerator seamGenerator;
-	
 	public StringFieldProcessor(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+		super(seamGenerator);
 	}
 	
 	@Override
@@ -38,5 +36,10 @@ public class StringFieldProcessor extends Processor {
 		StringField sf = new StringField(fieldName, fieldTitle, length);
 		
 		seamGenerator.addBridgeObject(object, sf);
+	}
+
+	@Override
+	public String getProcessedClassName() {
+		return "StringField";
 	}
 }

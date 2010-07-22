@@ -48,7 +48,16 @@ public class TestSeamGenerator {
 		generator = new SeamGenerator(classes, objects, objectRelations);
 	}
 	
-	void createStringFieldInstance(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {
+	void createRelationWithoutRole(UMLObject owner, UMLObject target) {
+		createRelation(owner, target, "");
+	}
+	
+	void createRelation(UMLObject owner, UMLObject target, String role) {
+		ObjectRelation relation = new ObjectRelation(owner, target).setRightRole(role);
+		objectRelations.add(relation);
+	}
+	
+	void addStringField(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {
 		UMLObject field = new UMLObject("", new UMLClass("StringField")).
 							addAttributeValuePair("fieldName", fieldNameValue).
 							addAttributeValuePair("fieldTitle", fieldTitleValue).

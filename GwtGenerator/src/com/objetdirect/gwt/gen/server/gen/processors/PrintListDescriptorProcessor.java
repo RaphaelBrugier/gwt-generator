@@ -16,26 +16,26 @@ package com.objetdirect.gwt.gen.server.gen.processors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.seam.print.PrintEntityDescriptor;
+import com.objetdirect.seam.print.PrintListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintEntityProcessor extends Processor {
+public class PrintListDescriptorProcessor extends Processor {
 
-	public PrintEntityProcessor(SeamGenerator seamGenerator) {
+	public PrintListDescriptorProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
 	
 	@Override
 	public void process(UMLObject object) {
-		PrintEntityDescriptor ped = PrintEntityDescriptor.newEmptyInstance();
+		PrintListDescriptor ped = PrintListDescriptor.newEmptyInstance();
 		
 		seamGenerator.addBridgeObject(object, ped);
 	}
 
 	@Override
 	public String getProcessedClassName() {
-		return "PrintEntity";
+		return "PrintListDescriptor";
 	}
 }
