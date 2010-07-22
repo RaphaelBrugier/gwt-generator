@@ -14,28 +14,28 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
-import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.verify;
+
+import org.junit.Test;
+
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.seam.print.PrintEntityDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintEntityProcessor extends Processor {
-
-	public PrintEntityProcessor(SeamGenerator seamGenerator) {
-		super(seamGenerator);
-	}
+public class TestPrintListDescriptorProcessor extends TestProcessor {
 	
-	@Override
-	public void process(UMLObject object) {
-		PrintEntityDescriptor ped = PrintEntityDescriptor.newEmptyInstance();
+	@Test
+	public void process() {
+		PrintEntityProcessor pdp = new PrintEntityProcessor(seamGenerator);
 		
-		seamGenerator.addBridgeObject(object, ped);
-	}
-
-	@Override
-	public String getProcessedClassName() {
-		return "PrintEntity";
+		UMLObject object = new UMLObject();
+		
+		pdp.process(object);
+		
+		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintEntityDescriptor.class));
 	}
 }

@@ -15,8 +15,8 @@
 package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
-import static com.objetdirect.seam.TestPrintEntity.testSimpleEntityFaceletText;
-import static com.objetdirect.seam.TestPrintEntity.testSimpleEntityJavaText;
+import static com.objetdirect.seam.TestPrintList.testSimpleListFaceletText;
+import static com.objetdirect.seam.TestPrintList.testSimpleListJavaText;
 
 import org.junit.Test;
 
@@ -26,7 +26,7 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestPrintEntity extends TestSeamGenerator {
+public class TestPrintList extends TestSeamGenerator {
 
 	@Test
 	public void testSimpleEntity() {
@@ -38,30 +38,25 @@ public class TestPrintEntity extends TestSeamGenerator {
 		
 		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass("PrintDescriptor")).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
-			addAttributeValuePair("className", "PrintAgency").
+			addAttributeValuePair("className", "PrintAgencies").
 			addAttributeValuePair("viewPackageName", "views").
-			addAttributeValuePair("viewName", "print-agency");
+			addAttributeValuePair("viewName", "print-agencies");
 		objects.add(printDescriptorInstance);
 		
-		UMLObject printEntityInstance = new UMLObject("", new UMLClass("PrintEntity"));
-		objects.add(printEntityInstance);
+		UMLObject printListInstance = new UMLObject("", new UMLClass("PrintListDescriptor"));
+		objects.add(printListInstance);
 		
-		createRelation(printDescriptorInstance, printEntityInstance, "feature");
+		createRelation(printDescriptorInstance, printListInstance, "feature");
 		
 		UMLObject entityInstance = new UMLObject("", agencyClass);
 		objects.add(entityInstance);
 		
-		createRelation(printEntityInstance, entityInstance, "entity");
+		createRelation(printListInstance, entityInstance, "entity");
 		
-		UMLObject printFormInstance = new UMLObject("", new UMLClass("PrintForm"));
-		objects.add(printFormInstance);
+		addStringField(printDescriptorInstance, "name", "Name", "20");
+		addStringField(printDescriptorInstance, "phone", "Phone", "10");
+		addStringField(printDescriptorInstance, "email", "E-mail", "20");
 		
-		createRelation(printEntityInstance, printFormInstance, "element");
-		
-		addStringField(printFormInstance, "name", "Name", "20");
-		addStringField(printFormInstance, "phone", "Phone", "10");
-		addStringField(printFormInstance, "email", "E-mail", "20");
-		
-		assertGenerated(testSimpleEntityJavaText, testSimpleEntityFaceletText);
+		assertGenerated(testSimpleListJavaText, testSimpleListFaceletText);
 	}
 }

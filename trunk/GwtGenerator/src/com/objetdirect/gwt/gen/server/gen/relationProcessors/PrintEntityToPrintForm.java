@@ -15,7 +15,6 @@
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
-import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.print.PrintEntityDescriptor;
 import com.objetdirect.seam.print.PrintFormDescriptor;

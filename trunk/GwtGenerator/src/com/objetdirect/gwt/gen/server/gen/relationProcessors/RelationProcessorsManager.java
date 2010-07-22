@@ -40,13 +40,13 @@ public class RelationProcessorsManager {
 	}
 	
 	private void buildProcessors() {
-		addProcessor("PrintDescriptor", "PrintEntity", new PrintDescriptorToPrintEntity(seamGenerator));
-		addProcessor("PrintEntity", "PrintForm", new PrintEntityToPrintForm(seamGenerator));
-		addProcessor("PrintEntity", "DomainInstance", new PrintEntityToDomainInstance(seamGenerator));
-		addProcessor("PrintForm", "StringField", new PrintFormToStringField(seamGenerator));
+		addRelationProcessor("PrintDescriptor", "PrintEntity", new PrintDescriptorToPrintEntity(seamGenerator));
+		addRelationProcessor("PrintEntity", "PrintForm", new PrintEntityToPrintForm(seamGenerator));
+		addRelationProcessor("PrintEntity", "DomainInstance", new PrintEntityToDomainInstance(seamGenerator));
+		addRelationProcessor("PrintForm", "StringField", new PrintFormToStringField(seamGenerator));
 	}
 
-	private void addProcessor(String ownerClassName, String targetClassName, RelationProcessor rp) {
+	private void addRelationProcessor(String ownerClassName, String targetClassName, RelationProcessor rp) {
 		if ( ! processors.containsKey(ownerClassName))
 			processors.put(ownerClassName, new HashMap<String, RelationProcessor>());
 

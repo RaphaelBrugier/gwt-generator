@@ -23,15 +23,18 @@ import com.objetdirect.seam.print.PrintFormDescriptor;
  */
 public class PrintFormProcessor extends Processor {
 
-	private SeamGenerator seamGenerator;
-	
 	public PrintFormProcessor(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+		super(seamGenerator);
 	}
 	
 	@Override
 	public void process(UMLObject object) {
 		PrintFormDescriptor pfd = new PrintFormDescriptor();
 		seamGenerator.addBridgeObject(object, pfd);
+	}
+
+	@Override
+	public String getProcessedClassName() {
+		return "PrintForm";
 	}
 }

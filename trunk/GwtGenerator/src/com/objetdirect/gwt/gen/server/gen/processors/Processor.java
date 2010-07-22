@@ -14,14 +14,37 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
+import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 
 /**
- * Construct the document from an object instance.
+ * Generic parser to construct an instance of an object in the generator world from the Uml world.
  * 
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public abstract class Processor {
 
+	protected final SeamGenerator seamGenerator;
+	
+	public Processor(SeamGenerator seamGenerator) {
+		this.seamGenerator = seamGenerator;
+	}
+
+	/**
+	 * Parse the given object and add it to the list of UmlObjects in the SeamGenerator instance if success
+	 * 
+	 * @param object
+	 */
 	public abstract void process(UMLObject object);
+	
+	/**
+	 * @return The name of the class processed by the processor
+	 */
+	public abstract String getProcessedClassName();
+
+	protected void checkGetNotNullForAttribute(String attributeName, String value) {
+		if (value == null || value.isEmpty())
+			throw new GWTGeneratorException("The value of the attribute " + attributeName + " is mandatory");
+	}
 }

@@ -15,7 +15,6 @@
 package com.objetdirect.gwt.gen.server.gen.processors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
-import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.seam.print.PrintDescriptor;
 
@@ -24,11 +23,8 @@ import com.objetdirect.seam.print.PrintDescriptor;
  */
 public class PrintDescriptorProcessor extends Processor {
 
-
-	private SeamGenerator seamGenerator;
-	
 	public PrintDescriptorProcessor(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+		super(seamGenerator);
 	}
 	
 	@Override
@@ -48,8 +44,8 @@ public class PrintDescriptorProcessor extends Processor {
 		seamGenerator.addBridgeObject(object, printDescriptor);
 	}
 	
-	private void checkGetNotNullForAttribute(String attributeName, String value) {
-		if (value == null || value.isEmpty())
-			throw new GWTGeneratorException("The value of the attribute " + attributeName + " is mandatory");
+	@Override
+	public String getProcessedClassName() {
+		return "PrintDescriptor";
 	}
 }
