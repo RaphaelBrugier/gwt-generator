@@ -21,7 +21,7 @@ import static org.mockito.Mockito.verify;
 import org.junit.Test;
 
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.seam.print.PrintEntityDescriptor;
+import com.objetdirect.seam.print.PrintListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
@@ -30,12 +30,12 @@ public class TestPrintListDescriptorProcessor extends TestProcessor {
 	
 	@Test
 	public void process() {
-		PrintEntityProcessor pdp = new PrintEntityProcessor(seamGenerator);
+		PrintListDescriptorProcessor pdp = new PrintListDescriptorProcessor(seamGenerator);
 		
 		UMLObject object = new UMLObject();
 		
 		pdp.process(object);
 		
-		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintEntityDescriptor.class));
+		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintListDescriptor.class));
 	}
 }
