@@ -15,12 +15,14 @@
 package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
+import static com.objetdirect.gwt.gen.TestUtil.findLinesOfCode;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.Before;
 
+import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -79,5 +81,17 @@ public class TestSeamGenerator {
 			theCodeOfClass("Page.xhtml").
 			ofType(CodeType.FACELET).
 			equals(faceletText);
+	}
+
+	void printGeneratedCode(CodeType codeType) {
+		String className = null;
+		switch (codeType) {
+			case JAVA: className = "Page.java"; break;
+			case FACELET: className = "Page.xhtml"; break;
+			default: break;
+		}
+		
+		List<String> linesOfCode = findLinesOfCode(className, generator.getGenerateCode(), codeType);
+		TestUtil.println(linesOfCode);
 	}
 }

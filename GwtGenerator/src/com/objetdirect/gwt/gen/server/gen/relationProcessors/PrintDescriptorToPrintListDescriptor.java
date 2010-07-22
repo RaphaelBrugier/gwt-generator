@@ -12,30 +12,35 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.processors;
+package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
+import com.objetdirect.seam.print.PrintDescriptor;
 import com.objetdirect.seam.print.PrintListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
+ *
  */
-public class PrintListDescriptorProcessor extends Processor {
+public class PrintDescriptorToPrintListDescriptor implements RelationProcessor{
 
-	public PrintListDescriptorProcessor(SeamGenerator seamGenerator) {
-		super(seamGenerator);
-	}
+	SeamGenerator seamGenerator;
 	
-	@Override
-	public void process(UMLObject object) {
-		PrintListDescriptor printListDescriptorInstance = PrintListDescriptor.newEmptyInstance();
-		
-		seamGenerator.addBridgeObject(object, printListDescriptorInstance);
+	/**
+	 * @param seamGenerator
+	 */
+	public PrintDescriptorToPrintListDescriptor(SeamGenerator seamGenerator) {
+		this.seamGenerator = seamGenerator;
 	}
 
 	@Override
-	public String getProcessedClassName() {
-		return "PrintListDescriptor";
+	public void process(ObjectRelation objectRelation) {
+		if(objectRelation.getRightRole().equals("feature")) {
+			PrintDescriptor printDescriptor = (PrintDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
+			PrintListDescriptor printListDescriptor = (PrintListDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
+			
+			printDescriptor.setFeature(printListDescriptor);
+		}
 	}
 }

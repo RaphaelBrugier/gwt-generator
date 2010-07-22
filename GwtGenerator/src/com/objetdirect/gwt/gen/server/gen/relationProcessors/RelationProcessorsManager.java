@@ -41,9 +41,12 @@ public class RelationProcessorsManager {
 	
 	private void buildProcessors() {
 		addRelationProcessor("PrintDescriptor", "PrintEntity", new PrintDescriptorToPrintEntity(seamGenerator));
-		addRelationProcessor("PrintEntity", "PrintForm", new PrintEntityToPrintForm(seamGenerator));
+		addRelationProcessor("PrintDescriptor", "PrintListDescriptor", new PrintDescriptorToPrintListDescriptor(seamGenerator));
 		addRelationProcessor("PrintEntity", "DomainInstance", new PrintEntityToDomainInstance(seamGenerator));
+		addRelationProcessor("PrintEntity", "PrintForm", new PrintEntityToPrintForm(seamGenerator));
 		addRelationProcessor("PrintForm", "StringField", new PrintFormToStringField(seamGenerator));
+		addRelationProcessor("PrintListDescriptor", "DomainInstance", new PrintListDescriptorToDomainInstance(seamGenerator));
+		addRelationProcessor("PrintListDescriptor", "StringField", new PrintListDescriptorToStringField(seamGenerator));
 	}
 
 	private void addRelationProcessor(String ownerClassName, String targetClassName, RelationProcessor rp) {
