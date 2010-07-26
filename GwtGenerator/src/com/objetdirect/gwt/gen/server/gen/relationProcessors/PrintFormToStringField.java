@@ -22,24 +22,19 @@ import com.objetdirect.seam.print.PrintFormDescriptor;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintFormToStringField implements RelationProcessor {
+public class PrintFormToStringField extends RelationProcessor<PrintFormDescriptor, StringField> {
 
-	SeamGenerator seamGenerator;
-	
 	/**
 	 * @param seamGenerator
 	 */
 	public PrintFormToStringField(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+		super(seamGenerator);
 	}
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		PrintFormDescriptor printFormDescriptor = (PrintFormDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
-
-		StringField stringField  = (StringField)  seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
-
+		PrintFormDescriptor printFormDescriptor = getOwner(objectRelation);
+		StringField stringField  = getTarget(objectRelation);
 		printFormDescriptor.showField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
-
 	}
 }

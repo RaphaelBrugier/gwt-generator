@@ -49,7 +49,6 @@ public class SeamDiagramDaoTest {
 	@Test
 	public void createSeamDiagram() {
 		String id = dao.createSeamDiagram().getKey();
-		System.out.println("id found = " + id);
 		
 		SeamDiagram seamDiagram = ServerHelper.getPM().getObjectById(SeamDiagram.class, id);
 		assertNotNull(seamDiagram);

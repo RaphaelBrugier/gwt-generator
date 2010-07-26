@@ -22,24 +22,30 @@ import com.objetdirect.seam.print.PrintFormDescriptor;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintEntityToPrintForm implements RelationProcessor{
+public class PrintEntityToPrintForm extends RelationProcessor<PrintEntityDescriptor, PrintFormDescriptor> {
 
-	SeamGenerator seamGenerator;
-	
 	/**
 	 * @param seamGenerator
 	 */
 	public PrintEntityToPrintForm(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+		super(seamGenerator);
 	}
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		if(objectRelation.getRightRole().equals("element")) {
-			PrintEntityDescriptor printEntityDescriptor  = (PrintEntityDescriptor)  seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
-			PrintFormDescriptor printFormDescriptor = (PrintFormDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
-
-			printEntityDescriptor.addElement(printFormDescriptor);
+		if (isElementRelation(objectRelation)) {
+			addElement(objectRelation);
 		}
+	}
+
+	private boolean isElementRelation(ObjectRelation objectRelation) {
+		return objectRelation.getRightRole().equals("element");
+	}
+
+	private void addElement(ObjectRelation objectRelation) {
+		PrintEntityDescriptor printEntityDescriptor  = getOwner(objectRelation);
+		PrintFormDescriptor printFormDescriptor = getTarget(objectRelation);
+
+		printEntityDescriptor.addElement(printFormDescriptor);
 	}
 }

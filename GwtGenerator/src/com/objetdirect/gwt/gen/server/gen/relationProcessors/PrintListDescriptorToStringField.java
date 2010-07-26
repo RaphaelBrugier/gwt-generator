@@ -22,24 +22,20 @@ import com.objetdirect.seam.print.PrintListDescriptor;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintListDescriptorToStringField implements RelationProcessor {
+public class PrintListDescriptorToStringField extends RelationProcessor<PrintListDescriptor, StringField> {
 
-	SeamGenerator seamGenerator;
-	
 	/**
 	 * @param seamGenerator
 	 */
 	public PrintListDescriptorToStringField(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+		super(seamGenerator);
 	}
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		
-		System.out.println("PrintListDescriptorToStringField");
-		PrintListDescriptor printFormDescriptor = (PrintListDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
+		PrintListDescriptor printFormDescriptor = getOwner(objectRelation);
 
-		StringField stringField  = (StringField)  seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
+		StringField stringField  = getTarget(objectRelation);
 
 		printFormDescriptor.showField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
 	}

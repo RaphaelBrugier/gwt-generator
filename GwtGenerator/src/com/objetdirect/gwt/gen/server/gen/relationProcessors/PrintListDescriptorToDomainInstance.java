@@ -22,24 +22,30 @@ import com.objetdirect.seam.print.PrintListDescriptor;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintListDescriptorToDomainInstance implements RelationProcessor{
+public class PrintListDescriptorToDomainInstance extends RelationProcessor<PrintListDescriptor, EntityDescriptor> {
 
-	SeamGenerator seamGenerator;
-	
 	/**
 	 * @param seamGenerator
 	 */
 	public PrintListDescriptorToDomainInstance(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+		super(seamGenerator);
 	}
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		if(objectRelation.getRightRole().equals("entity")) {
-			PrintListDescriptor printEntityDescriptor  = (PrintListDescriptor)  seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
-			EntityDescriptor entity = (EntityDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
-
-			printEntityDescriptor.setEntity(entity);
+		if (isEntityRelation(objectRelation)) {
+			setEntity(objectRelation);
 		}
+	}
+
+	private boolean isEntityRelation(ObjectRelation objectRelation) {
+		return objectRelation.getRightRole().equals("entity");
+	}
+
+	private void setEntity(ObjectRelation objectRelation) {
+		PrintListDescriptor printEntityDescriptor  = getOwner(objectRelation);
+		EntityDescriptor entity = getTarget(objectRelation);
+
+		printEntityDescriptor.setEntity(entity);
 	}
 }

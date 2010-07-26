@@ -16,31 +16,37 @@ package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
+import com.objetdirect.seam.DocumentFeature;
 import com.objetdirect.seam.print.PrintDescriptor;
-import com.objetdirect.seam.print.PrintListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  *
  */
-public class PrintDescriptorToPrintListDescriptor implements RelationProcessor{
+public class PrintDescriptorToDocumentFeature extends RelationProcessor<PrintDescriptor, DocumentFeature> {
 
-	SeamGenerator seamGenerator;
-	
 	/**
 	 * @param seamGenerator
 	 */
-	public PrintDescriptorToPrintListDescriptor(SeamGenerator seamGenerator) {
-		this.seamGenerator = seamGenerator;
+	public PrintDescriptorToDocumentFeature(SeamGenerator seamGenerator) {
+		super(seamGenerator);
 	}
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		if(objectRelation.getRightRole().equals("feature")) {
-			PrintDescriptor printDescriptor = (PrintDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
-			PrintListDescriptor printListDescriptor = (PrintListDescriptor) seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
-			
-			printDescriptor.setFeature(printListDescriptor);
+		if(isFeatureRelation(objectRelation)) {
+			setFeature(objectRelation);
 		}
+	}
+
+	private boolean isFeatureRelation(ObjectRelation objectRelation) {
+		return objectRelation.getRightRole().equals("feature");
+	}
+
+	private void setFeature(ObjectRelation objectRelation) {
+		PrintDescriptor printDescriptor = getOwner(objectRelation);
+		DocumentFeature documentFeature = getTarget(objectRelation);
+		
+		printDescriptor.setFeature(documentFeature);
 	}
 }

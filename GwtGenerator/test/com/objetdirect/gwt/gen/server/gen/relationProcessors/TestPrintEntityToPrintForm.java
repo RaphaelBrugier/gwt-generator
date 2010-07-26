@@ -39,7 +39,7 @@ public class TestPrintEntityToPrintForm extends TestRelationProcessor{
 	
 	@Test
 	public void process() {
-		PrintEntityToPrintForm processor = new PrintEntityToPrintForm(seamGenerator);
+		RelationProcessor<PrintEntityDescriptor, PrintFormDescriptor> processor = new PrintEntityToPrintForm(seamGenerator);
 		setReturnedGenObject(printEntityDescriptor, printForm, "element");
 
 		processor.process(objectRelation);

@@ -38,7 +38,7 @@ public class TestPrintDescriptorToPrintEntity extends TestRelationProcessor{
 	
 	@Test
 	public void process() {
-		PrintDescriptorToPrintEntity processor = new PrintDescriptorToPrintEntity(seamGenerator);
+		PrintDescriptorToDocumentFeature processor = new PrintDescriptorToDocumentFeature(seamGenerator);
 		setReturnedGenObject(printDescriptor, printEntityDescriptor, "feature");
 
 		processor.process(objectRelation);
