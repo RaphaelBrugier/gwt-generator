@@ -29,6 +29,7 @@ public class RelationProcessorsManager {
 
 	final SeamGenerator seamGenerator;
 	
+	@SuppressWarnings("unchecked")
 	private Map<String, Map<String, RelationProcessor>> processors;
 	
 	public RelationProcessorsManager(SeamGenerator seamGenerator) {
@@ -40,8 +41,8 @@ public class RelationProcessorsManager {
 	}
 	
 	private void buildProcessors() {
-		addRelationProcessor("PrintDescriptor", "PrintEntity", new PrintDescriptorToPrintEntity(seamGenerator));
-		addRelationProcessor("PrintDescriptor", "PrintListDescriptor", new PrintDescriptorToPrintListDescriptor(seamGenerator));
+		addRelationProcessor("PrintDescriptor", "PrintEntity", new PrintDescriptorToDocumentFeature(seamGenerator));
+		addRelationProcessor("PrintDescriptor", "PrintListDescriptor", new PrintDescriptorToDocumentFeature(seamGenerator));
 		addRelationProcessor("PrintEntity", "DomainInstance", new PrintEntityToDomainInstance(seamGenerator));
 		addRelationProcessor("PrintEntity", "PrintForm", new PrintEntityToPrintForm(seamGenerator));
 		addRelationProcessor("PrintForm", "StringField", new PrintFormToStringField(seamGenerator));

@@ -14,12 +14,44 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
+import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public interface RelationProcessor {
+public abstract class RelationProcessor<L, R> {
+	
+	protected final SeamGenerator seamGenerator;
 
-	public void process(ObjectRelation objectRelation);
+	/**
+	 * @param seamGenerator
+	 */
+	public RelationProcessor(SeamGenerator seamGenerator) {
+		this.seamGenerator = seamGenerator;
+	}
+
+	public abstract void process(ObjectRelation objectRelation);
+	
+	/**
+	 * Get the owner object of a relation
+	 * 
+	 * @param objectRelation
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public L getOwner(ObjectRelation objectRelation) {
+		return (L) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
+	}
+
+	/**
+	 * Get the targeted object of a relation.
+	 * 
+	 * @param objectRelation
+	 * @return
+	 */
+	@SuppressWarnings("unchecked")
+	public R getTarget(ObjectRelation objectRelation) {
+		return (R) seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
+	}
 }

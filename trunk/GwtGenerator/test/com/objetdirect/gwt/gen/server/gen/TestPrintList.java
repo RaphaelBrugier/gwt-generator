@@ -14,7 +14,6 @@
  */
 package com.objetdirect.gwt.gen.server.gen;
 
-import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.FACELET;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
 import static com.objetdirect.seam.TestPrintList.testSimpleListFaceletText;
 import static com.objetdirect.seam.TestPrintList.testSimpleListJavaText;
@@ -58,7 +57,6 @@ public class TestPrintList extends TestSeamGenerator {
 		addStringField(printListDescriptorInstance, "phone", "Phone", "10");
 		addStringField(printListDescriptorInstance, "email", "E-mail", "20");
 		
-		printGeneratedCode(FACELET);
 		assertGenerated(testSimpleListJavaText, testSimpleListFaceletText);
 	}
 }

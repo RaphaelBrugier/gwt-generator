@@ -41,6 +41,8 @@ import com.objetdirect.seam.DocumentDescriptor;
 import com.objetdirect.seam.Seam;
 
 /**
+ * This class converts a list of objets and relations into seam code.
+ * 
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class SeamGenerator {

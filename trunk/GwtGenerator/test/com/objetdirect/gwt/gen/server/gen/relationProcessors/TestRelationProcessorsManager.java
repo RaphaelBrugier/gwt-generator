@@ -56,7 +56,6 @@ public class TestRelationProcessorsManager {
 		manager = new RelationProcessorsManager(seamGenerator);
 	}
 	
-	
 	private void setClassNames(String ownerClassName, String targetClassName) {
 		when(umlObjectOwner.getClassName()).thenReturn(ownerClassName);
 		when(umlObjectTarget.getClassName()).thenReturn(targetClassName);
@@ -83,7 +82,7 @@ public class TestRelationProcessorsManager {
 		setClassNames("PrintDescriptor", "PrintEntity");
 		
 		RelationProcessor rp = manager.getRelationProcessor(objectRelation);
-		assertInstanceOf(rp, PrintDescriptorToPrintEntity.class);
+		assertInstanceOf(rp, PrintDescriptorToDocumentFeature.class);
 	}
 	
 	@Test
