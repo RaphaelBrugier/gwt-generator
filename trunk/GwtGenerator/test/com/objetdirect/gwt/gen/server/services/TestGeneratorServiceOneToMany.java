@@ -43,22 +43,8 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 		UMLClass leftEntity = new UMLClass("Trainer");
 		UMLClass rightEntity = new UMLClass("Tiger");
 		
-		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
-		relation.setName("");
-		
-		relation.setLeftAdornment(NONE);
-		relation.setLeftCardinality("1");
-		relation.setLeftConstraint("");
-		relation.setLeftRole("");
-		relation.setLeftStereotype("");
-		relation.setLeftTarget(leftEntity);
-		
-		relation.setRightAdornment(WIRE_ARROW);
-		relation.setRightCardinality("*");
-		relation.setRightConstraint("");
-		relation.setRightRole("trainedTigers");
-		relation.setRightStereotype("");
-		relation.setRightTarget(rightEntity);
+		String rightRole = "trainedTigers";
+		UMLRelation relation = createUniDirectionalOneToMany(leftEntity, rightEntity, rightRole);
 
 		List<UMLClass> classes = new LinkedList<UMLClass>();
 		List<UMLRelation> relations = new LinkedList<UMLRelation>();
@@ -96,6 +82,32 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 				"public List<Tiger> getTrainedTigers() {",
 				"	return Collections.unmodifiableList(trainedTigers);").
 			verify();
+	}
+
+	/**
+	 * @param leftEntity
+	 * @param rightEntity
+	 * @param rightRole
+	 * @return
+	 */
+	public static UMLRelation createUniDirectionalOneToMany(UMLClass leftEntity, UMLClass rightEntity, String rightRole) {
+		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
+		relation.setName("");
+		
+		relation.setLeftAdornment(NONE);
+		relation.setLeftCardinality("1");
+		relation.setLeftConstraint("");
+		relation.setLeftRole("");
+		relation.setLeftStereotype("");
+		relation.setLeftTarget(leftEntity);
+		
+		relation.setRightAdornment(WIRE_ARROW);
+		relation.setRightCardinality("*");
+		relation.setRightConstraint("");
+		relation.setRightRole(rightRole);
+		relation.setRightStereotype("");
+		relation.setRightTarget(rightEntity);
+		return relation;
 	}
 	
 	public void testBidirectional() {
