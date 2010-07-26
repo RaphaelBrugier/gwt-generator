@@ -16,25 +16,29 @@ package com.objetdirect.gwt.gen.server.gen.processors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.seam.print.PrintFormDescriptor;
+import com.objetdirect.seam.print.PrintInternalListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintFormProcessor extends Processor {
+public class PrintInternalListDescriptorProcessor extends Processor {
 
-	public PrintFormProcessor(SeamGenerator seamGenerator) {
+	public PrintInternalListDescriptorProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
-	}
-	
-	@Override
-	public void process(UMLObject object) {
-		PrintFormDescriptor printFormDescriptor = new PrintFormDescriptor();
-		seamGenerator.addBridgeObject(object, printFormDescriptor);
 	}
 
 	@Override
 	public String getProcessedClassName() {
-		return "PrintForm";
+		return "PrintInternalListDescriptor";
 	}
+
+	@Override
+	public void process(UMLObject object) {
+		String relationshipName = object.getValueOfAttribute("relationshipName");
+		checkGetNotNullForAttribute("relationshipName", relationshipName);
+		
+		PrintInternalListDescriptor printInternalListDescriptor = new PrintInternalListDescriptor(relationshipName);
+		seamGenerator.addBridgeObject(object, printInternalListDescriptor);
+	}
+
 }

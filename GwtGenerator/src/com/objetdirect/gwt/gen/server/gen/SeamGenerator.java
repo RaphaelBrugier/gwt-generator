@@ -26,6 +26,7 @@ import com.objetdirect.gwt.gen.server.gen.processors.PageDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.PrintInternalListDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
 import com.objetdirect.gwt.gen.server.gen.processors.StringFieldProcessor;
@@ -41,7 +42,7 @@ import com.objetdirect.seam.DocumentDescriptor;
 import com.objetdirect.seam.Seam;
 
 /**
- * This class converts a list of objets and relations into seam code.
+ * This class converts a list of objects and relations into seam code.
  * 
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
@@ -82,9 +83,10 @@ public class SeamGenerator {
 	private void addObjectProcessors() {
 		addProcessor(new PageDescriptorProcessor(this));
 		addProcessor(new PrintDescriptorProcessor(this));
-		addProcessor(new PrintListDescriptorProcessor(this));
-		addProcessor(new PrintFormProcessor(this));
 		addProcessor(new PrintEntityProcessor(this));
+		addProcessor(new PrintFormProcessor(this));
+		addProcessor(new PrintInternalListDescriptorProcessor(this));
+		addProcessor(new PrintListDescriptorProcessor(this));
 		addProcessor(new StringFieldProcessor(this));
 	}
 

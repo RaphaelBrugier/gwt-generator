@@ -24,41 +24,35 @@ import org.junit.Test;
 
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
-import com.objetdirect.seam.print.PrintDescriptor;
+import com.objetdirect.seam.print.PrintInternalListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestPrintDescriptorProcessor extends TestProcessor {
+public class TestPrintInternalListDescriptor extends TestProcessor {
 	
 	Processor processor;
-
+	
 	@Before
 	public void setUpObjectUnderTest() {
-		processor = new PrintDescriptorProcessor(seamGenerator);
+		processor = new PrintInternalListDescriptorProcessor(seamGenerator);
 	}
 	
+	
 	@Test
-	public void process_withGoodParameters_success() {
+	public void process_success() {
+		
 		UMLObject object = new UMLObject().
-			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
-			addAttributeValuePair("className", "EditAgencies").
-			addAttributeValuePair("viewPackageName", "views").
-			addAttributeValuePair("viewName", "edit-agencies");
+			addAttributeValuePair("relationshipName", "employees");
 		
 		processor.process(object);
 		
-		verify(seamGenerator).setDocumentDescriptor(isA(PrintDescriptor.class));
-		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintDescriptor.class));
+		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintInternalListDescriptor.class));
 	}
-	
 	
 	@Test
 	public void process_withNullParametersInObject_returnException() {
-		UMLObject object = new UMLObject().
-			addAttributeValuePair("className", "EditAgencies").
-			addAttributeValuePair("viewPackageName", "views").
-			addAttributeValuePair("viewName", "edit-agencies");
+		UMLObject object = new UMLObject();
 		
 		try {
 			processor.process(object);
