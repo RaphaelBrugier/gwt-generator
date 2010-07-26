@@ -25,8 +25,8 @@ import com.objetdirect.entities.OneToOneReferenceDescriptor;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLType;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
  * Helper methods to generate the source code from UML Components.
@@ -64,23 +64,17 @@ public class GeneratorHelper {
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
 		if (relation.isBidirectional()) {
-			OneToOneReferenceDescriptor refLeftToRight = 
-				new OneToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, false, false);
-			OneToOneReferenceDescriptor refRightToLeft = 
-				new OneToOneReferenceDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false, false, false);
-			
-			refLeftToRight.setReverse(refRightToLeft, relation.isLeftOwner());
-			refRightToLeft.setReverse(refLeftToRight, relation.isRightOwner());
+			if (relation.isLeftOwner()) {
+				leftEntity.addOneToOne(rightEntity, relation.getRightRole(), false, false, false, relation.getLeftRole(), false, false, false);
+			} else {
+				 rightEntity.addOneToOne(leftEntity, relation.getLeftRole(), false, false, false, relation.getRightRole(), false, false, false);
+			}
 		} else {
 			if (relation.isLeftOwner()) {
-				@SuppressWarnings("unused")
-				OneToOneReferenceDescriptor refLeftToRight = 
-					new OneToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, relation.isAComposition(), false);
+				leftEntity.addOneToOne(rightEntity, relation.getRightRole(), false, relation.isAComposition(), false);
 			} else
 			{
-				@SuppressWarnings("unused")
-				OneToOneReferenceDescriptor refRightToLeft = 
-					new OneToOneReferenceDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false, relation.isAComposition(), false);
+				rightEntity.addOneToOne(leftEntity, relation.getLeftRole(), false, relation.isAComposition(), false);
 			}
 		}
 	}
@@ -95,18 +89,14 @@ public class GeneratorHelper {
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
 		if (relation.isBidirectional()) {
-			throw new UMLException("Bidirectional one-to-many relation is not supported yet.");
+			throw new UMLException("Bidirectional one-to-many relation is not supported.");
 		} 
 		// Unidirectional
 		else {
 			if (relation.isLeftOwner()) {
-				@SuppressWarnings("unused")
-				OneToManyReferenceListDescriptor ref = 
-					new OneToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
+				leftEntity.addOneToMany(rightEntity, relation.getRightRole(), false);
 			} else {
-				@SuppressWarnings("unused")
-				OneToManyReferenceListDescriptor ref = 
-					new OneToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
+				rightEntity.addOneToMany(leftEntity, relation.getLeftRole(), false);
 			}
 		}
 	}
@@ -123,35 +113,18 @@ public class GeneratorHelper {
 		
 		if (relation.isBidirectional()) {
 			if (relation.isLeftOwner()) {
-				ManyToOneReferenceDescriptor leftToRight = 
-					new ManyToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, false);
-				OneToManyReferenceListDescriptor rightToLeft = 
-					new OneToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
-				
-				leftToRight.setReverse(rightToLeft, true);
-				rightToLeft.setReverse(leftToRight, false);
+				leftEntity.addManyToOne(rightEntity, relation.getRightRole(), false, false, relation.getLeftRole(), false);
 			} 
 			else {
-				OneToManyReferenceListDescriptor leftToRight = 
-					new OneToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
-				
-				ManyToOneReferenceDescriptor rightToLeft = 
-					new ManyToOneReferenceDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false, false);
-				
-				leftToRight.setReverse(rightToLeft, false);
-				rightToLeft.setReverse(leftToRight, true);
+				rightEntity.addManyToOne(leftEntity, relation.getLeftRole(), false, false, relation.getRightRole(), false);
 			}
 		} 
 		// Unidirectional
 		else {
 			if (relation.isLeftOwner()) {
-				@SuppressWarnings("unused")
-				ManyToOneReferenceDescriptor ref = 
-					new ManyToOneReferenceDescriptor(leftEntity, rightEntity, relation.getRightRole(), false, false);
+				leftEntity.addManyToOne(rightEntity, relation.getRightRole(), false, false);
 			} else {
-				@SuppressWarnings("unused")
-				ManyToOneReferenceDescriptor ref = 
-					new ManyToOneReferenceDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false, false);
+				rightEntity.addManyToOne(leftEntity, relation.getLeftRole(), false, false);
 			}
 		}
 	}
@@ -166,23 +139,18 @@ public class GeneratorHelper {
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
 		if (relation.isBidirectional()) {
-			ManyToManyReferenceListDescriptor leftToRight = 
-				new ManyToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
-			ManyToManyReferenceListDescriptor rightToLeft = 
-				new ManyToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
-			leftToRight.setReverse(rightToLeft, relation.isLeftOwner());
-			rightToLeft.setReverse(leftToRight, relation.isRightOwner());
+			if (relation.isLeftOwner()) {
+				leftEntity.addManyToMany(rightEntity, relation.getRightRole(), false, relation.getLeftRole(), false);
+			} else {
+				rightEntity.addManyToMany(rightEntity, relation.getLeftRole(), false, relation.getRightRole(), false);
+			}
 		}
 		// Unidirectional
 		else {
 			if (relation.isLeftOwner()) {
-				@SuppressWarnings("unused")
-				ManyToManyReferenceListDescriptor ref = 
-					new ManyToManyReferenceListDescriptor(leftEntity, rightEntity, relation.getRightRole(), false);
+				leftEntity.addManyToMany(rightEntity, relation.getRightRole(), false);
 			} else {
-				@SuppressWarnings("unused")
-				ManyToManyReferenceListDescriptor ref = 
-					new ManyToManyReferenceListDescriptor(rightEntity, leftEntity, relation.getLeftRole(), false);
+				rightEntity.addManyToMany(leftEntity, relation.getLeftRole(), false);
 			}
 		}
 	}
