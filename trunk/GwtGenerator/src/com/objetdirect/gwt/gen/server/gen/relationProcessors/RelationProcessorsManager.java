@@ -45,7 +45,9 @@ public class RelationProcessorsManager {
 		addRelationProcessor("PrintDescriptor", "PrintListDescriptor", new PrintDescriptorToDocumentFeature(seamGenerator));
 		addRelationProcessor("PrintEntity", "DomainInstance", new PrintEntityToDomainInstance(seamGenerator));
 		addRelationProcessor("PrintEntity", "PrintForm", new PrintEntityToPrintForm(seamGenerator));
+		addRelationProcessor("PrintEntity", "PrintInternalList", new PrintEntityToPrintInternalList(seamGenerator));
 		addRelationProcessor("PrintForm", "StringField", new PrintFormToStringField(seamGenerator));
+		addRelationProcessor("PrintInternalList", "StringField", new PrintInternalListDescriptorToStringField(seamGenerator));
 		addRelationProcessor("PrintListDescriptor", "DomainInstance", new PrintListDescriptorToDomainInstance(seamGenerator));
 		addRelationProcessor("PrintListDescriptor", "StringField", new PrintListDescriptorToStringField(seamGenerator));
 	}

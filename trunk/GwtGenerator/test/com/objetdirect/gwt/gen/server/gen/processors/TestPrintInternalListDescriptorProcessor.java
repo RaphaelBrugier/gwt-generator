@@ -14,31 +14,51 @@
  */
 package com.objetdirect.gwt.gen.server.gen.processors;
 
-import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import static junit.framework.Assert.fail;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.isA;
+import static org.mockito.Mockito.verify;
+
+import org.junit.Before;
+import org.junit.Test;
+
+import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.seam.print.PrintInternalListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintInternalListDescriptorProcessor extends Processor {
-
-	public PrintInternalListDescriptorProcessor(SeamGenerator seamGenerator) {
-		super(seamGenerator);
+public class TestPrintInternalListDescriptorProcessor extends TestProcessor {
+	
+	Processor processor;
+	
+	@Before
+	public void setUpObjectUnderTest() {
+		processor = new PrintInternalListDescriptorProcessor(seamGenerator);
 	}
-
-	@Override
-	public String getProcessedClassName() {
-		return "PrintInternalList";
-	}
-
-	@Override
-	public void process(UMLObject object) {
-		String relationshipName = object.getValueOfAttribute("relationshipName");
-		checkGetNotNullForAttribute("relationshipName", relationshipName);
+	
+	
+	@Test
+	public void process_success() {
 		
-		PrintInternalListDescriptor printInternalListDescriptor = new PrintInternalListDescriptor(relationshipName);
-		seamGenerator.addBridgeObject(object, printInternalListDescriptor);
+		UMLObject object = new UMLObject().
+			addAttributeValuePair("relationshipName", "employees");
+		
+		processor.process(object);
+		
+		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintInternalListDescriptor.class));
 	}
-
+	
+	@Test
+	public void process_withNullParametersInObject_returnException() {
+		UMLObject object = new UMLObject();
+		
+		try {
+			processor.process(object);
+			fail("The process method was expected to throw a GwtGeneratorException");
+		} catch(GWTGeneratorException e) {
+			
+		}
+	}
 }
