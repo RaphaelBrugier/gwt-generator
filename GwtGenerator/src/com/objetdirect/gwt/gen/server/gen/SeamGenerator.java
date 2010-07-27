@@ -16,6 +16,7 @@ package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -32,12 +33,12 @@ import com.objetdirect.gwt.gen.server.gen.processors.Processor;
 import com.objetdirect.gwt.gen.server.gen.processors.StringFieldProcessor;
 import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessor;
 import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessorsManager;
-import com.objetdirect.gwt.gen.server.services.GeneratorHelper;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 import com.objetdirect.seam.DocumentDescriptor;
 import com.objetdirect.seam.Seam;
 
@@ -53,6 +54,9 @@ public class SeamGenerator {
 	final List<UMLClass> classes;
 	final List<UMLObject> objects;
 	final List<ObjectRelation> objectRelations;
+	final List<UMLRelation> classRelations;
+	
+	final EntityGenerator entityGenerator;
 	
 	private DocumentDescriptor documentDescriptor;
 	
@@ -74,6 +78,9 @@ public class SeamGenerator {
 		this.classes = classes;
 		this.objects = objects;
 		this.objectRelations = objectRelations;
+		this.classRelations = new ArrayList<UMLRelation>();
+		entityGenerator = new EntityGenerator(classes, classRelations, PACKAGE_NAME);
+		
 		processors = new HashMap<String, Processor>();
 		umlObjectToGenObjects = new HashMap<UMLObject, Object>();
 		relationProcessorsManager = new RelationProcessorsManager(this);
@@ -103,12 +110,11 @@ public class SeamGenerator {
 
 	void parseClasses() {
 		classToEntity = new HashMap<String, EntityDescriptor>();
-		for (UMLClass umlClass : classes) {
-			EntityDescriptor entity = GeneratorHelper.convertUMLClassToEntityDescriptor(umlClass, PACKAGE_NAME);
-			classToEntity.put(umlClass.getName(), entity);
+		Map<UMLClass, EntityDescriptor> uMLClassToEntity = entityGenerator.getEntitiesMappedToCorrespondingUMLClass();
+		for (Map.Entry<UMLClass, EntityDescriptor> entry : uMLClassToEntity.entrySet()) {
+			classToEntity.put(entry.getKey().getName(), entry.getValue());
 		}
 	}
-
 
 	void parseObjects() {
 		for (UMLObject object : objects) {

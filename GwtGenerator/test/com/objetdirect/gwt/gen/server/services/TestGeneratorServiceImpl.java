@@ -15,12 +15,17 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
+
+import java.util.ArrayList;
+import java.util.List;
+
 import junit.framework.TestCase;
 
 import com.objetdirect.gwt.gen.TestUtil;
+import com.objetdirect.gwt.gen.server.gen.EntityGenerator;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 
 /**
@@ -32,18 +37,23 @@ public class TestGeneratorServiceImpl extends TestCase {
 	
 	String packageName = "com.od.test";
 	
+	List<UMLClass> classes;
+	EntityGenerator entityGenerator;
+	
 	protected void setUp() throws Exception {
-		super.setUp();
+		classes = new ArrayList<UMLClass>();
+		entityGenerator = new EntityGenerator(classes, new ArrayList<UMLRelation>(), packageName);
 	}
 	
 	public void testGenerateClassCode(){
-		UMLClass clazz = new UMLClass("MyClass");
-		UMLClassAttribute attribute = new UMLClassAttribute(PRIVATE, "String", "myStringField");
-		clazz.getAttributes().add(attribute);
+		UMLClass clazz = new UMLClass("MyClass").
+			addAttribute(PRIVATE, "String", "myStringField");
 		
+		classes.add(clazz);
 		String[] classCode = null;
+		
 		try {
-			classCode = GeneratorHelper.convertUMLClassToEntityDescriptor(clazz, packageName).getText();
+			classCode = entityGenerator.convertUMLClassToEntityDescriptor(clazz).getText();
 		} catch (UMLException e) {
 			fail();
 		}
@@ -70,29 +80,28 @@ public class TestGeneratorServiceImpl extends TestCase {
 	
 	public void testGenerateClassCodeWithSimpleFields() {
 		
-		UMLClass clazz = new UMLClass("MyClass");
-		
-		clazz.addAttribute(PRIVATE, "String", "myStringField");
-		clazz.addAttribute(PRIVATE, "int", "myIntField");
-		clazz.addAttribute(PRIVATE, "Integer", "myWIntField");
-		clazz.addAttribute(PRIVATE, "long", "myLongField");
-		clazz.addAttribute(PRIVATE, "Long", "myWLongField");
-		clazz.addAttribute(PRIVATE, "byte", "myByteField");
-		clazz.addAttribute(PRIVATE, "Byte", "myWByteField");
-		clazz.addAttribute(PRIVATE, "short", "myShortField");
-		clazz.addAttribute(PRIVATE, "Short", "myWShortField");
-		clazz.addAttribute(PRIVATE, "boolean", "myBooleanField");
-		clazz.addAttribute(PRIVATE, "Boolean", "myWBooleanField");
-		clazz.addAttribute(PRIVATE, "char", "myCharField");
-		clazz.addAttribute(PRIVATE, "Character", "myWCharField");
-		clazz.addAttribute(PRIVATE, "float", "myFloatField");
-		clazz.addAttribute(PRIVATE, "Float", "myWFloatField");
-		clazz.addAttribute(PRIVATE, "double", "myDoubleField");
-		clazz.addAttribute(PRIVATE, "Double", "myWDoubleField");
+		UMLClass clazz = new UMLClass("MyClass")
+			.addAttribute(PRIVATE, "String", "myStringField")
+			.addAttribute(PRIVATE, "int", "myIntField")
+			.addAttribute(PRIVATE, "Integer", "myWIntField")
+			.addAttribute(PRIVATE, "long", "myLongField")
+			.addAttribute(PRIVATE, "Long", "myWLongField")
+			.addAttribute(PRIVATE, "byte", "myByteField")
+			.addAttribute(PRIVATE, "Byte", "myWByteField")
+			.addAttribute(PRIVATE, "short", "myShortField")
+			.addAttribute(PRIVATE, "Short", "myWShortField")
+			.addAttribute(PRIVATE, "boolean", "myBooleanField")
+			.addAttribute(PRIVATE, "Boolean", "myWBooleanField")
+			.addAttribute(PRIVATE, "char", "myCharField")
+			.addAttribute(PRIVATE, "Character", "myWCharField")
+			.addAttribute(PRIVATE, "float", "myFloatField")
+			.addAttribute(PRIVATE, "Float", "myWFloatField")
+			.addAttribute(PRIVATE, "double", "myDoubleField")
+			.addAttribute(PRIVATE, "Double", "myWDoubleField");
 		
 		String[] classCode = null;
 		try {
-			classCode = GeneratorHelper.convertUMLClassToEntityDescriptor(clazz, packageName).getText();
+			classCode = entityGenerator.convertUMLClassToEntityDescriptor(clazz).getText();
 		} catch (UMLException e) {
 			fail();
 		}

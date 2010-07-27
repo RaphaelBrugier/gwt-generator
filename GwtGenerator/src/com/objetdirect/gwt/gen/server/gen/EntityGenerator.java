@@ -12,16 +12,15 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.services;
+package com.objetdirect.gwt.gen.server.gen;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.objetdirect.entities.EntityDescriptor;
-import com.objetdirect.entities.ManyToManyReferenceListDescriptor;
-import com.objetdirect.entities.ManyToOneReferenceDescriptor;
-import com.objetdirect.entities.OneToManyReferenceListDescriptor;
-import com.objetdirect.entities.OneToOneReferenceDescriptor;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClassAttribute;
@@ -29,19 +28,76 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
- * Helper methods to generate the source code from UML Components.
+ * Generate the entityDescriptor from a list of class.
+ * Also set the relation between each entity from the list of uml relations.
+ *
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public class GeneratorHelper {
-
+public class EntityGenerator {
 	
+	List<UMLClass> classes;
+	List<UMLRelation> relations;
+	String packageName;
+
+	Map<UMLClass, EntityDescriptor> entities;
+
+
+	/**
+	 * @param classes
+	 * @param relations
+	 * @param packageName
+	 */
+	public EntityGenerator(List<UMLClass> classes, List<UMLRelation> relations, String packageName) {
+		this.classes = classes;
+		this.relations = relations;
+		this.packageName = packageName;
+	}
+	
+
+	public Collection<EntityDescriptor> getGeneratedEntities() {
+		processClasses();
+		processRelations();
+		return entities.values();
+	}
+	
+
+	public Map<UMLClass, EntityDescriptor> getEntitiesMappedToCorrespondingUMLClass() {
+		processClasses();
+		processRelations();
+		return entities;
+	}
+
+	private void processClasses() {
+		entities = new HashMap<UMLClass, EntityDescriptor>();
+		for (UMLClass umlClass : classes) {
+			EntityDescriptor entity = convertUMLClassToEntityDescriptor(umlClass);
+			entities.put(umlClass, entity);
+		}
+	}
+
+	private void processRelations() {
+		for (UMLRelation relation : relations) {
+			if (relation.isOneToOne())
+				createOneToOneRelation(relation);
+			else if (relation.isOneToMany()) {
+				createOneToManyRelation(relation);
+			} else if (relation.isManyToOne()) {
+				createManyToOneRelation(relation);
+			} else if (relation.isManyToMany()) {
+				createManyToManyRelation(relation);
+			} else {
+				throw new UMLException("Unknown relation. Did you forget a property on the relation : " + relation + " ?");
+			}
+		}
+	}
+
+
 	/**
 	 * Take an UML Class from GWTUml and convert it in an entity class, the based class for the generator.
 	 * @param umlClass the class source
-	 * @param packageName the name of the package for the generated code.
 	 * @return An entity class used by the generator.
 	 */
-	public static EntityDescriptor convertUMLClassToEntityDescriptor(UMLClass umlClass, String packageName) {
+	public EntityDescriptor convertUMLClassToEntityDescriptor(UMLClass umlClass) {
 		EntityDescriptor entity = new EntityDescriptor(packageName, umlClass.getName());
 		
 		ArrayList<UMLClassAttribute> attributes = umlClass.getAttributes();
@@ -53,13 +109,11 @@ public class GeneratorHelper {
 		return entity;
 	}
 	
-	
 	/** Create a one to one relationship between two entities from the given relation.
-	 * @see com.objetdirect.gwt.gen.server.services#convertUMLClassToEntityDescriptor
-	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
 	 * @param relation the relation OneToOne between two entities
+	 * @see com.objetdirect.gwt.gen.server.services#convertUMLClassToEntityDescriptor
 	 */
-	public static void createOneToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) {
+	void createOneToOneRelation(UMLRelation relation) {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
@@ -84,7 +138,7 @@ public class GeneratorHelper {
 	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
 	 * @param relation the relation OneToOne between two entities
 	 */
-	public static void createOneToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLException {
+	void createOneToManyRelation(UMLRelation relation) throws UMLException {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
@@ -107,7 +161,7 @@ public class GeneratorHelper {
 	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
 	 * @param relation the relation OneToOne between two entities
 	 */
-	public static void createManyToOneRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) throws UMLException {
+	void createManyToOneRelation(UMLRelation relation) throws UMLException {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
@@ -134,7 +188,7 @@ public class GeneratorHelper {
 	 * @param entities Is a map of couple {UmlClass, Entity counterPart} 
 	 * @param relation the relation OneToOne between two entities
 	 */
-	public static void createManyToManyRelation(Map<UMLClass, EntityDescriptor> entities, UMLRelation relation) {
+	void createManyToManyRelation(UMLRelation relation) {
 		EntityDescriptor leftEntity = entities.get(relation.getLeftTarget());
 		EntityDescriptor rightEntity = entities.get(relation.getRightTarget());
 		
@@ -161,17 +215,9 @@ public class GeneratorHelper {
 	 * @param entity the target entity where the attribute will be add.
 	 * @param attribute	the attribute to add to the entity
 	 */
-	private static void addAttribute(EntityDescriptor entity, UMLClassAttribute attribute) {
+	void addAttribute(EntityDescriptor entity, UMLClassAttribute attribute) {
 		String name = attribute.getName();
 		String type = attribute.getType();
-//		UMLVisibility visibility = attribute.getVisibility();
-		
-//		switch (visibility) {
-//		case PRIVATE:
-//			break;
-//		default:
-//			throw new UMLException("Pojo generator only supports private field");
-//		}
 		
 		switch (UMLType.getUMLTypeFromString(type)) {
 		case STRING :

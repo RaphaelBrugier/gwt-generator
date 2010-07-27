@@ -16,15 +16,11 @@ package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.gen.server.services.TestGeneratorServiceOneToMany.createUniDirectionalOneToMany;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.NONE;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.WIRE_ARROW;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkKind.ASSOCIATION_RELATION;
 import static com.objetdirect.seam.TestPrintEntity.testSimpleEntityFaceletText;
 import static com.objetdirect.seam.TestPrintEntity.testSimpleEntityJavaText;
 
 import org.junit.Test;
 
-import com.objetdirect.gwt.gen.server.services.TestGeneratorServiceOneToMany;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
