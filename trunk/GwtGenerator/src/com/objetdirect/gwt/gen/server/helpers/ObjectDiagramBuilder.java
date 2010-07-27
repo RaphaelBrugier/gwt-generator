@@ -38,7 +38,7 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  */
 public class ObjectDiagramBuilder {
 
-	private static final String ENTITY_CLASS_NAME = "Entity";
+	public static final String ENTITY_CLASS_NAME = "Entity";
 
 	private final DiagramDao diagramDao;
 	
