@@ -14,6 +14,8 @@
  */
 package com.objetdirect.gwt.gen.server.gen;
 
+import static com.objetdirect.gwt.gen.server.helpers.ObjectDiagramBuilder.ENTITY_CLASS_NAME;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -77,6 +79,9 @@ public class EntityGenerator {
 
 	private void processRelations() {
 		for (UMLRelation relation : relations) {
+			if (relation.getRightRole().equalsIgnoreCase(ENTITY_CLASS_NAME)) {
+				return;
+			}
 			if (relation.isOneToOne())
 				createOneToOneRelation(relation);
 			else if (relation.isOneToMany()) {
