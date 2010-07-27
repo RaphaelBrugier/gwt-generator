@@ -12,33 +12,31 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.processors;
+package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.print.PrintInternalListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintInternalListDescriptorProcessor extends Processor {
+public class PrintInternalListDescriptorToStringField extends RelationProcessor<PrintInternalListDescriptor, StringField> {
 
-	public PrintInternalListDescriptorProcessor(SeamGenerator seamGenerator) {
+	/**
+	 * @param seamGenerator
+	 */
+	public PrintInternalListDescriptorToStringField(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
 
 	@Override
-	public String getProcessedClassName() {
-		return "PrintInternalList";
-	}
+	public void process(ObjectRelation objectRelation) {
+		PrintInternalListDescriptor printInternalListDescriptor = getOwner(objectRelation);
 
-	@Override
-	public void process(UMLObject object) {
-		String relationshipName = object.getValueOfAttribute("relationshipName");
-		checkGetNotNullForAttribute("relationshipName", relationshipName);
-		
-		PrintInternalListDescriptor printInternalListDescriptor = new PrintInternalListDescriptor(relationshipName);
-		seamGenerator.addBridgeObject(object, printInternalListDescriptor);
-	}
+		StringField stringField  = getTarget(objectRelation);
 
+		printInternalListDescriptor.showField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
+	}
 }

@@ -12,53 +12,37 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.processors;
+package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
-import static junit.framework.Assert.fail;
-import static org.mockito.Matchers.eq;
-import static org.mockito.Matchers.isA;
 import static org.mockito.Mockito.verify;
 
-import org.junit.Before;
 import org.junit.Test;
+import org.mockito.Mock;
 
-import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.print.PrintEntityDescriptor;
 import com.objetdirect.seam.print.PrintInternalListDescriptor;
+
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestPrintInternalListDescriptor extends TestProcessor {
+public class TestPrintEntityToPrintInternalList extends TestRelationProcessor{
 	
-	Processor processor;
+	@Mock
+	PrintEntityDescriptor printEntityDescriptor;
 	
-	@Before
-	public void setUpObjectUnderTest() {
-		processor = new PrintInternalListDescriptorProcessor(seamGenerator);
-	}
-	
+	@Mock
+	PrintInternalListDescriptor printInternalListDescriptor;
 	
 	@Test
-	public void process_success() {
+	public void process() {
+		RelationProcessor<PrintEntityDescriptor, PrintInternalListDescriptor> processor = new PrintEntityToPrintInternalList(seamGenerator);
+		setReturnedGenObject(printEntityDescriptor, printInternalListDescriptor, "element");
+
+		processor.process(objectRelation);
 		
-		UMLObject object = new UMLObject().
-			addAttributeValuePair("relationshipName", "employees");
-		
-		processor.process(object);
-		
-		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintInternalListDescriptor.class));
-	}
-	
-	@Test
-	public void process_withNullParametersInObject_returnException() {
-		UMLObject object = new UMLObject();
-		
-		try {
-			processor.process(object);
-			fail("The process method was expected to throw a GwtGeneratorException");
-		} catch(GWTGeneratorException e) {
-			
-		}
+		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
+		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
+		verify(printEntityDescriptor).addElement(printInternalListDescriptor);
 	}
 }

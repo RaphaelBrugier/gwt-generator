@@ -23,11 +23,13 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses( {
-	TestPrintFormProcessor.class,
-	TestPrintDescriptorProcessor.class,
 	TestPageDescriptorProcessor.class,
+	TestPrintDescriptorProcessor.class,
+	TestPrintEntityProcessor.class,
+	TestPrintFormProcessor.class,
+	TestPrintInternalListDescriptorProcessor.class,
+	TestPrintListDescriptorProcessor.class,
 	TestStringFieldProcessor.class,
-	TestPrintEntityProcessor.class
 })
 public class AllProcessorsTests {
 	
