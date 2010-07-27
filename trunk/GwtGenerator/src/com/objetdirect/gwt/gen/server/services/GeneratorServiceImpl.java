@@ -16,14 +16,13 @@ package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
 
-import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
+import com.objetdirect.gwt.gen.server.gen.EntityGenerator;
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.ObjectDiagramDto;
@@ -45,30 +44,12 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	public List<GeneratedCode> generateHibernateCode(List<UMLClass> classes,
 			List<UMLRelation> relations, String packageName) throws UMLException {
 
-		Map<UMLClass, EntityDescriptor> entities = new HashMap<UMLClass, EntityDescriptor>();
-		for (UMLClass umlClass : classes) {
-			EntityDescriptor entity = GeneratorHelper.convertUMLClassToEntityDescriptor(umlClass, packageName);
-			entities.put(umlClass, entity);
-		}
-		
-		for (UMLRelation relation : relations) {
-			if (relation.isOneToOne())
-				GeneratorHelper.createOneToOneRelation(entities, relation);
-			else if (relation.isOneToMany()) {
-				GeneratorHelper.createOneToManyRelation(entities, relation);
-			} else if (relation.isManyToOne()) {
-				GeneratorHelper.createManyToOneRelation(entities, relation);
-			} else if (relation.isManyToMany()) {
-				GeneratorHelper.createManyToManyRelation(entities, relation);
-			} else {
-				throw new UMLException("Unknown relation. Did you forget a property on the relation : " + relation + " ?");
-			}
-		}
-
 		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
+
+		EntityGenerator entitiesGenerator = new EntityGenerator(classes, relations, packageName);
 		
-		for (Map.Entry<UMLClass, EntityDescriptor> entry : entities.entrySet()) {
-			GeneratedCode generatedCode = new GeneratedCode(entry.getKey().getName(), entry.getValue().getText(), JAVA);
+		for(EntityDescriptor entity : entitiesGenerator.getGeneratedEntities()) {
+			GeneratedCode generatedCode = new GeneratedCode(entity.getName(), entity.getText(), JAVA);
 			result.add(generatedCode);
 		}
 		
