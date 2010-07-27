@@ -15,9 +15,8 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.NONE;
-import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment.WIRE_ARROW;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkKind.ASSOCIATION_RELATION;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation.createUniDirectionalOneToMany;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -84,32 +83,6 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 			verify();
 	}
 
-	/**
-	 * @param leftEntity
-	 * @param rightEntity
-	 * @param rightRole
-	 * @return
-	 */
-	public static UMLRelation createUniDirectionalOneToMany(UMLClass leftEntity, UMLClass rightEntity, String rightRole) {
-		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
-		relation.setName("");
-		
-		relation.setLeftAdornment(NONE);
-		relation.setLeftCardinality("1");
-		relation.setLeftConstraint("");
-		relation.setLeftRole("");
-		relation.setLeftStereotype("");
-		relation.setLeftTarget(leftEntity);
-		
-		relation.setRightAdornment(WIRE_ARROW);
-		relation.setRightCardinality("*");
-		relation.setRightConstraint("");
-		relation.setRightRole(rightRole);
-		relation.setRightStereotype("");
-		relation.setRightTarget(rightEntity);
-		return relation;
-	}
-	
 	public void testBidirectional() {
 		UMLClass leftEntity = new UMLClass("Troop");
 		UMLClass rightEntity = new UMLClass("Soldier");

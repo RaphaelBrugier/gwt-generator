@@ -287,8 +287,9 @@ public class ContentPresenter {
 		List<UMLObject> umlObjects = objectDiagram.getObjects();
 		List<ObjectRelation> objectRelations = objectDiagram.getObjectRelations();
 		List<UMLClass> classes = objectDiagram.getClasses();
+		List<UMLRelation> classRelations = objectDiagram.getClassRelations();
 		
-		ObjectDiagramDto objectDiagramDto = new ObjectDiagramDto(classes, umlObjects, objectRelations);
+		ObjectDiagramDto objectDiagramDto = new ObjectDiagramDto(classes, umlObjects, objectRelations, classRelations);
 		
 		generatorService.generateSeamCode(objectDiagramDto, new AsyncCallback<List<GeneratedCode>>() { 
 			@Override

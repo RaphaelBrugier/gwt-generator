@@ -28,6 +28,7 @@ import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
@@ -39,15 +40,17 @@ public class TestSeamGenerator {
 	List<UMLObject> objects;
 	List<ObjectRelation> objectRelations;
 	List<UMLClass> classes;
-	
+	List<UMLRelation> classRelations;
+ 	
 
 	@Before
 	public void setUp() throws Exception {
 		objects = new ArrayList<UMLObject>();
 		objectRelations = new ArrayList<ObjectRelation>();
 		classes = new ArrayList<UMLClass>();
+		classRelations = new ArrayList<UMLRelation>();
 		
-		generator = new SeamGenerator(classes, objects, objectRelations);
+		generator = new SeamGenerator(classes, objects, objectRelations, classRelations);
 	}
 	
 	void createRelationWithoutRole(UMLObject owner, UMLObject target) {
