@@ -20,6 +20,7 @@ import java.util.List;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
 /**
  * A simple data transfert object to transport the informations about an Object Diagram
@@ -32,6 +33,7 @@ public class ObjectDiagramDto implements Serializable {
 	public List<UMLClass> classes;
 	public List<UMLObject> objects;
 	public List<ObjectRelation> objectRelations;
+	public List<UMLRelation> classRelations;
 	
 	/**
 	 * Default constructor only for gwt-rpc serialization.
@@ -42,10 +44,12 @@ public class ObjectDiagramDto implements Serializable {
 	 * @param classes
 	 * @param objects
 	 * @param objectRelations
+	 * @param classRelations
 	 */
-	public ObjectDiagramDto(List<UMLClass> classes, List<UMLObject> objects, List<ObjectRelation> objectRelations) {
+	public ObjectDiagramDto(List<UMLClass> classes, List<UMLObject> objects, List<ObjectRelation> objectRelations, List<UMLRelation> classRelations) {
 		this.classes = classes;
 		this.objects = objects;
 		this.objectRelations = objectRelations;
+		this.classRelations = classRelations;
 	}
 }

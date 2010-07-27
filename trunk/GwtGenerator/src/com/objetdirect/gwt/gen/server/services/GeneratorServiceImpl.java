@@ -48,7 +48,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 
 		EntityGenerator entitiesGenerator = new EntityGenerator(classes, relations, packageName);
 		
-		for(EntityDescriptor entity : entitiesGenerator.getGeneratedEntities()) {
+		for (EntityDescriptor entity : entitiesGenerator.getGeneratedEntities()) {
 			GeneratedCode generatedCode = new GeneratedCode(entity.getName(), entity.getText(), JAVA);
 			result.add(generatedCode);
 		}
@@ -62,7 +62,7 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	@Override
 	public List<GeneratedCode> generateSeamCode(ObjectDiagramDto objectDiagram) throws UMLException {
 		
-		SeamGenerator seamGenerator = new SeamGenerator(objectDiagram.classes, objectDiagram.objects, objectDiagram.objectRelations);
+		SeamGenerator seamGenerator = new SeamGenerator(objectDiagram.classes, objectDiagram.objects, objectDiagram.objectRelations, objectDiagram.classRelations);
 		
 		return seamGenerator.getGenerateCode();
 	}

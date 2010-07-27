@@ -14,13 +14,19 @@
  */
 package com.objetdirect.gwt.gen.server.gen;
 
-import static com.objetdirect.gwt.gen.server.services.TestGeneratorServiceOneToMany.createUniDirectionalOneToMany;
+import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
+import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation.createUniDirectionalOneToMany;
+import static com.objetdirect.seam.TestPrintEntity.testFullFeaturedEntityFaceletText;
 import static com.objetdirect.seam.TestPrintEntity.testSimpleEntityFaceletText;
 import static com.objetdirect.seam.TestPrintEntity.testSimpleEntityJavaText;
 
+import java.util.List;
+
 import org.junit.Test;
 
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
+import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
@@ -83,5 +89,49 @@ public class TestPrintEntity extends TestSeamGenerator {
 		classes.add(employeeClass);
 		
 		UMLRelation relation = createUniDirectionalOneToMany(agencyClass, employeeClass, "employees");
+		classRelations.add(relation);
+		
+		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass("PrintDescriptor")).
+			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
+			addAttributeValuePair("className", "PrintAgency").
+			addAttributeValuePair("viewPackageName", "views").
+			addAttributeValuePair("viewName", "print-agency");
+		objects.add(printDescriptorInstance);
+		
+		UMLObject printEntityDescriptorInstance = new UMLObject("", new UMLClass("PrintEntity"));
+		objects.add(printEntityDescriptorInstance);
+		
+		UMLObject entityInstance = new UMLObject("", agencyClass);
+		objects.add(entityInstance);
+		
+		createRelation(printEntityDescriptorInstance, entityInstance, "entity");
+		
+		createRelation(printDescriptorInstance, printEntityDescriptorInstance, "feature");
+		
+		
+		UMLObject printFormInstance = new UMLObject("", new UMLClass("PrintForm"));
+		objects.add(printFormInstance);
+		
+		createRelation(printEntityDescriptorInstance, printFormInstance, "element");
+		
+		addStringField(printFormInstance, "name", "Name", "20");
+		addStringField(printFormInstance, "phone", "Phone", "10");
+		addStringField(printFormInstance, "email", "E-mail", "20");
+		
+		UMLObject printInternalListDescriptorInstance = new UMLObject("", new UMLClass("PrintInternalList")).
+			addAttributeValuePair("relationshipName", "employees");
+		objects.add(printInternalListDescriptorInstance);
+		
+		createRelation(printEntityDescriptorInstance, printInternalListDescriptorInstance, "element");
+		
+		addStringField(printInternalListDescriptorInstance, "firstName", "First Name", "20");
+		addStringField(printInternalListDescriptorInstance, "lastName", "Last Name", "10");
+		
+		List<GeneratedCode> generatedClassesCode = generator.getGenerateCode();
+		
+		In(generatedClassesCode).
+			theCodeOfClass("Page.xhtml").
+			ofType(CodeType.FACELET).
+			equals(testFullFeaturedEntityFaceletText);
 	}
 }

@@ -71,14 +71,15 @@ public class SeamGenerator {
 	
 	/**
 	 * @param objects
-	 * @param instantiationsLinks
 	 * @param objectRelations
+	 * @param classRelations TODO
+	 * @param instantiationsLinks
 	 */
-	public SeamGenerator(List<UMLClass> classes, List<UMLObject> objects, List<ObjectRelation> objectRelations) {
+	public SeamGenerator(List<UMLClass> classes, List<UMLObject> objects, List<ObjectRelation> objectRelations, List<UMLRelation> classRelations) {
 		this.classes = classes;
 		this.objects = objects;
 		this.objectRelations = objectRelations;
-		this.classRelations = new ArrayList<UMLRelation>();
+		this.classRelations = classRelations;
 		entityGenerator = new EntityGenerator(classes, classRelations, PACKAGE_NAME);
 		
 		processors = new HashMap<String, Processor>();
@@ -110,9 +111,12 @@ public class SeamGenerator {
 
 	void parseClasses() {
 		classToEntity = new HashMap<String, EntityDescriptor>();
-		Map<UMLClass, EntityDescriptor> uMLClassToEntity = entityGenerator.getEntitiesMappedToCorrespondingUMLClass();
-		for (Map.Entry<UMLClass, EntityDescriptor> entry : uMLClassToEntity.entrySet()) {
-			classToEntity.put(entry.getKey().getName(), entry.getValue());
+		Map<UMLClass, EntityDescriptor> uMLClassToEntities = entityGenerator.getEntitiesMappedToCorrespondingUMLClass();
+		
+		for (Map.Entry<UMLClass, EntityDescriptor> entry : uMLClassToEntities.entrySet()) {
+			String className = entry.getKey().getName();
+			EntityDescriptor entity = entry.getValue();
+			classToEntity.put(className, entity);
 		}
 	}
 
