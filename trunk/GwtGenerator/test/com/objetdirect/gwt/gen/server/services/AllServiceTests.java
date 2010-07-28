@@ -23,8 +23,7 @@ import org.junit.runners.Suite;
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses( {
-	TestGeneratorServiceManyToMany.class,
-	 TestGeneratorServiceImpl.class,
+	 TestGeneratorServiceManyToMany.class,
 	 TestGeneratorServiceOneToOne.class,
 	 TestGeneratorServiceOneToMany.class,
 	 TestProjectService.class,

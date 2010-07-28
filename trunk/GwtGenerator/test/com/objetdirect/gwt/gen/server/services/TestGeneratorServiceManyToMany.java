@@ -24,7 +24,6 @@ import junit.framework.TestCase;
 
 import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
@@ -37,7 +36,7 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 
 	private GeneratorServiceImpl service = new GeneratorServiceImpl();
 	
-	public void testUnidirectional() {
+	public void testUnidirectional() throws Exception {
 		UMLClass storeEntity = new UMLClass("Store");
 		UMLClass cityEntity = new UMLClass("City");
 		
@@ -66,11 +65,8 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 		relations.add(relation);
 		
 		List<GeneratedCode> generatedClassesCode = null;
-		try {
-			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
-		} catch (UMLException e) {
-			fail();
-		}
+	
+		generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		
 		In(generatedClassesCode).
 			theCodeOfClass(storeEntity.getName()).
@@ -90,7 +86,7 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 			verify();
 	}
 	
-	public void testBidirectional() {
+	public void testBidirectional() throws Exception {
 		UMLClass storeEntity = new UMLClass("Store");
 		UMLClass customerEntity = new UMLClass("Customer");
 		
@@ -119,11 +115,7 @@ public class TestGeneratorServiceManyToMany extends TestCase {
 		relations.add(relation);
 		
 		List<GeneratedCode> generatedClassesCode = null;
-		try {
-			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
-		} catch (UMLException e) {
-			fail();
-		}
+		generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		
 		In(generatedClassesCode).
 			theCodeOfClass(storeEntity.getName()).

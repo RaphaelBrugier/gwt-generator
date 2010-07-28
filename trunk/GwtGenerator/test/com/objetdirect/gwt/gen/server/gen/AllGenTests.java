@@ -28,6 +28,7 @@ import com.objetdirect.gwt.gen.server.gen.relationProcessors.AllRelationProcesso
 @Suite.SuiteClasses( {
 	AllProcessorsTests.class,
 	AllRelationProcessorsTests.class,
+	TestEntityGenerator.class,
 	TestPageDescriptor.class,
 	TestPrintEntity.class,
 	TestPrintList.class

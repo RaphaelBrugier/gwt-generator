@@ -38,7 +38,7 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 
 	private GeneratorServiceImpl service = new GeneratorServiceImpl();
 	
-	public void testUnidirectional() {
+	public void testUnidirectional() throws Exception {
 		UMLClass leftEntity = new UMLClass("Trainer");
 		UMLClass rightEntity = new UMLClass("Tiger");
 		
@@ -53,11 +53,7 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 		relations.add(relation);
 		
 		List<GeneratedCode> generatedClassesCode = null;
-		try {
-			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
-		} catch (UMLException e) {
-			fail();
-		}
+		generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		
 		In(generatedClassesCode).
 			theCodeOfClass(leftEntity.getName()).
@@ -83,7 +79,7 @@ public class TestGeneratorServiceOneToMany extends TestCase {
 			verify();
 	}
 
-	public void testBidirectional() {
+	public void testBidirectional() throws Exception {
 		UMLClass leftEntity = new UMLClass("Troop");
 		UMLClass rightEntity = new UMLClass("Soldier");
 		

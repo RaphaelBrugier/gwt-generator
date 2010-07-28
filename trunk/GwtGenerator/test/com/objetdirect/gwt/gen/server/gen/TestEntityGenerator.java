@@ -12,7 +12,7 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.services;
+package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
 
@@ -31,10 +31,8 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 /**
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
-public class TestGeneratorServiceImpl extends TestCase {
+public class TestEntityGenerator extends TestCase {
 
-	GeneratorServiceImpl service = new GeneratorServiceImpl();
-	
 	String packageName = "com.od.test";
 	
 	List<UMLClass> classes;
