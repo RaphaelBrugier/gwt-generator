@@ -30,7 +30,6 @@ import junit.framework.TestCase;
 
 import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
@@ -43,7 +42,7 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 
 	private GeneratorServiceImpl service = new GeneratorServiceImpl();
 	
-	public void testOneToOneUnidirectionnalReference() {
+	public void testOneToOneUnidirectionnalReference() throws Exception {
 		UMLClass leftEntity = new UMLClass("LeftEntity");
 		UMLClass rightEntity = new UMLClass("RightEntity");
 		
@@ -70,11 +69,7 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		relations.add(relation);
 		
 		List<GeneratedCode> generatedCode = null;
-		try {
-			generatedCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
-		} catch (UMLException e) {
-			fail();
-		}
+		generatedCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		
 		In(generatedCode).
 			theCodeOfClass(leftEntity.getName()).
@@ -124,11 +119,7 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		relations.add(relation);
 		
 		List<GeneratedCode> generatedCode = null;
-		try {
-			generatedCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
-		} catch (UMLException e) {
-			fail();
-		}
+		generatedCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		
 		In(generatedCode).
 			theCodeOfClass(leftEntity.getName()).
@@ -179,11 +170,7 @@ public class TestGeneratorServiceOneToOne extends TestCase {
 		relations.add(relation);
 		
 		List<GeneratedCode> generatedClassesCode = null;
-		try {
-			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
-		} catch (UMLException e) {
-			fail();
-		}
+		generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 	
 		In(generatedClassesCode).
 			theCodeOfClass(leftEntity.getName()).

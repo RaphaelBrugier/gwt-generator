@@ -26,7 +26,6 @@ import junit.framework.TestCase;
 
 import com.objetdirect.gwt.gen.TestUtil;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
-import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.LinkAdornment;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
@@ -39,7 +38,7 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 
 	private GeneratorServiceImpl service = new GeneratorServiceImpl();
 	
-	public void testUnidirectional() {
+	public void testUnidirectional() throws Exception {
 		UMLClass flightEntity = new UMLClass("Flight");
 		UMLClass companyEntity = new UMLClass("Company");
 		
@@ -68,11 +67,8 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 		relations.add(relation);
 		
 		List<GeneratedCode> generatedClassesCode = null;
-		try {
 			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
-		} catch (UMLException e) {
-			fail();
-		}
+
 		In(generatedClassesCode).
 			theCodeOfClass(flightEntity.getName()).
 			contains("" +
@@ -91,7 +87,7 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 		
 	}
 	
-	public void testBidirectional() {
+	public void testBidirectional() throws Exception {
 		UMLClass soldierEntity = new UMLClass("Soldier");
 		UMLClass troopEntity = new UMLClass("Troop");
 		
@@ -120,11 +116,7 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 		relations.add(relation);
 		
 		List<GeneratedCode> generatedClassesCode = null;
-		try {
-			generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
-		} catch (UMLException e) {
-			fail();
-		}
+		generatedClassesCode = service.generateHibernateCode(classes, relations, TestUtil.packageName);
 		
 		
 		In(generatedClassesCode).
