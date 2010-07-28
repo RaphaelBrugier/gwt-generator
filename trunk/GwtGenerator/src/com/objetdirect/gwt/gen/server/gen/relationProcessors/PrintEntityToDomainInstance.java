@@ -14,6 +14,12 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor.PRINT_ENTITY;
+import static com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessorsManager.DOMAIN_INSTANCE;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
@@ -24,9 +30,6 @@ import com.objetdirect.seam.print.PrintEntityDescriptor;
  */
 public class PrintEntityToDomainInstance extends RelationProcessor<PrintEntityDescriptor,EntityDescriptor> {
 
-	/**
-	 * @param seamGenerator
-	 */
 	public PrintEntityToDomainInstance(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
@@ -47,5 +50,15 @@ public class PrintEntityToDomainInstance extends RelationProcessor<PrintEntityDe
 		EntityDescriptor entity = getTarget(objectRelation);
 
 		printEntityDescriptor.setEntity(entity);
+	}
+
+	@Override
+	public String getOwnerClassName() {
+		return PRINT_ENTITY;
+	}
+
+	@Override
+	public List<String> getTargetClassNames() {
+		return Arrays.asList(DOMAIN_INSTANCE);
 	}
 }

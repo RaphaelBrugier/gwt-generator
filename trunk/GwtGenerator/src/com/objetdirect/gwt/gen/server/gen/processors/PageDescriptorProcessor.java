@@ -22,6 +22,9 @@ import com.objetdirect.seam.PageDescriptor;
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class PageDescriptorProcessor extends Processor {
+
+	public static final String PAGE_DESCRIPTOR = "PageDescriptor";
+
 	public PageDescriptorProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
@@ -41,6 +44,6 @@ public class PageDescriptorProcessor extends Processor {
 
 	@Override
 	public String getProcessedClassName() {
-		return "PageDescriptor";
+		return PAGE_DESCRIPTOR;
 	}
 }

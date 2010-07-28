@@ -23,6 +23,8 @@ import com.objetdirect.seam.print.PrintFormDescriptor;
  */
 public class PrintFormProcessor extends Processor {
 
+	public static final String PRINT_FORM = "PrintForm";
+	
 	public PrintFormProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
@@ -35,6 +37,6 @@ public class PrintFormProcessor extends Processor {
 
 	@Override
 	public String getProcessedClassName() {
-		return "PrintForm";
+		return PRINT_FORM;
 	}
 }

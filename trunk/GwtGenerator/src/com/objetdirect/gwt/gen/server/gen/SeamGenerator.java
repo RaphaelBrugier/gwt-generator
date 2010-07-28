@@ -16,7 +16,6 @@ package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.JAVA;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -68,11 +67,10 @@ public class SeamGenerator {
 	// This map maintains the bridge between the object from the uml world and the objects instantiated in the generator world.
 	private Map<UMLObject, Object> umlObjectToGenObjects;
 	
-	
 	/**
 	 * @param objects
 	 * @param objectRelations
-	 * @param classRelations TODO
+	 * @param classRelations
 	 * @param instantiationsLinks
 	 */
 	public SeamGenerator(List<UMLClass> classes, List<UMLObject> objects, List<ObjectRelation> objectRelations, List<UMLRelation> classRelations) {
@@ -132,7 +130,7 @@ public class SeamGenerator {
 	
 	void parseObjectRelations() {
 		for (ObjectRelation relation : objectRelations) {
-			RelationProcessor rp = relationProcessorsManager.getRelationProcessor(relation);
+			RelationProcessor<?,?> rp = relationProcessorsManager.getRelationProcessor(relation);
 			if (rp != null)
 				rp.process(relation);
 		}

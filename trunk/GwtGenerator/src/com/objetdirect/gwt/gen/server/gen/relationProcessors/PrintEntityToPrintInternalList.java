@@ -14,6 +14,12 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor.PRINT_ENTITY;
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintInternalListDescriptorProcessor.PRINT_INTERNAL_LIST;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.print.PrintEntityDescriptor;
@@ -47,5 +53,15 @@ public class PrintEntityToPrintInternalList extends RelationProcessor<PrintEntit
 		PrintInternalListDescriptor printInternalListDescriptor = getTarget(objectRelation);
 
 		printEntityDescriptor.addElement(printInternalListDescriptor);
+	}
+	
+	@Override
+	public String getOwnerClassName() {
+		return PRINT_ENTITY;
+	}
+
+	@Override
+	public List<String> getTargetClassNames() {
+		return Arrays.asList(PRINT_INTERNAL_LIST);
 	}
 }

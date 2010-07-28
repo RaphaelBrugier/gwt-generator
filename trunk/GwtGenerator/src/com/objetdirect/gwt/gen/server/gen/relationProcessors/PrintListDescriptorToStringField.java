@@ -14,6 +14,12 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor.PRINT_LIST_DESCRIPTOR;
+import static com.objetdirect.gwt.gen.server.gen.processors.StringFieldProcessor.STRING_FIELD;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
@@ -24,9 +30,6 @@ import com.objetdirect.seam.print.PrintListDescriptor;
  */
 public class PrintListDescriptorToStringField extends RelationProcessor<PrintListDescriptor, StringField> {
 
-	/**
-	 * @param seamGenerator
-	 */
 	public PrintListDescriptorToStringField(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
@@ -38,5 +41,15 @@ public class PrintListDescriptorToStringField extends RelationProcessor<PrintLis
 		StringField stringField  = getTarget(objectRelation);
 
 		printFormDescriptor.showField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
+	}
+
+	@Override
+	public String getOwnerClassName() {
+		return PRINT_LIST_DESCRIPTOR;
+	}
+
+	@Override
+	public List<String> getTargetClassNames() {
+		return Arrays.asList(STRING_FIELD);
 	}
 }

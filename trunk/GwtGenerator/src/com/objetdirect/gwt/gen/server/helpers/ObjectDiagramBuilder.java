@@ -40,6 +40,8 @@ public class ObjectDiagramBuilder {
 
 	public static final String ENTITY_CLASS_NAME = "Entity";
 
+	public static final String ENTITY_RELATION_NAME = "entity";
+
 	private final DiagramDao diagramDao;
 	
 	private final DiagramDto objectDiagramDto;
@@ -147,7 +149,7 @@ public class ObjectDiagramBuilder {
 			if (relation.getRightTarget().getName().equalsIgnoreCase(ENTITY_CLASS_NAME)) {
 				UMLClass seamClass = relation.getLeftTarget();
 				for (UMLClass entityClass : domainClasses) {
-					UMLRelation entityRelation = createAssociation(seamClass, entityClass, "entity");
+					UMLRelation entityRelation = createAssociation(seamClass, entityClass, ENTITY_RELATION_NAME);
 					entityRelations.add(entityRelation);
 				}
 			}

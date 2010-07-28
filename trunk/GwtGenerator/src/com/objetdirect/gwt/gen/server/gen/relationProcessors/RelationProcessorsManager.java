@@ -14,7 +14,10 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
+import static com.objetdirect.gwt.gen.server.helpers.ObjectDiagramBuilder.ENTITY_RELATION_NAME;
+
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
@@ -27,50 +30,61 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelatio
  */
 public class RelationProcessorsManager {
 
+	public static final String DOMAIN_INSTANCE = "DomainInstance";
+
 	final SeamGenerator seamGenerator;
 	
-	@SuppressWarnings("unchecked")
-	private Map<String, Map<String, RelationProcessor>> processors;
+	private Map<String, Map<String, RelationProcessor<?,?>>> processors;
 	
 	public RelationProcessorsManager(SeamGenerator seamGenerator) {
 		this.seamGenerator = seamGenerator;
 		
-		processors = new HashMap<String, Map<String,RelationProcessor>>();
+		processors = new HashMap<String, Map<String,RelationProcessor<?,?>>>();
 
 		buildProcessors();
 	}
 	
 	private void buildProcessors() {
-		addRelationProcessor("PrintDescriptor", "PrintEntity", new PrintDescriptorToDocumentFeature(seamGenerator));
-		addRelationProcessor("PrintDescriptor", "PrintListDescriptor", new PrintDescriptorToDocumentFeature(seamGenerator));
-		addRelationProcessor("PrintEntity", "DomainInstance", new PrintEntityToDomainInstance(seamGenerator));
-		addRelationProcessor("PrintEntity", "PrintForm", new PrintEntityToPrintForm(seamGenerator));
-		addRelationProcessor("PrintEntity", "PrintInternalList", new PrintEntityToPrintInternalList(seamGenerator));
-		addRelationProcessor("PrintForm", "StringField", new PrintFormToStringField(seamGenerator));
-		addRelationProcessor("PrintInternalList", "StringField", new PrintInternalListDescriptorToStringField(seamGenerator));
-		addRelationProcessor("PrintListDescriptor", "DomainInstance", new PrintListDescriptorToDomainInstance(seamGenerator));
-		addRelationProcessor("PrintListDescriptor", "StringField", new PrintListDescriptorToStringField(seamGenerator));
+		addRelationProcessor(new PrintDescriptorToDocumentFeature(seamGenerator));
+		addRelationProcessor(new PrintDescriptorToDocumentFeature(seamGenerator));
+		addRelationProcessor(new PrintEntityToDomainInstance(seamGenerator));
+		addRelationProcessor(new PrintEntityToPrintForm(seamGenerator));
+		addRelationProcessor(new PrintEntityToPrintInternalList(seamGenerator));
+		addRelationProcessor(new PrintFormToStringField(seamGenerator));
+		addRelationProcessor(new PrintInternalListDescriptorToStringField(seamGenerator));
+		addRelationProcessor(new PrintListDescriptorToDomainInstance(seamGenerator));
+		addRelationProcessor(new PrintListDescriptorToStringField(seamGenerator));
 	}
-
-	private void addRelationProcessor(String ownerClassName, String targetClassName, RelationProcessor rp) {
-		if ( ! processors.containsKey(ownerClassName))
-			processors.put(ownerClassName, new HashMap<String, RelationProcessor>());
-
-		Map<String, RelationProcessor> p = processors.get(ownerClassName);
+	
+	
+	private void addRelationProcessor( RelationProcessor<?,?> relationProcessor) {
+		String ownerClassName = relationProcessor.getOwnerClassName();
+		List<String> targetClassNames = relationProcessor.getTargetClassNames();
 		
-		p.put(targetClassName, rp);
+		for (String targetClassName : targetClassNames) {
+			addRelationProcessor(ownerClassName, targetClassName, relationProcessor);
+		}
 	}
 
-	public RelationProcessor getRelationProcessor(ObjectRelation relation) {
-		Map<String, RelationProcessor> p = processors.get(relation.getLeftObject().getClassName());
+	private void addRelationProcessor(String ownerClassName, String targetClassName, RelationProcessor<?,?> relationProcessor) {
+		if ( ! processors.containsKey(ownerClassName))
+			processors.put(ownerClassName, new HashMap<String, RelationProcessor<?,?>>());
+
+		Map<String, RelationProcessor<?,?>> p = processors.get(ownerClassName);
+		
+		p.put(targetClassName, relationProcessor);
+	}
+
+	public RelationProcessor<?,?> getRelationProcessor(ObjectRelation relation) {
+		Map<String, RelationProcessor<?,?>> p = processors.get(relation.getLeftObject().getClassName());
 		
 		if (p == null) {
 			return null;
 		}
 		else {
 			// Special case where  the instance is a domain instance
-			if (!p.containsKey(relation.getRightObject().getClassName()) && relation.getRightRole().equals("entity")) {
-				return p.get("DomainInstance");
+			if (!p.containsKey(relation.getRightObject().getClassName()) && relation.getRightRole().equals(ENTITY_RELATION_NAME)) {
+				return p.get(DOMAIN_INSTANCE);
 			}
 			return p.get(relation.getRightObject().getClassName());
 		}

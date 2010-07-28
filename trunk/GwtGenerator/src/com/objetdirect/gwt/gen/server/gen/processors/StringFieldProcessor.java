@@ -23,6 +23,8 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
  */
 public class StringFieldProcessor extends Processor {
 
+	public static final String STRING_FIELD = "StringField";
+
 	public StringFieldProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
@@ -40,6 +42,6 @@ public class StringFieldProcessor extends Processor {
 
 	@Override
 	public String getProcessedClassName() {
-		return "StringField";
+		return STRING_FIELD;
 	}
 }

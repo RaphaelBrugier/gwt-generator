@@ -14,6 +14,8 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
+import java.util.List;
+
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 
@@ -31,7 +33,33 @@ public abstract class RelationProcessor<L, R> {
 		this.seamGenerator = seamGenerator;
 	}
 
+	/**
+	 * Process a relation between two objects.
+	 * 
+	 * @param objectRelation
+	 */
 	public abstract void process(ObjectRelation objectRelation);
+	
+	/**
+	 * Get the owner's name of the relation.
+	 * @return the owner's name.
+	 */
+	public abstract String getOwnerClassName();
+	
+	
+	/**
+	 * Return the name of all the relation's target supported by the relation processor.
+	 * 
+	 * For example : if the processor can process two relations :
+	 * 1/ A to B
+	 * 2/ A to C
+	 * 
+	 * Then getOwnername will return "A"
+	 * And getTargetNames will return the list {"B", "C"}
+	 * 
+	 * @return
+	 */
+	public abstract List<String> getTargetClassNames();
 	
 	/**
 	 * Get the owner object of a relation

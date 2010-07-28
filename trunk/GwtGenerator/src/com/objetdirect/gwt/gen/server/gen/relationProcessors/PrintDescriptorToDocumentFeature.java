@@ -14,6 +14,13 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor.PRINT_DESCRIPTOR;
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor.PRINT_ENTITY;
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor.PRINT_LIST_DESCRIPTOR;
+
+import java.util.Arrays;
+import java.util.List;
+
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.DocumentFeature;
@@ -25,9 +32,6 @@ import com.objetdirect.seam.print.PrintDescriptor;
  */
 public class PrintDescriptorToDocumentFeature extends RelationProcessor<PrintDescriptor, DocumentFeature> {
 
-	/**
-	 * @param seamGenerator
-	 */
 	public PrintDescriptorToDocumentFeature(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
@@ -49,4 +53,15 @@ public class PrintDescriptorToDocumentFeature extends RelationProcessor<PrintDes
 		
 		printDescriptor.setFeature(documentFeature);
 	}
+
+	@Override
+	public String getOwnerClassName() {
+		return PRINT_DESCRIPTOR;
+	}
+
+	@Override
+	public List<String> getTargetClassNames() {
+		return Arrays.asList(PRINT_ENTITY, PRINT_LIST_DESCRIPTOR);
+	}
+	
 }
