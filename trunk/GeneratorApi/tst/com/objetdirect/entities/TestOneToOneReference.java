@@ -44,6 +44,11 @@ public class TestOneToOneReference extends TestCase {
 			"	this.link = link;",
 			"}");
 		TestUtil.assertNotExisting(e1.getText(), "preRemove");
+		
+		//TODO add a test to check if two default constructors are generated 
+		
+//		TestUtil.println(e1.getText());
+//		TestUtil.println(e2.getText());
 	}
 
 	public void testOneToOneUnidirectionnalMandatoryReference() {
@@ -72,6 +77,7 @@ public class TestOneToOneReference extends TestCase {
 			"	this.link = link;",
 			"}");
 		TestUtil.assertNotExisting(e1.getText(), "preRemove");
+		
 	}
 
 	public void testOneToOneUnidirectionnalCompositionReference() {
@@ -99,6 +105,10 @@ public class TestOneToOneReference extends TestCase {
 			"	this.link = link;",
 			"}");
 		TestUtil.assertNotExisting(e1.getText(), "preRemove");
+		
+//		System.out.println("\n\n\n");
+//		TestUtil.println(e1.getText());
+//		TestUtil.println(e2.getText());
 	}
 
 	public void testOneToOneUnidirectionnalMandatoryCompositionReference() {
@@ -129,6 +139,10 @@ public class TestOneToOneReference extends TestCase {
 			"	this.link = link;",
 			"}");
 		TestUtil.assertNotExisting(e1.getText(), "preRemove");
+		
+//		System.out.println("\n\n\n");
+//		TestUtil.println(e1.getText());
+//		TestUtil.println(e2.getText());
 	}
 
 	public void testOneToOneBidirectionnalReference() {
@@ -185,6 +199,10 @@ public class TestOneToOneReference extends TestCase {
 			"@Transient",
 			"boolean inDeletion = false;"
 		);
+		
+//		System.out.println("\n\n\n");
+//		TestUtil.println(e1.getText());
+//		TestUtil.println(e2.getText());
 	}
 
 	public void testOneToOneBidirectionnalMandatoryReference() {
@@ -247,6 +265,12 @@ public class TestOneToOneReference extends TestCase {
 			"@Transient",
 			"boolean inDeletion = false;"
 		);
+		
+//		System.out.println("\n\n\n");
+//		TestUtil.println(e1.getText());
+//		System.out.println("\n");
+//		TestUtil.println(e2.getText());
+		
 	}
 
 	public void testOneToOneBidirectionnalReverseMandatoryReference() {

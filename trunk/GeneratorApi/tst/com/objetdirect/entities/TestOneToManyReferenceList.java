@@ -21,7 +21,7 @@ import junit.framework.TestCase;
 
 public class TestOneToManyReferenceList extends TestCase {
 
-	public void testManyToOneUnidirectionnalReference() {
+	public void testOneToManyUnidirectionnalReference() {
 		EntityDescriptor e1 = new EntityDescriptor("com.objetdirect.domain", "LeftEntity");
 		EntityDescriptor e2 = new EntityDescriptor("com.objetdirect.domain", "RightEntity");
 		OneToManyReferenceListDescriptor ref = 
@@ -144,6 +144,9 @@ public class TestOneToManyReferenceList extends TestCase {
 			"@Transient",
 			"boolean inDeletion = false;"
 		);
+		
+		TestUtil.println(e1.getText());
+		TestUtil.println(e2.getText());
 	}
 	
 	public void testOneToManyBidirectionnalInverseMandatoryReference() {

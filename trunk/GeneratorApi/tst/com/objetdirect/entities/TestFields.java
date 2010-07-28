@@ -50,7 +50,7 @@ public class TestFields extends TestCase {
 			"public void setMyStringField(String myStringField) {",
 			"	this.myStringField = myStringField;",
 			"}"
-		);		
+		);
 	}
 	
 	public void testIntFields() {

@@ -15,9 +15,9 @@
 
 package com.objetdirect.entities;
 
-import com.objetdirect.engine.TestUtil;
-
 import junit.framework.TestCase;
+
+import com.objetdirect.engine.TestUtil;
 
 public class TestManyToOneReference extends TestCase {
 
@@ -126,6 +126,7 @@ public class TestManyToOneReference extends TestCase {
 			"@Transient",
 			"boolean inDeletion = false;"
 		);
+		
 	}
 
 	public void testManyToOneBidirectionnalMandatoryReference() {

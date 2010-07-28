@@ -15,11 +15,10 @@
 
 package com.objetdirect.gwt;
 
+import junit.framework.TestCase;
+
 import com.objetdirect.engine.TestUtil;
 import com.objetdirect.entities.EntityDescriptor;
-import com.objetdirect.seam.Seam;
-
-import junit.framework.TestCase;
 
 public class TestEmbeddedFormDescriptor extends TestCase {
 
