@@ -15,13 +15,13 @@
 
 package com.objetdirect.entities;
 
-import com.objetdirect.engine.TestUtil;
-
 import junit.framework.TestCase;
+
+import com.objetdirect.engine.TestUtil;
 
 public class TestManyToManyReferenceList extends TestCase {
 
-	public void testManyToOneUnidirectionnalReference() {
+	public void testManyToManyUnidirectionnalReference() {
 		EntityDescriptor e1 = new EntityDescriptor("com.objetdirect.domain", "LeftEntity");
 		EntityDescriptor e2 = new EntityDescriptor("com.objetdirect.domain", "RightEntity");
 		ManyToManyReferenceListDescriptor ref = 
@@ -68,6 +68,7 @@ public class TestManyToManyReferenceList extends TestCase {
 			"		return false;",
 			"}");
 		TestUtil.assertNotExisting(e1.getText(), "preRemove");
+		
 	}
 
 	public void testManyToManyBidirectionnalReference() {
@@ -79,7 +80,6 @@ public class TestManyToManyReferenceList extends TestCase {
 			new ManyToManyReferenceListDescriptor(e2, e1, "rlinks", false);
 		ref1.setReverse(ref2, true);
 		ref2.setReverse(ref1, false);
-		TestUtil.println(e1.getText());
 		TestUtil.assertText(e1.getBusinessConstructor().getText(),
 			"public LeftEntity(boolean dummy) {",
 			"	this.links = new ArrayList<RightEntity>();",

@@ -15,11 +15,62 @@
 
 package com.objetdirect.seam;
 
-import com.objetdirect.engine.TestUtil;
-
 import junit.framework.TestCase;
 
+import com.objetdirect.engine.TestUtil;
+
 public class TestPageDescriptor extends TestCase {
+	
+	public static String[] testSimplePageJavaText = {
+		"package com.objetdirect.actions;",
+		"",
+		"import org.jboss.seam.annotations.Name;",
+		"import org.jboss.seam.annotations.Scope;",
+		"import org.jboss.seam.core.Conversation;",
+		"import org.jboss.seam.ScopeType;",
+		"",
+		"@Name(\"editAgencies\")",
+		"@Scope(ScopeType.CONVERSATION)",
+		"public class EditAgenciesAnimator {",
+		"",
+		"",
+		"	public EditAgenciesAnimator() {",	
+		"		if (Conversation.instance().isLongRunning()) {",
+		"			Conversation.instance().end(true);",
+		"			Conversation.instance().leave();",
+		"		}",
+		"		Conversation.instance().begin();",
+		"	}",
+		"",
+		"",
+		"}"
+	};
+	
+	public static String[] testSimplePageFaceletText  = {
+		"<!DOCTYPE composition PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"", 
+		"			\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">",
+		"<ui:composition xmlns=\"http://www.w3.org/1999/xhtml\"",
+		"	xmlns:s=\"http://jboss.com/products/seam/taglib\"",
+		"	xmlns:ui=\"http://java.sun.com/jsf/facelets\"",
+		"	xmlns:f=\"http://java.sun.com/jsf/core\"",
+		"	xmlns:h=\"http://java.sun.com/jsf/html\"",
+		"	xmlns:ice=\"http://www.icesoft.com/icefaces/component\"",
+		"	template=\"/layout/template.xhtml\">",
+		"",
+		"<ui:define name=\"body\">",
+		"",
+		"	<h:messages styleClass=\"message\"/>",
+		"",
+		"	<ice:form id=\"pageForm\">",
+		"		<ice:panelGroup	styleClass=\"formBorderHighlight\">",
+		"",
+		"			<div class=\"dialog\">",
+		"			</div>",
+		"		</ice:panelGroup>",
+		"	</ice:form>",
+		"</ui:define>", 
+		"</ui:composition>"
+	};
 
 	public void testSimplePage() {
 		Seam.clear();
@@ -27,53 +78,10 @@ public class TestPageDescriptor extends TestCase {
 			new PageDescriptor("com.objetdirect.actions", "EditAgencies", "views", "edit-agencies");
 		page.build();
 		TestUtil.assertText(page.getJavaText(),
-			"package com.objetdirect.actions;",
-			"",
-			"import org.jboss.seam.annotations.Name;",
-			"import org.jboss.seam.annotations.Scope;",
-			"import org.jboss.seam.core.Conversation;",
-			"import org.jboss.seam.ScopeType;",
-			"",
-			"@Name(\"editAgencies\")",
-			"@Scope(ScopeType.CONVERSATION)",
-			"public class EditAgenciesAnimator {",
-			"",
-			"",
-			"	public EditAgenciesAnimator() {",	
-			"		if (Conversation.instance().isLongRunning()) {",
-			"			Conversation.instance().end(true);",
-			"			Conversation.instance().leave();",
-			"		}",
-			"		Conversation.instance().begin();",
-			"	}",
-			"",
-			"",
-			"}"
+				testSimplePageJavaText
 		);
 		TestUtil.assertText(page.getFaceletText(),
-			"<!DOCTYPE composition PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\"", 
-			"			\"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">",
-			"<ui:composition xmlns=\"http://www.w3.org/1999/xhtml\"",
-			"	xmlns:s=\"http://jboss.com/products/seam/taglib\"",
-			"	xmlns:ui=\"http://java.sun.com/jsf/facelets\"",
-			"	xmlns:f=\"http://java.sun.com/jsf/core\"",
-			"	xmlns:h=\"http://java.sun.com/jsf/html\"",
-			"	xmlns:ice=\"http://www.icesoft.com/icefaces/component\"",
-			"	template=\"/layout/template.xhtml\">",
-			"",
-			"<ui:define name=\"body\">",
-			"",
-			"	<h:messages styleClass=\"message\"/>",
-			"",
-			"	<ice:form id=\"pageForm\">",
-			"		<ice:panelGroup	styleClass=\"formBorderHighlight\">",
-			"",
-			"			<div class=\"dialog\">",
-			"			</div>",
-			"		</ice:panelGroup>",
-			"	</ice:form>",
-			"</ui:define>", 
-			"</ui:composition>"
+				testSimplePageFaceletText
 		);
 	}
 

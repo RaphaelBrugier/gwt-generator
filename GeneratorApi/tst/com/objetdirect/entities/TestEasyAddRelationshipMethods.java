@@ -15,9 +15,9 @@
 
 package com.objetdirect.entities;
 
-import com.objetdirect.engine.TestUtil;
-
 import junit.framework.TestCase;
+
+import com.objetdirect.engine.TestUtil;
 
 public class TestEasyAddRelationshipMethods extends TestCase {
 
@@ -56,6 +56,7 @@ public class TestEasyAddRelationshipMethods extends TestCase {
 		RelationshipDescriptor rrs = new OneToOneReferenceDescriptor(biography, author, "author", false, false, false);
 		author.addRelationship(rrs);
 		rs.setReverse(rrs, true);
+		rrs.setReverse(rs, false);
 		TestUtil.assertText(resultAuthor, author.getText());
 		TestUtil.assertText(resultBiography, biography.getText());
 	}
@@ -133,6 +134,7 @@ public class TestEasyAddRelationshipMethods extends TestCase {
 		author.addRelationship(rs);
 		RelationshipDescriptor rrs = new OneToManyReferenceListDescriptor(author, book, "books", true);
 		rs.setReverse(rrs, true);
+		rrs.setReverse(rs, false);
 		TestUtil.assertText(resultAuthor, author.getText());
 		TestUtil.assertText(resultBook, book.getText());
 	}
@@ -172,6 +174,7 @@ public class TestEasyAddRelationshipMethods extends TestCase {
 		RelationshipDescriptor rrs = new ManyToManyReferenceListDescriptor(keyword, book, "books", false);
 		keyword.addRelationship(rrs);
 		rs.setReverse(rrs, true);
+		rrs.setReverse(rs, false);
 		TestUtil.assertText(resultKeyword, keyword.getText());
 		TestUtil.assertText(resultBook, book.getText());
 	}

@@ -42,6 +42,7 @@ public class TestFormInDetail extends TestCase {
 		feature.setDetail(detail);
 		page.setFeature(feature);
 		page.build();
+		TestUtil.println(page.getJavaText());
 		TestUtil.assertText(page.getJavaText(),
 			"package com.objetdirect.actions;",
 			"",

@@ -15,11 +15,11 @@
 
 package com.objetdirect.seam;
 
-import com.objetdirect.engine.TestUtil;
-
 import junit.framework.TestCase;
 
-public class TestPopupDescritpor extends TestCase {
+import com.objetdirect.engine.TestUtil;
+
+public class TestPopupDescriptor extends TestCase {
 
 	public void testSimplePage() {
 		Seam.clear();
