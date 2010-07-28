@@ -23,6 +23,8 @@ import com.objetdirect.seam.print.PrintDescriptor;
  */
 public class PrintDescriptorProcessor extends Processor {
 
+	public static final String PRINT_DESCRIPTOR = "PrintDescriptor";
+	
 	public PrintDescriptorProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
@@ -46,6 +48,6 @@ public class PrintDescriptorProcessor extends Processor {
 	
 	@Override
 	public String getProcessedClassName() {
-		return "PrintDescriptor";
+		return PRINT_DESCRIPTOR;
 	}
 }

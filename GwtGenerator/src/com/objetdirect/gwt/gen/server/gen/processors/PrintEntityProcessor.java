@@ -22,6 +22,8 @@ import com.objetdirect.seam.print.PrintEntityDescriptor;
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class PrintEntityProcessor extends Processor {
+	
+	public static final String PRINT_ENTITY = "PrintEntity" ;
 
 	public PrintEntityProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
@@ -36,6 +38,6 @@ public class PrintEntityProcessor extends Processor {
 
 	@Override
 	public String getProcessedClassName() {
-		return "PrintEntity";
+		return PRINT_ENTITY;
 	}
 }

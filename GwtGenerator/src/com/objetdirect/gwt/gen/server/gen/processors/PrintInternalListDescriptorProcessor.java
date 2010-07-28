@@ -23,13 +23,10 @@ import com.objetdirect.seam.print.PrintInternalListDescriptor;
  */
 public class PrintInternalListDescriptorProcessor extends Processor {
 
+	public static final String PRINT_INTERNAL_LIST = "PrintInternalList";
+
 	public PrintInternalListDescriptorProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
-	}
-
-	@Override
-	public String getProcessedClassName() {
-		return "PrintInternalList";
 	}
 
 	@Override
@@ -41,4 +38,8 @@ public class PrintInternalListDescriptorProcessor extends Processor {
 		seamGenerator.addBridgeObject(object, printInternalListDescriptor);
 	}
 
+	@Override
+	public String getProcessedClassName() {
+		return PRINT_INTERNAL_LIST;
+	}
 }
