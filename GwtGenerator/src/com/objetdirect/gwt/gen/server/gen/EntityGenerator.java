@@ -22,6 +22,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.objetdirect.engine.EnumDescriptor;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.umlapi.client.exceptions.UMLException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -36,13 +37,13 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 public class EntityGenerator {
-	
+
 	List<UMLClass> classes;
 	List<UMLRelation> relations;
 	String packageName;
 
 	Map<UMLClass, EntityDescriptor> entities;
-
+	Map<UMLClass, EnumDescriptor> enumerations;
 
 	/**
 	 * @param classes
@@ -54,14 +55,12 @@ public class EntityGenerator {
 		this.relations = relations;
 		this.packageName = packageName;
 	}
-	
 
 	public Collection<EntityDescriptor> getGeneratedEntities() {
 		processClasses();
 		processRelations();
 		return entities.values();
 	}
-	
 
 	public Map<UMLClass, EntityDescriptor> getEntitiesMappedToCorrespondingUMLClass() {
 		processClasses();
@@ -71,9 +70,13 @@ public class EntityGenerator {
 
 	private void processClasses() {
 		entities = new HashMap<UMLClass, EntityDescriptor>();
+		enumerations = new  HashMap<UMLClass, EnumDescriptor>();
 		for (UMLClass umlClass : classes) {
-			EntityDescriptor entity = convertUMLClassToEntityDescriptor(umlClass);
-			entities.put(umlClass, entity);
+			if (umlClass.isEnumeration()) {
+				convertUMLClassToEnumeration(umlClass);
+			} else {
+				convertUMLClassToEntityDescriptor(umlClass);
+			}
 		}
 	}
 
@@ -82,7 +85,9 @@ public class EntityGenerator {
 			if (relation.getRightRole().equalsIgnoreCase(ENTITY_CLASS_NAME)) {
 				return;
 			}
-			if (relation.isOneToOne())
+			if (relation.getTarget().isEnumeration()) {
+				createEnumerationRelation(relation);
+			} else if (relation.isOneToOne())
 				createOneToOneRelation(relation);
 			else if (relation.isOneToMany()) {
 				createOneToManyRelation(relation);
@@ -102,7 +107,7 @@ public class EntityGenerator {
 	 * @param umlClass the class source
 	 * @return An entity class used by the generator.
 	 */
-	public EntityDescriptor convertUMLClassToEntityDescriptor(UMLClass umlClass) {
+	public void convertUMLClassToEntityDescriptor(UMLClass umlClass) {
 		EntityDescriptor entity = new EntityDescriptor(packageName, umlClass.getName());
 		
 		ArrayList<UMLClassAttribute> attributes = umlClass.getAttributes();
@@ -111,7 +116,25 @@ public class EntityGenerator {
 			addAttribute(entity, attribute);
 		}
 		
-		return entity;
+		entities.put(umlClass, entity);
+	}
+	
+	/**
+	 * Create an EnumDescriptor from the umlClass and add it to the list of enumerations. 
+	 * 
+	 * @param umlClass
+	 */
+	void convertUMLClassToEnumeration(UMLClass umlClass) {
+		EnumDescriptor enumDesc = new EnumDescriptor(packageName, umlClass.getName());
+		
+		ArrayList<UMLClassAttribute> attributes = umlClass.getAttributes();
+		
+		for (UMLClassAttribute attribute : attributes) {
+			String enumValue = attribute.getName();
+			enumDesc.addConstant(enumValue.toUpperCase(), enumValue.toLowerCase());
+		}
+		
+		enumerations.put(umlClass, enumDesc);
 	}
 	
 	/** Create a one to one relationship between two entities from the given relation.
@@ -214,6 +237,16 @@ public class EntityGenerator {
 		}
 	}
 	
+	/**
+	 * @param relation
+	 */
+	void createEnumerationRelation(UMLRelation relation) {
+		EntityDescriptor entity  = entities.get(relation.getOwner());
+		EnumDescriptor enumType = enumerations.get(relation.getTarget());
+		String name = relation.getRightRole();
+		
+		entity.addEnumField(name, enumType, null);
+	}
 	
 	/**
 	 * Add an attribute to the entity depending of the type of the given UmlClassAttribute
@@ -291,6 +324,9 @@ public class EntityGenerator {
 		case WRAPPED_DOUBLE  :
 			entity.addWrapperDoubleField(name, null);
 			break;
+			
+		case DATE :
+			entity.addDateField(name, null);
 
 		default:
 			break;
