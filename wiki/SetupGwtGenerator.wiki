@@ -1,0 +1,45 @@
+#How-to setup the GwtGenerator and start contributing
+
+= Prerequisite =
+
+We assume you have Eclipse installed with the latest Google Eclipse plugin.
+
+
+= Checkout the projects =
+CheckOut the GwtUmlApi project at :
+https://gwtuml.googlecode.com/svn/trunk/GWTUMLAPI
+
+CheckOut the GeneratorApi project at :
+https://gwt-generator.googlecode.com/svn/trunk/GeneratorApi
+
+CheckOut the GwtGeneratorProject at : 
+https://gwt-generator.googlecode.com/svn/trunk/GwtGenerator
+
+
+= Fix the missing libraries =
+For the GwtGeneratorProject project, you will have compile errors because of missing libraries.
+- appengine-api-labs.jar
+- appengine-api-labs-stubs.jar
+- appengine-testing.jar
+
+These libraries come with the appengine-sdk, usually you have the sdk installed with the google eclipse plugin. The libraries is locating in your eclipse directory, in the path :
+($eclipseDirectory)/plugins/com.google.appegine.eclipse.sdkbundle.($sdk_version)\lib
+
+Change the location of the missing libraries to your sdk’s location :
+Properties of the project -> Java build Path -> Libraries 
+
+
+= Add the source folders =
+You now still have compile errors in the GwtGenerator project because of missing sources. This is because the GwtGenerator project use the GwtUmlApi and GeneratorApi projects by linking to their sources and not using them as a compiled library. This simplified the development process with Gwt in development mode.
+
+Change the path for the missing sources : 
+Properties of the project -> Java build path -> Source
+
+Change the folder generatorAPI-src location to ($workspace)\GeneratorApi\src 
+Change the folder generatorAPI-tst location to ($workspace)\GeneratorApi\tst
+Change the folder gwtUmlAPi location to ($workspace)\gwtUmlAPi\src
+
+
+= Run ! =
+Now you can run the application !
+run as -> Web application.
