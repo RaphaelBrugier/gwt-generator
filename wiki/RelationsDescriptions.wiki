@@ -1,5 +1,7 @@
 #summary This page describes the relations supported by the generator and show the generated code for each relation.
 
+<wiki:toc max_depth="2" />
+
 = Introduction =
 
 Please note that :
@@ -9,26 +11,18 @@ A _one_ cardinality is represented by _"1"_ or nothing
 A _many_ cardinality is represented by _"`*`"_
 
 For a bidirectional relation, you must add a stereotype < < owner > > on the owner's side.
- 
-== Quick access ==
- [RelationsDescriptions#One_To_One_relations_descriptions OneToOne relations]
 
- [RelationsDescriptions#One_To_Many_relations_descriptions OneToMany relations]
-
- [RelationsDescriptions#Many_To_One_relations_descriptions ManyToOne relations]
-
- [RelationsDescriptions#Many_To_Many_relations_descriptions ManyToMany relations]
 -----
 -----
 
 
 =One To One relations descriptions=
 
-==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#d0e1387 Unidirectional]==
+==Unidirectional==
 
 http://gwt-generator.googlecode.com/svn/wiki/relations/oneToOne.png
 
-=== Generated Code ===
+===Generated Code===
 ==== Body class : ====
 {{{
 @Entity
@@ -187,7 +181,7 @@ public class RightEntity implements Serializable {
 
 ----
 
-==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#d0e1387 Bidirectional]==
+==Bidirectional==
 
 http://gwt-generator.googlecode.com/svn/wiki/relations/oneToOneBi.png
 
@@ -321,7 +315,7 @@ public class Passport implements Serializable {
 ----
 ----
 =One To Many relations descriptions=
-==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#entity-mapping-association-collection-manytomany-default Unidirectional]==
+==Unidirectional==
 
 http://gwt-generator.googlecode.com/svn/wiki/relations/oneToMany.png
 
@@ -417,7 +411,7 @@ public class Tiger implements Serializable {
 
 
 ----
-==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#d0e1596 Bidirectional]==
+==Bidirectional==
 
 http://gwt-generator.googlecode.com/svn/wiki/relations/oneToManyBi.png
 
@@ -427,7 +421,7 @@ Bidirectional relation with the oneToMany side as the owner is not supported yet
 ----
 =Many To One relations descriptions=
 
-==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#d0e1513 Unidirectional]==
+==Unidirectional==
 
 http://gwt-generator.googlecode.com/svn/wiki/relations/ManyToOne.png
 
@@ -508,7 +502,7 @@ public class Company implements Serializable {
 }}}
 
 ----
-==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#d0e1596 Bidirectional]==
+==Bidirectional==
 
 http://gwt-generator.googlecode.com/svn/wiki/relations/ManyToOneBi.png
 
@@ -662,7 +656,7 @@ public class Troop implements Serializable {
 ----
 =Many To Many relations descriptions=
 
-==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#d0e1763 Unidirectional]==
+==Unidirectional==
 
 http://gwt-generator.googlecode.com/svn/wiki/relations/ManyToMany.png
 
@@ -769,7 +763,7 @@ public class City implements Serializable {
 
 -----
 
-==[http://docs.jboss.org/hibernate/stable/annotations/reference/en/html_single/#d0e1763 Bidirectional]==
+==Bidirectional==
 
 http://gwt-generator.googlecode.com/svn/wiki/relations/ManyToManyBi.png
 
