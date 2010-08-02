@@ -127,6 +127,7 @@ public class TestPrintEntity extends TestSeamGenerator {
 		addStringField(printInternalListDescriptorInstance, "firstName", "First Name", "20");
 		addStringField(printInternalListDescriptorInstance, "lastName", "Last Name", "10");
 		
+		SeamGenerator generator = getSeamGenerator();
 		List<GeneratedCode> generatedClassesCode = generator.getGenerateCode();
 		
 		In(generatedClassesCode).

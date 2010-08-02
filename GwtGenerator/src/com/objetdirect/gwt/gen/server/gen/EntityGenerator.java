@@ -54,20 +54,26 @@ public class EntityGenerator {
 		this.classes = classes;
 		this.relations = relations;
 		this.packageName = packageName;
+		processAll();
 	}
 
 	public Collection<EntityDescriptor> getGeneratedEntities() {
-		processClasses();
-		processRelations();
 		return entities.values();
+	}
+	
+	public Collection<EnumDescriptor> getGeneratedEnumerations() {
+		return enumerations.values();
 	}
 
 	public Map<UMLClass, EntityDescriptor> getEntitiesMappedToCorrespondingUMLClass() {
-		processClasses();
-		processRelations();
 		return entities;
 	}
 
+	private void processAll() {
+		processClasses();
+		processRelations();
+	}
+	
 	private void processClasses() {
 		entities = new HashMap<UMLClass, EntityDescriptor>();
 		enumerations = new  HashMap<UMLClass, EnumDescriptor>();

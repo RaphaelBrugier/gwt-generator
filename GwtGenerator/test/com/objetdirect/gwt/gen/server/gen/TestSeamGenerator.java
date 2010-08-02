@@ -35,8 +35,6 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  */
 public class TestSeamGenerator {
 
-	SeamGenerator generator;
-
 	List<UMLObject> objects;
 	List<ObjectRelation> objectRelations;
 	List<UMLClass> classes;
@@ -49,8 +47,6 @@ public class TestSeamGenerator {
 		objectRelations = new ArrayList<ObjectRelation>();
 		classes = new ArrayList<UMLClass>();
 		classRelations = new ArrayList<UMLRelation>();
-		
-		generator = new SeamGenerator(classes, objects, objectRelations, classRelations);
 	}
 	
 	void createRelationWithoutRole(UMLObject owner, UMLObject target) {
@@ -74,6 +70,7 @@ public class TestSeamGenerator {
 	}
 	
 	void assertGenerated(String[] javaText, String[] faceletText) {
+		SeamGenerator generator = getSeamGenerator();
 		List<GeneratedCode> generatedClassesCode = generator.getGenerateCode();
 		
 		In(generatedClassesCode).
@@ -93,8 +90,12 @@ public class TestSeamGenerator {
 			case FACELET: className = "Page.xhtml"; break;
 			default: break;
 		}
-		
+		SeamGenerator generator = getSeamGenerator();
 		List<String> linesOfCode = findLinesOfCode(className, generator.getGenerateCode(), codeType);
 		TestUtil.println(linesOfCode);
+	}
+	
+	protected SeamGenerator getSeamGenerator() {
+		return new SeamGenerator(classes, objects, objectRelations, classRelations);
 	}
 }
