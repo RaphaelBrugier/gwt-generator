@@ -50,10 +50,8 @@ public class SeamGenerator {
 
 	private static final String PACKAGE_NAME = "com.objetdirect.domain";
 
-	final List<UMLClass> classes;
 	final List<UMLObject> objects;
 	final List<ObjectRelation> objectRelations;
-	final List<UMLRelation> classRelations;
 	
 	final EntityGenerator entityGenerator;
 	
@@ -74,10 +72,8 @@ public class SeamGenerator {
 	 * @param instantiationsLinks
 	 */
 	public SeamGenerator(List<UMLClass> classes, List<UMLObject> objects, List<ObjectRelation> objectRelations, List<UMLRelation> classRelations) {
-		this.classes = classes;
 		this.objects = objects;
 		this.objectRelations = objectRelations;
-		this.classRelations = classRelations;
 		entityGenerator = new EntityGenerator(classes, classRelations, PACKAGE_NAME);
 		
 		processors = new HashMap<String, Processor>();
@@ -101,13 +97,13 @@ public class SeamGenerator {
 		processors.put(className, processor);
 	}
 
-	void seamParse() {
+	private void parseAll() {
 		parseClasses();
 		parseObjects();
 		parseObjectRelations();
 	}
 
-	void parseClasses() {
+	private void parseClasses() {
 		classToEntity = new HashMap<String, EntityDescriptor>();
 		Map<UMLClass, EntityDescriptor> uMLClassToEntities = entityGenerator.getEntitiesMappedToCorrespondingUMLClass();
 		
@@ -118,7 +114,7 @@ public class SeamGenerator {
 		}
 	}
 
-	void parseObjects() {
+	private void parseObjects() {
 		for (UMLObject object : objects) {
 			if (processors.containsKey(object.getClassName())) {
 				processors.get(object.getClassName()).process(object);
@@ -128,7 +124,7 @@ public class SeamGenerator {
 		}
 	}
 	
-	void parseObjectRelations() {
+	private void parseObjectRelations() {
 		for (ObjectRelation relation : objectRelations) {
 			RelationProcessor<?,?> rp = relationProcessorsManager.getRelationProcessor(relation);
 			if (rp != null)
@@ -138,7 +134,7 @@ public class SeamGenerator {
 
 	public List<GeneratedCode> getGenerateCode() {
 		Seam.clear();
-		seamParse();
+		parseAll();
 		documentDescriptor.build();
 		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
 		

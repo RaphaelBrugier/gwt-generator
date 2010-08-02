@@ -20,6 +20,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.objetdirect.engine.EnumDescriptor;
 import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.gwt.gen.client.services.GeneratorService;
 import com.objetdirect.gwt.gen.server.gen.EntityGenerator;
@@ -44,16 +45,40 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	public List<GeneratedCode> generateHibernateCode(List<UMLClass> classes,
 			List<UMLRelation> relations, String packageName) throws UMLException {
 
-		List<GeneratedCode> result = new LinkedList<GeneratedCode>();
-
 		EntityGenerator entitiesGenerator = new EntityGenerator(classes, relations, packageName);
 		
+		List<GeneratedCode> listOfAllGeneratedCode = new LinkedList<GeneratedCode>();
+		addEntitiesCode(entitiesGenerator, listOfAllGeneratedCode);
+		
+		addEnumerationsCode(entitiesGenerator, listOfAllGeneratedCode);
+		
+		return listOfAllGeneratedCode;
+	}
+
+	/**
+	 * Add the generated code for the entities into the list of generated code.
+	 * 
+	 * @param entitiesGenerator The code generator.
+	 * @param listOfAllGeneratedCode The list where the generated code is added.
+	 */
+	private void addEnumerationsCode(EntityGenerator entitiesGenerator, List<GeneratedCode> listOfAllGeneratedCode) {
+		for (EnumDescriptor enumeration : entitiesGenerator.getGeneratedEnumerations()) {
+			GeneratedCode generatedCode = new GeneratedCode(enumeration.getTypeName(), enumeration.getText(), JAVA);
+			listOfAllGeneratedCode.add(generatedCode);
+		}
+	}
+
+	/**
+	 * Add the generated code for the enumerations into the list of generated code.
+	 * 
+	 * @param entitiesGenerator The code generator.
+	 * @param listOfAllGeneratedCode The list where the generated code is added.
+	 */
+	private void addEntitiesCode(EntityGenerator entitiesGenerator, List<GeneratedCode> listOfAllGeneratedCode) {
 		for (EntityDescriptor entity : entitiesGenerator.getGeneratedEntities()) {
 			GeneratedCode generatedCode = new GeneratedCode(entity.getName(), entity.getText(), JAVA);
-			result.add(generatedCode);
+			listOfAllGeneratedCode.add(generatedCode);
 		}
-		
-		return result;
 	}
 
 	/* (non-Javadoc)
@@ -61,7 +86,6 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	 */
 	@Override
 	public List<GeneratedCode> generateSeamCode(ObjectDiagramDto objectDiagram) throws UMLException {
-		
 		SeamGenerator seamGenerator = new SeamGenerator(objectDiagram.classes, objectDiagram.objects, objectDiagram.objectRelations, objectDiagram.classRelations);
 		
 		return seamGenerator.getGenerateCode();

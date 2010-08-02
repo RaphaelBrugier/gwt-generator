@@ -146,6 +146,7 @@ public class TestEntityGenerator {
 				"	BLACK(\"black\");");
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Test
 	public void createEnumerationRelation() {
 		UMLClass clazz = new UMLClass("MyClass");
