@@ -15,6 +15,7 @@
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
 import static com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor.PRINT_ENTITY;
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor.PRINT_FORM;
 import static com.objetdirect.gwt.gen.server.gen.processors.PrintInternalListDescriptorProcessor.PRINT_INTERNAL_LIST;
 
 import java.util.Arrays;
@@ -22,18 +23,18 @@ import java.util.List;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
+import com.objetdirect.seam.print.PrintElement;
 import com.objetdirect.seam.print.PrintEntityDescriptor;
-import com.objetdirect.seam.print.PrintInternalListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintEntityToPrintInternalList extends RelationProcessor<PrintEntityDescriptor, PrintInternalListDescriptor> {
+public class PrintEntityToPrintElement extends RelationProcessor<PrintEntityDescriptor, PrintElement> {
 
 	/**
 	 * @param seamGenerator
 	 */
-	public PrintEntityToPrintInternalList(SeamGenerator seamGenerator) {
+	public PrintEntityToPrintElement(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
 
@@ -50,11 +51,11 @@ public class PrintEntityToPrintInternalList extends RelationProcessor<PrintEntit
 
 	private void addElement(ObjectRelation objectRelation) {
 		PrintEntityDescriptor printEntityDescriptor  = getOwner(objectRelation);
-		PrintInternalListDescriptor printInternalListDescriptor = getTarget(objectRelation);
+		PrintElement printFormDescriptor = getTarget(objectRelation);
 
-		printEntityDescriptor.addElement(printInternalListDescriptor);
+		printEntityDescriptor.addElement(printFormDescriptor);
 	}
-	
+
 	@Override
 	public List<String> getOwnerClassNames() {
 		return Arrays.asList(PRINT_ENTITY);
@@ -62,6 +63,6 @@ public class PrintEntityToPrintInternalList extends RelationProcessor<PrintEntit
 
 	@Override
 	public List<String> getTargetClassNames() {
-		return Arrays.asList(PRINT_INTERNAL_LIST);
+		return Arrays.asList(PRINT_FORM, PRINT_INTERNAL_LIST);
 	}
 }

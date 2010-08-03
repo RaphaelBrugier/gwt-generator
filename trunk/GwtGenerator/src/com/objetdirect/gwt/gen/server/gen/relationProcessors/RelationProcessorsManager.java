@@ -47,8 +47,7 @@ public class RelationProcessorsManager {
 	private void buildProcessors() {
 		addRelationProcessor(new PrintDescriptorToDocumentFeature(seamGenerator));
 		addRelationProcessor(new PrintEntityToDomainInstance(seamGenerator));
-		addRelationProcessor(new PrintEntityToPrintForm(seamGenerator));
-		addRelationProcessor(new PrintEntityToPrintInternalList(seamGenerator));
+		addRelationProcessor(new PrintEntityToPrintElement(seamGenerator));
 		addRelationProcessor(new PrintFormToStringField(seamGenerator));
 		addRelationProcessor(new PrintInternalListDescriptorToStringField(seamGenerator));
 		addRelationProcessor(new PrintListDescriptorToDomainInstance(seamGenerator));

@@ -25,8 +25,7 @@ import org.junit.runners.Suite;
 @Suite.SuiteClasses( {
 	TestPrintDescriptorToPrintEntity.class,
 	TestPrintEntityToDomainInstance.class,
-	TestPrintEntityToPrintForm.class,
-	TestPrintEntityToPrintInternalList.class,
+	TestPrintEntityToPrintElement.class,
 	TestPrintFormToStringField.class,
 	TestPrintInternalListToStringField.class,
 	TestPrintListDescriptorToDomainInstance.class,

@@ -90,7 +90,7 @@ public class TestRelationProcessorsManager {
 		setRelationClassNames("PrintEntity", "PrintForm");
 		
 		RelationProcessor<?,?> rp = manager.getRelationProcessor(objectRelation);
-		assertInstanceOf(rp, PrintEntityToPrintForm.class);
+		assertInstanceOf(rp, PrintEntityToPrintElement.class);
 	}
 	
 	@Test
