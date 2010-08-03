@@ -14,6 +14,8 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor.PRINT_FORM;
+import static com.objetdirect.gwt.gen.server.gen.processors.PrintInternalListDescriptorProcessor.PRINT_INTERNAL_LIST;
 import static com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor.PRINT_LIST_DESCRIPTOR;
 import static com.objetdirect.gwt.gen.server.gen.processors.StringFieldProcessor.STRING_FIELD;
 
@@ -23,29 +25,27 @@ import java.util.List;
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
-import com.objetdirect.seam.print.PrintListDescriptor;
+import com.objetdirect.seam.fieldrenderers.HasFields;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class PrintListDescriptorToStringField extends RelationProcessor<PrintListDescriptor, StringField> {
+public class HasFieldsToStringField extends RelationProcessor<HasFields, StringField> {
 
-	public PrintListDescriptorToStringField(SeamGenerator seamGenerator) {
+	public HasFieldsToStringField(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
-		PrintListDescriptor printFormDescriptor = getOwner(objectRelation);
-
+		HasFields printFormDescriptor = getOwner(objectRelation);
 		StringField stringField  = getTarget(objectRelation);
-
-		printFormDescriptor.showField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
+		printFormDescriptor.addStringField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
 	}
 
 	@Override
 	public List<String> getOwnerClassNames() {
-		return Arrays.asList(PRINT_LIST_DESCRIPTOR);
+		return Arrays.asList(PRINT_FORM, PRINT_INTERNAL_LIST, PRINT_LIST_DESCRIPTOR);
 	}
 
 	@Override
