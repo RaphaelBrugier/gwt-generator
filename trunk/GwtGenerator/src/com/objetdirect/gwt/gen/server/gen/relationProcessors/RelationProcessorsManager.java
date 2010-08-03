@@ -46,7 +46,6 @@ public class RelationProcessorsManager {
 	
 	private void buildProcessors() {
 		addRelationProcessor(new PrintDescriptorToDocumentFeature(seamGenerator));
-		addRelationProcessor(new PrintDescriptorToDocumentFeature(seamGenerator));
 		addRelationProcessor(new PrintEntityToDomainInstance(seamGenerator));
 		addRelationProcessor(new PrintEntityToPrintForm(seamGenerator));
 		addRelationProcessor(new PrintEntityToPrintInternalList(seamGenerator));
@@ -58,17 +57,20 @@ public class RelationProcessorsManager {
 	
 	
 	private void addRelationProcessor( RelationProcessor<?,?> relationProcessor) {
-		String ownerClassName = relationProcessor.getOwnerClassName();
+		List<String> ownerClassNames = relationProcessor.getOwnerClassNames();
 		List<String> targetClassNames = relationProcessor.getTargetClassNames();
 		
-		for (String targetClassName : targetClassNames) {
-			addRelationProcessor(ownerClassName, targetClassName, relationProcessor);
+		for (String ownerClassName : ownerClassNames) {
+			for (String targetClassName : targetClassNames) {
+				addRelationProcessor(ownerClassName, targetClassName, relationProcessor);
+			}
 		}
 	}
 
 	private void addRelationProcessor(String ownerClassName, String targetClassName, RelationProcessor<?,?> relationProcessor) {
-		if ( ! processors.containsKey(ownerClassName))
+		if ( ! processors.containsKey(ownerClassName)) {
 			processors.put(ownerClassName, new HashMap<String, RelationProcessor<?,?>>());
+		}
 
 		Map<String, RelationProcessor<?,?>> p = processors.get(ownerClassName);
 		

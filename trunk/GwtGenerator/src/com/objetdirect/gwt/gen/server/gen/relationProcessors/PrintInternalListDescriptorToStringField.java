@@ -44,8 +44,8 @@ public class PrintInternalListDescriptorToStringField extends RelationProcessor<
 	}
 
 		@Override
-	public String getOwnerClassName() {
-		return PRINT_INTERNAL_LIST;
+	public List<String> getOwnerClassNames() {
+		return Arrays.asList(PRINT_INTERNAL_LIST);
 	}
 
 	@Override

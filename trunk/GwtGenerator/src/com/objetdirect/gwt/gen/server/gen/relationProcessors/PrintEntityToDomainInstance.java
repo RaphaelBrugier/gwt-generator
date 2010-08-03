@@ -53,8 +53,8 @@ public class PrintEntityToDomainInstance extends RelationProcessor<PrintEntityDe
 	}
 
 	@Override
-	public String getOwnerClassName() {
-		return PRINT_ENTITY;
+	public List<String> getOwnerClassNames() {
+		return Arrays.asList(PRINT_ENTITY);
 	}
 
 	@Override

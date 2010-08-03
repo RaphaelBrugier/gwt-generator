@@ -55,8 +55,8 @@ public class PrintDescriptorToDocumentFeature extends RelationProcessor<PrintDes
 	}
 
 	@Override
-	public String getOwnerClassName() {
-		return PRINT_DESCRIPTOR;
+	public List<String> getOwnerClassNames() {
+		return Arrays.asList(PRINT_DESCRIPTOR);
 	}
 
 	@Override
