@@ -42,8 +42,8 @@ public class PrintFormToStringField extends RelationProcessor<PrintFormDescripto
 	}
 
 	@Override
-	public String getOwnerClassName() {
-		return PRINT_FORM;
+	public List<String> getOwnerClassNames() {
+		return Arrays.asList(PRINT_FORM);
 	}
 
 	@Override

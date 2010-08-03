@@ -44,8 +44,8 @@ public class PrintListDescriptorToStringField extends RelationProcessor<PrintLis
 	}
 
 	@Override
-	public String getOwnerClassName() {
-		return PRINT_LIST_DESCRIPTOR;
+	public List<String> getOwnerClassNames() {
+		return Arrays.asList(PRINT_LIST_DESCRIPTOR);
 	}
 
 	@Override

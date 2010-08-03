@@ -70,22 +70,31 @@ public abstract class RelationProcessor<F, T> {
 	public abstract void process(ObjectRelation objectRelation);
 	
 	/**
-	 * Get the owner's name of the relation.
+	 * Get the types of all the relation's owner supported by the processor.
+	 * 
+	 * For example, if the processor can process two kind of relation : 
+	 * 1/ a relation from an object of type A to an object of type Z
+	 * 2/ a relation from an object of type B to an object of type Z
+	 * 
+	 * Then the list returned is {"A", "B"}
+	 * 
+	 * We assume that the types returned is or extends the parameter F of the RelationProcessor.
+	 * 
 	 * @return the owner's name.
 	 */
-	public abstract String getOwnerClassName();
+	public abstract List<String> getOwnerClassNames();
 	
 	
 	/**
-	 * Return the type of all the relation's target supported by the relation processor.
+	 * Return the types of all the relation's target supported by the relation processor.
 	 * 
 	 * For example : if the processor can process two relations :
-	 * 1/ an object of type A to an object of type B
-	 * 2/ an object of type A to an object of type C
+	 * 1/ a relation from an object of type A to an object of type B
+	 * 2/ a relation from an object of type A to an object of type C
 	 * 
 	 * Then getTargetClassNames will return the list {"B", "C"}
 	 * 
-	 * We assume that the types B and C extends the type T of the relation processor.
+	 * We assume that the types B and C extends the type T of the RelationProcessor.
 	 * 
 	 * @return the list of the types 
 	 */
