@@ -26,10 +26,8 @@ import org.junit.runners.Suite;
 	TestPrintDescriptorToPrintEntity.class,
 	TestPrintEntityToDomainInstance.class,
 	TestPrintEntityToPrintElement.class,
-	TestPrintFormToStringField.class,
-	TestPrintInternalListToStringField.class,
+	TestHasFieldsToStringField.class,
 	TestPrintListDescriptorToDomainInstance.class,
-	TestPrintListDescriptorToStringField.class,
 	TestRelationProcessorsManager.class
 })
 public class AllRelationProcessorsTests {

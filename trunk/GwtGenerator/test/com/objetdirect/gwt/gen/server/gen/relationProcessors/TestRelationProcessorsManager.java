@@ -98,7 +98,7 @@ public class TestRelationProcessorsManager {
 		setRelationClassNames("PrintForm", "StringField");
 		
 		RelationProcessor<?,?> rp = manager.getRelationProcessor(objectRelation);
-		assertInstanceOf(rp, PrintFormToStringField.class);
+		assertInstanceOf(rp, HasFieldsToStringField.class);
 	}
 	
 }

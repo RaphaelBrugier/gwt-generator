@@ -14,22 +14,22 @@
  */
 package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 
-import static org.mockito.Matchers.*;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.verify;
 
-import org.junit.After;
+import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
 import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
-import com.objetdirect.seam.print.PrintDescriptor;
-import com.objetdirect.seam.print.PrintEntityDescriptor;
+import com.objetdirect.seam.fieldrenderers.HasFields;
 import com.objetdirect.seam.print.PrintFormDescriptor;
+import com.objetdirect.seam.print.PrintInternalListDescriptor;
+import com.objetdirect.seam.print.PrintListDescriptor;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestPrintFormToStringField extends TestRelationProcessor{
+public class TestHasFieldsToStringField extends TestRelationProcessor{
 	private static final String FIELD_TITLE = "fieldTitle";
 	private static final String FIELD_NAME = "fieldName";
 	private static final String LENGTH = "20";
@@ -37,18 +37,50 @@ public class TestPrintFormToStringField extends TestRelationProcessor{
 	@Mock
 	PrintFormDescriptor printForm;
 	
+	@Mock
+	PrintInternalListDescriptor printInternalList;
+	
+	@Mock
+	PrintListDescriptor printListDescriptor;
+	
 	StringField stringField;
 	
-	@Test
-	public void process() {
-		PrintFormToStringField processor = new PrintFormToStringField(seamGenerator);
+	HasFieldsToStringField processor;
+	
+	@Before
+	public void beforeTests() {
 		stringField  = new StringField(FIELD_NAME, FIELD_TITLE, LENGTH);
+		processor = new HasFieldsToStringField(seamGenerator);
+	}
+	
+	
+	@Test
+	public void printFormDescriptor_to_StringField() {
 		setReturnedGenObject(printForm, stringField, null);
 
 		processor.process(objectRelation);
-		
+		verifyAll(printForm);
+	}
+	
+	@Test
+	public void printInternaList_to_StringField() {
+		setReturnedGenObject(printInternalList, stringField, null);
+
+		processor.process(objectRelation);
+		verifyAll(printInternalList);
+	}
+	
+	@Test
+	public void printListDescriptor_to_StringField() {
+		setReturnedGenObject(printListDescriptor, stringField, null);
+
+		processor.process(objectRelation);
+		verifyAll(printListDescriptor);
+	}
+	
+	private void verifyAll(HasFields objectToVerify) {
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
-		verify(printForm).showField(FIELD_NAME, FIELD_TITLE, 20);
+		verify(objectToVerify).addStringField(FIELD_NAME, FIELD_TITLE, 20);
 	}
 }
