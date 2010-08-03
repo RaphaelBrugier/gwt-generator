@@ -56,12 +56,12 @@ public class TestRelationProcessorsManager {
 		manager = new RelationProcessorsManager(seamGenerator);
 	}
 	
-	private void setClassNames(String ownerClassName, String targetClassName) {
-		when(umlObjectOwner.getClassName()).thenReturn(ownerClassName);
+	private void setRelationClassNames(String fromClassName, String targetClassName) {
+		when(umlObjectOwner.getClassName()).thenReturn(fromClassName);
 		when(umlObjectTarget.getClassName()).thenReturn(targetClassName);
 	}
 	
-	private void assertInstanceOf(RelationProcessor rp, Class<? extends RelationProcessor> clazz) {
+	private void assertInstanceOf(RelationProcessor<?,?> rp, Class<? extends RelationProcessor<?,?>> clazz) {
 		assertNotNull("The relation processors manager returned no processor.", rp);
 		assertTrue(
 			"The relation processor returned is not the one expected, returned : " + rp.getClass().getSimpleName() + " expected : " + clazz.getSimpleName(),
@@ -70,34 +70,34 @@ public class TestRelationProcessorsManager {
 	
 	@Test
 	public void getNoProcessor() {
-		setClassNames("Fake", "PrintForm");
+		setRelationClassNames("Fake", "PrintForm");
 		
-		RelationProcessor rp = manager.getRelationProcessor(objectRelation);
+		RelationProcessor<?,?> rp = manager.getRelationProcessor(objectRelation);
 		assertNull("Was expected to found no processor and returned null", rp);
 	}
 	
 
 	@Test
 	public void getPrintDescriptorToPrintEntity() {
-		setClassNames("PrintDescriptor", "PrintEntity");
+		setRelationClassNames("PrintDescriptor", "PrintEntity");
 		
-		RelationProcessor rp = manager.getRelationProcessor(objectRelation);
+		RelationProcessor<?,?> rp = manager.getRelationProcessor(objectRelation);
 		assertInstanceOf(rp, PrintDescriptorToDocumentFeature.class);
 	}
 	
 	@Test
 	public void getPrintEntityToPrintForm() {
-		setClassNames("PrintEntity", "PrintForm");
+		setRelationClassNames("PrintEntity", "PrintForm");
 		
-		RelationProcessor rp = manager.getRelationProcessor(objectRelation);
+		RelationProcessor<?,?> rp = manager.getRelationProcessor(objectRelation);
 		assertInstanceOf(rp, PrintEntityToPrintForm.class);
 	}
 	
 	@Test
 	public void getPrintFormToStringField() {
-		setClassNames("PrintForm", "StringField");
+		setRelationClassNames("PrintForm", "StringField");
 		
-		RelationProcessor rp = manager.getRelationProcessor(objectRelation);
+		RelationProcessor<?,?> rp = manager.getRelationProcessor(objectRelation);
 		assertInstanceOf(rp, PrintFormToStringField.class);
 	}
 	

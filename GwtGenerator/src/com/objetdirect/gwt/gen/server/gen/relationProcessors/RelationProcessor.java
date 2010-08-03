@@ -19,10 +19,28 @@ import java.util.List;
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 
+
 /**
+ * The RelationProcessor is responsible to add a relation between two objects.
+ * The RelationProcessor class is parameterized with two type, the types of the objects where the relation is established.
+ * 
+ * The type F designed the object's type where the relation is added (From)
+ * The type T designed the object's type where the relation point to. (To)
+ * 
+ * Typically, the process method will do :
+ * process {
+ * 		F fromObject = getOwner();
+ * 		T toObject = getTargert();
+ * 
+ * 		fromObject.setT(toObject);
+ * }
+ * 
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
+ *
+ * @param <F> The object's type where the relation is added
+ * @param <T> The object's type where the relation point to.
  */
-public abstract class RelationProcessor<L, R> {
+public abstract class RelationProcessor<F, T> {
 	
 	protected final SeamGenerator seamGenerator;
 
@@ -36,7 +54,18 @@ public abstract class RelationProcessor<L, R> {
 	/**
 	 * Process a relation between two objects.
 	 * 
-	 * @param objectRelation
+	 * We assume that the leftObject of the relation is of the type or extends F
+	 * We assume that the righObject of the relation is of the type or extends T
+	 * 
+	 * The typical implementation of the process method is :
+	 * public void process {
+	 * 		F fromObject = getOwner();
+	 * 		T toObject = getTargert();
+	 * 
+	 * 		fromObject.setT(toObject);
+	 * }
+	 * 
+	 * @param objectRelation the relation to process.
 	 */
 	public abstract void process(ObjectRelation objectRelation);
 	
@@ -48,16 +77,17 @@ public abstract class RelationProcessor<L, R> {
 	
 	
 	/**
-	 * Return the name of all the relation's target supported by the relation processor.
+	 * Return the type of all the relation's target supported by the relation processor.
 	 * 
 	 * For example : if the processor can process two relations :
-	 * 1/ A to B
-	 * 2/ A to C
+	 * 1/ an object of type A to an object of type B
+	 * 2/ an object of type A to an object of type C
 	 * 
-	 * Then getOwnername will return "A"
-	 * And getTargetNames will return the list {"B", "C"}
+	 * Then getTargetClassNames will return the list {"B", "C"}
 	 * 
-	 * @return
+	 * We assume that the types B and C extends the type T of the relation processor.
+	 * 
+	 * @return the list of the types 
 	 */
 	public abstract List<String> getTargetClassNames();
 	
@@ -68,8 +98,8 @@ public abstract class RelationProcessor<L, R> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public L getOwner(ObjectRelation objectRelation) {
-		return (L) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
+	public F getOwner(ObjectRelation objectRelation) {
+		return (F) seamGenerator.getGenObjectCounterPartOf(objectRelation.getLeftObject());
 	}
 
 	/**
@@ -79,7 +109,7 @@ public abstract class RelationProcessor<L, R> {
 	 * @return
 	 */
 	@SuppressWarnings("unchecked")
-	public R getTarget(ObjectRelation objectRelation) {
-		return (R) seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
+	public T getTarget(ObjectRelation objectRelation) {
+		return (T) seamGenerator.getGenObjectCounterPartOf(objectRelation.getRightObject());
 	}
 }
