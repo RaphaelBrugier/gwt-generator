@@ -22,14 +22,16 @@ import org.junit.Test;
 import org.mockito.Mock;
 
 import com.objetdirect.seam.print.PrintDescriptor;
+import com.objetdirect.seam.print.PrintElement;
 import com.objetdirect.seam.print.PrintEntityDescriptor;
 import com.objetdirect.seam.print.PrintFormDescriptor;
+import com.objetdirect.seam.print.PrintInternalListDescriptor;
 
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestPrintEntityToPrintForm extends TestRelationProcessor{
+public class TestPrintEntityToPrintElement extends TestRelationProcessor{
 	
 	@Mock
 	PrintEntityDescriptor printEntityDescriptor;
@@ -38,8 +40,8 @@ public class TestPrintEntityToPrintForm extends TestRelationProcessor{
 	PrintFormDescriptor printForm;
 	
 	@Test
-	public void process() {
-		RelationProcessor<PrintEntityDescriptor, PrintFormDescriptor> processor = new PrintEntityToPrintForm(seamGenerator);
+	public void From_PrintEntityDescriptor_to_PrintFormDescriptor() {
+		RelationProcessor<PrintEntityDescriptor, PrintElement> processor = new PrintEntityToPrintElement(seamGenerator);
 		setReturnedGenObject(printEntityDescriptor, printForm, "element");
 
 		processor.process(objectRelation);
@@ -47,5 +49,20 @@ public class TestPrintEntityToPrintForm extends TestRelationProcessor{
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
 		verify(printEntityDescriptor).addElement(printForm);
+	}
+	
+	@Mock
+	PrintInternalListDescriptor printInternalListDescriptor;
+	
+	@Test
+	public void From_PrintEntityDescriptor_to_PrintInternalListDescriptor() {
+		RelationProcessor<PrintEntityDescriptor, PrintElement> processor = new PrintEntityToPrintElement(seamGenerator);
+		setReturnedGenObject(printEntityDescriptor, printInternalListDescriptor, "element");
+
+		processor.process(objectRelation);
+		
+		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
+		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
+		verify(printEntityDescriptor).addElement(printInternalListDescriptor);
 	}
 }

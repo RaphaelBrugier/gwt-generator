@@ -30,8 +30,6 @@ public final class ServerHelper {
     private static final PersistenceManagerFactory pmfInstance =
         JDOHelper.getPersistenceManagerFactory("transactions-optional");
     
-    private ServerHelper() {}
-
     public static PersistenceManagerFactory get() {
         return pmfInstance;
     }
