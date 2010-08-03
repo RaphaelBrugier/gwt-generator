@@ -12,34 +12,38 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.processors;
-
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-
-import org.junit.After;
-import org.junit.Before;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import com.objetdirect.gwt.gen.server.gen.processors.Processor;
+import com.objetdirect.gwt.gen.server.gen.seamMM.EntityField;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
- *
  */
-public abstract class TestProcessor {
+public class EntityFieldProcessor extends Processor {
 
-	@Mock
-	protected
-	SeamGenerator seamGenerator;
+	public static final String ENTITY_FIELD = "EntityField";
 
-	@Before
-	public void before() {
-		 MockitoAnnotations.initMocks(this);
+	public EntityFieldProcessor(SeamGenerator seamGenerator) {
+		super(seamGenerator);
 	}
 	
-	@After
-	public void after() {
-		verifyNoMoreInteractions(seamGenerator);
+	@Override
+	public void process(UMLObject object) {
+		String fieldName = object.getValueOfAttribute("fieldName");
+		String fieldTitle = object.getValueOfAttribute("fieldTitle");
+		String labels = object.getValueOfAttribute("labels");
+		String length = object.getValueOfAttribute("length");
+		
+		EntityField numberField = new EntityField(fieldName, fieldTitle, labels, length );
+		
+		seamGenerator.addBridgeObject(object, numberField);
+	}
+
+	@Override
+	public String getProcessedClassName() {
+		return ENTITY_FIELD;
 	}
 }

@@ -17,6 +17,13 @@ package com.objetdirect.gwt.gen.server.gen.processors;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
+import com.objetdirect.gwt.gen.server.gen.processors.fields.TestBooleanFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.TestDateFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.TestEntityFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.TestEnumFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.TestNumberFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.TestStringFieldProcessor;
+
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
@@ -29,7 +36,12 @@ import org.junit.runners.Suite;
 	TestPrintFormProcessor.class,
 	TestPrintInternalListDescriptorProcessor.class,
 	TestPrintListDescriptorProcessor.class,
-	TestStringFieldProcessor.class,
+	TestBooleanFieldProcessor.class,
+	TestDateFieldProcessor.class,
+	TestEntityFieldProcessor.class,
+	TestEnumFieldProcessor.class,
+	TestNumberFieldProcessor.class,
+	TestStringFieldProcessor.class
 })
 public class AllProcessorsTests {
 	

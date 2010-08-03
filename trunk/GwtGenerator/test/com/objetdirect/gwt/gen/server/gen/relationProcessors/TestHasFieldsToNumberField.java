@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
+import com.objetdirect.gwt.gen.server.gen.seamMM.NumberField;
 import com.objetdirect.seam.fieldrenderers.HasFields;
 import com.objetdirect.seam.print.PrintFormDescriptor;
 import com.objetdirect.seam.print.PrintInternalListDescriptor;
@@ -29,11 +29,12 @@ import com.objetdirect.seam.print.PrintListDescriptor;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestHasFieldsToStringField extends TestRelationProcessor{
+public class TestHasFieldsToNumberField extends TestRelationProcessor{
 	private static final String FIELD_TITLE = "fieldTitle";
 	private static final String FIELD_NAME = "fieldName";
 	private static final String LENGTH = "20";
-	private static final int LENGTH_INT_VALUE = 20;
+	private static final int LENGHT_INT_VALUE = 20;
+	private static final String PATTERN_VALUE = "####";
 
 	@Mock
 	PrintFormDescriptor printForm;
@@ -44,36 +45,36 @@ public class TestHasFieldsToStringField extends TestRelationProcessor{
 	@Mock
 	PrintListDescriptor printListDescriptor;
 	
-	StringField stringField;
+	NumberField numberField;
 	
-	HasFieldsToStringField processor;
+	HasFieldsToNumberField processor;
 	
 	@Before
 	public void beforeTests() {
-		stringField  = new StringField(FIELD_NAME, FIELD_TITLE, LENGTH);
-		processor = new HasFieldsToStringField(seamGenerator);
+		numberField  = new NumberField(FIELD_NAME, FIELD_TITLE, PATTERN_VALUE, LENGTH);
+		processor = new HasFieldsToNumberField(seamGenerator);
 	}
 	
 	
 	@Test
-	public void printFormDescriptor_to_StringField() {
-		setReturnedGenObject(printForm, stringField, null);
+	public void printFormDescriptor_to_NumberField() {
+		setReturnedGenObject(printForm, numberField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printForm);
 	}
 	
 	@Test
-	public void printInternaList_to_StringField() {
-		setReturnedGenObject(printInternalList, stringField, null);
+	public void printInternaList_to_NumberField() {
+		setReturnedGenObject(printInternalList, numberField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printInternalList);
 	}
 	
 	@Test
-	public void printListDescriptor_to_StringField() {
-		setReturnedGenObject(printListDescriptor, stringField, null);
+	public void printListDescriptor_to_NumberField() {
+		setReturnedGenObject(printListDescriptor, numberField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printListDescriptor);
@@ -82,6 +83,6 @@ public class TestHasFieldsToStringField extends TestRelationProcessor{
 	private void verifyAll(HasFields objectToVerify) {
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
-		verify(objectToVerify).addStringField(FIELD_NAME, FIELD_TITLE, LENGTH_INT_VALUE);
+		verify(objectToVerify).addNumberField(FIELD_NAME, FIELD_TITLE, PATTERN_VALUE, LENGHT_INT_VALUE);
 	}
 }

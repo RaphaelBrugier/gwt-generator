@@ -12,34 +12,37 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.processors;
-
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-
-import org.junit.After;
-import org.junit.Before;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import com.objetdirect.gwt.gen.server.gen.processors.Processor;
+import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
- *
  */
-public abstract class TestProcessor {
+public class StringFieldProcessor extends Processor {
 
-	@Mock
-	protected
-	SeamGenerator seamGenerator;
+	public static final String STRING_FIELD = "StringField";
 
-	@Before
-	public void before() {
-		 MockitoAnnotations.initMocks(this);
+	public StringFieldProcessor(SeamGenerator seamGenerator) {
+		super(seamGenerator);
 	}
 	
-	@After
-	public void after() {
-		verifyNoMoreInteractions(seamGenerator);
+	@Override
+	public void process(UMLObject object) {
+		String fieldName = object.getValueOfAttribute("fieldName");
+		String fieldTitle = object.getValueOfAttribute("fieldTitle");
+		String length = object.getValueOfAttribute("length");
+		
+		StringField stringField = new StringField(fieldName, fieldTitle, length);
+		
+		seamGenerator.addBridgeObject(object, stringField);
+	}
+
+	@Override
+	public String getProcessedClassName() {
+		return STRING_FIELD;
 	}
 }
