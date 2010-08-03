@@ -30,6 +30,7 @@ import com.objetdirect.entities.EntityDescriptor;
 import com.objetdirect.seam.BaseComponent;
 import com.objetdirect.seam.EntityHolder;
 import com.objetdirect.seam.FieldRendererDescriptor;
+import com.objetdirect.seam.fieldrenderers.HasFields;
 import com.objetdirect.seam.fieldrenderers.LabelFieldRendererDescriptor;
 import com.objetdirect.seam.fieldrenderers.PrintBooleanFieldRendererDescriptor;
 import com.objetdirect.seam.fieldrenderers.PrintDateFieldRendererDescriptor;
@@ -37,7 +38,7 @@ import com.objetdirect.seam.fieldrenderers.PrintEntityFieldRendererDescriptor;
 import com.objetdirect.seam.fieldrenderers.PrintEnumFieldRendererDescriptor;
 import com.objetdirect.seam.fieldrenderers.PrintNumberFieldRendererDescriptor;
 
-public class PrintListDescriptor extends BaseComponent implements PrintFeature, EntityHolder {
+public class PrintListDescriptor extends BaseComponent implements PrintFeature, EntityHolder, HasFields {
 
 	public static PrintListDescriptor newEmptyInstance() {
 		return new PrintListDescriptor(null);
@@ -234,5 +235,35 @@ public class PrintListDescriptor extends BaseComponent implements PrintFeature, 
 		"	</p:font>",
 		"</p:cell>",
 	};
+
+	@Override
+	public void addBooleanField(String fieldName, String fieldTitle, String trueValue, String falseValue) {
+		showBooleanField(fieldName, fieldTitle, trueValue, falseValue);
+	}
+
+	@Override
+	public void addDateField(String fieldName, String fieldTitle, String pattern) {
+		showDateField(fieldName, fieldTitle, pattern);
+	}
+
+	@Override
+	public void addEntityField(String fieldName, String fieldTitle, String labels, int length) {
+		showEntityField(fieldName, fieldTitle, labels, length);
+	}
+
+	@Override
+	public void addEnumField(String fieldName, String fieldTitle, int length) {
+		showEnumField(fieldName, fieldTitle, length);
+	}
+
+	@Override
+	public void addNumberField(String fieldName, String fieldTitle, String pattern, int length) {
+		showNumberField(fieldName, fieldTitle, pattern, length);
+	}
+
+	@Override
+	public void addStringField(String fieldName, String fieldTitle, int length) {
+		showField(fieldName, fieldTitle, length);
+	}
 }
 
