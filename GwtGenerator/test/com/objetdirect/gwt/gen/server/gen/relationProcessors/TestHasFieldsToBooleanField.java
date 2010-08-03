@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
+import com.objetdirect.gwt.gen.server.gen.seamMM.BooleanField;
 import com.objetdirect.seam.fieldrenderers.HasFields;
 import com.objetdirect.seam.print.PrintFormDescriptor;
 import com.objetdirect.seam.print.PrintInternalListDescriptor;
@@ -29,11 +29,12 @@ import com.objetdirect.seam.print.PrintListDescriptor;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class TestHasFieldsToStringField extends TestRelationProcessor{
+public class TestHasFieldsToBooleanField extends TestRelationProcessor{
 	private static final String FIELD_TITLE = "fieldTitle";
 	private static final String FIELD_NAME = "fieldName";
-	private static final String LENGTH = "20";
-	private static final int LENGTH_INT_VALUE = 20;
+
+	private static final String FALSE_VALUE = "FALSE";
+	private static final String TRUE_VALUE = "TRUE";
 
 	@Mock
 	PrintFormDescriptor printForm;
@@ -44,36 +45,36 @@ public class TestHasFieldsToStringField extends TestRelationProcessor{
 	@Mock
 	PrintListDescriptor printListDescriptor;
 	
-	StringField stringField;
+	BooleanField booleanField;
 	
-	HasFieldsToStringField processor;
+	HasFieldsToDateField processor;
 	
 	@Before
 	public void beforeTests() {
-		stringField  = new StringField(FIELD_NAME, FIELD_TITLE, LENGTH);
-		processor = new HasFieldsToStringField(seamGenerator);
+		booleanField  = new BooleanField(FIELD_NAME, FIELD_TITLE);
+		processor = new HasFieldsToDateField(seamGenerator);
 	}
 	
 	
 	@Test
-	public void printFormDescriptor_to_StringField() {
-		setReturnedGenObject(printForm, stringField, null);
+	public void printFormDescriptor_to_DateField() {
+		setReturnedGenObject(printForm, booleanField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printForm);
 	}
 	
 	@Test
-	public void printInternaList_to_StringField() {
-		setReturnedGenObject(printInternalList, stringField, null);
+	public void printInternaList_to_DateField() {
+		setReturnedGenObject(printInternalList, booleanField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printInternalList);
 	}
 	
 	@Test
-	public void printListDescriptor_to_StringField() {
-		setReturnedGenObject(printListDescriptor, stringField, null);
+	public void printListDescriptor_to_DateField() {
+		setReturnedGenObject(printListDescriptor, booleanField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printListDescriptor);
@@ -82,6 +83,6 @@ public class TestHasFieldsToStringField extends TestRelationProcessor{
 	private void verifyAll(HasFields objectToVerify) {
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
-		verify(objectToVerify).addStringField(FIELD_NAME, FIELD_TITLE, LENGTH_INT_VALUE);
+		verify(objectToVerify).addBooleanField(FIELD_NAME, FIELD_TITLE, TRUE_VALUE, FALSE_VALUE);
 	}
 }

@@ -12,34 +12,38 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.processors;
-
-import static org.mockito.Mockito.verifyNoMoreInteractions;
-
-import org.junit.After;
-import org.junit.Before;
-import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
+package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import com.objetdirect.gwt.gen.server.gen.processors.Processor;
+import com.objetdirect.gwt.gen.server.gen.seamMM.NumberField;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
- *
  */
-public abstract class TestProcessor {
+public class NumberFieldProcessor extends Processor {
 
-	@Mock
-	protected
-	SeamGenerator seamGenerator;
+	public static final String NUMBER_FIELD = "NumberField";
 
-	@Before
-	public void before() {
-		 MockitoAnnotations.initMocks(this);
+	public NumberFieldProcessor(SeamGenerator seamGenerator) {
+		super(seamGenerator);
 	}
 	
-	@After
-	public void after() {
-		verifyNoMoreInteractions(seamGenerator);
+	@Override
+	public void process(UMLObject object) {
+		String fieldName = object.getValueOfAttribute("fieldName");
+		String fieldTitle = object.getValueOfAttribute("fieldTitle");
+		String pattern = object.getValueOfAttribute("pattern");
+		String length = object.getValueOfAttribute("length");
+		
+		NumberField numberField = new NumberField(fieldName, fieldTitle, pattern, length );
+		
+		seamGenerator.addBridgeObject(object, numberField);
+	}
+
+	@Override
+	public String getProcessedClassName() {
+		return NUMBER_FIELD;
 	}
 }

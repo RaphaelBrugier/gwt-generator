@@ -39,7 +39,6 @@ public class TestSeamGenerator {
 	List<ObjectRelation> objectRelations;
 	List<UMLClass> classes;
 	List<UMLRelation> classRelations;
- 	
 
 	@Before
 	public void setUp() throws Exception {

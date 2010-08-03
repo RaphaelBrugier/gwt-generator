@@ -12,28 +12,37 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.relationProcessors;
+package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import com.objetdirect.gwt.gen.server.gen.processors.Processor;
+import com.objetdirect.gwt.gen.server.gen.seamMM.DateField;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
+public class DateFieldProcessor extends Processor {
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses( {
-	TestHasFieldsToDateField.class,
-	TestHasFieldsToEntityField.class,
-	TestHasFieldsToEnumField.class,
-	TestHasFieldsToNumberField.class,
-	TestHasFieldsToStringField.class,
-	TestPrintDescriptorToPrintEntity.class,
-	TestPrintEntityToDomainInstance.class,
-	TestPrintEntityToPrintElement.class,
-	TestPrintListDescriptorToDomainInstance.class,
-	TestRelationProcessorsManager.class
-})
-public class AllRelationProcessorsTests {
+	public static final String DATE_FIELD = "DateField";
 
+	public DateFieldProcessor(SeamGenerator seamGenerator) {
+		super(seamGenerator);
+	}
+	
+	@Override
+	public void process(UMLObject object) {
+		String fieldName = object.getValueOfAttribute("fieldName");
+		String fieldTitle = object.getValueOfAttribute("fieldTitle");
+		String pattern = object.getValueOfAttribute("pattern");
+		
+		DateField dateField = new DateField(fieldName, fieldTitle, pattern);
+		
+		seamGenerator.addBridgeObject(object, dateField);
+	}
+
+	@Override
+	public String getProcessedClassName() {
+		return DATE_FIELD;
+	}
 }

@@ -29,7 +29,9 @@ import com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintInternalListDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
-import com.objetdirect.gwt.gen.server.gen.processors.StringFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.DateFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.NumberFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.StringFieldProcessor;
 import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessor;
 import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessorsManager;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
@@ -50,14 +52,14 @@ public class SeamGenerator {
 
 	private static final String PACKAGE_NAME = "com.objetdirect.domain";
 
-	final List<UMLObject> objects;
-	final List<ObjectRelation> objectRelations;
+	final private List<UMLObject> objects;
+	final private List<ObjectRelation> objectRelations;
 	
-	final EntityGenerator entityGenerator;
+	final private EntityGenerator entityGenerator;
 	
 	private DocumentDescriptor documentDescriptor;
 	
-	Map<String, EntityDescriptor> classToEntity;
+	private Map<String, EntityDescriptor> classToEntity;
 	
 	private Map<String, Processor> processors;
 	private RelationProcessorsManager relationProcessorsManager;
@@ -89,6 +91,8 @@ public class SeamGenerator {
 		addProcessor(new PrintFormProcessor(this));
 		addProcessor(new PrintInternalListDescriptorProcessor(this));
 		addProcessor(new PrintListDescriptorProcessor(this));
+		addProcessor(new DateFieldProcessor(this));
+		addProcessor(new NumberFieldProcessor(this));
 		addProcessor(new StringFieldProcessor(this));
 	}
 

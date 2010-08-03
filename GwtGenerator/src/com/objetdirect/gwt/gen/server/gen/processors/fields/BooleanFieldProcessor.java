@@ -12,28 +12,36 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server.gen.relationProcessors;
+package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
+import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
+import com.objetdirect.gwt.gen.server.gen.processors.Processor;
+import com.objetdirect.gwt.gen.server.gen.seamMM.BooleanField;
+import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
+public class BooleanFieldProcessor extends Processor {
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses( {
-	TestHasFieldsToDateField.class,
-	TestHasFieldsToEntityField.class,
-	TestHasFieldsToEnumField.class,
-	TestHasFieldsToNumberField.class,
-	TestHasFieldsToStringField.class,
-	TestPrintDescriptorToPrintEntity.class,
-	TestPrintEntityToDomainInstance.class,
-	TestPrintEntityToPrintElement.class,
-	TestPrintListDescriptorToDomainInstance.class,
-	TestRelationProcessorsManager.class
-})
-public class AllRelationProcessorsTests {
+	public static final String BOOLEAN_FIELD = "BooleanField";
 
+	public BooleanFieldProcessor(SeamGenerator seamGenerator) {
+		super(seamGenerator);
+	}
+	
+	@Override
+	public void process(UMLObject object) {
+		String fieldName = object.getValueOfAttribute("fieldName");
+		String fieldTitle = object.getValueOfAttribute("fieldTitle");
+		
+		BooleanField dateField = new BooleanField(fieldName, fieldTitle);
+		
+		seamGenerator.addBridgeObject(object, dateField);
+	}
+
+	@Override
+	public String getProcessedClassName() {
+		return BOOLEAN_FIELD;
+	}
 }

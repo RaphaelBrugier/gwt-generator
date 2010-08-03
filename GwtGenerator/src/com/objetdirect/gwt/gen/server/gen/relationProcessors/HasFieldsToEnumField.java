@@ -17,30 +17,30 @@ package com.objetdirect.gwt.gen.server.gen.relationProcessors;
 import static com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor.PRINT_FORM;
 import static com.objetdirect.gwt.gen.server.gen.processors.PrintInternalListDescriptorProcessor.PRINT_INTERNAL_LIST;
 import static com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor.PRINT_LIST_DESCRIPTOR;
-import static com.objetdirect.gwt.gen.server.gen.processors.fields.StringFieldProcessor.STRING_FIELD;
+import static com.objetdirect.gwt.gen.server.gen.processors.fields.EnumFieldProcessor.ENUM_FIELD;
 
 import java.util.Arrays;
 import java.util.List;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
-import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
+import com.objetdirect.gwt.gen.server.gen.seamMM.EnumField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.fieldrenderers.HasFields;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-public class HasFieldsToStringField extends RelationProcessor<HasFields, StringField> {
+public class HasFieldsToEnumField extends RelationProcessor<HasFields, EnumField> {
 
-	public HasFieldsToStringField(SeamGenerator seamGenerator) {
+	public HasFieldsToEnumField(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
 
 	@Override
 	public void process(ObjectRelation objectRelation) {
 		HasFields printFormDescriptor = getOwner(objectRelation);
-		StringField stringField  = getTarget(objectRelation);
-		printFormDescriptor.addStringField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
+		EnumField enumField  = getTarget(objectRelation);
+		printFormDescriptor.addEnumField(enumField.fieldName, enumField.fieldTitle, enumField.getLength());
 	}
 
 	@Override
@@ -50,6 +50,6 @@ public class HasFieldsToStringField extends RelationProcessor<HasFields, StringF
 
 	@Override
 	public List<String> getTargetClassNames() {
-		return Arrays.asList(STRING_FIELD);
+		return Arrays.asList(ENUM_FIELD);
 	}
 }
