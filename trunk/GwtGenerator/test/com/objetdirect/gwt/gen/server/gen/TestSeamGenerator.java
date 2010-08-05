@@ -16,6 +16,12 @@ package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
 import static com.objetdirect.gwt.gen.TestUtil.findLinesOfCode;
+import static com.objetdirect.gwt.gen.server.gen.processors.fields.BooleanFieldProcessor.BOOLEAN_FIELD;
+import static com.objetdirect.gwt.gen.server.gen.processors.fields.DateFieldProcessor.DATE_FIELD;
+import static com.objetdirect.gwt.gen.server.gen.processors.fields.EntityFieldProcessor.ENTITY_FIELD;
+import static com.objetdirect.gwt.gen.server.gen.processors.fields.EnumFieldProcessor.ENUM_FIELD;
+import static com.objetdirect.gwt.gen.server.gen.processors.fields.NumberFieldProcessor.NUMBER_FIELD;
+import static com.objetdirect.gwt.gen.server.gen.processors.fields.StringFieldProcessor.STRING_FIELD;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,10 +64,66 @@ public class TestSeamGenerator {
 	}
 	
 	void addStringField(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {
-		UMLObject field = new UMLObject("", new UMLClass("StringField")).
-							addAttributeValuePair("fieldName", fieldNameValue).
-							addAttributeValuePair("fieldTitle", fieldTitleValue).
-							addAttributeValuePair("length", lengthValue);
+		UMLObject field = new UMLObject("", new UMLClass(STRING_FIELD)).
+			addAttributeValuePair("fieldName", fieldNameValue).
+			addAttributeValuePair("fieldTitle", fieldTitleValue).
+			addAttributeValuePair("length", lengthValue);
+		objects.add(field);
+		
+		ObjectRelation relation = new ObjectRelation(form, field).setRightRole("");
+		objectRelations.add(relation);
+	}
+	
+	void addNumberField(UMLObject form, String fieldNameValue, String fieldTitleValue, String patternValue, String lengthValue) {
+		UMLObject field = new UMLObject("", new UMLClass(NUMBER_FIELD)).
+			addAttributeValuePair("fieldName", fieldNameValue).
+			addAttributeValuePair("fieldTitle", fieldTitleValue).
+			addAttributeValuePair("pattern", patternValue).
+			addAttributeValuePair("length", lengthValue);
+		objects.add(field);
+		
+		ObjectRelation relation = new ObjectRelation(form, field).setRightRole("");
+		objectRelations.add(relation);
+	}
+	
+	void addDateField(UMLObject form, String fieldNameValue, String fieldTitleValue, String patternValue) {
+		UMLObject field = new UMLObject("", new UMLClass(DATE_FIELD)).
+			addAttributeValuePair("fieldName", fieldNameValue).
+			addAttributeValuePair("fieldTitle", fieldTitleValue).
+			addAttributeValuePair("pattern", patternValue);
+		objects.add(field);
+		
+		ObjectRelation relation = new ObjectRelation(form, field).setRightRole("");
+		objectRelations.add(relation);
+	}
+	
+	void addBooleanField(UMLObject form, String fieldNameValue, String fieldTitleValue) {
+		UMLObject field = new UMLObject("", new UMLClass(BOOLEAN_FIELD)).
+			addAttributeValuePair("fieldName", fieldNameValue).
+			addAttributeValuePair("fieldTitle", fieldTitleValue);
+		objects.add(field);
+		
+		ObjectRelation relation = new ObjectRelation(form, field).setRightRole("");
+		objectRelations.add(relation);
+	}
+	
+	void addEnumField(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {
+		UMLObject field = new UMLObject("", new UMLClass(ENUM_FIELD)).
+		addAttributeValuePair("fieldName", fieldNameValue).
+		addAttributeValuePair("fieldTitle", fieldTitleValue).
+		addAttributeValuePair("length", lengthValue);
+		objects.add(field);
+		
+		ObjectRelation relation = new ObjectRelation(form, field).setRightRole("");
+		objectRelations.add(relation);
+	}
+	
+	void addEntityField(UMLObject form, String fieldNameValue, String fieldTitleValue, String labelsValue, String lengthValue) {
+		UMLObject field = new UMLObject("", new UMLClass(ENTITY_FIELD)).
+			addAttributeValuePair("fieldName", fieldNameValue).
+			addAttributeValuePair("fieldTitle", fieldTitleValue).
+			addAttributeValuePair("labels", labelsValue).
+			addAttributeValuePair("length", lengthValue);
 		objects.add(field);
 		
 		ObjectRelation relation = new ObjectRelation(form, field).setRightRole("");
@@ -74,12 +136,12 @@ public class TestSeamGenerator {
 		
 		In(generatedClassesCode).
 			theCodeOfClass("Page.java").
-			equals(javaText);
+			assertEquals(javaText);
 		
 		In(generatedClassesCode).
 			theCodeOfClass("Page.xhtml").
 			ofType(CodeType.FACELET).
-			equals(faceletText);
+			assertEquals(faceletText);
 	}
 
 	void printGeneratedCode(CodeType codeType) {

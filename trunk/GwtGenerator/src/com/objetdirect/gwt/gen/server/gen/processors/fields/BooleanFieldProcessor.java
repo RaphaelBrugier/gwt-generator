@@ -35,9 +35,9 @@ public class BooleanFieldProcessor extends Processor {
 		String fieldName = object.getValueOfAttribute("fieldName");
 		String fieldTitle = object.getValueOfAttribute("fieldTitle");
 		
-		BooleanField dateField = new BooleanField(fieldName, fieldTitle);
+		BooleanField booleanField = new BooleanField(fieldName, fieldTitle);
 		
-		seamGenerator.addBridgeObject(object, dateField);
+		seamGenerator.addBridgeObject(object, booleanField);
 	}
 
 	@Override

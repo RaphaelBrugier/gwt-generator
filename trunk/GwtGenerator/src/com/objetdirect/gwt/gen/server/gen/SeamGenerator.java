@@ -29,7 +29,10 @@ import com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintInternalListDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.BooleanFieldProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.fields.DateFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.EntityFieldProcessor;
+import com.objetdirect.gwt.gen.server.gen.processors.fields.EnumFieldProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.fields.NumberFieldProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.fields.StringFieldProcessor;
 import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessor;
@@ -91,7 +94,10 @@ public class SeamGenerator {
 		addProcessor(new PrintFormProcessor(this));
 		addProcessor(new PrintInternalListDescriptorProcessor(this));
 		addProcessor(new PrintListDescriptorProcessor(this));
+		addProcessor(new BooleanFieldProcessor(this));
 		addProcessor(new DateFieldProcessor(this));
+		addProcessor(new EntityFieldProcessor(this));
+		addProcessor(new EnumFieldProcessor(this));
 		addProcessor(new NumberFieldProcessor(this));
 		addProcessor(new StringFieldProcessor(this));
 	}

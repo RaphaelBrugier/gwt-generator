@@ -42,8 +42,8 @@ public class HasFieldsToBooleanField extends RelationProcessor<HasFields, Boolea
 	@Override
 	public void process(ObjectRelation objectRelation) {
 		HasFields printFormDescriptor = getOwner(objectRelation);
-		BooleanField dateField  = getTarget(objectRelation);
-		printFormDescriptor.addBooleanField(dateField.fieldName, dateField.fieldTitle, TRUE_VALUE, FALSE_VALUE);
+		BooleanField booleanField  = getTarget(objectRelation);
+		printFormDescriptor.addBooleanField(booleanField.fieldName, booleanField.fieldTitle, TRUE_VALUE, FALSE_VALUE);
 	}
 
 	@Override

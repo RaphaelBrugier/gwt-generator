@@ -133,6 +133,6 @@ public class TestPrintEntity extends TestSeamGenerator {
 		In(generatedClassesCode).
 			theCodeOfClass("Page.xhtml").
 			ofType(CodeType.FACELET).
-			equals(testFullFeaturedEntityFaceletText);
+		assertEquals(testFullFeaturedEntityFaceletText);
 	}
 }

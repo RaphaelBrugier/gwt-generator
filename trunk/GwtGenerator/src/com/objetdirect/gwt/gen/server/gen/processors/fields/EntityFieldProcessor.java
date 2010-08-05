@@ -37,9 +37,9 @@ public class EntityFieldProcessor extends Processor {
 		String labels = object.getValueOfAttribute("labels");
 		String length = object.getValueOfAttribute("length");
 		
-		EntityField numberField = new EntityField(fieldName, fieldTitle, labels, length );
+		EntityField entityField = new EntityField(fieldName, fieldTitle, labels, length);
 		
-		seamGenerator.addBridgeObject(object, numberField);
+		seamGenerator.addBridgeObject(object, entityField);
 	}
 
 	@Override
