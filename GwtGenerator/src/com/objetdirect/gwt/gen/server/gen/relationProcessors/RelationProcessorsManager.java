@@ -48,6 +48,11 @@ public class RelationProcessorsManager {
 		addRelationProcessor(new PrintDescriptorToDocumentFeature(seamGenerator));
 		addRelationProcessor(new PrintEntityToDomainInstance(seamGenerator));
 		addRelationProcessor(new PrintEntityToPrintElement(seamGenerator));
+		addRelationProcessor(new HasFieldsToBooleanField(seamGenerator));
+		addRelationProcessor(new HasFieldsToDateField(seamGenerator));
+		addRelationProcessor(new HasFieldsToEntityField(seamGenerator));
+		addRelationProcessor(new HasFieldsToEnumField(seamGenerator));
+		addRelationProcessor(new HasFieldsToNumberField(seamGenerator));
 		addRelationProcessor(new HasFieldsToStringField(seamGenerator));
 		addRelationProcessor(new PrintListDescriptorToDomainInstance(seamGenerator));
 	}

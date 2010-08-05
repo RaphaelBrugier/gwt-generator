@@ -77,7 +77,7 @@ public class AssertGeneratedCode {
 	/**
      * Assert that all the code of the class exactly equals the given model.
 	 */
-	public void equals(String ... model) {
+	public void assertEquals(String ... model) {
 		assert className != null : "you should give a class name";
 		
 		List<String> linesOfCode = findLinesOfCode(className, generatedClassesCode, codeType);

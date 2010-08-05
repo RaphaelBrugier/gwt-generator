@@ -41,23 +41,9 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 	public void testUnidirectional() throws Exception {
 		UMLClass flightEntity = new UMLClass("Flight");
 		UMLClass companyEntity = new UMLClass("Company");
+		String rightRole = "company";
 		
-		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
-		relation.setName("");
-		
-		relation.setLeftAdornment(NONE);
-		relation.setLeftCardinality("*");
-		relation.setLeftConstraint("");
-		relation.setLeftRole("");
-		relation.setLeftStereotype("");
-		relation.setLeftTarget(flightEntity);
-		
-		relation.setRightAdornment(WIRE_ARROW);
-		relation.setRightCardinality("1");
-		relation.setRightConstraint("");
-		relation.setRightRole("company");
-		relation.setRightStereotype("");
-		relation.setRightTarget(companyEntity);
+		UMLRelation relation = createManyToOneRelation(flightEntity, companyEntity, rightRole);
 
 		List<UMLClass> classes = new LinkedList<UMLClass>();
 		List<UMLRelation> relations = new LinkedList<UMLRelation>();
@@ -85,6 +71,32 @@ public class TestGeneratorServiceManyToOne extends TestCase {
 				"	return flight;").
 			verify();
 		
+	}
+
+	/**
+	 * @param ownerClass
+	 * @param targetClass
+	 * @param relationName
+	 * @return
+	 */
+	public static UMLRelation createManyToOneRelation(UMLClass ownerClass, UMLClass targetClass, String relationName) {
+		UMLRelation relation = new UMLRelation(ASSOCIATION_RELATION);
+		relation.setName("");
+		
+		relation.setLeftAdornment(NONE);
+		relation.setLeftCardinality("*");
+		relation.setLeftConstraint("");
+		relation.setLeftRole("");
+		relation.setLeftStereotype("");
+		relation.setLeftTarget(ownerClass);
+		
+		relation.setRightAdornment(WIRE_ARROW);
+		relation.setRightCardinality("1");
+		relation.setRightConstraint("");
+		relation.setRightRole(relationName);
+		relation.setRightStereotype("");
+		relation.setRightTarget(targetClass);
+		return relation;
 	}
 	
 	public void testBidirectional() throws Exception {

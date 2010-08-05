@@ -20,7 +20,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import com.objetdirect.gwt.gen.server.gen.seamMM.NumberField;
+import com.objetdirect.gwt.gen.server.gen.seamMM.EntityField;
 import com.objetdirect.seam.fieldrenderers.HasFields;
 import com.objetdirect.seam.print.PrintFormDescriptor;
 import com.objetdirect.seam.print.PrintInternalListDescriptor;
@@ -30,11 +30,11 @@ import com.objetdirect.seam.print.PrintListDescriptor;
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class TestHasFieldsToEntityField extends TestRelationProcessor{
-	private static final String FIELD_TITLE = "fieldTitle";
-	private static final String FIELD_NAME = "fieldName";
+	private static final String FIELD_TITLE = "linkField";
+	private static final String FIELD_NAME = "Link Field";
 	private static final String LENGTH = "20";
 	private static final int LENGHT_INT_VALUE = 20;
-	private static final String PATTERN_VALUE = "####";
+	private static final String LABELS_VALUE = "name";
 
 	@Mock
 	PrintFormDescriptor printForm;
@@ -45,36 +45,36 @@ public class TestHasFieldsToEntityField extends TestRelationProcessor{
 	@Mock
 	PrintListDescriptor printListDescriptor;
 	
-	NumberField numberField;
+	EntityField entityField;
 	
-	HasFieldsToNumberField processor;
+	HasFieldsToEntityField processor;
 	
 	@Before
 	public void beforeTests() {
-		numberField  = new NumberField(FIELD_NAME, FIELD_TITLE, PATTERN_VALUE, LENGTH);
-		processor = new HasFieldsToNumberField(seamGenerator);
+		entityField  = new EntityField(FIELD_NAME, FIELD_TITLE, LABELS_VALUE, LENGTH);
+		processor = new HasFieldsToEntityField(seamGenerator);
 	}
 	
 	
 	@Test
-	public void printFormDescriptor_to_NumberField() {
-		setReturnedGenObject(printForm, numberField, null);
+	public void printFormDescriptor_to_EntityField() {
+		setReturnedGenObject(printForm, entityField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printForm);
 	}
 	
 	@Test
-	public void printInternaList_to_NumberField() {
-		setReturnedGenObject(printInternalList, numberField, null);
+	public void printInternaList_to_EntityField() {
+		setReturnedGenObject(printInternalList, entityField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printInternalList);
 	}
 	
 	@Test
-	public void printListDescriptor_to_NumberField() {
-		setReturnedGenObject(printListDescriptor, numberField, null);
+	public void printListDescriptor_to_EntityField() {
+		setReturnedGenObject(printListDescriptor, entityField, null);
 
 		processor.process(objectRelation);
 		verifyAll(printListDescriptor);
@@ -83,6 +83,6 @@ public class TestHasFieldsToEntityField extends TestRelationProcessor{
 	private void verifyAll(HasFields objectToVerify) {
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
-		verify(objectToVerify).addNumberField(FIELD_NAME, FIELD_TITLE, PATTERN_VALUE, LENGHT_INT_VALUE);
+		verify(objectToVerify).addEntityField(FIELD_NAME, FIELD_TITLE, LABELS_VALUE, LENGHT_INT_VALUE);
 	}
 }
