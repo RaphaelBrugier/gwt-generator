@@ -17,9 +17,6 @@ package com.objetdirect.gwt.gen.server.services;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.CLASS;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
 import static org.mockito.Mockito.mock;
-
-import java.util.ArrayList;
-
 import junit.framework.TestCase;
 
 import com.google.appengine.api.datastore.DatastoreService;
@@ -54,8 +51,6 @@ public class TestDiagramService extends TestCase {
 	
 	private Directory directory;
 	
-	private Directory otherDirectory;
-	
 	protected void setUp() throws Exception {
 		super.setUp();
 		helper.setUp();
@@ -66,8 +61,6 @@ public class TestDiagramService extends TestCase {
 		projectService.createProject("projectTest");
 		Project p = projectService.getProjects().get(0);
 		directory = p.getDirectories().get(0);
-		
-		otherDirectory = p.getDirectories().get(1);
 	}
 	
 	
@@ -102,19 +95,6 @@ public class TestDiagramService extends TestCase {
 		assertEquals(CLASS, dto.getType() );
 		assertEquals("name", dto.getName());
 		assertEquals(directory.getKey(), dto.getDirectoryKey());
-	}
-	
-	public void testGetDiagrams() {
-		DiagramDto diagramDto = new DiagramDto(directory.getKey(),"name", CLASS);
-		String id = diagramService.createDiagram(diagramDto);
-		diagramService.createDiagram(new DiagramDto(directory.getKey(),"name2", OBJECT));
-		diagramService.createDiagram(new DiagramDto(otherDirectory.getKey(),"name2", OBJECT)); // We can create a diagram with the same name in an other directory.
-
-		ArrayList<DiagramDto> diagrams =  diagramService.getDiagrams(directory.getKey());
-		assertEquals(2, diagrams.size());
-
-		DiagramDto dto = diagrams.get(0);
-		assertEquals(id, "name", CLASS, directory.getKey(), dto);
 	}
 	
 	public void testDelete() throws Exception {

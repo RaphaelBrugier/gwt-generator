@@ -149,6 +149,7 @@ public class DiagramsListPresenter {
 			DirectoryTreeItem directoryTreeItem = new DirectoryTreeItem(directory);
 			bindDirectoryItem(project, directoryTreeItem);
 			projectItem.addItem(directoryTreeItem);
+			
 			for (DiagramDto diagram : directory.getDiagrams()) {
 				DiagramTreeItem diagramTreeItem = display.createDiagramTreeItem(diagram.getName());
 				bindDiagramTreeItem(diagram, diagramTreeItem);
@@ -177,7 +178,7 @@ public class DiagramsListPresenter {
 
 	/**
 	 * Bind the directoryTreeItem buttons with the action : - create a new diagram
-	 * @param project TODO
+	 * @param project Project owning the directory.
 	 * @param directoryTreeItem
 	 *            The directory tree item where the actions are attached.
 	 */
@@ -189,7 +190,7 @@ public class DiagramsListPresenter {
 				if (directoryTreeItem.getDirectory().getDirType() == DirectoryType.SEAM) {
 					bindCreateObjectDiagram(project, directoryTreeItem);
 				} else {
-					bindCreateDiagram(directoryTreeItem);
+					bindCreateDiagram(directoryTreeItem, project.isSeamProject());
 				}
 			}
 		});
@@ -205,17 +206,13 @@ public class DiagramsListPresenter {
 			public void onClick(ClickEvent event) {
 				Directory directory = directoryTreeItem.getDirectory();
 				String classDiagramKey = popup.getClassDiagramKeySelected();
-				doCreateDiagram(popup, directory, popup.getDiagramName(), classDiagramKey);
+				doCreateDiagram(popup, directory, popup.getDiagramName(), classDiagramKey, false);
 			}
 		});
 
 		popup.show();
 	}
 	
-	/**
-	 * @param project
-	 * @return
-	 */
 	private Directory getClassDiagramDirectoryFromProject(Project project) {
 		for(Directory dir : project.getDirectories()) {
 			if (dir.getDirType() == DirectoryType.DOMAIN)
@@ -224,14 +221,14 @@ public class DiagramsListPresenter {
 		return null;
 	}
 
-	void bindCreateDiagram(final DirectoryTreeItem directoryTreeItem) {
+	void bindCreateDiagram(final DirectoryTreeItem directoryTreeItem, final boolean isSeamProject) {
 		final DisplayPopupDiagram popup =  new CreateDiagramPopup();
 		
 		popup.getCreateButton().addClickHandler(new ClickHandler() {
 			@Override
 			public void onClick(ClickEvent event) {
 				Directory directory = directoryTreeItem.getDirectory();
-				doCreateDiagram(popup, directory, popup.getDiagramName(), null);
+				doCreateDiagram(popup, directory, popup.getDiagramName(), null, isSeamProject);
 			}
 		});
 		
@@ -255,7 +252,6 @@ public class DiagramsListPresenter {
 		});
 
 		diagramTreeItem.getDeleteDiagramButton().addClickHandler(new ClickHandler() {
-
 			@Override
 			public void onClick(ClickEvent event) {
 				doDeleteDiagram(diagram);
@@ -346,17 +342,19 @@ public class DiagramsListPresenter {
 	 * When the diagram is created, load the designer with it.
 	 * 
 	 * @param createDiagramPopup The Popup to hide when the action is finished.
-	 * @param directory The directory where is created  the diagrma.
+	 * @param directory The directory where the diagram is created.
 	 * @param diagramName The diagram's name.
 	 * @param classDiagramKey If the diagram to create is an object diagram, this is the key to the class diagram instantiated.
+	 * @param isSeamDiagram true if the diagram is created in the special seam admin project.
 	 */
-	private void doCreateDiagram(DisplayPopupDiagram createDiagramPopup, Directory directory, String diagramName, String classDiagramKey) {
+	private void doCreateDiagram(DisplayPopupDiagram createDiagramPopup, Directory directory, String diagramName, String classDiagramKey, boolean isSeamDiagram) {
 		createDiagramPopup.hide();
 		String directoryKey = directory.getKey();
 		DiagramType diagramType = getDiagramTypeFromDirectoryType(directory.getDirType());
 		
 		final DiagramDto diagramDto = new DiagramDto(directoryKey, diagramName, diagramType);
 		diagramDto.classDiagramKey = classDiagramKey;
+		diagramDto.setIsSeamDiagram(isSeamDiagram);
 
 		// Create a default canvas to save with the new diagram.
 		UMLCanvas defaultCanvas = UMLCanvas.createUmlCanvas(diagramType);

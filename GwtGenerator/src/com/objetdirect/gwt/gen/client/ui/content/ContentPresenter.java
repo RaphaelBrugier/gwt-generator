@@ -200,13 +200,11 @@ public class ContentPresenter {
 				
 				umlCanvas.setUpAfterDeserialization(canvasWidth, canvasHeight);
 
-
 				drawer = display.buildDrawer(umlCanvas, diagramFound.getType());
 				display.getMainContainer().clear();
 				display.getMainContainer().add(drawer);
 				
-				 // In the case where we are displaying the seam class diagram, we disable the edition
-				if (diagramDto.seamSpecialDiagram) {
+				if (! diagramFound.isEditable()) {
 					umlCanvas.setMouseEnabled(false);
 					drawer.setHotKeysEnabled(false);
 				}
@@ -258,7 +256,7 @@ public class ContentPresenter {
 		
 		switch(currentDiagram.getType()) {
 			case CLASS : doGenerateHibernateCode(); break;
-			case OBJECT : doGenerateSeamCode();
+			case OBJECT : doGenerateSeamCode(); break;
 		}
 	}
 	

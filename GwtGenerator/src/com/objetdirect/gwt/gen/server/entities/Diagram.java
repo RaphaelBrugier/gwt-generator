@@ -66,6 +66,9 @@ public class Diagram {
 	 */
 	@Persistent
 	private String classDiagramKey;
+	
+	@Persistent
+	private boolean isSeamDiagram;
 
 	/**
 	 * Default constructor ONLY for gwt-rpc serialization
@@ -78,6 +81,8 @@ public class Diagram {
 		this.name = name;
 		this.user = user;
 		this.directoryKey = directoryKey;
+		classDiagramKey = null;
+		isSeamDiagram = false;
 	}
 
 	/**
@@ -184,7 +189,20 @@ public class Diagram {
 	public String getDirectoryKey() {
 		return directoryKey;
 	}
-	
+
+	/**
+	 * @return the isSeamDiagram
+	 */
+	public boolean isSeamDiagram() {
+		return isSeamDiagram;
+	}
+
+	/**
+	 * @param isSeamDiagram the isSeamDiagram to set
+	 */
+	public void setSeamDiagram(boolean isSeamDiagram) {
+		this.isSeamDiagram = isSeamDiagram;
+	}
 	
 	/**
 	 * Copy all the fields of the given DiagramInformations the object.
@@ -209,7 +227,6 @@ public class Diagram {
 		}
 	}
 	
-	
 	/** Copy the fields of the Diagram object into the given DiagramInformations object.
 	 * @param diagramToCopy the diagram the targeted diagram
 	 */
@@ -220,6 +237,8 @@ public class Diagram {
 		diagramToCopy.setName(this.name);
 		diagramToCopy.setDirectoryKey(this.directoryKey);
 		diagramToCopy.classDiagramKey = this.classDiagramKey;
+		diagramToCopy.setIsSeamDiagram(isSeamDiagram);
+		diagramToCopy.setEditable(true);
 		
 		UMLCanvas canvas = null;
 		

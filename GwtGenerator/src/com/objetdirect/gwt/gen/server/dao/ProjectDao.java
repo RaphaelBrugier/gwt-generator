@@ -56,16 +56,29 @@ public class ProjectDao {
 	}
 	
 	/**
-	 * Create a new project for the logged user.
 	 * @param name
+	 * @param email
 	 * @return
 	 */
-	public Project createProject(String name) {
-//		PersistenceManager pm = ServerHelper.getPM();
-		String email = ServerHelper.getCurrentUser().getEmail();
+	public Project createProject(String name, String email) {
 		
 		final Project persistedProject[] = new Project[1];
 		persistedProject[0] = new Project(name, email);
+
+		execute(new Action(){
+
+			@Override
+			public void run(PersistenceManager pm) {
+				persistedProject[0] = pm.makePersistent(persistedProject[0]);
+			}
+		});
+		return persistedProject[0];
+	}
+	
+	public Project createProject(Project project) {
+		
+		final Project persistedProject[] = new Project[1];
+		persistedProject[0] = project;
 
 		execute(new Action(){
 
@@ -90,6 +103,27 @@ public class ProjectDao {
 		
 		return projectFound;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Project getSeamProject() {
+		PersistenceManager pm = ServerHelper.getPM();
+		pm.getFetchPlan().addGroup("directory");
+		
+		Project projectFound = null;
+		List<Project> projectsFound;
+		try {
+			Query q = pm.newQuery(Project.class, "seamProject == b");
+		    q.declareParameters("boolean b");
+		    projectsFound = (List<Project>)q.execute(true);
+		    if (projectsFound.size() == 1) {
+		    	projectFound = (Project) pm.detachCopyAll(projectsFound).toArray()[0];
+		    }
+		} finally {
+			pm.close();
+		}
+		
+		return projectFound;
+	}
 
 	/**
 	 * Get all the projects of the logged user
@@ -97,7 +131,7 @@ public class ProjectDao {
 	 * @return a list of project.
 	 */
 	@SuppressWarnings("unchecked")
-	public List<Project> getProjects() {
+	public List<Project> getProjects(String email) {
 		PersistenceManager pm = ServerHelper.getPM();
 		
 		// Adding the "directory" group will force the detach of the "directories" field of the Project class
@@ -111,7 +145,7 @@ public class ProjectDao {
 		try {
 			Query q = pm.newQuery(Project.class, "email == e");
 		    q.declareParameters("String e");
-		    queryResult = (List<Project>) q.execute(getCurrentUser().getEmail());
+		    queryResult = (List<Project>) q.execute(email);
 		    projectsFound = pm.detachCopyAll(queryResult);
 		} finally {
 			pm.close();
@@ -120,35 +154,6 @@ public class ProjectDao {
 		return new ArrayList<Project>(projectsFound);
 	}
 	
-	/**
-	 * Get a project by its name. Use carefully because the name identifier should be unique across all projects.
-	 * Typically, the name "adminProject" will be a reserved project name.
-	 * 
-	 * @param name
-	 * @return
-	 */
-	@SuppressWarnings("unchecked")
-	public Project getProjectByName(String name) {
-		PersistenceManager pm = ServerHelper.getPM();
-		pm.getFetchPlan().addGroup("directory");
-		List<Project> projectsFound = null;
-		Project p = null;
-		try {
-			Query q = pm.newQuery(Project.class, "name == n");
-		    q.declareParameters("String n");
-		    projectsFound = (List<Project>) q.execute(name);
-		    if (projectsFound == null || projectsFound.size() != 1) {
-		    	p = null;
-		    }
-		    else {
-		    	p = (Project) pm.detachCopy(projectsFound.get(0));
-		    }
-		} finally {
-			pm.close();
-		}
-		return p;
-	}
-
 	/**
 	 * Update a project in the base;
 	 * @param project
@@ -165,8 +170,6 @@ public class ProjectDao {
 		
 		return persistedProject;
 	}
-	
-	
 	
 	
 	/**

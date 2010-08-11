@@ -15,23 +15,20 @@
 package com.objetdirect.gwt.gen.server.services;
 
 import static com.objetdirect.gwt.gen.server.ServerHelper.checkLoggedIn;
-import static com.objetdirect.gwt.gen.server.services.ProjectServiceImpl.SEAM_CLASSES_SUPPORTED;
+import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
 import static com.objetdirect.gwt.umlapi.client.helpers.GWTUMLDrawerHelper.isNotBlank;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT;
-
-import java.util.ArrayList;
 
 import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
 import com.objetdirect.gwt.gen.server.dao.SeamDiagramDao;
-import com.objetdirect.gwt.gen.server.entities.SeamDiagram;
+import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.server.helpers.ObjectDiagramBuilder;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.exceptions.CreateDiagramException;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
-import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
  * Real implementation of DiagramService.
@@ -61,22 +58,25 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		if (! isNotBlank(diagramDto.getName())) {
 			throw new CreateDiagramException("You must specify a name for your diagram.");
 		}
+		
+		if (diagramDto.isSeamDiagram()) {
+			if (! UserServiceFactory.getUserService().isUserAdmin()) {
+				throw new CreateDiagramException("Only administrators can create a new diagram in the Seam project.");
+			}
+		}
+		
 		if (diagramDao.getDiagram(diagramDto.getType(), diagramDto.getName(), diagramDto.getDirectoryKey()) != null) {
 			throw new CreateDiagramException("A diagram of this type and with this name already exist. Please use an other name.");
 		}
-
-		return diagramDao.createDiagram(diagramDto.getDirectoryKey(), diagramDto.getType(), diagramDto.getName(), diagramDto.getCanvas(), diagramDto.classDiagramKey);
-	}
-
-	
-	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagrams(java.lang.String)
-	 */
-	@Override
-	public ArrayList<DiagramDto> getDiagrams(String directoryKey) {
-		checkLoggedIn();
 		
-		return diagramDao.getDiagrams(directoryKey);
+		Diagram newDiagram = new Diagram(diagramDto.getDirectoryKey(), diagramDto.getType(), diagramDto.getName(), getCurrentUser());
+		if (diagramDto.getCanvas()!= null) {
+			newDiagram.setCanvas(diagramDto.getCanvas());
+		}
+		newDiagram.setClassDiagramKey(diagramDto.classDiagramKey);
+		newDiagram.setSeamDiagram(diagramDto.isSeamDiagram());
+		
+		return diagramDao.createDiagram(newDiagram);
 	}
 	
 	/* (non-Javadoc)
@@ -85,26 +85,21 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 	@Override
 	public void deleteDiagram(String key) {
 		checkLoggedIn();
-		if (key != null) {
-			diagramDao.deleteDiagram(key);
-		} else {
-			seamDiagramDao.deleteSeamDiagram();
-		}
+		diagramDao.deleteDiagram(key);
 	}
 
 	/* (non-Javadoc)
-	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.String)
+	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#getDiagram(java.lang.String, boolean)
 	 */
 	@Override
 	public DiagramDto getDiagram(String key) {
 		checkLoggedIn();
 		
-		// Special case for the seam diagram
-		if (key == null) {
-				return getSeamDiagram();
-		}
+		Diagram diagram = diagramDao.getDiagram(key);
 		
-		DiagramDto diagramFound = diagramDao.getDiagram(key);
+		DiagramDto diagramFound = diagram.copyToDiagramDto();
+		
+		setSeamDiagramNonEditableForNonAdmin(diagram, diagramFound);
 		
 		if (diagramFound.getType()==OBJECT) {
 			ObjectDiagramBuilder objectDiagramBuilder = new ObjectDiagramBuilder(diagramFound, diagramDao, seamDiagramDao);
@@ -113,43 +108,30 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		
 		return diagramFound;
 	}
-	
-	/**
-	 * @return the seam class diagram of the classes supported by the code generator.
-	 */
-	private DiagramDto getSeamDiagram() {
-		SeamDiagram	seamDiagram = seamDiagramDao.getSeamDiagram();
-		
-		DiagramDto seamDiagramDto = new DiagramDto();
-		seamDiagramDto.setName(SEAM_CLASSES_SUPPORTED);
-		seamDiagramDto.setCanvas(seamDiagram.getCanvas());
-		seamDiagramDto.seamSpecialDiagram = true;
-		seamDiagramDto.setKey(null);
-		seamDiagramDto.setType(DiagramType.CLASS);
-		return seamDiagramDto;
+
+	private void setSeamDiagramNonEditableForNonAdmin(Diagram diagram, DiagramDto diagramFound) {
+		if (diagram.isSeamDiagram()) {
+			if (! UserServiceFactory.getUserService().isUserAdmin()) {
+				diagramFound.setEditable(false);
+			}
+		}
 	}
 	
-
 	/* (non-Javadoc)
 	 * @see com.objetdirect.gwt.gen.client.services.DiagramService#saveDiagram(com.objetdirect.gwt.gen.shared.dto.DiagramInformations)
 	 */
 	@Override
 	public void saveDiagram(DiagramDto diagramToSave) {
 		checkLoggedIn();
-		if (diagramToSave.seamSpecialDiagram) {
-			updateSeamDiagram(diagramToSave);
-		} else {
-			diagramDao.saveDiagram(diagramToSave);
+		if (diagramToSave.isSeamDiagram()) {
+			checkUserLoggedIsAdmin();
 		}
+		diagramDao.saveDiagram(diagramToSave);
 	}
 
-	private void updateSeamDiagram(DiagramDto diagramToSave) {
+	private void checkUserLoggedIsAdmin() {
 		if (! UserServiceFactory.getUserService().isUserAdmin()) {
-			throw new GWTGeneratorException("You are not allowed to edit the seam diagram.");
+			throw new GWTGeneratorException("You are not allowed to edit this diagram.");
 		}
-
-		if (seamDiagramDao.getSeamDiagram() == null)
-			seamDiagramDao.createSeamDiagram();
-		seamDiagramDao.updateCanvasInSeamDiagram(diagramToSave.getCanvas());
 	}
 }

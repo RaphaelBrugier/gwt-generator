@@ -14,14 +14,10 @@
  */
 package com.objetdirect.gwt.gen.server.dao;
 
-import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
-
 import javax.jdo.PersistenceManager;
 
-import com.allen_sauer.gwt.log.client.Log;
 import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.shared.entities.Directory;
-import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 
 
 /**
@@ -65,20 +61,13 @@ public class DirectoryDao {
 		pm.currentTransaction().begin();
 		try {
 			Directory directoryFound = pm.getObjectById(Directory.class, directory.getKey());
-			if (! directoryFound.getEmail().equals(getCurrentUser().getEmail())) {
-				Log.error("Trying to delete a Directory not owned by the user logged.");
-				throw new GWTGeneratorException("Trying to delete a directory not owned by the user logged.");
-			}
-
-			if (directoryFound == null) 
-				throw new GWTGeneratorException("The directory to delete was not found.");
 			pm.deletePersistent(directoryFound);
 			
 			pm.currentTransaction().commit();
 		} finally {
 			 if (pm.currentTransaction().isActive()) {
-		            pm.currentTransaction().rollback();
-		        }
+				 pm.currentTransaction().rollback();
+	         }
 		}
 	}
 }

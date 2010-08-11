@@ -26,7 +26,6 @@ import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
@@ -49,22 +48,11 @@ public class DiagramDao {
 	}
 	
 	/**
-	 * Create a diagram and return its generated id.
-	 * @param directoryKey the key of the owner directory.
-	 * @param type the type of the diagram.
-	 * @param name the diagram name.
-	 * @param classDiagramKey If the diagram is an object diagram, this is the key to the class diagram instantiated.
-	 * @return the generated id for the diagram.
+	 * @param newDiagram
+	 * @return
 	 */
-	public String createDiagram(String directoryKey, DiagramType type, String name, UMLCanvas umlCanvas, String classDiagramKey) {
-		final Diagram persistedDiagram[] = new Diagram[1];
-		persistedDiagram[0] = new Diagram(directoryKey, type, name, getCurrentUser());
-		
-		if (umlCanvas!= null) {
-			persistedDiagram[0].setCanvas(umlCanvas);
-		}
-		
-		persistedDiagram[0].setClassDiagramKey(classDiagramKey);
+	public String createDiagram(Diagram newDiagram) {
+		final Diagram persistedDiagram[] ={newDiagram};
 		
 		execute(new Action() {
 			public void run(PersistenceManager pm) {
@@ -75,23 +63,24 @@ public class DiagramDao {
 	}
 	
 	/**
-	 * Get a diagram for the logged user from its key.
+	 * Get a diagram from its key. 
+	 * 
 	 * @param key
 	 * @return the diagram found or null.
 	 */
-	public DiagramDto getDiagram(String key) {
+	public Diagram getDiagram(String key) {
 		PersistenceManager pm = ServerHelper.getPM();
-		DiagramDto diagramFound = null;
+		Diagram diagram;
 		try {
-			Diagram diagram = pm.getObjectById(Diagram.class, key);
-			if(diagram!=null) {
-				diagramFound = diagram.copyToDiagramDto();
+			diagram = pm.getObjectById(Diagram.class, key);
+			if(diagram!= null) {
+				diagram = pm.detachCopy(diagram);
 			}
 		} finally {
 			pm.close();
 		}
 		
-		return diagramFound;
+		return diagram;
 	}
 	
 	/**

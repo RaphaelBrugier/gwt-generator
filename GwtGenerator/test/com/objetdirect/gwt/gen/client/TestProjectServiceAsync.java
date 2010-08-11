@@ -8,7 +8,6 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.objetdirect.gwt.gen.client.services.ProjectService;
 import com.objetdirect.gwt.gen.client.services.ProjectServiceAsync;
 import com.objetdirect.gwt.gen.shared.entities.Project;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvas;
 
 public class TestProjectServiceAsync extends GWTTestCase {
 
