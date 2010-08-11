@@ -22,7 +22,6 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses( {
-	SeamDiagramDaoTest.class,
 	ProjectDaoTest.class
 })
 public class AllDaoTests {

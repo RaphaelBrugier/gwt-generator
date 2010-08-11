@@ -21,9 +21,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
-import com.objetdirect.gwt.gen.server.dao.SeamDiagramDao;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
-import com.objetdirect.gwt.gen.server.entities.SeamDiagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ObjectDiagram;
@@ -47,8 +45,6 @@ public class ObjectDiagramBuilder {
 	
 	private final DiagramDto objectDiagramDto;
 	
-	private final SeamDiagramDao seamDiagramDao;
-	
 	/**
 	 * Construct a builder.
 	 * 
@@ -56,10 +52,9 @@ public class ObjectDiagramBuilder {
 	 * @param diagramDao dao to access to the diagrams
 	 * @param seamDiagramDao dao to access to the seam diagram
 	 */
-	public ObjectDiagramBuilder(DiagramDto objectDiagramDto, DiagramDao diagramDao, SeamDiagramDao seamDiagramDao) {
+	public ObjectDiagramBuilder(DiagramDto objectDiagramDto, DiagramDao diagramDao) {
 		this.diagramDao = diagramDao;
 		this.objectDiagramDto = objectDiagramDto;
-		this.seamDiagramDao = seamDiagramDao;
 	}
 
 	/**
@@ -103,8 +98,8 @@ public class ObjectDiagramBuilder {
 	 */
 	private void addSeamClasses(final List<UMLClass> domainClasses, final List<UMLRelation> classRelations) {
 
-		SeamDiagram seamDiagram = seamDiagramDao.getSeamDiagram();
-		UMLCanvasClassDiagram seamClassDiagram = (UMLCanvasClassDiagram) seamDiagram.getCanvas();
+//		SeamDiagram seamDiagram = seamDiagramDao.getSeamDiagram();
+		UMLCanvasClassDiagram seamClassDiagram = (UMLCanvasClassDiagram) null; //TODO
 		
 		List<UMLClass> seamSupportedClasses = createSeamSupportedClasses(seamClassDiagram.getUmlClasses());
 		
