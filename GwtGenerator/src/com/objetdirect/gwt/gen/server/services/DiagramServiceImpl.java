@@ -23,7 +23,6 @@ import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.objetdirect.gwt.gen.client.services.DiagramService;
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
-import com.objetdirect.gwt.gen.server.dao.SeamDiagramDao;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.server.helpers.ObjectDiagramBuilder;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
@@ -39,8 +38,6 @@ import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
 public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramService {
 	
 	private DiagramDao diagramDao = new DiagramDao();
-	
-	private SeamDiagramDao seamDiagramDao = new SeamDiagramDao();
 	
 	/**
 	 * @param diagramDao the diagramDao to set
@@ -102,7 +99,7 @@ public class DiagramServiceImpl extends RemoteServiceServlet implements DiagramS
 		setSeamDiagramNonEditableForNonAdmin(diagram, diagramFound);
 		
 		if (diagramFound.getType()==OBJECT) {
-			ObjectDiagramBuilder objectDiagramBuilder = new ObjectDiagramBuilder(diagramFound, diagramDao, seamDiagramDao);
+			ObjectDiagramBuilder objectDiagramBuilder = new ObjectDiagramBuilder(diagramFound, diagramDao);
 			diagramFound = objectDiagramBuilder.getObjectDiagramTransformed();
 		}
 		
