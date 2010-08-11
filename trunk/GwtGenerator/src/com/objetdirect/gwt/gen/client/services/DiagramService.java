@@ -14,8 +14,6 @@
  */
 package com.objetdirect.gwt.gen.client.services;
 
-import java.util.ArrayList;
-
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
@@ -36,14 +34,6 @@ public interface DiagramService extends RemoteService {
 	 * @throws CreateDiagramException
 	 */
 	public String createDiagram(DiagramDto diagramDto) throws CreateDiagramException;
-	
-	/**
-	 * Get all the diagrams of the logged user on a directory
-	 *
-	 * @param directory Directory where the diagrams are stored.
-	 * @return A list of the diagrams.
-	 */
-	public ArrayList<DiagramDto> getDiagrams(String directory) throws GWTGeneratorException;
 	
 	/**
 	 * Delete a diagram in the base.

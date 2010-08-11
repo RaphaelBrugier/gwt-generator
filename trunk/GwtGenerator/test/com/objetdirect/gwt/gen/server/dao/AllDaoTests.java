@@ -20,10 +20,10 @@ import org.junit.runners.Suite;
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
-
 @RunWith(Suite.class)
 @Suite.SuiteClasses( {
-	SeamDiagramDaoTest.class
+	SeamDiagramDaoTest.class,
+	ProjectDaoTest.class
 })
 public class AllDaoTests {
 

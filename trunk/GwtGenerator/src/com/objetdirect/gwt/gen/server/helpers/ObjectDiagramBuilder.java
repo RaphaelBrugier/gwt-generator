@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
 import com.objetdirect.gwt.gen.server.dao.SeamDiagramDao;
+import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.server.entities.SeamDiagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
@@ -83,7 +84,8 @@ public class ObjectDiagramBuilder {
 		
 		ObjectDiagram objectDiagram = (ObjectDiagram)objectDiagramDto.getCanvas();
 		
-		DiagramDto classDiagramDto = diagramDao.getDiagram(objectDiagramDto.classDiagramKey);
+		Diagram diagram = diagramDao.getDiagram(objectDiagramDto.classDiagramKey);
+		DiagramDto classDiagramDto = diagram.copyToDiagramDto();
 		ClassDiagram classDiagram = (ClassDiagram ) classDiagramDto.getCanvas();
 		
 		List<UMLClass> domainClasses = classDiagram.getUmlClasses();

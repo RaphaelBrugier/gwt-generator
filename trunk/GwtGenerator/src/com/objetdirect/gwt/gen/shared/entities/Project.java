@@ -46,9 +46,15 @@ public class Project implements Serializable {
 	@Persistent
 	private String email;
 	
+	/** 
+	 * Flag to know if the project is the Seam project. 
+	 * Default is false.
+	 */
+	@Persistent
+	private boolean seamProject;
+
 	@Element(dependent = "true")
 	private List<Directory> directories;
-
 
 	/** Default constructor ONLY for gwt-rpc serialization. */
 	@SuppressWarnings("unused")
@@ -57,6 +63,7 @@ public class Project implements Serializable {
 	public Project(String name, String email) {
 		this.name = name;
 		this.email = email;
+		seamProject = false;
 		directories = new ArrayList<Directory>();
 	}
 	
@@ -96,6 +103,20 @@ public class Project implements Serializable {
 	}
 	
 	/**
+	 * @return True if the project is the Seam project.
+	 */
+	public boolean isSeamProject() {
+		return seamProject;
+	}
+
+	/**
+	 * @param seamProject True if the project is the Seam project.
+	 */
+	public void setSeamProject(boolean seamProject) {
+		this.seamProject = seamProject;
+	}
+	
+	/**
 	 * @return the directories
 	 */
 	public List<Directory> getDirectories() {
@@ -118,9 +139,9 @@ public class Project implements Serializable {
 		}
 		return null;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Project key = " + key + " name = " + name + " email = " + email;  
+		return "Project [directories=" + directories + ", email=" + email + ", key=" + key + ", name=" + name + ", seamProject=" + seamProject + "]";
 	}
 }
