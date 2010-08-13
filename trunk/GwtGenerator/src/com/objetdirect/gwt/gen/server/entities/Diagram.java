@@ -58,6 +58,7 @@ public class Diagram {
 	@Persistent
 	private Blob serializedCanvas;
 	
+	@SuppressWarnings("unused")
 	@Persistent
 	private User user;
 	
@@ -93,13 +94,6 @@ public class Diagram {
 	}
 
 	/**
-	 * @param key the key to set
-	 */
-	public void setKey(String key) {
-		this.key = key;
-	}
-
-	/**
 	 * @return the name
 	 */
 	public String getName() {
@@ -107,45 +101,10 @@ public class Diagram {
 	}
 
 	/**
-	 * @param name the name to set
-	 */
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	/**
 	 * @return the type
 	 */
 	public DiagramType getType() {
 		return type;
-	}
-
-	/**
-	 * @param type the type to set
-	 */
-	public void setType(DiagramType type) {
-		this.type = type;
-	}
-
-	/**
-	 * @return the user
-	 */
-	public User getUser() {
-		return user;
-	}
-
-	/**
-	 * @param user the user to set
-	 */
-	public void setUser(User user) {
-		this.user = user;
-	}
-	
-	/**
-	 * @return the serializedCanvas
-	 */
-	public Blob getSerializedCanvas() {
-		return serializedCanvas;
 	}
 
 	/**
@@ -162,16 +121,11 @@ public class Diagram {
 		this.classDiagramKey = classDiagramKey;
 	}
 
-	/**
-	 * @param serializedCanvas the serializedCanvas to set
-	 */
-	public void setSerializedCanvas(Blob serializedCanvas) {
-		this.serializedCanvas = serializedCanvas;
-	}
-	
 	public void setCanvas(UMLCanvas umlCanvas) {
-		if (umlCanvas == null)
+		if (umlCanvas == null) {
 			return;
+		}
+		
 		ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
 		ObjectOutputStream oos;
 		try {
@@ -181,6 +135,24 @@ public class Diagram {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public UMLCanvas getCanvas() {
+		UMLCanvas canvas = null;
+		
+		if (serializedCanvas!=null) {
+			ByteArrayInputStream byteInput = new ByteArrayInputStream(serializedCanvas.getBytes());
+			ObjectInputStream ois;
+			try {
+				ois = new ObjectInputStream(byteInput);
+				canvas = (UMLCanvas)ois.readObject();
+			} catch (IOException e) {
+				e.printStackTrace();
+			} catch (ClassNotFoundException e) {
+				e.printStackTrace();
+			}
+		}
+		return canvas;
 	}
 	
 	/**
@@ -212,20 +184,9 @@ public class Diagram {
 		this.type = diagramToCopy.getType();
 		this.name = diagramToCopy.getName();
 		this.classDiagramKey = diagramToCopy.classDiagramKey;
-		
-		// copy serializedCanvas field
-		if (diagramToCopy.getCanvas() != null) {
-			ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-			ObjectOutputStream oos;
-			try {
-				oos = new ObjectOutputStream(byteOutput);
-				oos.writeObject(diagramToCopy.getCanvas());
-				this.serializedCanvas = new Blob(byteOutput.toByteArray());
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
+		setCanvas(diagramToCopy.getCanvas());
 	}
+
 	
 	/** Copy the fields of the Diagram object into the given DiagramInformations object.
 	 * @param diagramToCopy the diagram the targeted diagram
@@ -239,22 +200,8 @@ public class Diagram {
 		diagramToCopy.classDiagramKey = this.classDiagramKey;
 		diagramToCopy.setIsSeamDiagram(isSeamDiagram);
 		diagramToCopy.setEditable(true);
+		diagramToCopy.setCanvas(getCanvas());
 		
-		UMLCanvas canvas = null;
-		
-		if (serializedCanvas!=null) {
-			ByteArrayInputStream byteInput = new ByteArrayInputStream(serializedCanvas.getBytes());
-			ObjectInputStream ois;
-			try {
-				ois = new ObjectInputStream(byteInput);
-				canvas = (UMLCanvas)ois.readObject();
-			} catch (IOException e) {
-				e.printStackTrace();
-			} catch (ClassNotFoundException e) {
-				e.printStackTrace();
-			}
-			diagramToCopy.setCanvas(canvas);
-		}
 		return diagramToCopy;
 	}
 
