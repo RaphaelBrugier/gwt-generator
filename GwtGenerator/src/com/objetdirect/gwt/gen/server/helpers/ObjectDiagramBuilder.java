@@ -18,6 +18,7 @@ import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation.createAssociation;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
@@ -25,7 +26,6 @@ import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
 import com.objetdirect.gwt.umlapi.client.umlCanvas.ObjectDiagram;
-import com.objetdirect.gwt.umlapi.client.umlCanvas.UMLCanvasClassDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
 
@@ -97,19 +97,36 @@ public class ObjectDiagramBuilder {
 	 * The seam classes and relations are found in the special seam diagram.
 	 */
 	private void addSeamClasses(final List<UMLClass> domainClasses, final List<UMLRelation> classRelations) {
-
-//		SeamDiagram seamDiagram = seamDiagramDao.getSeamDiagram();
-		UMLCanvasClassDiagram seamClassDiagram = (UMLCanvasClassDiagram) null; //TODO
+		List<ClassDiagram> classDiagrams = getSeamClassDiagrams();
 		
-		List<UMLClass> seamSupportedClasses = createSeamSupportedClasses(seamClassDiagram.getUmlClasses());
+		ClassDiagramMerger classDiagramMerger = new ClassDiagramMerger(classDiagrams);
+		classDiagramMerger.mergeAll();
 		
-		List<UMLRelation> seamRelations = seamClassDiagram.getClassRelations();
+		List<UMLClass> mergedClasses = classDiagramMerger.getClasses();
+		List<UMLRelation> mergedRelations = classDiagramMerger.getRelations();
 		
-		List<UMLRelation> entityRelations = createEntityRelations(domainClasses, seamRelations);
+		List<UMLClass> seamSupportedClasses = createSeamSupportedClasses(mergedClasses);
+		
+		List<UMLRelation> entityRelations = createEntityRelations(domainClasses, mergedRelations);
 		
 		domainClasses.addAll(seamSupportedClasses);
-		classRelations.addAll(seamRelations);
+		classRelations.addAll(mergedRelations);
 		classRelations.addAll(entityRelations);
+	}
+
+	/**
+	 * Get all the class diagrams defining the seam diagram.
+	 * 
+	 * @return a list of all the diagrams.
+	 */
+	private List<ClassDiagram> getSeamClassDiagrams() {
+		List<ClassDiagram> classDiagrams = new ArrayList<ClassDiagram>();
+		Collection<Diagram> seamDiagrams = diagramDao.getSeamDiagrams();
+		for (Diagram diagram : seamDiagrams) {
+			ClassDiagram classDiagram = (ClassDiagram) diagram.getCanvas();
+			classDiagrams.add(classDiagram);
+		}
+		return classDiagrams;
 	}
 
 	/**
