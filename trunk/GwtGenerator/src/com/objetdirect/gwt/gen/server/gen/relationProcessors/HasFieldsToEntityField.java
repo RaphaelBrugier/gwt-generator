@@ -23,9 +23,9 @@ import java.util.Arrays;
 import java.util.List;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
-import com.objetdirect.gwt.gen.server.gen.seamMM.EntityField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.ObjectRelation;
 import com.objetdirect.seam.fieldrenderers.HasFields;
+import com.objetdirect.seam.fields.EntityField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>

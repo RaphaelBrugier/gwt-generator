@@ -20,8 +20,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import com.objetdirect.gwt.gen.server.gen.seamMM.BooleanField;
 import com.objetdirect.seam.fieldrenderers.HasFields;
+import com.objetdirect.seam.fields.BooleanField;
 import com.objetdirect.seam.print.PrintFormDescriptor;
 import com.objetdirect.seam.print.PrintInternalListDescriptor;
 import com.objetdirect.seam.print.PrintListDescriptor;
