@@ -183,9 +183,7 @@ public class ProjectDao {
 		
 		List<Diagram> queryResult;
 		Project projectFound = pm.getObjectById(Project.class, project.getKey());
-		if (! projectFound.getEmail().equals(getCurrentUser().getEmail())) {
-			throw new GWTGeneratorException("Trying to delete a Project not owned by the user logged.");
-		}
+
 		if (projectFound == null) 
 			throw new GWTGeneratorException("The Project to delete was not found.");
 		
