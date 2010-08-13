@@ -12,29 +12,24 @@
  * 
  * You should have received a copy of the GNU Lesser General Public License along with Gwt-Generator. If not, see <http://www.gnu.org/licenses/>.
  */
-package com.objetdirect.gwt.gen.server;
-
-import org.junit.runner.RunWith;
-import org.junit.runners.Suite;
-
-import com.objetdirect.gwt.gen.server.dao.AllDaoTests;
-import com.objetdirect.gwt.gen.server.gen.AllGenTests;
-import com.objetdirect.gwt.gen.server.gen.TestUMLObjectInstantiator;
-import com.objetdirect.gwt.gen.server.helpers.ClassDiagramMergerTests;
-import com.objetdirect.gwt.gen.server.services.AllServiceTests;
+package com.objetdirect.gwt.gen.shared.exceptions;
 
 /**
- * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
+ * This class defines exceptions thrown where the object diagram instantiated in the generator objects.
+ * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
+@SuppressWarnings("serial")
+public class InstantiateObjectDiagramException extends RuntimeException {
 
-@RunWith(Suite.class)
-@Suite.SuiteClasses( {
-	AllServiceTests.class,
-	AllGenTests.class,
-	AllDaoTests.class,
-	ClassDiagramMergerTests.class,
-	TestUMLObjectInstantiator.class
-})
-public class AllServerTests {
+	public InstantiateObjectDiagramException() {
+	}
 
+	/**
+	 * Constructor of the exception
+	 * 
+	 * @param msg The String exception
+	 */
+	public InstantiateObjectDiagramException(final String msg) {
+		super(msg);
+	}
 }
