@@ -50,15 +50,11 @@ public class TestPrintInternalListDescriptorProcessor extends TestProcessor {
 		verify(seamGenerator).addBridgeObject(eq(object), isA(PrintInternalListDescriptor.class));
 	}
 	
-	@Test
+	@Test(expected=GWTGeneratorException.class)
 	public void process_withNullParametersInObject_returnException() {
 		UMLObject object = new UMLObject();
 		
-		try {
-			processor.process(object);
-			fail("The process method was expected to throw a GwtGeneratorException");
-		} catch(GWTGeneratorException e) {
-			
-		}
+		processor.process(object);
+		fail("The process method was expected to throw a GwtGeneratorException");
 	}
 }

@@ -127,8 +127,6 @@ public class TestPrintList extends TestSeamGenerator {
 		SeamGenerator generator = getSeamGenerator();
 		List<GeneratedCode> generatedClassesCode = generator.getGenerateCode();
 		
-		printGeneratedCode(FACELET);
-		
 		In(generatedClassesCode).
 			theCodeOfClass("Page.xhtml").
 			ofType(FACELET).

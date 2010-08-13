@@ -164,7 +164,8 @@ public class TestProjectService {
 		
 		projectService.deleteProject(p);
 		
-		assertEquals(0, ds.prepare(new Query("Directory")).countEntities());
+		// another directory was automatically created when getting the project; This directory is the special seam directory.
+		assertEquals(1, ds.prepare(new Query("Directory")).countEntities()); 
 	}
 	
 	@Test
