@@ -17,6 +17,7 @@ package com.objetdirect.gwt.gen.server.dao;
 import static com.objetdirect.gwt.gen.server.ServerHelper.getCurrentUser;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.jdo.PersistenceManager;
@@ -141,6 +142,23 @@ public class DiagramDao {
 		}
 
 		return results;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Diagram> getSeamDiagrams() {
+		PersistenceManager pm = ServerHelper.getPM();
+		Collection<Diagram> queryResult = new ArrayList<Diagram>();
+		
+		try {
+			Query q = pm.newQuery(Diagram.class, "isSeamDiagram == b");
+		    q.declareParameters("boolean b");
+		    queryResult = (List<Diagram>) q.execute(true);
+		    queryResult = pm.detachCopyAll(queryResult);
+		} finally {
+			pm.close();
+		}
+		
+		return queryResult;
 	}
 	
 	/**

@@ -22,9 +22,9 @@ import org.junit.runners.Suite;
  */
 @RunWith(Suite.class)
 @Suite.SuiteClasses( {
-	ProjectDaoTest.class
+	ProjectDaoTest.class,
+	TestDiagramDao.class
 })
 public class AllDaoTests {
-
 
 }
