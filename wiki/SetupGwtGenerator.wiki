@@ -1,4 +1,4 @@
-#How-to setup the Gwt-Generator and start contributing
+#summary How-to setup the Gwt-Generator and start contributing
 
 = Prerequisite =
 
