@@ -34,6 +34,8 @@ public class PrintEntityDescriptor extends BaseComponent implements PrintFeature
 		return new PrintEntityDescriptor(null);
 	}
 	
+	public PrintEntityDescriptor() {}
+	
 	public PrintEntityDescriptor(EntityDescriptor entity) {
 		this.entity = entity;
 	}
