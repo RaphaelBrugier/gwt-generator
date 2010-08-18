@@ -60,6 +60,8 @@ public class SeamGenerator {
 	
 	final private EntityGenerator entityGenerator;
 	
+	final private UMLObjectInstantiator instantiator;
+	
 	private DocumentDescriptor documentDescriptor;
 	
 	private Map<String, EntityDescriptor> classToEntity;
@@ -80,6 +82,7 @@ public class SeamGenerator {
 		this.objects = objects;
 		this.objectRelations = objectRelations;
 		entityGenerator = new EntityGenerator(classes, classRelations, PACKAGE_NAME);
+		instantiator = new UMLObjectInstantiator();
 		
 		processors = new HashMap<String, Processor>();
 		umlObjectToGenObjects = new HashMap<UMLObject, Object>();
@@ -126,11 +129,22 @@ public class SeamGenerator {
 
 	private void parseObjects() {
 		for (UMLObject object : objects) {
-			if (processors.containsKey(object.getClassName())) {
-				processors.get(object.getClassName()).process(object);
-			} else if (classToEntity.containsKey(object.getClassName())) {
-				addBridgeObject(object, classToEntity.get(object.getClassName()));
+			String objectClassName = object.getClassName();
+			
+			if (classToEntity.containsKey(objectClassName)) {
+				addBridgeObject(object, classToEntity.get(objectClassName));
+			} else
+			{
+				Object objectInstantiated = instantiator.instantiate(object);
+				addBridgeObject(object, objectInstantiated);
 			}
+			
+			if (objectClassName.equals("seam.print.PrintDescriptor") || objectClassName.equals("seam.PageDescriptor")) {
+				setDocumentDescriptor((DocumentDescriptor)getGenObjectCounterPartOf(object));
+			}
+//			if (processors.containsKey(objectClassName)) {
+//				processors.get(objectClassName).process(object);
+//			}
 		}
 	}
 	

@@ -31,21 +31,35 @@ public class UMLObjectInstantiator {
 
 	private static final String PACKAGE_NAME = "com.objetdirect.";
 
-	public Object instantiate(UMLObject umlObject) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+	public Object instantiate(UMLObject umlObject) {
 		String className = umlObject.getClassName();
 
-		Class<?> classToInstantiate = Class.forName(PACKAGE_NAME + className);
-
-		Object object = null;
-
-		int numberOfAttributes = umlObject.getObjectAttributes().size();
-		if (numberOfAttributes == 0) {
-			object = classToInstantiate.newInstance();
-		} else {
-			object = instantiateWithParameters(umlObject.getObjectAttributes(), classToInstantiate);
+		Class<?> classToInstantiate;
+		try {
+			classToInstantiate = Class.forName(PACKAGE_NAME + className);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new InstantiateObjectDiagramException("Unable to find the class " + PACKAGE_NAME + className + ". Be sure to prefix the class name with the good package.");
 		}
 
-		return object;
+		String exceptionMessage = "Unable to instantiate the class " + className;
+		try {
+			
+			if (umlObject.getObjectAttributes().size() == 0) {
+				exceptionMessage = exceptionMessage + " with the default constructor";
+				return classToInstantiate.newInstance();
+			} else {
+				exceptionMessage = exceptionMessage + " with a constructor with the parameters " + umlObject.getObjectAttributes();
+				return instantiateWithParameters(umlObject.getObjectAttributes(), classToInstantiate);
+			}
+			
+		} catch (InstantiationException e) {
+			e.printStackTrace();
+			throw new InstantiateObjectDiagramException(exceptionMessage);
+		} catch (IllegalAccessException e) {
+			e.printStackTrace();
+			throw new InstantiateObjectDiagramException(exceptionMessage + " for security reason.");
+		}
 	}
 
 	/**
@@ -75,7 +89,7 @@ public class UMLObjectInstantiator {
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
 			throw new InstantiateObjectDiagramException(
-					"Unable to instantiate the class " + className + " because there is no constructor for the given parameters");
+				"Unable to instantiate the class " + className + " because there is no constructor for the given parameters");
 		}
 		
 		Object object = null;

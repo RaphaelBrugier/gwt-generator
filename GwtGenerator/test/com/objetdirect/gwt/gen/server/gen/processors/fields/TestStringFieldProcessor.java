@@ -21,8 +21,8 @@ import org.junit.Test;
 
 import com.objetdirect.gwt.gen.server.gen.processors.TestProcessor;
 import com.objetdirect.gwt.gen.server.gen.processors.fields.StringFieldProcessor;
-import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.fields.StringField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>

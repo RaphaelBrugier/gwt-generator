@@ -20,8 +20,8 @@ import static org.mockito.Mockito.verify;
 import org.junit.Test;
 
 import com.objetdirect.gwt.gen.server.gen.processors.TestProcessor;
-import com.objetdirect.gwt.gen.server.gen.seamMM.DateField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.fields.DateField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>

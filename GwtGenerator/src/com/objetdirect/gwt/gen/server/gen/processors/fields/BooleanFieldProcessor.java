@@ -16,27 +16,27 @@ package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
-import com.objetdirect.gwt.gen.server.gen.seamMM.BooleanField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.fields.BooleanField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class BooleanFieldProcessor extends Processor {
 
-	public static final String BOOLEAN_FIELD = "BooleanField";
+	public static final String BOOLEAN_FIELD = "seam.fields.BooleanField";
 
 	public BooleanFieldProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
-	
+
 	@Override
 	public void process(UMLObject object) {
 		String fieldName = object.getValueOfAttribute("fieldName");
 		String fieldTitle = object.getValueOfAttribute("fieldTitle");
-		
+
 		BooleanField booleanField = new BooleanField(fieldName, fieldTitle);
-		
+
 		seamGenerator.addBridgeObject(object, booleanField);
 	}
 

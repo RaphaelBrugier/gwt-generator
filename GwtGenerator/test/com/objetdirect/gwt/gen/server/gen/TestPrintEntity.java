@@ -36,6 +36,11 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  */
 public class TestPrintEntity extends TestSeamGenerator {
 
+	private static final String PRINT_INTERNAL_LIST_DESCRIPTOR_CLASSNAME = "seam.print.PrintInternalListDescriptor";
+	private static final String PRINT_DESCRIPTOR_CLASSNAME = "seam.print.PrintDescriptor";
+	private static final String PRINT_FORM_DESCRIPTOR_CLASSNAME = "seam.print.PrintFormDescriptor";
+	private static final String PRINT_ENTITY_DESCRIPTOR_CLASSNAME = "seam.print.PrintEntityDescriptor";
+
 	@Test
 	public void testSimpleEntity() {
 		UMLClass agencyClass = new UMLClass("Agency").
@@ -44,14 +49,14 @@ public class TestPrintEntity extends TestSeamGenerator {
 			addAttribute(PRIVATE, "String", "email");
 		classes.add(agencyClass);
 		
-		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass("PrintDescriptor")).
+		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass(PRINT_DESCRIPTOR_CLASSNAME)).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
 			addAttributeValuePair("className", "PrintAgency").
 			addAttributeValuePair("viewPackageName", "views").
 			addAttributeValuePair("viewName", "print-agency");
 		objects.add(printDescriptorInstance);
-		
-		UMLObject printEntityInstance = new UMLObject("", new UMLClass("PrintEntity"));
+
+		UMLObject printEntityInstance = new UMLObject("", new UMLClass(PRINT_ENTITY_DESCRIPTOR_CLASSNAME));
 		objects.add(printEntityInstance);
 		
 		createRelation(printDescriptorInstance, printEntityInstance, "feature");
@@ -61,7 +66,7 @@ public class TestPrintEntity extends TestSeamGenerator {
 		
 		createRelation(printEntityInstance, entityInstance, "entity");
 		
-		UMLObject printFormInstance = new UMLObject("", new UMLClass("PrintForm"));
+		UMLObject printFormInstance = new UMLObject("", new UMLClass(PRINT_FORM_DESCRIPTOR_CLASSNAME));
 		objects.add(printFormInstance);
 		
 		createRelation(printEntityInstance, printFormInstance, "element");
@@ -70,6 +75,7 @@ public class TestPrintEntity extends TestSeamGenerator {
 		addStringField(printFormInstance, "phone", "Phone", "10");
 		addStringField(printFormInstance, "email", "E-mail", "20");
 		
+		printGeneratedCode(CodeType.FACELET);
 		assertGenerated(testSimpleEntityJavaText, testSimpleEntityFaceletText);
 	}
 	
@@ -90,15 +96,15 @@ public class TestPrintEntity extends TestSeamGenerator {
 		
 		UMLRelation relation = createUniDirectionalOneToMany(agencyClass, employeeClass, "employees");
 		classRelations.add(relation);
-		
-		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass("PrintDescriptor")).
+
+		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass(PRINT_DESCRIPTOR_CLASSNAME)).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
 			addAttributeValuePair("className", "PrintAgency").
 			addAttributeValuePair("viewPackageName", "views").
 			addAttributeValuePair("viewName", "print-agency");
 		objects.add(printDescriptorInstance);
 		
-		UMLObject printEntityDescriptorInstance = new UMLObject("", new UMLClass("PrintEntity"));
+		UMLObject printEntityDescriptorInstance = new UMLObject("", new UMLClass(PRINT_ENTITY_DESCRIPTOR_CLASSNAME));
 		objects.add(printEntityDescriptorInstance);
 		
 		UMLObject entityInstance = new UMLObject("", agencyClass);
@@ -109,7 +115,7 @@ public class TestPrintEntity extends TestSeamGenerator {
 		createRelation(printDescriptorInstance, printEntityDescriptorInstance, "feature");
 		
 		
-		UMLObject printFormInstance = new UMLObject("", new UMLClass("PrintForm"));
+		UMLObject printFormInstance = new UMLObject("", new UMLClass(PRINT_FORM_DESCRIPTOR_CLASSNAME));
 		objects.add(printFormInstance);
 		
 		createRelation(printEntityDescriptorInstance, printFormInstance, "element");
@@ -118,7 +124,7 @@ public class TestPrintEntity extends TestSeamGenerator {
 		addStringField(printFormInstance, "phone", "Phone", "10");
 		addStringField(printFormInstance, "email", "E-mail", "20");
 		
-		UMLObject printInternalListDescriptorInstance = new UMLObject("", new UMLClass("PrintInternalList")).
+		UMLObject printInternalListDescriptorInstance = new UMLObject("", new UMLClass(PRINT_INTERNAL_LIST_DESCRIPTOR_CLASSNAME)).
 			addAttributeValuePair("relationshipName", "employees");
 		objects.add(printInternalListDescriptorInstance);
 		

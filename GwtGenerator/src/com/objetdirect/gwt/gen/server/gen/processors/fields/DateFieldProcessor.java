@@ -16,15 +16,15 @@ package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
-import com.objetdirect.gwt.gen.server.gen.seamMM.DateField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.fields.DateField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class DateFieldProcessor extends Processor {
 
-	public static final String DATE_FIELD = "DateField";
+	public static final String DATE_FIELD = "seam.fields.DateField";
 
 	public DateFieldProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
