@@ -46,6 +46,9 @@ public class PrintListDescriptor extends BaseComponent implements PrintFeature, 
 	
 	EntityDescriptor entity;
 	
+	public PrintListDescriptor() {
+	}
+	
 	public PrintListDescriptor(EntityDescriptor entity) {
 		this.entity = entity;
 	}
