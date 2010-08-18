@@ -19,7 +19,6 @@ import org.junit.runners.Suite;
 
 import com.objetdirect.gwt.gen.server.dao.AllDaoTests;
 import com.objetdirect.gwt.gen.server.gen.AllGenTests;
-import com.objetdirect.gwt.gen.server.gen.TestUMLObjectInstantiator;
 import com.objetdirect.gwt.gen.server.helpers.ClassDiagramMergerTests;
 import com.objetdirect.gwt.gen.server.services.AllServiceTests;
 
@@ -32,8 +31,7 @@ import com.objetdirect.gwt.gen.server.services.AllServiceTests;
 	AllServiceTests.class,
 	AllGenTests.class,
 	AllDaoTests.class,
-	ClassDiagramMergerTests.class,
-	TestUMLObjectInstantiator.class
+	ClassDiagramMergerTests.class
 })
 public class AllServerTests {
 

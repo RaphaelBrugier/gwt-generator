@@ -16,15 +16,15 @@ package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
-import com.objetdirect.gwt.gen.server.gen.seamMM.EntityField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.fields.EntityField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class EntityFieldProcessor extends Processor {
 
-	public static final String ENTITY_FIELD = "EntityField";
+	public static final String ENTITY_FIELD = "seam.fields.EntityField";
 
 	public EntityFieldProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);

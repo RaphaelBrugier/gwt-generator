@@ -16,15 +16,15 @@ package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
-import com.objetdirect.gwt.gen.server.gen.seamMM.EnumField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.fields.EnumField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class EnumFieldProcessor extends Processor {
 
-	public static final String ENUM_FIELD = "EnumField";
+	public static final String ENUM_FIELD = "seam.fields.EnumField";
 
 	public EnumFieldProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);

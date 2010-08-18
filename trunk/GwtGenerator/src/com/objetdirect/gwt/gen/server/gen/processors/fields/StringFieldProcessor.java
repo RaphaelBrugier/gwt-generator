@@ -16,15 +16,15 @@ package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
-import com.objetdirect.gwt.gen.server.gen.seamMM.StringField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.fields.StringField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class StringFieldProcessor extends Processor {
 
-	public static final String STRING_FIELD = "StringField";
+	public static final String STRING_FIELD = "seam.fields.StringField";
 
 	public StringFieldProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);

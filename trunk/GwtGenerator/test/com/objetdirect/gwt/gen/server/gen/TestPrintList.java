@@ -15,8 +15,6 @@
 package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
-import static com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor.PRINT_DESCRIPTOR;
-import static com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor.PRINT_LIST_DESCRIPTOR;
 import static com.objetdirect.gwt.gen.server.services.TestGeneratorServiceManyToOne.createManyToOneRelation;
 import static com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType.FACELET;
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.UMLVisibility.PRIVATE;
@@ -40,6 +38,9 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  */
 public class TestPrintList extends TestSeamGenerator {
 
+	private static final String PRINT_DESCRIPTOR_CLASSNAME = "seam.print.PrintDescriptor";
+	private static final String PRINT_LIST_DESCRIPTOR_CLASSNAME = "seam.print.PrintListDescriptor";
+
 	@Test
 	public void testSimpleList() {
 		UMLClass agencyClass = new UMLClass("Agency").
@@ -48,14 +49,14 @@ public class TestPrintList extends TestSeamGenerator {
 			addAttribute(PRIVATE, "String", "email");
 		classes.add(agencyClass);
 		
-		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass(PRINT_DESCRIPTOR)).
+		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass(PRINT_DESCRIPTOR_CLASSNAME)).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
 			addAttributeValuePair("className", "PrintAgencies").
 			addAttributeValuePair("viewPackageName", "views").
 			addAttributeValuePair("viewName", "print-agencies");
 		objects.add(printDescriptorInstance);
 		
-		UMLObject printListDescriptorInstance = new UMLObject("", new UMLClass(PRINT_LIST_DESCRIPTOR));
+		UMLObject printListDescriptorInstance = new UMLObject("", new UMLClass(PRINT_LIST_DESCRIPTOR_CLASSNAME));
 			addStringField(printListDescriptorInstance, "name", "Name", "20");
 			addStringField(printListDescriptorInstance, "phone", "Phone", "10");
 			addStringField(printListDescriptorInstance, "email", "E-mail", "20");
@@ -97,18 +98,18 @@ public class TestPrintList extends TestSeamGenerator {
 			enumRelation.setRightTarget(dummyEnum);
 			enumRelation.setRightRole("enumField");
 		classRelations.add(enumRelation);
-			
+
 		UMLRelation manyToOneRelation = createManyToOneRelation(dummyEntityClass, linkedDummy, "linkField");
 		classRelations.add(manyToOneRelation);
 		
-		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass(PRINT_DESCRIPTOR)).
+		UMLObject printDescriptorInstance =  new UMLObject("", new UMLClass(PRINT_DESCRIPTOR_CLASSNAME)).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
 			addAttributeValuePair("className", "PrintAgencies").
 			addAttributeValuePair("viewPackageName", "views").
 			addAttributeValuePair("viewName", "print-agencies");
 		objects.add(printDescriptorInstance);
 		
-		UMLObject printListDescriptorInstance = new UMLObject("", new UMLClass(PRINT_LIST_DESCRIPTOR));
+		UMLObject printListDescriptorInstance = new UMLObject("", new UMLClass(PRINT_LIST_DESCRIPTOR_CLASSNAME));
 			addStringField(printListDescriptorInstance, "stringField", "String field", "20");
 			addNumberField(printListDescriptorInstance, "intField", "Int field", "####", "20");
 			addDateField(printListDescriptorInstance, "dateField", "Date field", "dd/MM/yyyy");

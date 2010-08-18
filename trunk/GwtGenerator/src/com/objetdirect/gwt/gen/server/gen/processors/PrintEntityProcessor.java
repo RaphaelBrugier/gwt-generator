@@ -23,7 +23,7 @@ import com.objetdirect.seam.print.PrintEntityDescriptor;
  */
 public class PrintEntityProcessor extends Processor {
 	
-	public static final String PRINT_ENTITY = "PrintEntity" ;
+	public static final String PRINT_ENTITY = "seam.print.PrintEntityDescriptor" ;
 
 	public PrintEntityProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);

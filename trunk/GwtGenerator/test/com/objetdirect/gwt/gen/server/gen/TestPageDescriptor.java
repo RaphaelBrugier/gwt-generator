@@ -29,7 +29,7 @@ public class TestPageDescriptor extends TestSeamGenerator {
 
 	@Test
 	public void testGenerateSimplePageCode() throws Exception {
-		UMLClass clazz = new UMLClass("PageDescriptor");
+		UMLClass clazz = new UMLClass("seam.PageDescriptor");
 		
 		UMLObject pageDescriptorObject =  new UMLObject("", clazz).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").

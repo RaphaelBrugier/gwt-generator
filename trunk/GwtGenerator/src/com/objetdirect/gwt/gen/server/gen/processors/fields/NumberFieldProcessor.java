@@ -16,15 +16,15 @@ package com.objetdirect.gwt.gen.server.gen.processors.fields;
 
 import com.objetdirect.gwt.gen.server.gen.SeamGenerator;
 import com.objetdirect.gwt.gen.server.gen.processors.Processor;
-import com.objetdirect.gwt.gen.server.gen.seamMM.NumberField;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
+import com.objetdirect.seam.fields.NumberField;
 
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class NumberFieldProcessor extends Processor {
 
-	public static final String NUMBER_FIELD = "NumberField";
+	public static final String NUMBER_FIELD = "seam.fields.NumberField";
 
 	public NumberFieldProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);

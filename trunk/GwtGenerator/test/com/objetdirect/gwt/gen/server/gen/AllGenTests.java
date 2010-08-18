@@ -31,7 +31,8 @@ import com.objetdirect.gwt.gen.server.gen.relationProcessors.AllRelationProcesso
 	TestEntityGenerator.class,
 	TestPageDescriptor.class,
 	TestPrintEntity.class,
-	TestPrintList.class
+	TestPrintList.class,
+	TestUMLObjectInstantiator.class
 })
 public class AllGenTests {
 

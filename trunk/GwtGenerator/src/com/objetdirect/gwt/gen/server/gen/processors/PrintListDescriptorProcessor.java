@@ -23,7 +23,7 @@ import com.objetdirect.seam.print.PrintListDescriptor;
  */
 public class PrintListDescriptorProcessor extends Processor {
 
-	public static final String PRINT_LIST_DESCRIPTOR = "PrintListDescriptor";
+	public static final String PRINT_LIST_DESCRIPTOR = "seam.print.PrintListDescriptor";
 
 	public PrintListDescriptorProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);

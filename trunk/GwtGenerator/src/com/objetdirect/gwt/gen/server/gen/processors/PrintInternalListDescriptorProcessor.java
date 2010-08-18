@@ -23,7 +23,7 @@ import com.objetdirect.seam.print.PrintInternalListDescriptor;
  */
 public class PrintInternalListDescriptorProcessor extends Processor {
 
-	public static final String PRINT_INTERNAL_LIST = "PrintInternalList";
+	public static final String PRINT_INTERNAL_LIST = "seam.print.PrintInternalListDescriptor";
 
 	public PrintInternalListDescriptorProcessor(SeamGenerator seamGenerator) {
 		super(seamGenerator);
