@@ -22,21 +22,6 @@ import java.util.List;
 import java.util.Map;
 
 import com.objetdirect.entities.EntityDescriptor;
-import com.objetdirect.gwt.gen.server.gen.processors.PageDescriptorProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.PrintDescriptorProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.PrintEntityProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.PrintFormProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.PrintInternalListDescriptorProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.PrintListDescriptorProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.Processor;
-import com.objetdirect.gwt.gen.server.gen.processors.fields.BooleanFieldProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.fields.DateFieldProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.fields.EntityFieldProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.fields.EnumFieldProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.fields.NumberFieldProcessor;
-import com.objetdirect.gwt.gen.server.gen.processors.fields.StringFieldProcessor;
-import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessor;
-import com.objetdirect.gwt.gen.server.gen.relationProcessors.RelationProcessorsManager;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode;
 import com.objetdirect.gwt.gen.shared.dto.GeneratedCode.CodeType;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLClass;
@@ -68,9 +53,6 @@ public class SeamGenerator {
 	
 	private Map<String, EntityDescriptor> classToEntity;
 	
-	private Map<String, Processor> processors;
-	private RelationProcessorsManager relationProcessorsManager;
-	
 	// This map maintains the bridge between the object from the uml world and the objects instantiated in the generator world.
 	private Map<UMLObject, Object> umlObjectToGenObjects;
 	
@@ -87,31 +69,9 @@ public class SeamGenerator {
 		instantiator = new UMLObjectInstantiator();
 		relationMaker = new ObjectRelationMaker(this);
 		
-		processors = new HashMap<String, Processor>();
 		umlObjectToGenObjects = new HashMap<UMLObject, Object>();
-		relationProcessorsManager = new RelationProcessorsManager(this);
-		addObjectProcessors();
 	}
 	
-	private void addObjectProcessors() {
-		addProcessor(new PageDescriptorProcessor(this));
-		addProcessor(new PrintDescriptorProcessor(this));
-		addProcessor(new PrintEntityProcessor(this));
-		addProcessor(new PrintFormProcessor(this));
-		addProcessor(new PrintInternalListDescriptorProcessor(this));
-		addProcessor(new PrintListDescriptorProcessor(this));
-		addProcessor(new BooleanFieldProcessor(this));
-		addProcessor(new DateFieldProcessor(this));
-		addProcessor(new EntityFieldProcessor(this));
-		addProcessor(new EnumFieldProcessor(this));
-		addProcessor(new NumberFieldProcessor(this));
-		addProcessor(new StringFieldProcessor(this));
-	}
-
-	private void addProcessor(Processor processor) {
-		String className = processor.getProcessedClassName();
-		processors.put(className, processor);
-	}
 
 	private void parseAll() {
 		parseClasses();
@@ -145,18 +105,12 @@ public class SeamGenerator {
 			if (objectClassName.equals("seam.print.PrintDescriptor") || objectClassName.equals("seam.PageDescriptor")) {
 				setDocumentDescriptor((DocumentDescriptor)getGenObjectCounterPartOf(object));
 			}
-//			if (processors.containsKey(objectClassName)) {
-//				processors.get(objectClassName).process(object);
-//			}
 		}
 	}
 	
 	private void parseObjectRelations() {
 		for (ObjectRelation relation : objectRelations) {
 			relationMaker.createRelationFromUml(relation);
-//			RelationProcessor<?,?> rp = relationProcessorsManager.getRelationProcessor(relation);
-//			if (rp != null)
-//				rp.process(relation);
 		}
 	}
 

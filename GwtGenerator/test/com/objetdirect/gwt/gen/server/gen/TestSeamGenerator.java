@@ -16,12 +16,6 @@ package com.objetdirect.gwt.gen.server.gen;
 
 import static com.objetdirect.gwt.gen.AssertGeneratedCode.In;
 import static com.objetdirect.gwt.gen.TestUtil.findLinesOfCode;
-import static com.objetdirect.gwt.gen.server.gen.processors.fields.BooleanFieldProcessor.BOOLEAN_FIELD;
-import static com.objetdirect.gwt.gen.server.gen.processors.fields.DateFieldProcessor.DATE_FIELD;
-import static com.objetdirect.gwt.gen.server.gen.processors.fields.EntityFieldProcessor.ENTITY_FIELD;
-import static com.objetdirect.gwt.gen.server.gen.processors.fields.EnumFieldProcessor.ENUM_FIELD;
-import static com.objetdirect.gwt.gen.server.gen.processors.fields.NumberFieldProcessor.NUMBER_FIELD;
-import static com.objetdirect.gwt.gen.server.gen.processors.fields.StringFieldProcessor.STRING_FIELD;
 
 import java.util.ArrayList;
 import java.util.List;

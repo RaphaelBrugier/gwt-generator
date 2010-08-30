@@ -17,8 +17,6 @@ package com.objetdirect.gwt.gen.client.ui;
 import com.google.gwt.event.shared.HandlerManager;
 import com.google.gwt.user.client.ui.RootLayoutPanel;
 import com.objetdirect.gwt.gen.client.GwtGenerator;
-import com.objetdirect.gwt.gen.client.event.BackToHomeEvent;
-import com.objetdirect.gwt.gen.client.event.BackToHomeEvent.BackToHomeEventHandler;
 import com.objetdirect.gwt.gen.client.ui.popup.ErrorToaster;
 import com.objetdirect.gwt.gen.client.ui.popup.MessageToaster;
 import com.objetdirect.gwt.gen.client.ui.welcome.WelcomePanel;
@@ -36,22 +34,9 @@ public class MainController  {
 
 	public MainController() {
 		eventBus = new HandlerManager(null);
-		bind();
 		doGoToHomeScreen();
 	}
 
-	/**
-	 * Add handlers to the event bus.
-	 */
-	private void bind() {
-		eventBus.addHandler(BackToHomeEvent.TYPE, new BackToHomeEventHandler() {
-			@Override
-			public void onBackToHomeEvent(BackToHomeEvent event) {
-				doGoToHomeScreen();
-			}
-		});
-
-	}
 
 	/** Request to return to the home screen.
 	 *  Home screens means welcome screen if the user is not logged or
