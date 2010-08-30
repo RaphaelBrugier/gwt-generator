@@ -18,7 +18,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import com.objetdirect.gwt.gen.shared.exceptions.InstantiateObjectDiagramException;
+import com.objetdirect.gwt.gen.shared.exceptions.DiagramGenerationException;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObjectAttribute;
 
@@ -32,17 +32,9 @@ public class UMLObjectInstantiator {
 	private static final String PACKAGE_NAME = "com.objetdirect.";
 
 	public Object instantiate(UMLObject umlObject) {
-		String className = umlObject.getClassName();
+		Class<?> classToInstantiate = getJavaClassFromUmlObject(umlObject);
 
-		Class<?> classToInstantiate;
-		try {
-			classToInstantiate = Class.forName(PACKAGE_NAME + className);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new InstantiateObjectDiagramException("Unable to find the class " + PACKAGE_NAME + className + ". Be sure to prefix the class name with the good package.");
-		}
-
-		String exceptionMessage = "Unable to instantiate the class " + className;
+		String exceptionMessage = "Unable to instantiate the class " + umlObject.getClassName();
 		try {
 			
 			if (umlObject.getObjectAttributes().size() == 0) {
@@ -55,10 +47,10 @@ public class UMLObjectInstantiator {
 			
 		} catch (InstantiationException e) {
 			e.printStackTrace();
-			throw new InstantiateObjectDiagramException(exceptionMessage);
+			throw new DiagramGenerationException(exceptionMessage);
 		} catch (IllegalAccessException e) {
 			e.printStackTrace();
-			throw new InstantiateObjectDiagramException(exceptionMessage + " for security reason.");
+			throw new DiagramGenerationException(exceptionMessage + " for security reason.");
 		}
 	}
 
@@ -85,10 +77,10 @@ public class UMLObjectInstantiator {
 			constructor = classToInstantiate.getConstructor(paramTypes);
 		} catch (SecurityException e) {
 			e.printStackTrace();
-			throw new InstantiateObjectDiagramException("Unable to instantiate the class " + className + " due to security restrictions");
+			throw new DiagramGenerationException("Unable to instantiate the class " + className + " due to security restrictions");
 		} catch (NoSuchMethodException e) {
 			e.printStackTrace();
-			throw new InstantiateObjectDiagramException(
+			throw new DiagramGenerationException(
 				"Unable to instantiate the class " + className + " because there is no constructor for the given parameters");
 		}
 		
@@ -97,13 +89,29 @@ public class UMLObjectInstantiator {
 			object = constructor.newInstance(attributesValues);
 		} catch (IllegalArgumentException e) {
 			e.printStackTrace();
-			throw new InstantiateObjectDiagramException(
+			throw new DiagramGenerationException(
 					"Unable to instantiate the class " + className + " because wrong parameters has been passed to the constructor " + constructor);
 		} catch (InvocationTargetException e) {
 			e.printStackTrace();
-			throw new InstantiateObjectDiagramException(
+			throw new DiagramGenerationException(
 					"Unable to instantiate the class " + className + " because wrong parameters has been passed to the constructor " + constructor);
 		}
 		return object;
+	}
+	
+	/**
+	 * @param className
+	 * @return
+	 */
+	public static Class<?> getJavaClassFromUmlObject(UMLObject umlObject) {
+		String className = umlObject.getClassName();
+		Class<?> classToInstantiate;
+		try {
+			classToInstantiate = Class.forName(PACKAGE_NAME + className);
+		} catch (ClassNotFoundException e) {
+			e.printStackTrace();
+			throw new DiagramGenerationException("Unable to find the class " + PACKAGE_NAME + className + ". Be sure to prefix the class name with the good package.");
+		}
+		return classToInstantiate;
 	}
 }
