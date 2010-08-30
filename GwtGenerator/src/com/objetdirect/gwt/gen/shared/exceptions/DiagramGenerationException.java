@@ -19,9 +19,9 @@ package com.objetdirect.gwt.gen.shared.exceptions;
  * @author Raphael Brugier (raphael-dot-brugier.at.gmail'dot'com)
  */
 @SuppressWarnings("serial")
-public class InstantiateObjectDiagramException extends RuntimeException {
+public class DiagramGenerationException extends RuntimeException {
 
-	public InstantiateObjectDiagramException() {
+	public DiagramGenerationException() {
 	}
 
 	/**
@@ -29,7 +29,7 @@ public class InstantiateObjectDiagramException extends RuntimeException {
 	 * 
 	 * @param msg The String exception
 	 */
-	public InstantiateObjectDiagramException(final String msg) {
+	public DiagramGenerationException(final String msg) {
 		super(msg);
 	}
 }

@@ -29,6 +29,7 @@ import com.objetdirect.gwt.gen.server.gen.relationProcessors.AllRelationProcesso
 	AllProcessorsTests.class,
 	AllRelationProcessorsTests.class,
 	TestEntityGenerator.class,
+	TestObjectRelationMaker.class,
 	TestPageDescriptor.class,
 	TestPrintEntity.class,
 	TestPrintList.class,
