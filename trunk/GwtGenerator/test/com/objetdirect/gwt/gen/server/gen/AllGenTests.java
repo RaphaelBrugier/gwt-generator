@@ -17,17 +17,12 @@ package com.objetdirect.gwt.gen.server.gen;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
-import com.objetdirect.gwt.gen.server.gen.processors.AllProcessorsTests;
-import com.objetdirect.gwt.gen.server.gen.relationProcessors.AllRelationProcessorsTests;
-
 /**
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 
 @RunWith(Suite.class)
 @Suite.SuiteClasses( {
-	AllProcessorsTests.class,
-	AllRelationProcessorsTests.class,
 	TestEntityGenerator.class,
 	TestObjectRelationMaker.class,
 	TestPageDescriptor.class,
