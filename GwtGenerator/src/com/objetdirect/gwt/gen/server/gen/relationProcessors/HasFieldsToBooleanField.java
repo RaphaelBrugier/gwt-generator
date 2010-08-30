@@ -32,9 +32,6 @@ import com.objetdirect.seam.fields.BooleanField;
  */
 public class HasFieldsToBooleanField extends RelationProcessor<HasFields, BooleanField> {
 
-	private static final String FALSE_VALUE = "FALSE";
-	private static final String TRUE_VALUE = "TRUE";
-
 	public HasFieldsToBooleanField(SeamGenerator seamGenerator) {
 		super(seamGenerator);
 	}
@@ -43,7 +40,7 @@ public class HasFieldsToBooleanField extends RelationProcessor<HasFields, Boolea
 	public void process(ObjectRelation objectRelation) {
 		HasFields printFormDescriptor = getOwner(objectRelation);
 		BooleanField booleanField  = getTarget(objectRelation);
-		printFormDescriptor.addBooleanField(booleanField.fieldName, booleanField.fieldTitle, TRUE_VALUE, FALSE_VALUE);
+		printFormDescriptor.setBooleanField(booleanField);
 	}
 
 	@Override

@@ -33,7 +33,6 @@ public class TestHasFieldsToEntityField extends TestRelationProcessor{
 	private static final String FIELD_TITLE = "linkField";
 	private static final String FIELD_NAME = "Link Field";
 	private static final String LENGTH = "20";
-	private static final int LENGHT_INT_VALUE = 20;
 	private static final String LABELS_VALUE = "name";
 
 	@Mock
@@ -83,6 +82,6 @@ public class TestHasFieldsToEntityField extends TestRelationProcessor{
 	private void verifyAll(HasFields objectToVerify) {
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
-		verify(objectToVerify).addEntityField(FIELD_NAME, FIELD_TITLE, LABELS_VALUE, LENGHT_INT_VALUE);
+		verify(objectToVerify).setEntityField(entityField);
 	}
 }

@@ -40,7 +40,7 @@ public class HasFieldsToDateField extends RelationProcessor<HasFields, DateField
 	public void process(ObjectRelation objectRelation) {
 		HasFields printFormDescriptor = getOwner(objectRelation);
 		DateField dateField  = getTarget(objectRelation);
-		printFormDescriptor.addDateField(dateField.fieldName, dateField.fieldTitle, dateField.pattern);
+		printFormDescriptor.setDateField(dateField);
 	}
 
 	@Override

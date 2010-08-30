@@ -40,7 +40,7 @@ public class HasFieldsToStringField extends RelationProcessor<HasFields, StringF
 	public void process(ObjectRelation objectRelation) {
 		HasFields printFormDescriptor = getOwner(objectRelation);
 		StringField stringField  = getTarget(objectRelation);
-		printFormDescriptor.addStringField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
+		printFormDescriptor.setStringField(stringField);
 	}
 
 	@Override

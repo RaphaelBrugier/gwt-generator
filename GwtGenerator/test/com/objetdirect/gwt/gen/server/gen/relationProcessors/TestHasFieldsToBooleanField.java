@@ -33,9 +33,6 @@ public class TestHasFieldsToBooleanField extends TestRelationProcessor{
 	private static final String FIELD_TITLE = "fieldTitle";
 	private static final String FIELD_NAME = "fieldName";
 
-	private static final String FALSE_VALUE = "FALSE";
-	private static final String TRUE_VALUE = "TRUE";
-
 	@Mock
 	PrintFormDescriptor printForm;
 	
@@ -83,6 +80,6 @@ public class TestHasFieldsToBooleanField extends TestRelationProcessor{
 	private void verifyAll(HasFields objectToVerify) {
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
-		verify(objectToVerify).addBooleanField(FIELD_NAME, FIELD_TITLE, TRUE_VALUE, FALSE_VALUE);
+		verify(objectToVerify).setBooleanField(booleanField);
 	}
 }

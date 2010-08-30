@@ -33,7 +33,6 @@ public class TestHasFieldsToNumberField extends TestRelationProcessor{
 	private static final String FIELD_TITLE = "fieldTitle";
 	private static final String FIELD_NAME = "fieldName";
 	private static final String LENGTH = "20";
-	private static final int LENGHT_INT_VALUE = 20;
 	private static final String PATTERN_VALUE = "####";
 
 	@Mock
@@ -83,6 +82,6 @@ public class TestHasFieldsToNumberField extends TestRelationProcessor{
 	private void verifyAll(HasFields objectToVerify) {
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
-		verify(objectToVerify).addNumberField(FIELD_NAME, FIELD_TITLE, PATTERN_VALUE, LENGHT_INT_VALUE);
+		verify(objectToVerify).setNumberField(numberField);
 	}
 }

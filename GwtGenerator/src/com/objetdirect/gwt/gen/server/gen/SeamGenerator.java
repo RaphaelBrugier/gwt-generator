@@ -62,6 +62,8 @@ public class SeamGenerator {
 	
 	final private UMLObjectInstantiator instantiator;
 	
+	final private ObjectRelationMaker relationMaker;
+	
 	private DocumentDescriptor documentDescriptor;
 	
 	private Map<String, EntityDescriptor> classToEntity;
@@ -83,6 +85,7 @@ public class SeamGenerator {
 		this.objectRelations = objectRelations;
 		entityGenerator = new EntityGenerator(classes, classRelations, PACKAGE_NAME);
 		instantiator = new UMLObjectInstantiator();
+		relationMaker = new ObjectRelationMaker(this);
 		
 		processors = new HashMap<String, Processor>();
 		umlObjectToGenObjects = new HashMap<UMLObject, Object>();
@@ -150,9 +153,10 @@ public class SeamGenerator {
 	
 	private void parseObjectRelations() {
 		for (ObjectRelation relation : objectRelations) {
-			RelationProcessor<?,?> rp = relationProcessorsManager.getRelationProcessor(relation);
-			if (rp != null)
-				rp.process(relation);
+			relationMaker.createRelationFromUml(relation);
+//			RelationProcessor<?,?> rp = relationProcessorsManager.getRelationProcessor(relation);
+//			if (rp != null)
+//				rp.process(relation);
 		}
 	}
 

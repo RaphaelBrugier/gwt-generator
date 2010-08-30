@@ -40,7 +40,7 @@ public class HasFieldsToEnumField extends RelationProcessor<HasFields, EnumField
 	public void process(ObjectRelation objectRelation) {
 		HasFields printFormDescriptor = getOwner(objectRelation);
 		EnumField enumField  = getTarget(objectRelation);
-		printFormDescriptor.addEnumField(enumField.fieldName, enumField.fieldTitle, enumField.getLength());
+		printFormDescriptor.setEnumField(enumField);
 	}
 
 	@Override
