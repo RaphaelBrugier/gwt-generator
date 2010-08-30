@@ -40,7 +40,7 @@ public class HasFieldsToEntityField extends RelationProcessor<HasFields, EntityF
 	public void process(ObjectRelation objectRelation) {
 		HasFields printFormDescriptor = getOwner(objectRelation);
 		EntityField entityField  = getTarget(objectRelation);
-		printFormDescriptor.addEntityField(entityField.fieldName, entityField.fieldTitle, entityField.labels, entityField.getLength());
+		printFormDescriptor.setEntityField(entityField);
 	}
 
 	@Override

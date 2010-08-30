@@ -33,7 +33,6 @@ public class TestHasFieldsToStringField extends TestRelationProcessor{
 	private static final String FIELD_TITLE = "fieldTitle";
 	private static final String FIELD_NAME = "fieldName";
 	private static final String LENGTH = "20";
-	private static final int LENGTH_INT_VALUE = 20;
 
 	@Mock
 	PrintFormDescriptor printForm;
@@ -82,6 +81,6 @@ public class TestHasFieldsToStringField extends TestRelationProcessor{
 	private void verifyAll(HasFields objectToVerify) {
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectOwner);
 		verify(seamGenerator).getGenObjectCounterPartOf(umlObjectTarget);
-		verify(objectToVerify).addStringField(FIELD_NAME, FIELD_TITLE, LENGTH_INT_VALUE);
+		verify(objectToVerify).setStringField(stringField);
 	}
 }

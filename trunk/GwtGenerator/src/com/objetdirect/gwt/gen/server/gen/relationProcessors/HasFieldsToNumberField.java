@@ -40,7 +40,7 @@ public class HasFieldsToNumberField extends RelationProcessor<HasFields, NumberF
 	public void process(ObjectRelation objectRelation) {
 		HasFields printFormDescriptor = getOwner(objectRelation);
 		NumberField numberField  = getTarget(objectRelation);
-		printFormDescriptor.addNumberField(numberField.fieldName, numberField.fieldTitle, numberField.pattern, numberField.getLength());
+		printFormDescriptor.setNumberField(numberField);
 	}
 
 	@Override
