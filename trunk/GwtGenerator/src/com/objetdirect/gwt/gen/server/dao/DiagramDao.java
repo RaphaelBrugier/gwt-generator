@@ -27,6 +27,7 @@ import com.objetdirect.gwt.gen.server.ServerHelper;
 import com.objetdirect.gwt.gen.server.entities.Diagram;
 import com.objetdirect.gwt.gen.shared.dto.DiagramDto;
 import com.objetdirect.gwt.gen.shared.exceptions.GWTGeneratorException;
+import com.objetdirect.gwt.umlapi.client.umlCanvas.ClassDiagram;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType;
 
 /**
@@ -159,6 +160,21 @@ public class DiagramDao {
 		}
 		
 		return queryResult;
+	}
+	
+	/**
+	 * Get all the class diagrams defining the seam diagram.
+	 * 
+	 * @return a list of all the diagrams.
+	 */
+	public List<ClassDiagram> getSeamClassDiagrams() {
+		List<ClassDiagram> classDiagrams = new ArrayList<ClassDiagram>();
+		Collection<Diagram> seamDiagrams = getSeamDiagrams();
+		for (Diagram diagram : seamDiagrams) {
+			ClassDiagram classDiagram = (ClassDiagram) diagram.getCanvas();
+			classDiagrams.add(classDiagram);
+		}
+		return classDiagrams;
 	}
 	
 	/**

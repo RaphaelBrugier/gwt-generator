@@ -36,6 +36,10 @@ import com.objetdirect.seam.print.PrintEntityDescriptor;
  */
 public class TestObjectRelationMaker {
 
+	private static final String PRINT_ENTITY_DESCRIPTOR_CLASSNAME = "PrintEntityDescriptor";
+
+	private static final String ENTITY_DESCRIPTOR_CLASSNAME = "EntityDescriptor";
+
 	ObjectRelationMaker relationMaker;
 	
 	@Mock
@@ -58,8 +62,8 @@ public class TestObjectRelationMaker {
 		MockitoAnnotations.initMocks(this);
 		relationMaker = new ObjectRelationMaker(seamGenerator);
 		objectRelation = new ObjectRelation(umlObjectOwner, umlObjectTarget);
-		when(umlObjectOwner.getClassName()).thenReturn("seam.print.PrintEntityDescriptor");
-		when(umlObjectTarget.getClassName()).thenReturn("entities.EntityDescriptor");
+		when(umlObjectOwner.getClassName()).thenReturn(PRINT_ENTITY_DESCRIPTOR_CLASSNAME);
+		when(umlObjectTarget.getClassName()).thenReturn(ENTITY_DESCRIPTOR_CLASSNAME);
 	}
 	
 	@Test
@@ -77,7 +81,7 @@ public class TestObjectRelationMaker {
 	@Test
 	public void makeSetMethodFromClassName() throws Exception {
 		// given 
-		objectRelation.getRightObject().setInstantiatedClass(new UMLClass("entities.EntityDescriptor"));
+		objectRelation.getRightObject().setInstantiatedClass(new UMLClass(ENTITY_DESCRIPTOR_CLASSNAME));
 		objectRelation.setRightRole("");
 		
 		// when

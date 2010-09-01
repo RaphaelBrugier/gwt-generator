@@ -96,13 +96,12 @@ public class SeamGenerator {
 			
 			if (classToEntity.containsKey(objectClassName)) {
 				addBridgeObject(object, classToEntity.get(objectClassName));
-			} else
-			{
+			} else {
 				Object objectInstantiated = instantiator.instantiate(object);
 				addBridgeObject(object, objectInstantiated);
 			}
 			
-			if (objectClassName.equals("seam.print.PrintDescriptor") || objectClassName.equals("seam.PageDescriptor")) {
+			if (objectClassName.equals("PrintDescriptor") || objectClassName.equals("PageDescriptor")) {
 				setDocumentDescriptor((DocumentDescriptor)getGenObjectCounterPartOf(object));
 			}
 		}

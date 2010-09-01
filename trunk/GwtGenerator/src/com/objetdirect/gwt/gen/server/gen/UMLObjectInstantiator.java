@@ -23,13 +23,16 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
 import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObjectAttribute;
 
 /**
- * This class is responsible to instantiate generator object from UmlObject using reflection.
+ * This class is responsible to instantiate generator objects from UmlObject using reflection.
  * 
  * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
  */
 public class UMLObjectInstantiator {
 
-	private static final String PACKAGE_NAME = "com.objetdirect.";
+	private static final String PACKAGE_NAME_PREFIX = "com.objetdirect.";
+	
+	
+	private static final String[] PACKAGES = {"entities.", "seam.fields.", "seam.print.", "seam."}; 
 
 	public Object instantiate(UMLObject umlObject) {
 		Class<?> classToInstantiate = getJavaClassFromUmlObject(umlObject);
@@ -105,12 +108,17 @@ public class UMLObjectInstantiator {
 	 */
 	public static Class<?> getJavaClassFromUmlObject(UMLObject umlObject) {
 		String className = umlObject.getClassName();
-		Class<?> classToInstantiate;
-		try {
-			classToInstantiate = Class.forName(PACKAGE_NAME + className);
-		} catch (ClassNotFoundException e) {
-			e.printStackTrace();
-			throw new DiagramGenerationException("Unable to find the class " + PACKAGE_NAME + className + ". Be sure to prefix the class name with the good package.");
+		Class<?> classToInstantiate = null;
+		for (String packageName : PACKAGES) {
+			try {
+				String fullClassName = PACKAGE_NAME_PREFIX + packageName + className;
+				classToInstantiate = Class.forName(fullClassName);
+				break;
+			} catch (ClassNotFoundException e) {
+			}
+		}
+		if (classToInstantiate == null) {
+			throw new DiagramGenerationException("Unable to find the class " + className + ".");
 		}
 		return classToInstantiate;
 	}

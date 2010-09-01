@@ -58,7 +58,7 @@ public class TestSeamGenerator {
 	}
 	
 	void addStringField(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {
-		UMLObject field = new UMLObject("", new UMLClass("seam.fields.StringField")).
+		UMLObject field = new UMLObject("", new UMLClass("StringField")).
 			addAttributeValuePair("fieldName", fieldNameValue).
 			addAttributeValuePair("fieldTitle", fieldTitleValue).
 			addAttributeValuePair("length", lengthValue);
@@ -69,7 +69,7 @@ public class TestSeamGenerator {
 	}
 	
 	void addNumberField(UMLObject form, String fieldNameValue, String fieldTitleValue, String patternValue, String lengthValue) {
-		UMLObject field = new UMLObject("", new UMLClass("seam.fields.NumberField")).
+		UMLObject field = new UMLObject("", new UMLClass("NumberField")).
 			addAttributeValuePair("fieldName", fieldNameValue).
 			addAttributeValuePair("fieldTitle", fieldTitleValue).
 			addAttributeValuePair("pattern", patternValue).
@@ -81,7 +81,7 @@ public class TestSeamGenerator {
 	}
 	
 	void addDateField(UMLObject form, String fieldNameValue, String fieldTitleValue, String patternValue) {
-		UMLObject field = new UMLObject("", new UMLClass("seam.fields.DateField")).
+		UMLObject field = new UMLObject("", new UMLClass("DateField")).
 			addAttributeValuePair("fieldName", fieldNameValue).
 			addAttributeValuePair("fieldTitle", fieldTitleValue).
 			addAttributeValuePair("pattern", patternValue);
@@ -92,7 +92,7 @@ public class TestSeamGenerator {
 	}
 	
 	void addBooleanField(UMLObject form, String fieldNameValue, String fieldTitleValue) {
-		UMLObject field = new UMLObject("", new UMLClass("seam.fields.BooleanField")).
+		UMLObject field = new UMLObject("", new UMLClass("BooleanField")).
 			addAttributeValuePair("fieldName", fieldNameValue).
 			addAttributeValuePair("fieldTitle", fieldTitleValue);
 		objects.add(field);
@@ -102,7 +102,7 @@ public class TestSeamGenerator {
 	}
 	
 	void addEnumField(UMLObject form, String fieldNameValue, String fieldTitleValue, String lengthValue) {
-		UMLObject field = new UMLObject("", new UMLClass("seam.fields.EnumField")).
+		UMLObject field = new UMLObject("", new UMLClass("EnumField")).
 		addAttributeValuePair("fieldName", fieldNameValue).
 		addAttributeValuePair("fieldTitle", fieldTitleValue).
 		addAttributeValuePair("length", lengthValue);
@@ -113,7 +113,7 @@ public class TestSeamGenerator {
 	}
 	
 	void addEntityField(UMLObject form, String fieldNameValue, String fieldTitleValue, String labelsValue, String lengthValue) {
-		UMLObject field = new UMLObject("", new UMLClass("seam.fields.EntityField")).
+		UMLObject field = new UMLObject("", new UMLClass("EntityField")).
 			addAttributeValuePair("fieldName", fieldNameValue).
 			addAttributeValuePair("fieldTitle", fieldTitleValue).
 			addAttributeValuePair("labels", labelsValue).
