@@ -36,10 +36,10 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  */
 public class TestPrintEntity extends TestSeamGenerator {
 
-	private static final String PRINT_INTERNAL_LIST_DESCRIPTOR_CLASSNAME = "seam.print.PrintInternalListDescriptor";
-	private static final String PRINT_DESCRIPTOR_CLASSNAME = "seam.print.PrintDescriptor";
-	private static final String PRINT_FORM_DESCRIPTOR_CLASSNAME = "seam.print.PrintFormDescriptor";
-	private static final String PRINT_ENTITY_DESCRIPTOR_CLASSNAME = "seam.print.PrintEntityDescriptor";
+	private static final String PRINT_INTERNAL_LIST_DESCRIPTOR_CLASSNAME = "PrintInternalListDescriptor";
+	private static final String PRINT_DESCRIPTOR_CLASSNAME = "PrintDescriptor";
+	private static final String PRINT_FORM_DESCRIPTOR_CLASSNAME = "PrintFormDescriptor";
+	private static final String PRINT_ENTITY_DESCRIPTOR_CLASSNAME = "PrintEntityDescriptor";
 
 	@Test
 	public void testSimpleEntity() {
@@ -75,7 +75,6 @@ public class TestPrintEntity extends TestSeamGenerator {
 		addStringField(printFormInstance, "phone", "Phone", "10");
 		addStringField(printFormInstance, "email", "E-mail", "20");
 		
-		printGeneratedCode(CodeType.FACELET);
 		assertGenerated(testSimpleEntityJavaText, testSimpleEntityFaceletText);
 	}
 	
@@ -113,7 +112,6 @@ public class TestPrintEntity extends TestSeamGenerator {
 		createRelation(printEntityDescriptorInstance, entityInstance, "entity");
 		
 		createRelation(printDescriptorInstance, printEntityDescriptorInstance, "feature");
-		
 		
 		UMLObject printFormInstance = new UMLObject("", new UMLClass(PRINT_FORM_DESCRIPTOR_CLASSNAME));
 		objects.add(printFormInstance);

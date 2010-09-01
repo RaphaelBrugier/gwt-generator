@@ -38,8 +38,8 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  */
 public class TestPrintList extends TestSeamGenerator {
 
-	private static final String PRINT_DESCRIPTOR_CLASSNAME = "seam.print.PrintDescriptor";
-	private static final String PRINT_LIST_DESCRIPTOR_CLASSNAME = "seam.print.PrintListDescriptor";
+	private static final String PRINT_DESCRIPTOR_CLASSNAME = "PrintDescriptor";
+	private static final String PRINT_LIST_DESCRIPTOR_CLASSNAME = "PrintListDescriptor";
 
 	@Test
 	public void testSimpleList() {
@@ -61,7 +61,7 @@ public class TestPrintList extends TestSeamGenerator {
 			addStringField(printListDescriptorInstance, "phone", "Phone", "10");
 			addStringField(printListDescriptorInstance, "email", "E-mail", "20");
 		objects.add(printListDescriptorInstance);
-		
+
 		createRelation(printDescriptorInstance, printListDescriptorInstance, "feature");
 		
 		UMLObject entityInstance = new UMLObject("", agencyClass);
@@ -92,7 +92,7 @@ public class TestPrintList extends TestSeamGenerator {
 			addAttribute(PRIVATE, "Date", "dateField").
 			addAttribute(PRIVATE, "boolean", "boolField");
 		classes.add(dummyEntityClass);
-		
+
 		UMLRelation enumRelation = new UMLRelation(ASSOCIATION_RELATION);
 			enumRelation.setLeftTarget(dummyEntityClass);
 			enumRelation.setRightTarget(dummyEnum);
@@ -108,7 +108,7 @@ public class TestPrintList extends TestSeamGenerator {
 			addAttributeValuePair("viewPackageName", "views").
 			addAttributeValuePair("viewName", "print-agencies");
 		objects.add(printDescriptorInstance);
-		
+
 		UMLObject printListDescriptorInstance = new UMLObject("", new UMLClass(PRINT_LIST_DESCRIPTOR_CLASSNAME));
 			addStringField(printListDescriptorInstance, "stringField", "String field", "20");
 			addNumberField(printListDescriptorInstance, "intField", "Int field", "####", "20");
@@ -117,7 +117,7 @@ public class TestPrintList extends TestSeamGenerator {
 			addEnumField(printListDescriptorInstance, "enumField", "Enum field", "15");
 			addEntityField(printListDescriptorInstance, "linkField", "Link field", "name", "15");
 		objects.add(printListDescriptorInstance);
-		
+
 		createRelation(printDescriptorInstance, printListDescriptorInstance, "feature");
 		
 		UMLObject entityInstance = new UMLObject("", dummyEntityClass);

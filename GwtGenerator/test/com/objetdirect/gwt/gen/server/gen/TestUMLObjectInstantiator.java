@@ -33,8 +33,8 @@ public class TestUMLObjectInstantiator {
 
 	private static final String FIELD_TITLE_VALUE = "fieldTitleValue";
 	private static final String FIELD_NAME_VALUE = "fieldNameValue";
-	private static final String BOOLEAN_FIELD_CLASSNAME = "seam.fields.BooleanField";
-	private static final String PRINT_ENTITY_DESCRIPTOR_CLASSNAME = "seam.print.PrintEntityDescriptor";
+	private static final String BOOLEAN_FIELD_CLASSNAME = "BooleanField";
+	private static final String PRINT_ENTITY_DESCRIPTOR_CLASSNAME = "PrintEntityDescriptor";
 	
 	UMLObjectInstantiator instantiator;
 	
@@ -42,7 +42,6 @@ public class TestUMLObjectInstantiator {
 	public void setUp() throws Exception {
 		instantiator = new UMLObjectInstantiator();
 	}
-	
 	
 	@Test
 	public void instantiate_PrintEntityDescriptorClass() throws Exception {
@@ -71,5 +70,4 @@ public class TestUMLObjectInstantiator {
 		assertEquals(FIELD_NAME_VALUE, booleanField.fieldName);
 		assertEquals(FIELD_TITLE_VALUE, booleanField.fieldTitle);
 	}
-	
 }

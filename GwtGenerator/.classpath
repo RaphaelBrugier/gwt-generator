@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry kind="src" path="src"/>
-	<classpathentry kind="src" path="gwtuml-src"/>
 	<classpathentry kind="src" path="generatorAPI-tst"/>
-	<classpathentry kind="src" path="generatorAPI-src"/>
 	<classpathentry kind="src" output="test-classes" path="test"/>
+	<classpathentry kind="src" path="generatorAPI-src"/>
+	<classpathentry kind="src" path="gwtUmlAPi"/>
 	<classpathentry kind="con" path="com.google.appengine.eclipse.core.GAE_CONTAINER"/>
 	<classpathentry kind="con" path="com.google.gwt.eclipse.core.GWT_CONTAINER"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
@@ -13,8 +13,8 @@
 	<classpathentry kind="lib" path="lib/tatami-1.4-rip.jar"/>
 	<classpathentry kind="lib" path="lib/mockito-all-1.8.5.jar" sourcepath="C:/Documents and Settings/Raphael/.m2/repository/org/mockito/mockito-all/1.8.5/mockito-all-1.8.5-sources.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
-	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/impl/appengine-api-stubs.jar"/>
-	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/impl/appengine-api-labs.jar"/>
-	<classpathentry kind="lib" path="E:/dev/tools/eclipse-jee-galileo-SR2-win32/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/testing/appengine-testing.jar"/>
+	<classpathentry kind="lib" path="C:/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/impl/appengine-api-stubs.jar"/>
+	<classpathentry kind="lib" path="C:/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/impl/appengine-api-labs.jar"/>
+	<classpathentry kind="lib" path="C:/eclipse/plugins/com.google.appengine.eclipse.sdkbundle.1.3.5_1.3.5.v201006301254/appengine-java-sdk-1.3.5/lib/testing/appengine-testing.jar"/>
 	<classpathentry kind="output" path="war/WEB-INF/classes"/>
 </classpath>

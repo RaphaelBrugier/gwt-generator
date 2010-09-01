@@ -86,8 +86,22 @@ public class GeneratorServiceImpl extends RemoteServiceServlet implements Genera
 	 */
 	@Override
 	public List<GeneratedCode> generateSeamCode(ObjectDiagramDto objectDiagram) throws UMLException {
-		SeamGenerator seamGenerator = new SeamGenerator(objectDiagram.classes, objectDiagram.objects, objectDiagram.objectRelations, objectDiagram.classRelations);
+		List<UMLClass> filteredClass = filterSeamClassesInDiagramClasses(objectDiagram.classes);
 		
+		SeamGenerator seamGenerator = new SeamGenerator(objectDiagram.classes, objectDiagram.objects, objectDiagram.objectRelations, objectDiagram.classRelations);
 		return seamGenerator.getGenerateCode();
+	}
+
+	/**
+	 * The classes declared in the object diagram are also classes declared in the seam diagram.
+	 * Since they are not entity classes and not supposed to be generated, we have to filter them and remove them from the
+	 * list of classes in the object diagram.
+	 * 
+	 * @param classes
+	 * @return
+	 */
+	private List<UMLClass> filterSeamClassesInDiagramClasses(List<UMLClass> classes) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

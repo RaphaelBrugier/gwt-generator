@@ -97,7 +97,7 @@ public class ObjectDiagramBuilder {
 	 * The seam classes and relations are found in the special seam diagram.
 	 */
 	private void addSeamClasses(final List<UMLClass> domainClasses, final List<UMLRelation> classRelations) {
-		List<ClassDiagram> classDiagrams = getSeamClassDiagrams();
+		List<ClassDiagram> classDiagrams = diagramDao.getSeamClassDiagrams();
 		
 		ClassDiagramMerger classDiagramMerger = new ClassDiagramMerger(classDiagrams);
 		classDiagramMerger.mergeAll();
@@ -105,7 +105,7 @@ public class ObjectDiagramBuilder {
 		List<UMLClass> mergedClasses = classDiagramMerger.getClasses();
 		List<UMLRelation> mergedRelations = classDiagramMerger.getRelations();
 		
-		List<UMLClass> seamSupportedClasses = createSeamSupportedClasses(mergedClasses);
+		List<UMLClass> seamSupportedClasses = filterSeamSupportedClasses(mergedClasses);
 		
 		List<UMLRelation> entityRelations = createEntityRelations(domainClasses, mergedRelations);
 		
@@ -114,29 +114,15 @@ public class ObjectDiagramBuilder {
 		classRelations.addAll(entityRelations);
 	}
 
+	
 	/**
-	 * Get all the class diagrams defining the seam diagram.
-	 * 
-	 * @return a list of all the diagrams.
-	 */
-	private List<ClassDiagram> getSeamClassDiagrams() {
-		List<ClassDiagram> classDiagrams = new ArrayList<ClassDiagram>();
-		Collection<Diagram> seamDiagrams = diagramDao.getSeamDiagrams();
-		for (Diagram diagram : seamDiagrams) {
-			ClassDiagram classDiagram = (ClassDiagram) diagram.getCanvas();
-			classDiagrams.add(classDiagram);
-		}
-		return classDiagrams;
-	}
-
-	/**
-	 * Create the list of the classes supported by the seam generation.
-	 * Basically, it's just the classes declared in the seam diagram but without the abstract classes and the classes named Entity.
+	 * Filter the list of the classes supported by the seam generation.
+	 * Basically, it's just removing the abstract classes and the classes named Entity.
 	 * 
 	 * @param umlClasses The classes declared in the seam diagram.
 	 * @return
 	 */
-	private List<UMLClass> createSeamSupportedClasses(List<UMLClass> umlClasses) {
+	public static List<UMLClass> filterSeamSupportedClasses(List<UMLClass> umlClasses) {
 		List<UMLClass> seamSupportedClasses = new ArrayList<UMLClass>();
 		
 		for (UMLClass umlClass : umlClasses) {

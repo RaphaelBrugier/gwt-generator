@@ -27,9 +27,11 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.UMLObject;
  */
 public class TestPageDescriptor extends TestSeamGenerator {
 
+	public static final String PAGE_DESCRIPTOR_CLASSNAME = "PageDescriptor";
+
 	@Test
 	public void testGenerateSimplePageCode() throws Exception {
-		UMLClass clazz = new UMLClass("seam.PageDescriptor");
+		UMLClass clazz = new UMLClass(PAGE_DESCRIPTOR_CLASSNAME);
 		
 		UMLObject pageDescriptorObject =  new UMLObject("", clazz).
 			addAttributeValuePair("classPackageName", "com.objetdirect.actions").
