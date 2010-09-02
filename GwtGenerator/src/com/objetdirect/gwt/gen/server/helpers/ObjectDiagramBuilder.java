@@ -1,8 +1,8 @@
 /*
- * This file is part of the Gwt-Generator project and was written by Raphaël Brugier <raphael dot brugier at gmail dot com > for Objet Direct
+ * This file is part of the Gwt-Generator project and was written by Raphaï¿½l Brugier <raphael dot brugier at gmail dot com > for Objet Direct
  * <http://wwww.objetdirect.com>
  * 
- * Copyright © 2010 Objet Direct
+ * Copyright ï¿½ 2010 Objet Direct
  * 
  * Gwt-Generator is free software: you can redistribute it and/or modify it under the terms of the GNU Lesser General Public License as published by the Free Software
  * Foundation, either version 3 of the License, or (at your option) any later version.
@@ -18,7 +18,6 @@ import static com.objetdirect.gwt.umlapi.client.umlcomponents.DiagramType.OBJECT
 import static com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation.createAssociation;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 import com.objetdirect.gwt.gen.server.dao.DiagramDao;
@@ -33,7 +32,7 @@ import com.objetdirect.gwt.umlapi.client.umlcomponents.umlrelation.UMLRelation;
  * This class is responsible to add the classes and class relations to an object diagram from the class diagram instantiated.
  * It also adds the seam classes and relation supported by the generator.
  * 
- * @author Raphaël Brugier <raphael dot brugier at gmail dot com>
+ * @author Raphaï¿½l Brugier <raphael dot brugier at gmail dot com>
  */
 public class ObjectDiagramBuilder {
 
