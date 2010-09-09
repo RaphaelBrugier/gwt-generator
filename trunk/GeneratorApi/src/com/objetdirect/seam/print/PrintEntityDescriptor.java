@@ -123,6 +123,10 @@ public class PrintEntityDescriptor extends BaseComponent implements PrintFeature
 		return this;
 	}
 	
+	public void setElement(PrintElement element) {
+		addElement(element);
+	}
+	
 	public String getEntityAlias() {
 		return getEntityType().getName();
 	}
