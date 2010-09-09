@@ -14,20 +14,27 @@
  */
 package com.objetdirect.seam.fieldrenderers;
 
+import com.objetdirect.seam.fields.BooleanField;
+import com.objetdirect.seam.fields.DateField;
+import com.objetdirect.seam.fields.EntityField;
+import com.objetdirect.seam.fields.EnumField;
+import com.objetdirect.seam.fields.NumberField;
+import com.objetdirect.seam.fields.StringField;
+
 /**
  * @author Raphael Brugier <raphael dot brugier at gmail dot com >
  */
 public interface HasFields {
 
-	public void addStringField(String fieldName, String fieldTitle, int length);
+	public void setStringField(StringField stringField);
 	
-	public void addNumberField(String fieldName, String fieldTitle, String pattern, int length);
+	public void setNumberField(NumberField numberField);
 	
-	public void addDateField(String fieldName, String fieldTitle, String pattern);
+	public void setDateField(DateField dateField);
 	
-	public void addBooleanField(String fieldName, String fieldTitle, String trueValue, String falseValue);
+	public void setBooleanField(BooleanField booleanField);
 	
-	public void addEnumField(String fieldName, String fieldTitle, int length);
+	public void setEnumField(EnumField enumField);
 	
-	public void addEntityField(String fieldName, String fieldTitle, String labels, int length);
+	public void setEntityField(EntityField entityField);
 }

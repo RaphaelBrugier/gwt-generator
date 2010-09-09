@@ -15,6 +15,9 @@
 
 package com.objetdirect.seam.print;
 
+import static com.objetdirect.seam.fields.BooleanField.FALSE_VALUE;
+import static com.objetdirect.seam.fields.BooleanField.TRUE_VALUE;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +33,12 @@ import com.objetdirect.seam.fieldrenderers.PrintDateFieldRendererDescriptor;
 import com.objetdirect.seam.fieldrenderers.PrintEntityFieldRendererDescriptor;
 import com.objetdirect.seam.fieldrenderers.PrintEnumFieldRendererDescriptor;
 import com.objetdirect.seam.fieldrenderers.PrintNumberFieldRendererDescriptor;
+import com.objetdirect.seam.fields.BooleanField;
+import com.objetdirect.seam.fields.DateField;
+import com.objetdirect.seam.fields.EntityField;
+import com.objetdirect.seam.fields.EnumField;
+import com.objetdirect.seam.fields.NumberField;
+import com.objetdirect.seam.fields.StringField;
 
 public class PrintFormDescriptor extends BaseComponent implements EntityHolder, PrintElement, HasFields {
 
@@ -152,32 +161,32 @@ public class PrintFormDescriptor extends BaseComponent implements EntityHolder, 
 	};
 	
 	@Override
-	public void addBooleanField(String fieldName, String fieldTitle, String trueValue, String falseValue) {
-		showBooleanField(fieldName, fieldTitle, trueValue, falseValue);
+	public void setBooleanField(BooleanField booleanField) {
+		showBooleanField(booleanField.fieldName, booleanField.fieldTitle, TRUE_VALUE, FALSE_VALUE);
 	}
 
 	@Override
-	public void addDateField(String fieldName, String fieldTitle, String pattern) {
-		showDateField(fieldName, fieldTitle, pattern);
+	public void setDateField(DateField dateField) {
+		showDateField(dateField.fieldName, dateField.fieldTitle, dateField.pattern);
 	}
 
 	@Override
-	public void addEntityField(String fieldName, String fieldTitle, String labels, int length) {
-		showEntityField(fieldName, fieldTitle, labels, length);
+	public void setEntityField(EntityField entityField) {
+		showEntityField(entityField.fieldName, entityField.fieldTitle, entityField.labels, entityField.getLength());
 	}
 
 	@Override
-	public void addEnumField(String fieldName, String fieldTitle, int length) {
-		showEnumField(fieldName, fieldTitle, length);
+	public void setEnumField(EnumField enumField) {
+		showEnumField(enumField.fieldName, enumField.fieldTitle, enumField.getLength());
 	}
 
 	@Override
-	public void addNumberField(String fieldName, String fieldTitle, String pattern, int length) {
-		showNumberField(fieldName, fieldTitle, pattern, length);
+	public void setNumberField(NumberField numberField) {
+		showNumberField(numberField.fieldName, numberField.fieldTitle, numberField.pattern, numberField.getLength());
 	}
 
 	@Override
-	public void addStringField(String fieldName, String fieldTitle, int length) {
-		showField(fieldName, fieldTitle, length);
+	public void setStringField(StringField stringField) {
+		showField(stringField.fieldName, stringField.fieldTitle, stringField.getLength());
 	}
 }
